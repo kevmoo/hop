@@ -59,6 +59,19 @@ abstract class Sequence&lt;E&gt; extends Enumerable&lt;E&gt; {
  @override
  Iterator&lt;E&gt; get iterator =&gt; new _SequenceIterator(this);
 
+ bool itemsEqual(Sequence other) {
+   requireArgumentNotNull(other, 'other');
+   if(other.length != this.length) {
+     return false;
+   }
+   for(int i = 0; i &lt; length; i++) {
+     if(other[i] != this[i]) {
+       return false;
+     }
+   }
+   return true;
+ }
+
  /**
   * Returns an object wraps [this] and implements [List].
   *
@@ -449,6 +462,27 @@ int indexOf(E value, [int start = 0]) {
    if (this[i] == value) return i;
  }
  return -1;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="itemsEqual">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>itemsEqual</strong>(<a href="../bot/Sequence.html">Sequence</a> other) <a class="anchor-link" href="#itemsEqual"
+              title="Permalink to Sequence&lt;E&gt;.itemsEqual">#</a></h4>
+<div class="doc">
+<pre class="source">
+bool itemsEqual(Sequence other) {
+ requireArgumentNotNull(other, 'other');
+ if(other.length != this.length) {
+   return false;
+ }
+ for(int i = 0; i &lt; length; i++) {
+   if(other[i] != this[i]) {
+     return false;
+   }
+ }
+ return true;
 }
 </pre>
 </div>

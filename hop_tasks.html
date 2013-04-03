@@ -37,7 +37,16 @@
 <pre class="source">
 Task createUnitTestTask(Action1&lt;unittest.Configuration&gt; unitTestAction) {
  return new Task.async((TaskContext ctx) {
-   final config = new _HopTestConfiguration(ctx);
+
+   final summaryFlag = ctx.arguments[_summaryFlag];
+
+   final passSummary =
+       (summaryFlag == _summaryAll || summaryFlag == _summaryPass);
+
+   final failSummary =
+       (summaryFlag == _summaryAll || summaryFlag == _summaryFail);
+
+   final config = new _HopTestConfiguration(ctx, failSummary, passSummary);
    unitTestAction(config);
 
    if(!ctx.arguments.rest.isEmpty) {

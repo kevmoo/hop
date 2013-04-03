@@ -75,7 +75,7 @@ class Configuration {
   * a test suite.
   */
  void onTestStart(TestCase testCase) {
-   assert(testCase != null);	
+   assert(testCase != null);
  }
 
  /**
@@ -83,7 +83,7 @@ class Configuration {
   * progress on a test suite.
   */
  void onTestResult(TestCase testCase) {
-   assert(testCase != null);	
+   assert(testCase != null);
  }
 
  /**
@@ -129,7 +129,7 @@ class Configuration {
  void onSummary(int passed, int failed, int errors, List&lt;TestCase&gt; results,
      String uncaughtError) {
    // Print each test's result.
-   for (final t in _tests) {
+   for (final t in testCases) {
      var resultString = "${t.result}".toUpperCase();
      print('$resultString: ${t.description}');
 
@@ -341,7 +341,7 @@ of tests (e.g. setting up the test).</p>
 void onSummary(int passed, int failed, int errors, List&lt;TestCase&gt; results,
    String uncaughtError) {
  // Print each test's result.
- for (final t in _tests) {
+ for (final t in testCases) {
    var resultString = "${t.result}".toUpperCase();
    print('$resultString: ${t.description}');
 
@@ -383,7 +383,7 @@ void <strong>onTestResult</strong>(<a href="../unittest/TestCase.html">TestCase<
 progress on a test suite.</p>
 <pre class="source">
 void onTestResult(TestCase testCase) {
- assert(testCase != null);	
+ assert(testCase != null);
 }
 </pre>
 </div>
@@ -412,7 +412,7 @@ void <strong>onTestStart</strong>(<a href="../unittest/TestCase.html">TestCase</
 a test suite.</p>
 <pre class="source">
 void onTestStart(TestCase testCase) {
- assert(testCase != null);	
+ assert(testCase != null);
 }
 </pre>
 </div>

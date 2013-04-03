@@ -44,7 +44,22 @@ class StringLineReader {
 
  int get position =&gt; _position;
 
- String readNextLine() {
+ bool get eof =&gt; _position == null;
+
+ String readNextLine() =&gt; _peekOrReadNextLine(true);
+
+ String peekNextLine() =&gt; _peekOrReadNextLine(false);
+
+ String readToEnd() {
+   if(_position == null) {
+     return null;
+   }
+   final value = source.substring(position, source.length);
+   _position = null;
+   return value;
+ }
+
+ String _peekOrReadNextLine(bool updatePosition) {
    if(_position == null) {
      return null;
    }
@@ -53,7 +68,9 @@ class StringLineReader {
    if(nextLF &lt; 0) {
      // no more new lines, return what's left and set postion = null
      final value = source.substring(position, source.length);
-     _position = null;
+     if(updatePosition) {
+       _position = null;
+     }
      return value;
    }
 
@@ -63,17 +80,10 @@ class StringLineReader {
    final value = isWinNL ? source.substring(_position, nextLF-1) :
      source.substring(_position, nextLF);
 
-   _position = nextLF + 1;
-
-   return value;
- }
-
- String readToEnd() {
-   if(_position == null) {
-     return null;
+   if(updatePosition) {
+     _position = nextLF + 1;
    }
-   final value = source.substring(position, source.length);
-   _position = null;
+
    return value;
  }
 }
@@ -96,6 +106,18 @@ StringLineReader(this.source) {
 </div>
 <div>
 <h3>Properties</h3>
+<div class="field"><h4 id="eof">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>eof</strong> <a class="anchor-link"
+            href="#eof"
+            title="Permalink to StringLineReader.eof">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+bool get eof =&gt; _position == null;
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="position">
 <button class="show-code">Code</button>
 final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>position</strong> <a class="anchor-link"
@@ -123,35 +145,23 @@ source
 </div>
 <div>
 <h3>Methods</h3>
+<div class="method"><h4 id="peekNextLine">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>peekNextLine</strong>() <a class="anchor-link" href="#peekNextLine"
+              title="Permalink to StringLineReader.peekNextLine">#</a></h4>
+<div class="doc">
+<pre class="source">
+String peekNextLine() =&gt; _peekOrReadNextLine(false);
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="readNextLine">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>readNextLine</strong>() <a class="anchor-link" href="#readNextLine"
               title="Permalink to StringLineReader.readNextLine">#</a></h4>
 <div class="doc">
 <pre class="source">
-String readNextLine() {
- if(_position == null) {
-   return null;
- }
- final nextLF = source.indexOf('\n', _position);
-
- if(nextLF &lt; 0) {
-   // no more new lines, return what's left and set postion = null
-   final value = source.substring(position, source.length);
-   _position = null;
-   return value;
- }
-
- // to handle Windows newlines, see if the value before nextLF is a Carriage return
- final isWinNL = nextLF &gt; 0 &amp;&amp; source.substring(nextLF-1,nextLF) == '\r';
-
- final value = isWinNL ? source.substring(_position, nextLF-1) :
-   source.substring(_position, nextLF);
-
- _position = nextLF + 1;
-
- return value;
-}
+String readNextLine() =&gt; _peekOrReadNextLine(true);
 </pre>
 </div>
 </div>

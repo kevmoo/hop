@@ -37,7 +37,7 @@ guide for more details.</p>
    organized together using <a class="crossref" href="unittest.html#group">group</a>.</p></li><li><strong>Checks</strong>: Test expectations can be specified via <code>expect</code></li><li>
 <p><strong>Matchers</strong>: <code>expect</code> assertions are written declaratively using the
    <code>Matcher</code> class.</p></li><li>
-<p><strong>Configuration</strong>: The framework can be adapted by calling <a class="crossref" href="unittest.html#configure">configure</a> with a
+<p><strong>Configuration</strong>: The framework can be adapted by calling <code>configure</code> with a
    <a class="crossref" href="unittest/Configuration.html">Configuration</a>. See the other libraries in the <code>unittest</code> package for
    alternative implementations of <a class="crossref" href="unittest/Configuration.html">Configuration</a> including
    <code>compact_vm_config.dart</code>, <code>html_config.dart</code> and
@@ -161,18 +161,6 @@ main() {
 </code></pre></div>
 <div>
 <h3>Properties</h3>
-<div class="field"><h4 id="config">
-<button class="show-code">Code</button>
-final <a href="unittest/Configuration.html">Configuration</a>         <strong>config</strong> <a class="anchor-link"
-            href="#config"
-            title="Permalink to config">#</a>
-        </h4>
-        <div class="doc">
-<pre class="source">
-Configuration get config =&gt; _config;
-</pre>
-</div>
-</div>
 <div class="field"><h4 id="currentTestCase">
 <button class="show-code">Code</button>
 final <a href="unittest/TestCase.html">TestCase</a>         <strong>currentTestCase</strong> <a class="anchor-link"
@@ -180,10 +168,11 @@ final <a href="unittest/TestCase.html">TestCase</a>         <strong>currentTestC
             title="Permalink to currentTestCase">#</a>
         </h4>
         <div class="doc">
+<p><a class="crossref" href="unittest/TestCase.html">TestCase</a> currently being executed. </p>
 <pre class="source">
 TestCase get currentTestCase =&gt;
-   (_currentTest &gt;= 0 &amp;&amp; _currentTest &lt; _tests.length)
-       ? _tests[_currentTest]
+   (_currentTestCaseIndex &gt;= 0 &amp;&amp; _currentTestCaseIndex &lt; _testCases.length)
+       ? _testCases[_currentTestCaseIndex]
        : null;
 </pre>
 </div>
@@ -243,9 +232,8 @@ final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href=
             title="Permalink to testCases">#</a>
         </h4>
         <div class="doc">
-<p>Get the list of tests. </p>
 <pre class="source">
-List&lt;TestCase&gt; get testCases =&gt; _tests;
+testCases = new UnmodifiableListView(_testCases)
 </pre>
 </div>
 </div>
@@ -258,6 +246,36 @@ List&lt;TestCase&gt; get testCases =&gt; _tests;
         <div class="doc">
 <pre class="source">
 testState = {}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="unittestConfiguration">
+<button class="show-code">Code</button>
+<a href="unittest/Configuration.html">Configuration</a> <strong>get unittestConfiguration</strong> <a class="anchor-link" href="#unittestConfiguration"
+              title="Permalink to get unittestConfiguration">#</a></h4>
+<div class="doc">
+<p><a class="crossref" href="unittest/Configuration.html">Configuration</a> used by the unittest library. </p>
+<pre class="source">
+Configuration get unittestConfiguration =&gt; _config;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="unittestConfiguration=">
+<button class="show-code">Code</button>
+void <strong>set unittestConfiguration</strong>(<a href="unittest/Configuration.html">Configuration</a> value) <a class="anchor-link" href="#unittestConfiguration="
+              title="Permalink to set unittestConfiguration">#</a></h4>
+<div class="doc">
+<p>Sets the <a class="crossref" href="unittest/Configuration.html">Configuration</a> used by the unittest library.</p>
+<p>Throws a <code>StateError</code> if there is an existing, incompatible value.</p>
+<pre class="source">
+void set unittestConfiguration(Configuration value) {
+ if(!identical(_config, value)) {
+   if(_config != null) {
+     throw new StateError('unittestConfiguration has already been set');
+   }
+   _config = value;
+ }
+}
 </pre>
 </div>
 </div>
@@ -294,9 +312,9 @@ void <strong>setSoloTest</strong>(<a href="http://api.dartlang.org/dart_core/int
 <p>Select a solo test by ID. </p>
 <pre class="source">
 void setSoloTest(int id) {
- for (var i = 0; i &lt; _tests.length; i++) {
-   if (_tests[i].id == id) {
-     _soloTest = _tests[i];
+ for (var i = 0; i &lt; _testCases.length; i++) {
+   if (_testCases[i].id == id) {
+     _soloTest = _testCases[i];
      break;
    }
  }
@@ -319,12 +337,10 @@ void ensureInitialized() {
  // Hook our async guard into the matcher library.
  wrapAsync = (f, [id]) =&gt; expectAsync1(f, id: id);
 
- _tests = &lt;TestCase&gt;[];
- _testRunner = _nextBatch;
  _uncaughtErrorMessage = null;
 
  if (_config == null) {
-   _config = new Configuration();
+   unittestConfiguration = new Configuration();
  }
  _config.onInit();
 
@@ -345,7 +361,7 @@ void <strong>registerException</strong>(e, [trace]) <a class="anchor-link" href=
 <p>Registers that an exception was caught for the current test.</p>
 <pre class="source">
 void registerException(e, [trace]) {
- _registerException(_currentTest, e, trace);
+ _registerException(_currentTestCaseIndex, e, trace);
 }
 </pre>
 </div>
@@ -362,7 +378,7 @@ passed to the corresponding test.</p>
 <span class="param">tryBody</span> (if any) is returned by <a class="crossref" href="unittest.html#guardAsync">guardAsync</a>.</p>
 <pre class="source">
 guardAsync(Function tryBody) {
- return _guardAsync(tryBody, null, _currentTest);
+ return _guardAsync(tryBody, null, _currentTestCaseIndex);
 }
 </pre>
 </div>
@@ -375,7 +391,7 @@ void <strong>runTests</strong>() <a class="anchor-link" href="#runTests"
 <p>Runs all queued tests, one at a time. </p>
 <pre class="source">
 void runTests() {
- _currentTest = 0;
+ _currentTestCaseIndex = 0;
  _currentGroup = '';
 
  // If we are soloing a test, remove all the others.
@@ -386,7 +402,7 @@ void runTests() {
  _config.onStart();
 
  _defer(() {
-   _testRunner();
+   _nextBatch();
  });
 }
 </pre>
@@ -412,7 +428,7 @@ void filterTests(testFilter) {
  } else if (testFilter is Function) {
    filterFunction = testFilter;
  }
- _tests.retainWhere(filterFunction);
+ _testCases.retainWhere(filterFunction);
 }
 </pre>
 </div>
@@ -705,8 +721,8 @@ void solo_test(String spec, TestFunction body) {
 
  ensureInitialized();
 
- _soloTest = new TestCase._internal(_tests.length + 1, _fullSpec(spec), body);
- _tests.add(_soloTest);
+ _soloTest = new TestCase._internal(_testCases.length + 1, _fullSpec(spec), body);
+ _testCases.add(_soloTest);
 }
 </pre>
 </div>
@@ -722,7 +738,8 @@ calls.</p>
 <pre class="source">
 void test(String spec, TestFunction body) {
  ensureInitialized();
- _tests.add(new TestCase._internal(_tests.length + 1, _fullSpec(spec), body));
+ _testCases.add(new TestCase._internal(_testCases.length + 1, _fullSpec(spec),
+                                       body));
 }
 </pre>
 </div>
@@ -734,23 +751,6 @@ void <strong>logMessage</strong>(<a href="http://api.dartlang.org/dart_core/Stri
 <div class="doc">
 <pre class="source">
 void logMessage(String message) =&gt; _config.logMessage(message);
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="configure">
-<button class="show-code">Code</button>
-<a href="unittest/Configuration.html">Configuration</a> <strong>configure</strong>(<a href="unittest/Configuration.html">Configuration</a> config) <a class="anchor-link" href="#configure"
-              title="Permalink to configure">#</a></h4>
-<div class="doc">
-<p>Set the <a class="crossref" href="unittest/Configuration.html">Configuration</a> used by the unittest library. Returns any
-previous configuration.
-TODO: consider deprecating in favor of a setter now we have a getter.</p>
-<pre class="source">
-Configuration configure(Configuration config) {
- Configuration _oldConfig = _config;
- _config = config;
- return _oldConfig;
-}
 </pre>
 </div>
 </div>

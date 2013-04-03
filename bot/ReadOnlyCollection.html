@@ -481,6 +481,27 @@ int indexOf(E value, [int start = 0]) {
 </pre>
 </div>
 </div>
+<div class="method inherited"><h4 id="itemsEqual">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>itemsEqual</strong>(<a href="../bot/Sequence.html">Sequence</a> other) <a class="anchor-link" href="#itemsEqual"
+              title="Permalink to ReadOnlyCollection&lt;T&gt;.itemsEqual">#</a></h4>
+<div class="inherited-from">inherited from <a href="../bot/Sequence.html">Sequence</a> </div><div class="doc">
+<pre class="source">
+bool itemsEqual(Sequence other) {
+ requireArgumentNotNull(other, 'other');
+ if(other.length != this.length) {
+   return false;
+ }
+ for(int i = 0; i &lt; length; i++) {
+   if(other[i] != this[i]) {
+     return false;
+   }
+ }
+ return true;
+}
+</pre>
+</div>
+</div>
 <div class="method inherited"><h4 id="join">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>join</strong>([<a href="http://api.dartlang.org/dart_core/String.html">String</a> separator]) <a class="anchor-link" href="#join"
