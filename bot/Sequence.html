@@ -59,6 +59,7 @@ abstract class Sequence&lt;E&gt; extends Enumerable&lt;E&gt; {
  @override
  Iterator&lt;E&gt; get iterator =&gt; new _SequenceIterator(this);
 
+ // TODO: ponder making the type Iterable and be smarter about length, etc.
  bool itemsEqual(Sequence other) {
    requireArgumentNotNull(other, 'other');
    if(other.length != this.length) {
@@ -410,6 +411,29 @@ E firstWhere(bool test(E value), { E orElse() }) {
 </pre>
 </div>
 </div>
+<div class="method inherited"><h4 id="fold">
+<button class="show-code">Code</button>
+dynamic<strong>fold</strong>(initialValue, combine(previousValue, <a href="../bot/Sequence.html">E</a> element)) <a class="anchor-link" href="#fold"
+              title="Permalink to Sequence&lt;E&gt;.fold">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> </div><div class="doc">
+<p>Reduce a collection to a single value by iteratively combining each element
+of the collection with an existing value using the provided function.
+Use 
+<span class="param">initialValue</span> as the initial value, and the function 
+<span class="param">combine</span> to
+create a new value from the previous one and an element.</p>
+<p>Example of calculating the sum of an iterable:</p>
+<p>  iterable.fold(0, (prev, element) => prev + element);</p>
+<pre class="source">
+dynamic fold(var initialValue,
+            dynamic combine(var previousValue, E element)) {
+ var value = initialValue;
+ for (E element in this) value = combine(value, element);
+ return value;
+}
+</pre>
+</div>
+</div>
 <div class="method inherited"><h4 id="forEach">
 <button class="show-code">Code</button>
 void <strong>forEach</strong>(void f(<a href="../bot/Sequence.html">E</a> element)) <a class="anchor-link" href="#forEach"
@@ -499,20 +523,8 @@ Then concatenates the strings, optionally separated by the
 string.</p>
 <pre class="source">
 String join([String separator]) {
- Iterator&lt;E&gt; iterator = this.iterator;
- if (!iterator.moveNext()) return "";
  StringBuffer buffer = new StringBuffer();
- if (separator == null || separator == "") {
-   do {
-     buffer.write("${iterator.current}");
-   } while (iterator.moveNext());
- } else {
-   buffer.write("${iterator.current}");
-   while (iterator.moveNext()) {
-     buffer.write(separator);
-     buffer.write("${iterator.current}");
-   }
- }
+ buffer.writeAll(this, separator == null ? "" : separator);
  return buffer.toString();
 }
 </pre>
@@ -650,7 +662,7 @@ E min([int compare(E a, E b)]) {
 </div>
 <div class="method inherited"><h4 id="reduce">
 <button class="show-code">Code</button>
-<strong>reduce</strong>(initialValue, combine(previousValue, <a href="../bot/Sequence.html">E</a> element)) <a class="anchor-link" href="#reduce"
+dynamic<strong>reduce</strong>(initialValue, combine(previousValue, <a href="../bot/Sequence.html">E</a> element)) <a class="anchor-link" href="#reduce"
               title="Permalink to Sequence&lt;E&gt;.reduce">#</a></h4>
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> </div><div class="doc">
 <p>Reduce a collection to a single value by iteratively combining each element
@@ -659,14 +671,15 @@ Use
 <span class="param">initialValue</span> as the initial value, and the function 
 <span class="param">combine</span> to
 create a new value from the previous one and an element.</p>
-<p>Example of calculating the sum of a collection:</p>
-<p>  collection.reduce(0, (prev, element) => prev + element);</p>
+<p>Example of calculating the sum of an iterable:</p>
+<p>  iterable.reduce((prev, element) => prev + element);</p>
+<p><em>UPCOMING API-CHANGE</em>: this method will soon be changed to not take
+an initial value: <code>iterable.reduce(min)</code>. Use <code>fold</code> instead.</p>
 <pre class="source">
+@deprecated
 dynamic reduce(var initialValue,
               dynamic combine(var previousValue, E element)) {
- var value = initialValue;
- for (E element in this) value = combine(value, element);
- return value;
+ return fold(initialValue, combine);
 }
 </pre>
 </div>

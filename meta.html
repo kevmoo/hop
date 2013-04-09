@@ -39,8 +39,12 @@ const         <strong>deprecated</strong> <a class="anchor-link"
             title="Permalink to deprecated">#</a>
         </h4>
         <div class="doc">
+<p>An annotation used to mark a class, field, getter, setter, method, top-level
+variable, or top-level function as one that should no longer be used. Tools
+can use this annotation to provide a warning on references to the marked
+element.</p>
 <pre class="source">
-deprecated = const _Deprecated()
+const deprecated = const _Deprecated()
 </pre>
 </div>
 </div>
@@ -51,8 +55,11 @@ const         <strong>override</strong> <a class="anchor-link"
             title="Permalink to override">#</a>
         </h4>
         <div class="doc">
+<p>An annotation used to mark an instance member (method, field, getter or
+setter) as overriding an inherited class member. Tools can use this
+annotation to provide a warning if there is no overridden member.</p>
 <pre class="source">
-override = const _Override()
+const override = const _Override()
 </pre>
 </div>
 </div>

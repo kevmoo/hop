@@ -99,8 +99,10 @@ final <a href="../args/ArgResults.html">ArgResults</a>         <strong>command</
             title="Permalink to ArgResults.command">#</a>
         </h4>
         <div class="doc">
+<p>The command that was selected, or <code>null</code> if none was. This will contain
+the options that were selected for that command.</p>
 <pre class="source">
-command
+final ArgResults command
 </pre>
 </div>
 </div>
@@ -111,8 +113,10 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
             title="Permalink to ArgResults.name">#</a>
         </h4>
         <div class="doc">
+<p>If these are the results for parsing a command's options, this will be
+the name of the command. For top-level results, this returns <code>null</code>.</p>
 <pre class="source">
-name
+final String name
 </pre>
 </div>
 </div>
@@ -136,8 +140,11 @@ final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href=
             title="Permalink to ArgResults.rest">#</a>
         </h4>
         <div class="doc">
+<p>The remaining command-line arguments that were not parsed as options or
+flags. If <code>--</code> was used to separate the options from the remaining
+arguments, it will not be included in this list.</p>
 <pre class="source">
-rest
+final List&lt;String&gt; rest
 </pre>
 </div>
 </div>
@@ -146,7 +153,7 @@ rest
 <h3>Operators</h3>
 <div class="method"><h4 id="[]">
 <button class="show-code">Code</button>
-<strong>operator []</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#[]"
+dynamic<strong>operator []</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#[]"
               title="Permalink to ArgResults.operator []">#</a></h4>
 <div class="doc">
 <p>Gets the parsed command-line option named 

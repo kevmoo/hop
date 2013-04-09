@@ -366,8 +366,9 @@ Mock.custom({this.name,
             title="Permalink to Mock.log">#</a>
         </h4>
         <div class="doc">
+<p>The <a class="crossref" href="../mock/Mock.html#log">log</a> of calls made. Only used if <a class="crossref" href="../mock/Mock.html#name">name</a> is null. </p>
 <pre class="source">
-log
+LogEntryList log
 </pre>
 </div>
 </div>
@@ -398,8 +399,9 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
             title="Permalink to Mock.name">#</a>
         </h4>
         <div class="doc">
+<p>The mock name. Needed if the log is shared; optional otherwise. </p>
 <pre class="source">
-name
+final String name
 </pre>
 </div>
 </div>
@@ -488,7 +490,7 @@ LogEntryList getLogs([CallMatcher logFilter,
 </div>
 <div class="method"><h4 id="noSuchMethod">
 <button class="show-code">Code</button>
-<strong>noSuchMethod</strong>(<a href="http://api.dartlang.org/dart_core/InvocationMirror.html">InvocationMirror</a> invocation) <a class="anchor-link" href="#noSuchMethod"
+dynamic<strong>noSuchMethod</strong>(<a href="http://api.dartlang.org/dart_core/InvocationMirror.html">InvocationMirror</a> invocation) <a class="anchor-link" href="#noSuchMethod"
               title="Permalink to Mock.noSuchMethod">#</a></h4>
 <div class="doc">
 <p>This is the handler for method calls. We loop through the list

@@ -185,7 +185,7 @@ const         <strong>ERROR</strong> <a class="anchor-link"
         </h4>
         <div class="doc">
 <pre class="source">
-ERROR = 'error'
+const ERROR = 'error'
 </pre>
 </div>
 </div>
@@ -197,7 +197,7 @@ const         <strong>FAIL</strong> <a class="anchor-link"
         </h4>
         <div class="doc">
 <pre class="source">
-FAIL  = 'fail'
+const FAIL  = 'fail'
 </pre>
 </div>
 </div>
@@ -208,8 +208,9 @@ FAIL  = 'fail'
             title="Permalink to groupSep">#</a>
         </h4>
         <div class="doc">
+<p>Separator used between group names and test names. </p>
 <pre class="source">
-groupSep = ' '
+String groupSep = ' '
 </pre>
 </div>
 </div>
@@ -220,8 +221,9 @@ const         <strong>PASS</strong> <a class="anchor-link"
             title="Permalink to PASS">#</a>
         </h4>
         <div class="doc">
+<p>Test case result strings. </p>
 <pre class="source">
-PASS  = 'pass'
+const PASS  = 'pass'
 </pre>
 </div>
 </div>
@@ -232,8 +234,9 @@ final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href=
             title="Permalink to testCases">#</a>
         </h4>
         <div class="doc">
+<p>Get the list of tests. </p>
 <pre class="source">
-testCases = new UnmodifiableListView(_testCases)
+final List&lt;TestCase&gt; testCases = new UnmodifiableListView(_testCases)
 </pre>
 </div>
 </div>
@@ -244,8 +247,13 @@ testCases = new UnmodifiableListView(_testCases)
             title="Permalink to testState">#</a>
         </h4>
         <div class="doc">
+<p>A map that can be used to communicate state between a test driver
+or main() function and the tests, particularly when these two
+are otherwise independent. For example, a test driver that starts
+an HTTP server and then runs tests that access that server could use
+this as a way of communicating the server port to the tests.</p>
 <pre class="source">
-testState = {}
+Map testState = {}
 </pre>
 </div>
 </div>
@@ -330,25 +338,7 @@ void <strong>ensureInitialized</strong>() <a class="anchor-link" href="#ensureIn
 <p>Lazily initializes the test library if not already initialized.</p>
 <pre class="source">
 void ensureInitialized() {
- if (_initialized) {
-   return;
- }
- _initialized = true;
- // Hook our async guard into the matcher library.
- wrapAsync = (f, [id]) =&gt; expectAsync1(f, id: id);
-
- _uncaughtErrorMessage = null;
-
- if (_config == null) {
-   unittestConfiguration = new Configuration();
- }
- _config.onInit();
-
- if (_config.autoStart) {
-   // Immediately queue the suite up. It will run after a timeout (i.e. after
-   // main() has returned).
-   _defer(runTests);
- }
+ _ensureInitialized(true);
 }
 </pre>
 </div>
@@ -368,7 +358,7 @@ void registerException(e, [trace]) {
 </div>
 <div class="method"><h4 id="guardAsync">
 <button class="show-code">Code</button>
-<strong>guardAsync</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> tryBody) <a class="anchor-link" href="#guardAsync"
+dynamic<strong>guardAsync</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> tryBody) <a class="anchor-link" href="#guardAsync"
               title="Permalink to guardAsync">#</a></h4>
 <div class="doc">
 <p>Run 
@@ -391,6 +381,7 @@ void <strong>runTests</strong>() <a class="anchor-link" href="#runTests"
 <p>Runs all queued tests, one at a time. </p>
 <pre class="source">
 void runTests() {
+ _ensureInitialized(false);
  _currentTestCaseIndex = 0;
  _currentGroup = '';
 
@@ -749,8 +740,11 @@ void test(String spec, TestFunction body) {
 void <strong>logMessage</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#logMessage"
               title="Permalink to logMessage">#</a></h4>
 <div class="doc">
+<p>Can be called by tests to log status. Tests should use this
+instead of <code>print</code>.</p>
 <pre class="source">
-void logMessage(String message) =&gt; _config.logMessage(message);
+void logMessage(String message) =&gt;
+   _config.onLogMessage(currentTestCase, message);
 </pre>
 </div>
 </div>

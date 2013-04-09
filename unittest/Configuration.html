@@ -47,13 +47,13 @@ class Configuration {
   * Particularly useful in cases where we have parent/child configurations
   * such as layout tests.
   */
- String get name =&gt; 'Configuration';
+ final String name = 'Configuration';
 
  /**
   * If true, then tests are started automatically (otherwise [runTests]
   * must be called explicitly after the tests are set up.
   */
- bool get autoStart =&gt; true;
+ final bool autoStart = true;
 
  /**
   * Called as soon as the unittest framework becomes initialized. This is done
@@ -96,25 +96,10 @@ class Configuration {
  }
 
  /**
-  * Can be called by tests to log status. Tests should use this
-  * instead of print. Subclasses should not override this; they
-  * should instead override logMessage which is passed the test case.
-  */
- void logMessage(String message) {
-   if (currentTestCase == null) {
-     // Before or after tests run. In this case we pass null for the test
-     // case reference and let the config decide what to do with this.
-     logTestCaseMessage(null, message);
-   } else {
-     logTestCaseMessage(currentTestCase, message);
-   }
- }
-
- /**
   * Handles the logging of messages by a test case. The default in
   * this base configuration is to call print();
   */
- void logTestCaseMessage(TestCase testCase, String message) {
+ void onLogMessage(TestCase testCase, String message) {
    print(message);
  }
 
@@ -129,7 +114,7 @@ class Configuration {
  void onSummary(int passed, int failed, int errors, List&lt;TestCase&gt; results,
      String uncaughtError) {
    // Print each test's result.
-   for (final t in testCases) {
+   for (final t in results) {
      var resultString = "${t.result}".toUpperCase();
      print('$resultString: ${t.description}');
 
@@ -145,13 +130,11 @@ class Configuration {
    // Show the summary.
    print('');
 
-   var success = false;
    if (passed == 0 &amp;&amp; failed == 0 &amp;&amp; errors == 0 &amp;&amp; uncaughtError == null) {
      print('No tests found.');
      // This is considered a failure too.
    } else if (failed == 0 &amp;&amp; errors == 0 &amp;&amp; uncaughtError == null) {
      print('All $passed tests passed.');
-     success = true;
    } else {
      if (uncaughtError != null) {
        print('Top-level uncaught error: $uncaughtError');
@@ -207,7 +190,7 @@ final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <st
 <p>If true, then tests are started automatically (otherwise <a class="crossref" href="../unittest.html#runTests">runTests</a>
 must be called explicitly after the tests are set up.</p>
 <pre class="source">
-bool get autoStart =&gt; true;
+final bool autoStart = true
 </pre>
 </div>
 </div>
@@ -222,7 +205,7 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
 Particularly useful in cases where we have parent/child configurations
 such as layout tests.</p>
 <pre class="source">
-String get name =&gt; 'Configuration';
+final String name = 'Configuration'
 </pre>
 </div>
 </div>
@@ -238,41 +221,6 @@ void <strong>handleExternalError</strong>(e, <a href="http://api.dartlang.org/da
 <pre class="source">
 void handleExternalError(e, String message, [String stack = '']) =&gt;
    _reportTestError('$message\nCaught $e', stack);
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="logMessage">
-<button class="show-code">Code</button>
-void <strong>logMessage</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#logMessage"
-              title="Permalink to Configuration.logMessage">#</a></h4>
-<div class="doc">
-<p>Can be called by tests to log status. Tests should use this
-instead of print. Subclasses should not override this; they
-should instead override logMessage which is passed the test case.</p>
-<pre class="source">
-void logMessage(String message) {
- if (currentTestCase == null) {
-   // Before or after tests run. In this case we pass null for the test
-   // case reference and let the config decide what to do with this.
-   logTestCaseMessage(null, message);
- } else {
-   logTestCaseMessage(currentTestCase, message);
- }
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="logTestCaseMessage">
-<button class="show-code">Code</button>
-void <strong>logTestCaseMessage</strong>(<a href="../unittest/TestCase.html">TestCase</a> testCase, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#logTestCaseMessage"
-              title="Permalink to Configuration.logTestCaseMessage">#</a></h4>
-<div class="doc">
-<p>Handles the logging of messages by a test case. The default in
-this base configuration is to call print();</p>
-<pre class="source">
-void logTestCaseMessage(TestCase testCase, String message) {
- print(message);
-}
 </pre>
 </div>
 </div>
@@ -315,6 +263,20 @@ void onInit() {
 </pre>
 </div>
 </div>
+<div class="method"><h4 id="onLogMessage">
+<button class="show-code">Code</button>
+void <strong>onLogMessage</strong>(<a href="../unittest/TestCase.html">TestCase</a> testCase, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#onLogMessage"
+              title="Permalink to Configuration.onLogMessage">#</a></h4>
+<div class="doc">
+<p>Handles the logging of messages by a test case. The default in
+this base configuration is to call print();</p>
+<pre class="source">
+void onLogMessage(TestCase testCase, String message) {
+ print(message);
+}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="onStart">
 <button class="show-code">Code</button>
 void <strong>onStart</strong>() <a class="anchor-link" href="#onStart"
@@ -341,7 +303,7 @@ of tests (e.g. setting up the test).</p>
 void onSummary(int passed, int failed, int errors, List&lt;TestCase&gt; results,
    String uncaughtError) {
  // Print each test's result.
- for (final t in testCases) {
+ for (final t in results) {
    var resultString = "${t.result}".toUpperCase();
    print('$resultString: ${t.description}');
 
@@ -357,13 +319,11 @@ void onSummary(int passed, int failed, int errors, List&lt;TestCase&gt; results,
  // Show the summary.
  print('');
 
- var success = false;
  if (passed == 0 &amp;&amp; failed == 0 &amp;&amp; errors == 0 &amp;&amp; uncaughtError == null) {
    print('No tests found.');
    // This is considered a failure too.
  } else if (failed == 0 &amp;&amp; errors == 0 &amp;&amp; uncaughtError == null) {
    print('All $passed tests passed.');
-   success = true;
  } else {
    if (uncaughtError != null) {
      print('Top-level uncaught error: $uncaughtError');

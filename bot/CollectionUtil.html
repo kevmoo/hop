@@ -55,7 +55,7 @@ class CollectionUtil {
      $(source.expand(func));
 
  static int count(Iterable source, Func1&lt;dynamic, bool&gt; test) {
-   return source.reduce(0, (int previous, dynamic element) {
+   return source.fold(0, (int previous, dynamic element) {
      if(test(element)) {
        return previous + 1;
      } else {
@@ -165,7 +165,7 @@ static Enumerable selectMany(Iterable source, Func1&lt;dynamic, Iterable&gt; fun
 <div class="doc">
 <pre class="source">
 static int count(Iterable source, Func1&lt;dynamic, bool&gt; test) {
- return source.reduce(0, (int previous, dynamic element) {
+ return source.fold(0, (int previous, dynamic element) {
    if(test(element)) {
      return previous + 1;
    } else {

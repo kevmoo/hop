@@ -171,8 +171,9 @@ final <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="h
             title="Permalink to ArgParser.commands">#</a>
         </h4>
         <div class="doc">
+<p>The commands that have been defined for this parser.</p>
 <pre class="source">
-commands = &lt;String, ArgParser&gt;{}
+final Map&lt;String, ArgParser&gt; commands = &lt;String, ArgParser&gt;{}
 </pre>
 </div>
 </div>
@@ -183,8 +184,9 @@ final <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="h
             title="Permalink to ArgParser.options">#</a>
         </h4>
         <div class="doc">
+<p>The options that have been defined for this parser.</p>
 <pre class="source">
-options = &lt;String, Option&gt;{}
+final Map&lt;String, Option&gt; options = &lt;String, Option&gt;{}
 </pre>
 </div>
 </div>
@@ -266,7 +268,7 @@ Option findByAbbreviation(String abbr) {
 </div>
 <div class="method"><h4 id="getDefault">
 <button class="show-code">Code</button>
-<strong>getDefault</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> option) <a class="anchor-link" href="#getDefault"
+dynamic<strong>getDefault</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> option) <a class="anchor-link" href="#getDefault"
               title="Permalink to ArgParser.getDefault">#</a></h4>
 <div class="doc">
 <p>Get the default value for an option. Useful after parsing to test

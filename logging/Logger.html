@@ -267,8 +267,9 @@ factory Logger(String name) {
             title="Permalink to Logger.children">#</a>
         </h4>
         <div class="doc">
+<p>Children in the hierarchy of loggers, indexed by their simple names. </p>
 <pre class="source">
-children
+Map&lt;String, Logger&gt; children
 </pre>
 </div>
 </div>
@@ -306,7 +307,7 @@ Level get level {
 </div>
 <div class="method"><h4 id="level=">
 <button class="show-code">Code</button>
-<strong>set level</strong>(<a href="../logging/Level.html">Level</a> value) <a class="anchor-link" href="#level="
+dynamic<strong>set level</strong>(<a href="../logging/Level.html">Level</a> value) <a class="anchor-link" href="#level="
               title="Permalink to Logger.set level">#</a></h4>
 <div class="doc">
 <p>Override the level for this particular <a class="crossref" href="../logging/Logger.html#Logger">Logger</a> and its children. </p>
@@ -333,8 +334,9 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
             title="Permalink to Logger.name">#</a>
         </h4>
         <div class="doc">
+<p>Simple name of this logger. </p>
 <pre class="source">
-name
+final String name
 </pre>
 </div>
 </div>
@@ -360,8 +362,9 @@ final <a href="../logging/Logger.html">Logger</a>         <strong>parent</strong
             title="Permalink to Logger.parent">#</a>
         </h4>
         <div class="doc">
+<p>Parent of this logger in the hierarchy of loggers. </p>
 <pre class="source">
-parent
+final Logger parent
 </pre>
 </div>
 </div>

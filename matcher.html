@@ -38,8 +38,9 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>anything</stron
             title="Permalink to anything">#</a>
         </h4>
         <div class="doc">
+<p>A matcher that matches any value. </p>
 <pre class="source">
-anything = const _IsAnything()
+const Matcher anything = const _IsAnything()
 </pre>
 </div>
 </div>
@@ -50,8 +51,14 @@ anything = const _IsAnything()
             title="Permalink to completes">#</a>
         </h4>
         <div class="doc">
+<p>Matches a <code>Future</code> that completes successfully with a value. Note that this
+creates an asynchronous expectation. The call to <code>expect()</code> that includes
+this will return immediately and execution will continue. Later, when the
+future completes, the actual expectation will run.</p>
+<p>To test that a Future completes with an exception, you can use <a class="crossref" href="matcher.html#throws">throws</a> and
+<a class="crossref" href="matcher.html#throwsA">throwsA</a>.</p>
 <pre class="source">
-completes = const _Completes(null, '')
+Matcher completes = const _Completes(null, '')
 </pre>
 </div>
 </div>
@@ -62,8 +69,9 @@ const         <strong>isArgumentError</strong> <a class="anchor-link"
             title="Permalink to isArgumentError">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for ArgumentErrors. </p>
 <pre class="source">
-isArgumentError = const _ArgumentError()
+const isArgumentError = const _ArgumentError()
 </pre>
 </div>
 </div>
@@ -74,8 +82,10 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>isEmpty</strong
             title="Permalink to isEmpty">#</a>
         </h4>
         <div class="doc">
+<p>Returns a matcher that matches empty strings, maps or iterables
+(including collections).</p>
 <pre class="source">
-isEmpty = const _Empty()
+const Matcher isEmpty = const _Empty()
 </pre>
 </div>
 </div>
@@ -86,8 +96,9 @@ const         <strong>isException</strong> <a class="anchor-link"
             title="Permalink to isException">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for Exceptions. </p>
 <pre class="source">
-isException = const _Exception()
+const isException = const _Exception()
 </pre>
 </div>
 </div>
@@ -98,8 +109,9 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>isFalse</strong
             title="Permalink to isFalse">#</a>
         </h4>
         <div class="doc">
+<p>A matcher that matches anything except the Boolean value true. </p>
 <pre class="source">
-isFalse = const _IsFalse()
+const Matcher isFalse = const _IsFalse()
 </pre>
 </div>
 </div>
@@ -110,8 +122,9 @@ const         <strong>isFormatException</strong> <a class="anchor-link"
             title="Permalink to isFormatException">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for FormatExceptions. </p>
 <pre class="source">
-isFormatException = const _FormatException()
+const isFormatException = const _FormatException()
 </pre>
 </div>
 </div>
@@ -122,8 +135,9 @@ const         <strong>isList</strong> <a class="anchor-link"
             title="Permalink to isList">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for List types. </p>
 <pre class="source">
-isList = const _IsList()
+const isList = const _IsList()
 </pre>
 </div>
 </div>
@@ -134,8 +148,9 @@ const         <strong>isMap</strong> <a class="anchor-link"
             title="Permalink to isMap">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for Map types. </p>
 <pre class="source">
-isMap = const _IsMap()
+const isMap = const _IsMap()
 </pre>
 </div>
 </div>
@@ -146,9 +161,10 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>isNegative</str
             title="Permalink to isNegative">#</a>
         </h4>
         <div class="doc">
+<p>A matcher which matches if the match argument is negative.</p>
 <pre class="source">
-isNegative =
-const _OrderingComparison(0, false, true, false, 'a negative value', false)
+const Matcher isNegative =
+ const _OrderingComparison(0, false, true, false, 'a negative value', false)
 </pre>
 </div>
 </div>
@@ -159,10 +175,11 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>isNonNegative</
             title="Permalink to isNonNegative">#</a>
         </h4>
         <div class="doc">
+<p>A matcher which matches if the match argument is zero or positive.</p>
 <pre class="source">
-isNonNegative =
-const _OrderingComparison(0, true, false, true,
-'a non-negative value', false)
+const Matcher isNonNegative =
+ const _OrderingComparison(0, true, false, true,
+     'a non-negative value', false)
 </pre>
 </div>
 </div>
@@ -173,10 +190,11 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>isNonPositive</
             title="Permalink to isNonPositive">#</a>
         </h4>
         <div class="doc">
+<p>A matcher which matches if the match argument is zero or negative.</p>
 <pre class="source">
-isNonPositive =
-const _OrderingComparison(0, true, true, false,
-'a non-positive value', false)
+const Matcher isNonPositive =
+ const _OrderingComparison(0, true, true, false,
+     'a non-positive value', false)
 </pre>
 </div>
 </div>
@@ -187,9 +205,10 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>isNonZero</stro
             title="Permalink to isNonZero">#</a>
         </h4>
         <div class="doc">
+<p>A matcher which matches if the match argument is non-zero.</p>
 <pre class="source">
-isNonZero =
-const _OrderingComparison(0, false, true, true, 'a value not equal to')
+const Matcher isNonZero =
+ const _OrderingComparison(0, false, true, true, 'a value not equal to')
 </pre>
 </div>
 </div>
@@ -200,8 +219,9 @@ const         <strong>isNoSuchMethodError</strong> <a class="anchor-link"
             title="Permalink to isNoSuchMethodError">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for NoSuchMethodErrors. </p>
 <pre class="source">
-isNoSuchMethodError = const _NoSuchMethodError()
+const isNoSuchMethodError = const _NoSuchMethodError()
 </pre>
 </div>
 </div>
@@ -212,8 +232,9 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>isNotNull</stro
             title="Permalink to isNotNull">#</a>
         </h4>
         <div class="doc">
+<p>A matcher that matches any non-null value. </p>
 <pre class="source">
-isNotNull = const _IsNotNull()
+const Matcher isNotNull = const _IsNotNull()
 </pre>
 </div>
 </div>
@@ -224,8 +245,9 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>isNull</strong>
             title="Permalink to isNull">#</a>
         </h4>
         <div class="doc">
+<p>A matcher that matches any null value. </p>
 <pre class="source">
-isNull = const _IsNull()
+const Matcher isNull = const _IsNull()
 </pre>
 </div>
 </div>
@@ -236,9 +258,10 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>isPositive</str
             title="Permalink to isPositive">#</a>
         </h4>
         <div class="doc">
+<p>A matcher which matches if the match argument is positive.</p>
 <pre class="source">
-isPositive =
-const _OrderingComparison(0, false, false, true, 'a positive value', false)
+const Matcher isPositive =
+ const _OrderingComparison(0, false, false, true, 'a positive value', false)
 </pre>
 </div>
 </div>
@@ -249,8 +272,9 @@ const         <strong>isRangeError</strong> <a class="anchor-link"
             title="Permalink to isRangeError">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for RangeErrors. </p>
 <pre class="source">
-isRangeError = const _RangeError()
+const isRangeError = const _RangeError()
 </pre>
 </div>
 </div>
@@ -261,8 +285,9 @@ const         <strong>isStateError</strong> <a class="anchor-link"
             title="Permalink to isStateError">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for StateErrors. </p>
 <pre class="source">
-isStateError = const _StateError()
+const isStateError = const _StateError()
 </pre>
 </div>
 </div>
@@ -273,8 +298,9 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>isTrue</strong>
             title="Permalink to isTrue">#</a>
         </h4>
         <div class="doc">
+<p>A matcher that matches the Boolean value true. </p>
 <pre class="source">
-isTrue = const _IsTrue()
+const Matcher isTrue = const _IsTrue()
 </pre>
 </div>
 </div>
@@ -285,8 +311,9 @@ const         <strong>isUnimplementedError</strong> <a class="anchor-link"
             title="Permalink to isUnimplementedError">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for UnimplementedErrors. </p>
 <pre class="source">
-isUnimplementedError = const _UnimplementedError()
+const isUnimplementedError = const _UnimplementedError()
 </pre>
 </div>
 </div>
@@ -297,8 +324,9 @@ const         <strong>isUnsupportedError</strong> <a class="anchor-link"
             title="Permalink to isUnsupportedError">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for UnsupportedError. </p>
 <pre class="source">
-isUnsupportedError = const _UnsupportedError()
+const isUnsupportedError = const _UnsupportedError()
 </pre>
 </div>
 </div>
@@ -309,9 +337,10 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>isZero</strong>
             title="Permalink to isZero">#</a>
         </h4>
         <div class="doc">
+<p>A matcher which matches if the match argument is zero.</p>
 <pre class="source">
-isZero =
-const _OrderingComparison(0, true, false, false, 'a value equal to')
+const Matcher isZero =
+ const _OrderingComparison(0, true, false, false, 'a value equal to')
 </pre>
 </div>
 </div>
@@ -322,8 +351,13 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>returnsNormally
             title="Permalink to returnsNormally">#</a>
         </h4>
         <div class="doc">
+<p>A matcher that matches a function call against no exception.
+The function will be called once. Any exceptions will be silently swallowed.
+The value passed to expect() should be a reference to the function.
+Note that the function cannot take arguments; to handle this
+a wrapper will have to be created.</p>
 <pre class="source">
-returnsNormally = const _ReturnsNormally()
+const Matcher returnsNormally = const _ReturnsNormally()
 </pre>
 </div>
 </div>
@@ -334,8 +368,17 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>throws</strong>
             title="Permalink to throws">#</a>
         </h4>
         <div class="doc">
+<p>This can be used to match two kinds of objects:</p><ul><li>
+<p>A <code>Function</code> that throws an exception when called. The function cannot
+take any arguments. If you want to test that a function expecting
+arguments throws, wrap it in another zero-argument function that calls
+the one you want to test.</p></li><li>
+<p>A <code>Future</code> that completes with an exception. Note that this creates an
+asynchronous expectation. The call to <code>expect()</code> that includes this will
+return immediately and execution will continue. Later, when the future
+completes, the actual expectation will run.</p></li></ul>
 <pre class="source">
-throws = const Throws()
+const Matcher throws = const Throws()
 </pre>
 </div>
 </div>
@@ -346,9 +389,10 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsArgumentE
             title="Permalink to throwsArgumentError">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for functions that throw ArgumentError. </p>
 <pre class="source">
-throwsArgumentError =
-const Throws(isArgumentError)
+const Matcher throwsArgumentError =
+   const Throws(isArgumentError)
 </pre>
 </div>
 </div>
@@ -359,8 +403,9 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsException
             title="Permalink to throwsException">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for functions that throw Exception. </p>
 <pre class="source">
-throwsException = const Throws(isException)
+const Matcher throwsException = const Throws(isException)
 </pre>
 </div>
 </div>
@@ -371,9 +416,10 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsFormatExc
             title="Permalink to throwsFormatException">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for functions that throw FormatException. </p>
 <pre class="source">
-throwsFormatException =
-const Throws(isFormatException)
+const Matcher throwsFormatException =
+   const Throws(isFormatException)
 </pre>
 </div>
 </div>
@@ -384,9 +430,10 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsNoSuchMet
             title="Permalink to throwsNoSuchMethodError">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for functions that throw NoSuchMethodError. </p>
 <pre class="source">
-throwsNoSuchMethodError =
-const Throws(isNoSuchMethodError)
+const Matcher throwsNoSuchMethodError =
+   const Throws(isNoSuchMethodError)
 </pre>
 </div>
 </div>
@@ -397,9 +444,10 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsRangeErro
             title="Permalink to throwsRangeError">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for functions that throw RangeError. </p>
 <pre class="source">
-throwsRangeError =
-const Throws(isRangeError)
+const Matcher throwsRangeError =
+   const Throws(isRangeError)
 </pre>
 </div>
 </div>
@@ -410,9 +458,10 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsStateErro
             title="Permalink to throwsStateError">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for functions that throw StateError. </p>
 <pre class="source">
-throwsStateError =
-const Throws(isStateError)
+const Matcher throwsStateError =
+   const Throws(isStateError)
 </pre>
 </div>
 </div>
@@ -423,9 +472,10 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsUnimpleme
             title="Permalink to throwsUnimplementedError">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for functions that throw Exception. </p>
 <pre class="source">
-throwsUnimplementedError =
-const Throws(isUnimplementedError)
+const Matcher throwsUnimplementedError =
+   const Throws(isUnimplementedError)
 </pre>
 </div>
 </div>
@@ -436,8 +486,9 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsUnsupport
             title="Permalink to throwsUnsupportedError">#</a>
         </h4>
         <div class="doc">
+<p>A matcher for functions that throw UnsupportedError. </p>
 <pre class="source">
-throwsUnsupportedError = const Throws(isUnsupportedError)
+const Matcher throwsUnsupportedError = const Throws(isUnsupportedError)
 </pre>
 </div>
 </div>
@@ -448,8 +499,15 @@ throwsUnsupportedError = const Throws(isUnsupportedError)
             title="Permalink to wrapAsync">#</a>
         </h4>
         <div class="doc">
+<p>Some matchers, like those for Futures and exception testing,
+can fail in asynchronous sections, and throw exceptions.
+A user of this library will typically want to catch and handle 
+such exceptions. The <a class="crossref" href="matcher.html#wrapAsync">wrapAsync</a> property is a function that
+can wrap callbacks used by these Matchers so that they can be
+used safely. For example, the unittest library will set this
+to be expectAsync1. By default this is an identity function.</p>
 <pre class="source">
-wrapAsync = (f, [id]) =&gt; f
+Function wrapAsync = (f, [id]) =&gt; f
 </pre>
 </div>
 </div>

@@ -64,7 +64,7 @@ const <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
         </h4>
         <div class="doc">
 <pre class="source">
-CHROME = "Chrome"
+static const String CHROME = "Chrome"
 </pre>
 </div>
 </div>
@@ -76,7 +76,7 @@ const <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
         </h4>
         <div class="doc">
 <pre class="source">
-FIREFOX = "Firefox"
+static const String FIREFOX = "Firefox"
 </pre>
 </div>
 </div>
@@ -88,7 +88,7 @@ const <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
         </h4>
         <div class="doc">
 <pre class="source">
-IE = "Internet Explorer"
+static const String IE = "Internet Explorer"
 </pre>
 </div>
 </div>
@@ -100,7 +100,7 @@ const <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
         </h4>
         <div class="doc">
 <pre class="source">
-OPERA = "Opera"
+static const String OPERA = "Opera"
 </pre>
 </div>
 </div>
@@ -112,7 +112,7 @@ const <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
         </h4>
         <div class="doc">
 <pre class="source">
-SAFARI = "Safari"
+static const String SAFARI = "Safari"
 </pre>
 </div>
 </div>
@@ -139,8 +139,9 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
             title="Permalink to SupportedBrowser.browserName">#</a>
         </h4>
         <div class="doc">
+<p>The name of the browser.</p>
 <pre class="source">
-browserName
+final String browserName
 </pre>
 </div>
 </div>
@@ -151,8 +152,10 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
             title="Permalink to SupportedBrowser.minimumVersion">#</a>
         </h4>
         <div class="doc">
+<p>The minimum version of the browser that supports the feature, or null
+if supported on all versions.</p>
 <pre class="source">
-minimumVersion
+final String minimumVersion
 </pre>
 </div>
 </div>

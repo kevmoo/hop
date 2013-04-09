@@ -324,8 +324,9 @@ final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href=
             title="Permalink to Parser.args">#</a>
         </h4>
         <div class="doc">
+<p>The arguments being parsed. </p>
 <pre class="source">
-args
+final List&lt;String&gt; args
 </pre>
 </div>
 </div>
@@ -336,8 +337,10 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
             title="Permalink to Parser.commandName">#</a>
         </h4>
         <div class="doc">
+<p>If parser is parsing a command's options, this will be the name of the
+command. For top-level results, this returns <code>null</code>.</p>
 <pre class="source">
-commandName
+final String commandName
 </pre>
 </div>
 </div>
@@ -361,8 +364,9 @@ final <a href="../args/ArgParser.html">ArgParser</a>         <strong>grammar</st
             title="Permalink to Parser.grammar">#</a>
         </h4>
         <div class="doc">
+<p>The grammar being parsed. </p>
 <pre class="source">
-grammar
+final ArgParser grammar
 </pre>
 </div>
 </div>
@@ -373,8 +377,10 @@ final <a href="../args.src.parser/Parser.html">Parser</a>         <strong>parent
             title="Permalink to Parser.parent">#</a>
         </h4>
         <div class="doc">
+<p>The parser for the supercommand of this command parser, or <code>null</code> if this
+is the top-level parser.</p>
 <pre class="source">
-parent
+final Parser parent
 </pre>
 </div>
 </div>
@@ -385,8 +391,9 @@ final <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>         <stro
             title="Permalink to Parser.results">#</a>
         </h4>
         <div class="doc">
+<p>The accumulated parsed options. </p>
 <pre class="source">
-results = {}
+final Map results = {}
 </pre>
 </div>
 </div>
@@ -650,7 +657,7 @@ void readNextArgAsValue(Option option) {
 </div>
 <div class="method"><h4 id="setOption">
 <button class="show-code">Code</button>
-<strong>setOption</strong>(<a href="http://api.dartlang.org/dart_core/Map.html">Map</a> results, <a href="../args/Option.html">Option</a> option, value) <a class="anchor-link" href="#setOption"
+dynamic<strong>setOption</strong>(<a href="http://api.dartlang.org/dart_core/Map.html">Map</a> results, <a href="../args/Option.html">Option</a> option, value) <a class="anchor-link" href="#setOption"
               title="Permalink to Parser.setOption">#</a></h4>
 <div class="doc">
 <p>Validates and stores 
@@ -675,7 +682,7 @@ setOption(Map results, Option option, value) {
 </div>
 <div class="method"><h4 id="validate">
 <button class="show-code">Code</button>
-<strong>validate</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> condition, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#validate"
+dynamic<strong>validate</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> condition, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#validate"
               title="Permalink to Parser.validate">#</a></h4>
 <div class="doc">
 <p>Called during parsing to validate the arguments. Throws a

@@ -36,8 +36,16 @@
             title="Permalink to finishes">#</a>
         </h4>
         <div class="doc">
+<p>Matches a <code>Future</code> that completes successfully with a value. Note that this
+creates an asynchronous expectation. The call to <code>expect()</code> that includes
+this will return immediately and execution will continue. Later, when the
+future completes, the actual expectation will run.</p>
+<p>To test that a Future completes with an exception, you can use <code>throws</code> and
+<code>throwsA</code>.</p>
+<p>Unlike <code>completes</code> in <code>unittest</code>, exceptions are registered directly with
+the test framework. They are not wrapped.</p>
 <pre class="source">
-finishes = const _Finishes(null)
+Matcher finishes = const _Finishes(null)
 </pre>
 </div>
 </div>
@@ -49,8 +57,8 @@ final <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsAssertion
         </h4>
         <div class="doc">
 <pre class="source">
-throwsAssertionError =
-const Throws(const _AssertionErrorMatcher())
+final Matcher throwsAssertionError =
+ const Throws(const _AssertionErrorMatcher())
 </pre>
 </div>
 </div>
@@ -62,8 +70,8 @@ final <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsInvalidOp
         </h4>
         <div class="doc">
 <pre class="source">
-throwsInvalidOperationError =
-const Throws(const _InvalidOperationError())
+final Matcher throwsInvalidOperationError =
+ const Throws(const _InvalidOperationError())
 </pre>
 </div>
 </div>
@@ -75,8 +83,8 @@ final <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsNullArgum
         </h4>
         <div class="doc">
 <pre class="source">
-throwsNullArgumentError =
-const Throws(const _NullArgumentError())
+final Matcher throwsNullArgumentError =
+ const Throws(const _NullArgumentError())
 </pre>
 </div>
 </div>

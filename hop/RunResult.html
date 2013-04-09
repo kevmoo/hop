@@ -93,8 +93,11 @@ final <a href="../hop/RunResult.html">RunResult</a>         <strong>BAD_USAGE</s
             title="Permalink to RunResult.BAD_USAGE">#</a>
         </h4>
         <div class="doc">
+<p>Hop was called with bad arguments.</p>
+<p>Code 64</p>
+<p>See <code>EX_USAGE</code> in <a href="http://www.retro11.de/ouxr/211bsd/usr/include/sysexits.h.html">http://www.retro11.de/ouxr/211bsd/usr/include/sysexits.h.html</a></p>
 <pre class="source">
-BAD_USAGE = const RunResult._internal(64, 'BAD USAGE')
+static final RunResult BAD_USAGE = const RunResult._internal(64, 'BAD USAGE')
 </pre>
 </div>
 </div>
@@ -105,8 +108,10 @@ final <a href="../hop/RunResult.html">RunResult</a>         <strong>ERROR</stron
             title="Permalink to RunResult.ERROR">#</a>
         </h4>
         <div class="doc">
+<p>Task misbehaved. Returned null, used <a class="crossref" href="../hop/TaskContext.html">TaskContext</a> incorrectly, etc.</p>
+<p>Code 82</p>
 <pre class="source">
-ERROR = const RunResult._internal(82, 'ERROR')
+static final RunResult ERROR = const RunResult._internal(82, 'ERROR')
 </pre>
 </div>
 </div>
@@ -117,8 +122,10 @@ final <a href="../hop/RunResult.html">RunResult</a>         <strong>EXCEPTION</s
             title="Permalink to RunResult.EXCEPTION">#</a>
         </h4>
         <div class="doc">
+<p>Task was was started, but threw an exception</p>
+<p>Code 81</p>
 <pre class="source">
-EXCEPTION = const RunResult._internal(81, 'EXCEPTION')
+static final RunResult EXCEPTION = const RunResult._internal(81, 'EXCEPTION')
 </pre>
 </div>
 </div>
@@ -129,8 +136,10 @@ final <a href="../hop/RunResult.html">RunResult</a>         <strong>FAIL</strong
             title="Permalink to RunResult.FAIL">#</a>
         </h4>
         <div class="doc">
+<p>Task was was started and failed gracefully</p>
+<p>Code 80</p>
 <pre class="source">
-FAIL = const RunResult._internal(80, 'FAIL')
+static final RunResult FAIL = const RunResult._internal(80, 'FAIL')
 </pre>
 </div>
 </div>
@@ -141,8 +150,10 @@ final <a href="../hop/RunResult.html">RunResult</a>         <strong>SUCCESS</str
             title="Permalink to RunResult.SUCCESS">#</a>
         </h4>
         <div class="doc">
+<p>Ran successfully</p>
+<p>Code 0</p>
 <pre class="source">
-SUCCESS = const RunResult._internal(0, 'SUCCESS')
+static final RunResult SUCCESS = const RunResult._internal(0, 'SUCCESS')
 </pre>
 </div>
 </div>
@@ -157,7 +168,7 @@ final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <stro
         </h4>
         <div class="doc">
 <pre class="source">
-exitCode
+final int exitCode
 </pre>
 </div>
 </div>
@@ -169,7 +180,7 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
         </h4>
         <div class="doc">
 <pre class="source">
-name
+final String name
 </pre>
 </div>
 </div>

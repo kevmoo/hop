@@ -108,8 +108,9 @@ const <a href="../logging/Level.html">Level</a>         <strong>ALL</strong> <a 
             title="Permalink to Level.ALL">#</a>
         </h4>
         <div class="doc">
+<p>Special key to turn on logging for all levels (<a class="crossref" href="../logging/Level.html#value">value</a> = 0). </p>
 <pre class="source">
-ALL = const Level('ALL', 0)
+static const Level ALL = const Level('ALL', 0)
 </pre>
 </div>
 </div>
@@ -120,8 +121,9 @@ const <a href="../logging/Level.html">Level</a>         <strong>CONFIG</strong> 
             title="Permalink to Level.CONFIG">#</a>
         </h4>
         <div class="doc">
+<p>Key for static configuration messages (<a class="crossref" href="../logging/Level.html#value">value</a> = 700). </p>
 <pre class="source">
-CONFIG = const Level('CONFIG', 700)
+static const Level CONFIG = const Level('CONFIG', 700)
 </pre>
 </div>
 </div>
@@ -132,8 +134,9 @@ const <a href="../logging/Level.html">Level</a>         <strong>FINE</strong> <a
             title="Permalink to Level.FINE">#</a>
         </h4>
         <div class="doc">
+<p>Key for tracing information (<a class="crossref" href="../logging/Level.html#value">value</a> = 500). </p>
 <pre class="source">
-FINE = const Level('FINE', 500)
+static const Level FINE = const Level('FINE', 500)
 </pre>
 </div>
 </div>
@@ -144,8 +147,9 @@ const <a href="../logging/Level.html">Level</a>         <strong>FINER</strong> <
             title="Permalink to Level.FINER">#</a>
         </h4>
         <div class="doc">
+<p>Key for fairly detailed tracing (<a class="crossref" href="../logging/Level.html#value">value</a> = 400). </p>
 <pre class="source">
-FINER = const Level('FINER', 400)
+static const Level FINER = const Level('FINER', 400)
 </pre>
 </div>
 </div>
@@ -156,8 +160,9 @@ const <a href="../logging/Level.html">Level</a>         <strong>FINEST</strong> 
             title="Permalink to Level.FINEST">#</a>
         </h4>
         <div class="doc">
+<p>Key for highly detailed tracing (<a class="crossref" href="../logging/Level.html#value">value</a> = 300). </p>
 <pre class="source">
-FINEST = const Level('FINEST', 300)
+static const Level FINEST = const Level('FINEST', 300)
 </pre>
 </div>
 </div>
@@ -168,8 +173,9 @@ const <a href="../logging/Level.html">Level</a>         <strong>INFO</strong> <a
             title="Permalink to Level.INFO">#</a>
         </h4>
         <div class="doc">
+<p>Key for informational messages (<a class="crossref" href="../logging/Level.html#value">value</a> = 800). </p>
 <pre class="source">
-INFO = const Level('INFO', 800)
+static const Level INFO = const Level('INFO', 800)
 </pre>
 </div>
 </div>
@@ -180,8 +186,9 @@ const <a href="../logging/Level.html">Level</a>         <strong>OFF</strong> <a 
             title="Permalink to Level.OFF">#</a>
         </h4>
         <div class="doc">
+<p>Special key to turn off all logging (<a class="crossref" href="../logging/Level.html#value">value</a> = 2000). </p>
 <pre class="source">
-OFF = const Level('OFF', 2000)
+static const Level OFF = const Level('OFF', 2000)
 </pre>
 </div>
 </div>
@@ -192,8 +199,9 @@ const <a href="../logging/Level.html">Level</a>         <strong>SEVERE</strong> 
             title="Permalink to Level.SEVERE">#</a>
         </h4>
         <div class="doc">
+<p>Key for serious failures (<a class="crossref" href="../logging/Level.html#value">value</a> = 1000). </p>
 <pre class="source">
-SEVERE = const Level('SEVERE', 1000)
+static const Level SEVERE = const Level('SEVERE', 1000)
 </pre>
 </div>
 </div>
@@ -204,8 +212,9 @@ const <a href="../logging/Level.html">Level</a>         <strong>SHOUT</strong> <
             title="Permalink to Level.SHOUT">#</a>
         </h4>
         <div class="doc">
+<p>Key for extra debugging loudness (<a class="crossref" href="../logging/Level.html#value">value</a> = 1200). </p>
 <pre class="source">
-SHOUT = const Level('SHOUT', 1200)
+static const Level SHOUT = const Level('SHOUT', 1200)
 </pre>
 </div>
 </div>
@@ -216,8 +225,9 @@ const <a href="../logging/Level.html">Level</a>         <strong>WARNING</strong>
             title="Permalink to Level.WARNING">#</a>
         </h4>
         <div class="doc">
+<p>Key for potential problems (<a class="crossref" href="../logging/Level.html#value">value</a> = 900). </p>
 <pre class="source">
-WARNING = const Level('WARNING', 900)
+static const Level WARNING = const Level('WARNING', 900)
 </pre>
 </div>
 </div>
@@ -267,7 +277,7 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
         </h4>
         <div class="doc">
 <pre class="source">
-name
+final String name
 </pre>
 </div>
 </div>
@@ -278,8 +288,10 @@ final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <stro
             title="Permalink to Level.value">#</a>
         </h4>
         <div class="doc">
+<p>Unique value for this level. Used to order levels, so filtering can exclude
+messages whose level is under certain value.</p>
 <pre class="source">
-value
+final int value
 </pre>
 </div>
 </div>

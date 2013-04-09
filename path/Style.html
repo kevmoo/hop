@@ -90,8 +90,10 @@ final         <strong>posix</strong> <a class="anchor-link"
             title="Permalink to Style.posix">#</a>
         </h4>
         <div class="doc">
+<p>POSIX-style paths use "/" (forward slash) as separators. Absolute paths
+start with "/". Used by UNIX, Linux, Mac OS X, and others.</p>
 <pre class="source">
-posix = new Style._('posix', '/', '/', '/')
+static final posix = new Style._('posix', '/', '/', '/')
 </pre>
 </div>
 </div>
@@ -102,9 +104,12 @@ final         <strong>windows</strong> <a class="anchor-link"
             title="Permalink to Style.windows">#</a>
         </h4>
         <div class="doc">
+<p>Windows paths use "\" (backslash) as separators. Absolute paths start with
+a drive letter followed by a colon (example, "C:") or two backslashes
+("\\") for UNC paths.</p>
 <pre class="source">
-windows = new Style._('windows', '\\', r'[/\\]',
-r'\\\\|[a-zA-Z]:[/\\]')
+static final windows = new Style._('windows', '\\', r'[/\\]',
+   r'\\\\|[a-zA-Z]:[/\\]')
 </pre>
 </div>
 </div>
@@ -118,8 +123,9 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
             title="Permalink to Style.name">#</a>
         </h4>
         <div class="doc">
+<p>The name of this path style. Will be "posix" or "windows".</p>
 <pre class="source">
-name
+final String name
 </pre>
 </div>
 </div>
@@ -130,8 +136,10 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
             title="Permalink to Style.separator">#</a>
         </h4>
         <div class="doc">
+<p>The path separator for this style. On POSIX, this is <code>/</code>. On Windows,
+it's <code>\</code>.</p>
 <pre class="source">
-separator
+final String separator
 </pre>
 </div>
 </div>
@@ -142,8 +150,11 @@ final <a href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a>      
             title="Permalink to Style.separatorPattern">#</a>
         </h4>
         <div class="doc">
+<p>The <code>Pattern</code> that can be used to match a separator for a path in this
+style. Windows allows both "/" and "\" as path separators even though
+"\" is the canonical one.</p>
 <pre class="source">
-separatorPattern
+final Pattern separatorPattern
 </pre>
 </div>
 </div>
