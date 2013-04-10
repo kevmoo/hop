@@ -43,47 +43,6 @@ dependencies:
 
 # The libraries
 
-The Bag-of-Tricks is two sets of libraries: __bot__ and __hop__.
-
-# bot
-
-## bot -- default library
-
- * No dependencies on 3rd-party libraries.
- * Usable for browser-based projects and non-browser projects.
-
-### attached
- * A general model for supporting extensible, runtime-defined events and
-   properties on supported objects.
- * This functionality is inspired by the Dependency Object/Property model
-   in WPF/Silverlight.
-
-### collection
- * `Array2d`
- * `Grouping` of collections
- * `ReadOnlyCollection`
-
-### color
- * `RgbColor`, `HslColor` with associated conversions back and forth
- * `RgbColor` supports to/from hex
-
-
-### events
- * Easily raise and subscribe to events with custom, type-safe event objects.
-
-### math
- * Mostly classes related to 2D geometry and graphicsgeometry-related classes
- * `Coordinate`, `Box`, `Size`, `Vector`, `AffineTransfrom`
-
-## bot_async
-  * `FutureValue`: an abstract model for async conversions via `Future<T>`
-  * `SendPortValue`: an implementation of `FutureValue` using isolates.
-
-## bot_retained
-  * A library for creating interactive content using HTML5 Canvas.
-  
-# hop
-
 ## hop - core task runtime
   * An object-oriented framework creating and reusing scripts in Dart.
   * Easy to create command-line scripts.
@@ -99,7 +58,6 @@ The Bag-of-Tricks is two sets of libraries: __bot__ and __hop__.
 
 # Authors
  * [Kevin Moore](https://github.com/kevmoo) ([+Kevin Moore](https://plus.google.com/110066012384188006594/), [@kevmoo](http://twitter.com/kevmoo))
- * [Andreas Köberle](https://github.com/eskimoblood) ([@eskimobloood](https://twitter.com/eskimobloood))
  * [Adam Singer](https://github.com/financeCoding) ([+Adam Singer](https://plus.google.com/104569492481999771226))
  * [Damon Douglas](https://github.com/damondouglas) ([+Damon Douglas](https://plus.google.com/u/0/108940381045821372455/))
  * _You? File bugs. Fork and Fix bugs. Let's build this community._

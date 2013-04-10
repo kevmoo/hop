@@ -2,9 +2,9 @@ library harness_console;
 
 import 'package:unittest/unittest.dart';
 import 'package:unittest/vm_config.dart';
-import 'test_console.dart' as console;
-import 'test_shared.dart' as shared;
-import 'test_dump_render_tree.dart' as drt;
+
+import 'hop/_hop.dart' as hop;
+import 'hop_tasks/_hop_tasks.dart' as hop_tasks;
 
 main() {
   testCore(new VMConfiguration());
@@ -14,7 +14,6 @@ void testCore(Configuration config) {
   unittestConfiguration = config;
   groupSep = ' - ';
 
-  shared.main();
-  console.main();
-  drt.main();
+  hop.main();
+  hop_tasks.main();
 }

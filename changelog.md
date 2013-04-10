@@ -1,4 +1,4 @@
-# Changelog - Dart Bag of Tricks
+# Changelog - Dart Hop Task Management Framework
 
 ## 0.16.3+1 2013-04-09 (SDK 0.4.5+1 r21094)
 
