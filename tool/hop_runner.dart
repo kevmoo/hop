@@ -8,7 +8,6 @@ import 'package:bot/hop.dart';
 import 'package:bot/hop_tasks.dart';
 import '../test/harness_console.dart' as test_console;
 
-import 'tasks/update_example_html.dart' as html_tasks;
 import 'tasks/dartdoc_postbuild.dart' as dartdoc;
 
 void main() {
@@ -31,20 +30,7 @@ void main() {
                                                        'test/test_browser.dart',
                                                        'test/test_shared.dart']));
 
-  //
-  // Dart2js
-  //
-  final paths = ['click', 'drag', 'fract', 'frames', 'nav', 'spin']
-      .map((d) => "example/bot_retained/$d/${d}_demo.dart")
-      .toList();
-  paths.add('test/harness_browser.dart');
-
-  addTask('dart2js', createDart2JsTask(paths,
-      liveTypeAnalysis: true, rejectDeprecatedFeatures: true));
-
   addTask('bench', createBenchTask());
-
-  addTask('update-html', html_tasks.getUpdateExampleHtmlTask());
 
   runHop();
 }

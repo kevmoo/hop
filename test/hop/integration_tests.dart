@@ -24,8 +24,7 @@ class IntegrationTests {
           expect(pr.exitCode, equals(RunResult.SUCCESS.exitCode));
           final lines = Util.splitLines(pr.stdout.trim()).toList();
           expect(lines, orderedEquals(['analyze_libs', 'analyze_test_libs', 'bench',
-                                       'dart2js', 'docs', 'help', 'test',
-                                       'update-html']));
+                                       'docs', 'help', 'test']));
     });
   }
 
