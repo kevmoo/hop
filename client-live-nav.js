@@ -76,7 +76,8 @@ $$.MappedIterator = {"": "Iterator;_liblib$_current,_iterator,_f",
 
 $$.WhereIterable = {"": "Iterable;_iterable,_f",
   get$iterator: function(_) {
-    return $.WhereIterator$($.get$iterator$ax(this._iterable), this._f);
+    var t1 = this._iterable;
+    return $.WhereIterator$(t1.get$iterator(t1), this._f);
   }
 };
 
@@ -11005,14 +11006,14 @@ $.StringWrapper_wEo = new $.StringWrapper(",");
 $.PrecedenceInfo_43h = new $.PrecedenceInfo($.StringWrapper_wEo, 0, 44);
 $.EventStreamProvider_keydown = new $.EventStreamProvider("keydown");
 $.Keyword_uHn = new $.Keyword("implements", false, true, $.PrecedenceInfo_StringWrapper_keyword_0_107);
-$.JSArray_methods = $.JSArray.prototype;
+$.StringWrapper_ouN = new $.StringWrapper("=>");
 $.Keyword_Z2F = new $.Keyword("continue", false, false, $.PrecedenceInfo_StringWrapper_keyword_0_107);
-$.StringWrapper_string = new $.StringWrapper("string");
-$.PrecedenceInfo_StringWrapper_string_0_39 = new $.PrecedenceInfo($.StringWrapper_string, 0, 39);
+$.JSArray_methods = $.JSArray.prototype;
 $.C_CloseToken = new $.CloseToken();
 $.StringWrapper_sxw = new $.StringWrapper("===");
 $.PrecedenceInfo_IQT = new $.PrecedenceInfo($.StringWrapper_sxw, 9, 134);
-$.StringWrapper_ouN = new $.StringWrapper("=>");
+$.StringWrapper_string = new $.StringWrapper("string");
+$.PrecedenceInfo_StringWrapper_string_0_39 = new $.PrecedenceInfo($.StringWrapper_string, 0, 39);
 $.StringWrapper_f5R = new $.StringWrapper("<=");
 $.PrecedenceInfo_0DX = new $.PrecedenceInfo($.StringWrapper_f5R, 10, 129);
 $.Keyword_0zn = new $.Keyword("case", false, false, $.PrecedenceInfo_StringWrapper_keyword_0_107);
