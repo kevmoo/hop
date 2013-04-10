@@ -1,4 +1,4 @@
-# The HOP task management system for Dart
+# HOP
 ## An object-oriented framework creating and reusing scripts in Dart.
 
 [![Build Status](https://drone.io/github.com/kevmoo/hop.dart/status.png)](https://drone.io/github.com/kevmoo/hop.dart/latest)
