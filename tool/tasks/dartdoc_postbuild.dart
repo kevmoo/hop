@@ -9,7 +9,7 @@ import 'package:html5lib/dom.dart';
 import 'shared.dart';
 
 const _sourceTitle = 'Dart Documentation';
-const _outputTitle = 'BOT Documentation';
+const _outputTitle = 'HOP Documentation';
 
 Future postBuild(TaskLogger logger, String tempDocDir) {
 
@@ -57,7 +57,6 @@ Future<Document> _updateIndex(Document source) {
       .singleWhere((Element div) => div.attributes['class'] == 'content');
 
   // should only have h3 and h4 elements
-  final botHeaders = new List<Element>();
   final hopHeaders = new List<Element>();
   final otherHeaders = new List<Element>();
 
@@ -72,9 +71,7 @@ Future<Document> _updateIndex(Document source) {
 
       final libName = anchor.innerHtml;
 
-      if(libName.startsWith('bot')) {
-        botHeaders.add(child);
-      } else if(libName.startsWith('hop')) {
+      if(libName.startsWith('hop')) {
         hopHeaders.add(child);
       } else {
         otherHeaders.add(child);
@@ -99,7 +96,6 @@ Future<Document> _updateIndex(Document source) {
 
   };
 
-  doSection('Dart Bag of Tricks', botHeaders);
   doSection('Hop task system', hopHeaders);
   doSection('Dependencies', otherHeaders);
 
@@ -111,15 +107,15 @@ Element _getAboutElement() {
     ..attributes['src'] = 'logo.png'
     ..attributes['width'] = '333'
     ..attributes['height'] = '250'
-    ..attributes['title'] = 'Dart Bag of Tricks';
+    ..attributes['title'] = 'HOP Task Management Framwork for Dart';
 
   final logoLink = new Element.tag('a')
-    ..attributes['href'] = 'https://github.com/kevmoo/bot.dart'
+    ..attributes['href'] = 'https://github.com/kevmoo/hop.dart'
     ..children.add(logo);
 
   final ghLink = new Element.tag('a')
-  ..attributes['href'] = 'https://github.com/kevmoo/bot.dart'
-  ..innerHtml = 'github.com/kevmoo/bot.dart';
+  ..attributes['href'] = 'https://github.com/kevmoo/hop.dart'
+  ..innerHtml = 'github.com/kevmoo/hop.dart';
 
 
   return new Element.tag('div')
