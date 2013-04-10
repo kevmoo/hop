@@ -51,14 +51,6 @@ void runHop({
   Runner._runShell(_sharedConfig, helpTaskName);
 }
 
-/**
- * Use [runHop] instead.
- */
-@deprecated
-void runHopCore() {
-  runHop(paranoid: false, helpTaskName: null);
-}
-
 void addTask(String name, Task task) {
   _sharedConfig.addTask(name, task);
 }
