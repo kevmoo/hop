@@ -1,12 +1,9 @@
-![BOT!](https://raw.github.com/kevmoo/bot.dart/master/resource/logo.png)
-# The Dart Bag-of-Tricks
-## A collection of (mostly) general libraries to make working with [Dart](http://www.dartlang.org/) more productive.
+# The HOP task management system for Dart
+## An object-oriented framework creating and reusing scripts in Dart.
 
-Starting by porting bits of the [PL javascript library](https://github.com/thinkpixellab/pl) and Google's [Closure javascript library](https://developers.google.com/closure/library/) to enable some interesting scenarios.
+[![Build Status](https://drone.io/github.com/kevmoo/hop.dart/status.png)](https://drone.io/github.com/kevmoo/hop.dart/latest)
 
-[![](https://drone.io/kevmoo/bot.dart/status.png)](https://drone.io/kevmoo/bot.dart/latest)
-
-# Projects using BOT
+# Projects using HOP
 
 * [chrome.dart](https://github.com/dart-gde/chrome.dart) - Dart interop with chrome.* APIs for Chrome Packaged Apps
 * [Pop, Pop, Win!](https://github.com/dart-lang/pop-pop-win) - Minesweeper with balloons
@@ -16,30 +13,30 @@ Starting by porting bits of the [PL javascript library](https://github.com/think
 
 # Try It Now
 
-The __Dart Bag-of-Tricks__ ( __BOT__ ) is hosted on [pub.dartlang.org](http://pub.dartlang.org/packages/bot). Add the __BOT__ package to your `pubspec.yaml` file, selecting a version range that works with your version of the SDK. _Always check the [BOT page](http://pub.dartlang.org/packages/bot) on pub to find the latest release._
+The __The HOP task management system for Dart__ is hosted on [pub.dartlang.org](http://pub.dartlang.org/packages/hop). Add the __HOP__ package to your `pubspec.yaml` file, selecting a version range that works with your version of the SDK. _Always check the [HOP page](http://pub.dartlang.org/packages/hop) on pub to find the latest release._
 
-See the [changelog](https://github.com/kevmoo/bot.dart/blob/master/changelog.md) to find the version that works best for you.
+See the [changelog](https://github.com/kevmoo/hop.dart/blob/master/changelog.md) to find the version that works best for you.
 
-If you'd like to track bleeding edge developments, you can reference the the [GitHub repository](https://github.com/kevmoo/bot.dart) directly:
+If you'd like to track bleeding edge developments, you can reference the the [GitHub repository](https://github.com/kevmoo/hop.dart) directly:
 ```yaml
 dependencies:
-  bot:
-    git: https://github.com/kevmoo/bot.dart.git
+  hop:
+    git: https://github.com/kevmoo/hop.dart.git
 ```
 
 # Versioning
 
 * We follow [Semantic Versioning](http://semver.org/).
-* We are not planning a V1 for __BOT__ until Dart releases V1.
+* We are not planning a V1 for __HOP__ until Dart releases V1.
 	* In the mean time, the version will remain `0.Y.Z`.
 	* Changes to the _minor_ version - Y - will indicate breaking changes.
 	* Changes to the _patch_ version - Z - indicate non-breaking changes.
 
 # Dart SDK dependency
 
-* We're going to try to keep __BOT__ in line with the [latest integration build](https://gsdview.appspot.com/dart-editor-archive-integration/latest/) of the Dart SDK and Editor.
-* At this point, each SDK release tends to introduce breaking changes, which usually require breaking changes in __BOT__.
-* Keep an eye on the [changelog](https://github.com/kevmoo/bot.dart/blob/master/changelog.md) to see how __BOT__ aligns with each SDK release. 
+* We're going to try to keep __HOP__ in line with the [latest integration build](https://gsdview.appspot.com/dart-editor-archive-integration/latest/) of the Dart SDK and Editor.
+* At this point, each SDK release tends to introduce breaking changes, which usually require breaking changes in __HOP__.
+* Keep an eye on the [changelog](https://github.com/kevmoo/hop.dart/blob/master/changelog.md) to see how __HOP__ aligns with each SDK release. 
 
 # The libraries
 
