@@ -14,7 +14,7 @@ import 'package:bot/bot.dart';
 import 'package:bot/bot_async.dart';
 import 'package:bot/bot_git.dart';
 import 'package:bot/bot_io.dart';
-import 'package:bot/hop.dart';
+import 'package:hop/hop.dart';
 
 part 'src/hop_tasks/bench_task.dart';
 part 'src/hop_tasks/dart_analyzer.dart';
