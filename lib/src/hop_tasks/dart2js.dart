@@ -6,7 +6,8 @@ part of hop_tasks;
  */
 Task createDart2JsTask(dynamic delayedRootList, {String output: null,
   String packageRoot: null, bool minify: false, bool allowUnsafeEval: true,
-  bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false}) {
+  bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false, 
+  String outputType: "js"}) {
 
   return new Task.async((context) {
     bool errors = false;
@@ -26,7 +27,8 @@ Task createDart2JsTask(dynamic delayedRootList, {String output: null,
                 allowUnsafeEval: allowUnsafeEval,
                 packageRoot: packageRoot,
                 liveTypeAnalysis: liveTypeAnalysis,
-                rejectDeprecatedFeatures: rejectDeprecatedFeatures)
+                rejectDeprecatedFeatures: rejectDeprecatedFeatures,
+                outputType: outputType)
                 .then((bool success) {
                   // should not have been run if we had pending errors
                   assert(errors == false);
@@ -42,10 +44,15 @@ Task createDart2JsTask(dynamic delayedRootList, {String output: null,
 
 Future<bool> _dart2js(TaskContext ctx, String file, {String output: null,
   String packageRoot: null, bool minify: false, bool allowUnsafeEval: true,
-  bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false}) {
+  bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false,
+  String outputType: "js"}) {
 
   if(output == null) {
-    output = "${file}.js";
+    output = "${file}";
+  }
+  
+  if (outputType == "js") {
+    output = "${output}.js";
   }
 
   final packageDir = new Directory('packages');
@@ -54,6 +61,7 @@ Future<bool> _dart2js(TaskContext ctx, String file, {String output: null,
   final args = ["--package-root=${packageDir.path}",
                 '--throw-on-error',
                 '-v',
+                "--output-type=$outputType",
                 "--out=$output",
                 file];
 
