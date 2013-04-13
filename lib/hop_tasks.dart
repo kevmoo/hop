@@ -12,8 +12,8 @@ import 'package:unittest/unittest.dart' as unittest;
 
 import 'package:bot/bot.dart';
 import 'package:bot/bot_async.dart';
-import 'package:bot/bot_git.dart';
-import 'package:bot/bot_io.dart';
+import 'package:bot_io/bot_git.dart';
+import 'package:bot_io/bot_io.dart';
 import 'package:hop/hop.dart';
 
 part 'src/hop_tasks/bench_task.dart';

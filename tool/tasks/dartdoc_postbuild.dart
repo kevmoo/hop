@@ -82,7 +82,7 @@ Future<Document> _updateIndex(Document source) {
   contentDiv.children.clear();
 
   contentDiv.children.add(new Element.tag('h2')
-    ..innerHtml = 'Dart Bag of Tricks');
+    ..innerHtml = 'Hop: Dart Task Framework');
 
   contentDiv.children.add(_getAboutElement());
 
@@ -103,16 +103,6 @@ Future<Document> _updateIndex(Document source) {
 }
 
 Element _getAboutElement() {
-  final logo = new Element.tag('img')
-    ..attributes['src'] = 'logo.png'
-    ..attributes['width'] = '333'
-    ..attributes['height'] = '250'
-    ..attributes['title'] = 'HOP Task Management Framwork for Dart';
-
-  final logoLink = new Element.tag('a')
-    ..attributes['href'] = 'https://github.com/kevmoo/hop.dart'
-    ..children.add(logo);
-
   final ghLink = new Element.tag('a')
   ..attributes['href'] = 'https://github.com/kevmoo/hop.dart'
   ..innerHtml = 'github.com/kevmoo/hop.dart';
@@ -120,7 +110,6 @@ Element _getAboutElement() {
 
   return new Element.tag('div')
     ..attributes['class'] = 'about'
-    ..children.add(logoLink)
     ..children.add(new Element.tag('br'))
     ..children.add(ghLink);
 }

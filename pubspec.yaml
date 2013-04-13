@@ -9,6 +9,7 @@ environment:
 dependencies:
   unittest: '>=0.4.5+1'
   bot: '>=0.16.3'
+  bot_io: '>=0.20.0-dev'
   args: '>=0.4.5+1'
   logging: '>=0.4.5+1'
   pathos: '>=0.4.5+1'
