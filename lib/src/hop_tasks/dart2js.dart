@@ -1,13 +1,37 @@
 part of hop_tasks;
 
+// TODO: output does not work if there is more than one file provided, moron!
+
+@deprecated
+Task createDart2JsTask(dynamic delayedRootList, {String output: null,
+  String packageRoot: null, bool minify: false, bool allowUnsafeEval: true,
+  bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false}) {
+
+  return createDartCompilerTask(delayedRootList,
+      output: output,
+      packageRoot: packageRoot,
+      minify: minify,
+      allowUnsafeEval: allowUnsafeEval,
+      liveTypeAnalysis: liveTypeAnalysis,
+      rejectDeprecatedFeatures: rejectDeprecatedFeatures,
+      outputType: 'js');
+}
+
 /**
  * [delayedRootList] a [List<String>] mapping to paths to libraries or some
  * combinations of [Future] or [Function] values that return a [List<String>].
+ *
+ * [outputType] must be one of *js* or *dart*.
  */
-Task createDart2JsTask(dynamic delayedRootList, {String output: null,
+Task createDartCompilerTask(dynamic delayedRootList, {String output: null,
   String packageRoot: null, bool minify: false, bool allowUnsafeEval: true,
-  bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false, 
+  bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false,
   String outputType: "js"}) {
+
+  requireArgumentNotNullOrEmpty(outputType, 'outputType');
+  requireArgument(outputType == 'js' || outputType == 'dart', 'outputType');
+
+  final friendlyName = (outputType == 'js') ? 'Javascript' : 'Dart';
 
   return new Task.async((context) {
     bool errors = false;
@@ -22,13 +46,8 @@ Task createDart2JsTask(dynamic delayedRootList, {String output: null,
             }
 
             return _dart2js(context, path,
-                output: output,
-                minify: minify,
-                allowUnsafeEval: allowUnsafeEval,
-                packageRoot: packageRoot,
-                liveTypeAnalysis: liveTypeAnalysis,
-                rejectDeprecatedFeatures: rejectDeprecatedFeatures,
-                outputType: outputType)
+                output, packageRoot, minify, allowUnsafeEval,
+                liveTypeAnalysis, rejectDeprecatedFeatures, outputType)
                 .then((bool success) {
                   // should not have been run if we had pending errors
                   assert(errors == false);
@@ -39,20 +58,24 @@ Task createDart2JsTask(dynamic delayedRootList, {String output: null,
         .then((_) {
           return !errors;
         });
-  }, description: 'Run Dart-to-Javascript compiler');
+  }, description: 'Run Dart-to-$friendlyName compiler');
 }
 
-Future<bool> _dart2js(TaskContext ctx, String file, {String output: null,
-  String packageRoot: null, bool minify: false, bool allowUnsafeEval: true,
-  bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false,
-  String outputType: "js"}) {
+Future<bool> _dart2js(TaskContext ctx, String file,
+    String output, String packageRoot, bool minify, bool allowUnsafeEval,
+    bool liveTypeAnalysis, bool rejectDeprecatedFeatures, String outputType) {
 
   if(output == null) {
-    output = "${file}";
+    output = file;
+
+    if(!output.endsWith(outputType)) {
+      output = '$output.$outputType';
+    }
   }
-  
-  if (outputType == "js") {
-    output = "${output}.js";
+
+  if(output == file) {
+    throw 'The provided or derived output value "$output" is the same an input'
+      ' file.';
   }
 
   final packageDir = new Directory('packages');
