@@ -8,11 +8,11 @@ environment:
   sdk: '>=0.4.5+1.r21094'
 dependencies:
   unittest: '>=0.4.5+1'
-  bot: '>=0.16.3'
-  bot_io: '>=0.20.0-dev'
   args: '>=0.4.5+1'
+  bot: '>=0.16.3'
   logging: '>=0.4.5+1'
+  bot_io: '>=0.20.0-dev'
   pathos: '>=0.4.5+1'
   meta: '>=0.4.5+1'
 dev_dependencies:
-  html5lib: '>=0.4.1'
+  html5lib: '>=0.4.2'
