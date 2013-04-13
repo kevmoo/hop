@@ -1,5 +1,5 @@
 name: hop
-version: 0.20.0
+version: 0.20.0+1
 author: Kevin Moore <kevin@thinkpixellab.com>
 description: A task management framework for Dart
 homepage: https://github.com/kevmoo/hop.dart
