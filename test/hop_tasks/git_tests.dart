@@ -201,14 +201,3 @@ class GitTests {
             workingDir: workingDir));
   }
 }
-
-Future _debugPrintDir(String dir) {
-  return _debugPrintShellCommand('tree', [], dir)
-      .then((_) => _debugPrintShellCommand('pwd', [], dir));
-}
-
-Future _debugPrintShellCommand(String command, List<String> args, String workingDir) {
-  return Process.run(command, args, new ProcessOptions()..workingDirectory = workingDir)
-      .then((pr) => print(pr.stdout));
-}
-
