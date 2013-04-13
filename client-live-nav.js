@@ -76,8 +76,7 @@ $$.MappedIterator = {"": "Iterator;_liblib$_current,_iterator,_f",
 
 $$.WhereIterable = {"": "Iterable;_iterable,_f",
   get$iterator: function(_) {
-    var t1 = this._iterable;
-    return $.WhereIterator$(t1.get$iterator(t1), this._f);
+    return $.WhereIterator$($.get$iterator$ax(this._iterable), this._f);
   }
 };
 
@@ -11008,12 +11007,11 @@ $.EventStreamProvider_keydown = new $.EventStreamProvider("keydown");
 $.Keyword_uHn = new $.Keyword("implements", false, true, $.PrecedenceInfo_StringWrapper_keyword_0_107);
 $.StringWrapper_ouN = new $.StringWrapper("=>");
 $.Keyword_Z2F = new $.Keyword("continue", false, false, $.PrecedenceInfo_StringWrapper_keyword_0_107);
-$.JSArray_methods = $.JSArray.prototype;
+$.StringWrapper_string = new $.StringWrapper("string");
+$.PrecedenceInfo_StringWrapper_string_0_39 = new $.PrecedenceInfo($.StringWrapper_string, 0, 39);
 $.C_CloseToken = new $.CloseToken();
 $.StringWrapper_sxw = new $.StringWrapper("===");
 $.PrecedenceInfo_IQT = new $.PrecedenceInfo($.StringWrapper_sxw, 9, 134);
-$.StringWrapper_string = new $.StringWrapper("string");
-$.PrecedenceInfo_StringWrapper_string_0_39 = new $.PrecedenceInfo($.StringWrapper_string, 0, 39);
 $.StringWrapper_f5R = new $.StringWrapper("<=");
 $.PrecedenceInfo_0DX = new $.PrecedenceInfo($.StringWrapper_f5R, 10, 129);
 $.Keyword_0zn = new $.Keyword("case", false, false, $.PrecedenceInfo_StringWrapper_keyword_0_107);
@@ -11056,8 +11054,8 @@ $.PrecedenceInfo_ato = new $.PrecedenceInfo($.StringWrapper_Eip, 0, 33);
 $.Keyword_UWX = new $.Keyword("while", false, false, $.PrecedenceInfo_StringWrapper_keyword_0_107);
 $.Keyword_Qcj = new $.Keyword("export", false, true, $.PrecedenceInfo_StringWrapper_keyword_0_107);
 $.JSInt_methods = $.JSInt.prototype;
-$.Keyword_v1E = new $.Keyword("false", false, false, $.PrecedenceInfo_StringWrapper_keyword_0_107);
 $.Keyword_RA5 = new $.Keyword("assert", false, false, $.PrecedenceInfo_StringWrapper_keyword_0_107);
+$.Keyword_v1E = new $.Keyword("false", false, false, $.PrecedenceInfo_StringWrapper_keyword_0_107);
 $.Keyword_8eb = new $.Keyword("factory", false, true, $.PrecedenceInfo_StringWrapper_keyword_0_107);
 $.PrecedenceInfo_chs = new $.PrecedenceInfo($.StringWrapper_aZ2, 0, 64);
 $.Keyword_AyS = new $.Keyword("null", false, false, $.PrecedenceInfo_StringWrapper_keyword_0_107);
@@ -11087,6 +11085,7 @@ $.PrecedenceInfo_ySx = new $.PrecedenceInfo($.StringWrapper_kUZ, 1, 131);
 $.PrecedenceInfo_ijq = new $.PrecedenceInfo($.StringWrapper_ATp, 12, 43);
 $.PrecedenceInfo_M13 = new $.PrecedenceInfo($.StringWrapper_ckJ, 10, 138);
 $.Keyword_InH = new $.Keyword("interface", false, true, $.PrecedenceInfo_StringWrapper_keyword_0_107);
+$.JSArray_methods = $.JSArray.prototype;
 $.Keyword_hbN = new $.Keyword("catch", false, false, $.PrecedenceInfo_StringWrapper_keyword_0_107);
 $.PrecedenceInfo_StringWrapper_$_0_159 = new $.PrecedenceInfo($.StringWrapper_$, 0, 159);
 $.PrecedenceInfo_wC2 = new $.PrecedenceInfo($.StringWrapper_ato, 1, 148);
