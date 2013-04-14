@@ -145,11 +145,25 @@ class CopyDirectoryTests {
         }); 
   }
   
+  /**
+   * Copy directory with symlinks followed. 
+   */
+  static _copyDirectoryWithSymlinksFollowed() {
+  }
+  
+  /**
+   * Copy directory with symlinks not followed.
+   */
+  static _copyDirectoryWithSymlinksNotFollowed() {
+  }
+  
   static void register() {
     group('copyDirectory', () {
       test('copy directory', _copyDirectorySuccess);
       test('copy directory with bad source', _copyDirectoryWithBadSource);
-      test('copy directory with bad destination', _copyDirectoryWithBadDestination);     
+      test('copy directory with bad destination', _copyDirectoryWithBadDestination);
+      test('copy directory with symlinks followed', _copyDirectoryWithSymlinksFollowed);
+      test('copy directory with symlinks not followed', _copyDirectoryWithSymlinksNotFollowed);
     });
   }
 }
