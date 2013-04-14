@@ -1,5 +1,11 @@
 part of hop_tasks;
 
+/**
+ * Create a [Task] for copying [source] to [destination]. If [destination] 
+ * folder exists an [Exception] is thrown. If the source folder does not
+ * exist an [Exception] is thrown. If the source folder does not contain
+ * any files then an [Exception] is thrown.
+ */
 Task copyDirectory(String source, String destination) {
   
   return new Task.async((context) {

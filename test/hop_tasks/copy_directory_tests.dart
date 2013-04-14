@@ -3,7 +3,10 @@
 part of test_hop_tasks;
 
 class CopyDirectoryTests {
-  // Check if two files are the same by md5 sum
+  
+  /**
+   * Check if two files are the same by md5sum
+   */
   static bool _testFileSame(File file1, File file2) {
     List file1Bytes = file1.readAsBytesSync();
     List file2Bytes = file2.readAsBytesSync();
@@ -23,6 +26,9 @@ class CopyDirectoryTests {
     return true;
   }
   
+  /**
+   * Copy files from source directory to destination directory without errors. 
+   */
   static _copyDirectorySuccess() {
     final inputs = {"src/main1.dart": "void main() => print('hello bot');",
                     "src/main2.dart": "void main() { String i = 42; }"};
@@ -75,6 +81,9 @@ class CopyDirectoryTests {
         });    
   }
   
+  /**
+   * Copy directory with bad source directory.
+   */
   static _copyDirectoryWithBadSource() {
     TempDir tempDirSrc;
     return TempDir.create()
@@ -95,6 +104,10 @@ class CopyDirectoryTests {
         });    
   }
   
+  /**
+   * Copy directory with bad destination directory. Destination directory
+   * already exists. 
+   */
   static _copyDirectoryWithBadDestination() {
     final inputs = {"src/main1.dart": "void main() => print('hello bot');",   
                     "src/main2.dart": "void main() { String i = 42; }"};
