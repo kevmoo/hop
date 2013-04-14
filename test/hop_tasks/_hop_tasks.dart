@@ -2,6 +2,7 @@ library test_hop_tasks;
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:crypto';
 import 'package:unittest/unittest.dart';
 import 'package:bot/bot.dart';
 import 'package:bot_io/bot_git.dart';
@@ -14,11 +15,13 @@ import '../hop/_hop.dart';
 part 'process_tests.dart';
 part 'git_tests.dart';
 part 'dart_analyzer_tests.dart';
+part 'copy_directory_tests.dart';
 
 void main() {
   group('hop_tasks', () {
     ProcessTests.run();
     GitTests.register();
     DartAnalyzerTests.register();
+    CopyDirectoryTests.register();
   });
 }
