@@ -1,12 +1,14 @@
 part of hop_tasks;
 
 /**
- * Create a [Task] for copying [source] to [destination]. If [destination] 
- * folder exists an [Exception] is thrown. If the source folder does not
- * exist an [Exception] is thrown. If the source folder does not contain
- * any files then an [Exception] is thrown.
+ * Create a [Task] for copying [source] to [destination]. [followLinks] will 
+ * copy files from symlinks into [destination] with same directory structure.
+ * 
+ * If [destination] folder exists an [Exception] is thrown. If the source 
+ * folder does not exist an [Exception] is thrown. If the source folder does 
+ * not contain any files then an [Exception] is thrown.
  */
-Task copyDirectory(String source, String destination) {
+Task copyDirectory(String source, String destination, {bool followLinks: false}) {
   
   return new Task.async((context) {
     var completer = new Completer();
@@ -25,7 +27,7 @@ Task copyDirectory(String source, String destination) {
       throw "Source path does not exists $source";
     }
     
-    List<FileSystemEntity> sourceFiles = sourceDirectory.listSync(recursive: true, followLinks: true);
+    List<FileSystemEntity> sourceFiles = sourceDirectory.listSync(recursive: true, followLinks: followLinks);
     
     if (sourceFiles.isEmpty) {
       throw "Source path does not contain any files $source";

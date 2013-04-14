@@ -1,7 +1,8 @@
-// TODO(adam): Add tests related to symlinks. 
-
 part of test_hop_tasks;
 
+/**
+ * Test class for [copyDirectory] [Task].
+ */
 class CopyDirectoryTests {
   
   /**
@@ -150,6 +151,5 @@ class CopyDirectoryTests {
       test('copy directory with bad source', _copyDirectoryWithBadSource);
       test('copy directory with bad destination', _copyDirectoryWithBadDestination);     
     });
-    
   }
 }
