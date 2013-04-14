@@ -148,13 +148,132 @@ class CopyDirectoryTests {
   /**
    * Copy directory with symlinks followed. 
    */
-  static _copyDirectoryWithSymlinksFollowed() {
+  static _copyDirectoryWithSymlinksFollowed() {  
+    final inputs = {"src/real/main1.dart": "void main() => print('hello bot');",
+                    "src/real/main2.dart": "void main() { String i = 42; }"};
+    final outputs = ["dest/real/main1.dart", "dest/real/main2.dart", 
+                     "dest/link/main1.dart", "dest/link/main2.dart"];
+    
+    TempDir tempDirSrc;
+    Path sourcePath, destinationPath;
+    Directory sourceDir;
+    return TempDir.create()
+        .then((TempDir value) {
+          tempDirSrc = value;
+          sourcePath = new Path(tempDirSrc.path).join(new Path("src"));
+          destinationPath = new Path(tempDirSrc.path).join(new Path("dest"));
+          sourceDir = new Directory.fromPath(sourcePath.join(new Path("real")));
+          sourceDir.createSync(recursive: true);
+          
+          var linkPath = new Path(tempDirSrc.path).join(new Path("src/link"));
+          Link link = new Link.fromPath(linkPath);
+          link.createSync("real");
+          
+          final populater = new MapDirectoryPopulater(inputs);
+          return tempDirSrc.populate(populater);
+        })
+        .then((TempDir value) {
+          assert(value == tempDirSrc);
+
+          final task = copyDirectory(sourcePath.toNativePath(), destinationPath.toNativePath(), followLinks: true);
+          return runTaskInTestRunner(task);
+        })
+        .then((RunResult runResult) {
+          expect(runResult, RunResult.SUCCESS);
+          
+          List<FileSystemEntity> destinationFiles = new Directory.fromPath(destinationPath).listSync(recursive: true, followLinks: true);
+          
+          destinationFiles.forEach((FileSystemEntity fileSystemEntity) {
+            var filePath = new Path(fileSystemEntity.path);
+            var relFilePath = filePath.relativeTo(new Path(tempDirSrc.path));
+            
+            FileSystemEntityType type = FileSystemEntity.typeSync(fileSystemEntity.path);
+            if (type == FileSystemEntityType.FILE) {
+              expect(outputs.contains(relFilePath.toString()), isTrue);
+              outputs.remove(relFilePath.toString());
+              
+              File destFile = new File.fromPath(filePath);
+              var relSrcFilePath = filePath.relativeTo(new Path(destinationPath.toNativePath()));
+              var srcFilePath = sourcePath.join(relSrcFilePath);
+
+              File srcFile = new File.fromPath(srcFilePath);
+              
+              expect(_testFileSame(srcFile, destFile), isTrue);
+            }
+          });
+          
+          expect(outputs, hasLength(0));
+        })
+        .whenComplete(() {
+          if(tempDirSrc != null) {
+            tempDirSrc.dispose();
+          }
+        });     
   }
   
   /**
    * Copy directory with symlinks not followed.
    */
   static _copyDirectoryWithSymlinksNotFollowed() {
+    final inputs = {"src/real/main1.dart": "void main() => print('hello bot');",
+                    "src/real/main2.dart": "void main() { String i = 42; }"};
+    final outputs = ["dest/real/main1.dart", "dest/real/main2.dart"];
+    
+    TempDir tempDirSrc;
+    Path sourcePath, destinationPath;
+    Directory sourceDir;
+    return TempDir.create()
+        .then((TempDir value) {
+          tempDirSrc = value;
+          sourcePath = new Path(tempDirSrc.path).join(new Path("src"));
+          destinationPath = new Path(tempDirSrc.path).join(new Path("dest"));
+          sourceDir = new Directory.fromPath(sourcePath.join(new Path("real")));
+          sourceDir.createSync(recursive: true);
+          
+          var linkPath = new Path(tempDirSrc.path).join(new Path("src/link"));
+          Link link = new Link.fromPath(linkPath);
+          link.createSync("real");
+          
+          final populater = new MapDirectoryPopulater(inputs);
+          return tempDirSrc.populate(populater);
+        })
+        .then((TempDir value) {
+          assert(value == tempDirSrc);
+
+          final task = copyDirectory(sourcePath.toNativePath(), destinationPath.toNativePath(), followLinks: false);
+          return runTaskInTestRunner(task);
+        })
+        .then((RunResult runResult) {
+          expect(runResult, RunResult.SUCCESS);
+          
+          List<FileSystemEntity> destinationFiles = new Directory.fromPath(destinationPath).listSync(recursive: true, followLinks: true);
+          
+          destinationFiles.forEach((FileSystemEntity fileSystemEntity) {
+            var filePath = new Path(fileSystemEntity.path);
+            var relFilePath = filePath.relativeTo(new Path(tempDirSrc.path));
+            
+            FileSystemEntityType type = FileSystemEntity.typeSync(fileSystemEntity.path);
+            if (type == FileSystemEntityType.FILE) {
+              expect(outputs.contains(relFilePath.toString()), isTrue);
+              outputs.remove(relFilePath.toString());
+              
+              File destFile = new File.fromPath(filePath);
+              var relSrcFilePath = filePath.relativeTo(new Path(destinationPath.toNativePath()));
+              var srcFilePath = sourcePath.join(relSrcFilePath);
+
+              File srcFile = new File.fromPath(srcFilePath);
+              
+              expect(_testFileSame(srcFile, destFile), isTrue);
+            }
+          });
+          
+          expect(outputs, hasLength(0));
+        })
+        .whenComplete(() {
+          if(tempDirSrc != null) {
+            tempDirSrc.dispose();
+          }
+        });      
   }
   
   static void register() {
