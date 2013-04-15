@@ -81,9 +81,6 @@ Future<Document> _updateIndex(Document source) {
 
   contentDiv.children.clear();
 
-  contentDiv.children.add(new Element.tag('h2')
-    ..innerHtml = 'Hop: Dart Task Framework');
-
   contentDiv.children.add(_getAboutElement());
 
   final doSection = (String name, List<Element> sectionContent) {
@@ -113,6 +110,9 @@ Element _getAboutElement() {
     ..attributes['href'] = 'https://github.com/kevmoo/hop.dart'
     ..children.add(logo);
 
+  final sourceLabel = new Element.tag('strong')
+    ..innerHtml = 'Source code: ';
+
   final ghLink = new Element.tag('a')
   ..attributes['href'] = 'https://github.com/kevmoo/hop.dart'
   ..innerHtml = 'github.com/kevmoo/hop.dart';
@@ -122,5 +122,6 @@ Element _getAboutElement() {
     ..attributes['class'] = 'about'
     ..children.add(logoLink)
     ..children.add(new Element.tag('br'))
+    ..children.add(sourceLabel)
     ..children.add(ghLink);
 }
