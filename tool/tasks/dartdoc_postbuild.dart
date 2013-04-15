@@ -105,8 +105,8 @@ Future<Document> _updateIndex(Document source) {
 Element _getAboutElement() {
   final logo = new Element.tag('img')
     ..attributes['src'] = 'logo.png'
-    ..attributes['width'] = '333'
-    ..attributes['height'] = '250'
+    ..attributes['width'] = '500'
+    ..attributes['height'] = '304'
     ..attributes['title'] = 'HOP - Dart Task Framework';
 
   final logoLink = new Element.tag('a')
