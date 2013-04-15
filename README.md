@@ -1,5 +1,5 @@
 ![HOP!](https://raw.github.com/kevmoo/hop.dart/master/resource/logo.png)
-## An object-oriented framework creating and reusing scripts in Dart.
+## An object-oriented framework reusable Dart tasks.
 
 [![Build Status](https://drone.io/github.com/kevmoo/hop.dart/status.png)](https://drone.io/github.com/kevmoo/hop.dart/latest)
 
@@ -41,7 +41,6 @@ dependencies:
 # The libraries
 
 ## hop - core task runtime
-  * An object-oriented framework creating and reusing scripts in Dart.
   * Easy to create command-line scripts.
   * Define functionality in libraries. Add and update them with `pub`.
   * Nice touches for free: bash command completion, help, helpful exit codes
