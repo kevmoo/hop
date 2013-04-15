@@ -93,7 +93,7 @@ Future<Document> _updateIndex(Document source) {
 
   };
 
-  doSection('Hop task system', hopHeaders);
+  doSection('Hop Task Framework', hopHeaders);
   doSection('Dependencies', otherHeaders);
 
   return new Future<Document>.immediate(source);
