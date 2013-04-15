@@ -1,5 +1,9 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.21.0-dev *pre-release* (SDK 0.4.5+1 r21094)
+
+* Removed deprecations. (TODO: provide details)
+
 ## 0.20.0 2013-04-10 (SDK 0.4.5+1 r21094)
 
 * The grand split from [BOT](https://github.com/kevmoo/bot.dart) begins.
