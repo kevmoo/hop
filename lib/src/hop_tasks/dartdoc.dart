@@ -36,31 +36,6 @@ Task createDartDocTask(dynamic delayedLibraryList, {
   config: (parser) => _dartDocParserConfig(parser, targetBranch));
 }
 
-/**
- * This method is deprecated. Use [createDartDocTask] instead.
- */
-@deprecated
-Task getCompileDocsFunc(String targetBranch, String packageDir,
-                        dynamic delayedLibraryList,
-                        {Iterable<String> excludeLibs, bool linkApi: false}) {
-  return createDartDocTask(delayedLibraryList,
-      targetBranch: targetBranch,
-      packageDir: packageDir,
-      excludeLibs:excludeLibs,
-      linkApi:linkApi);
-}
-
-/**
- * This method is deprecated. Use [createDartDocTask] instead.
- */
-@deprecated
-Future<bool> compileDocs(TaskContext ctx, String targetBranch,
-    dynamic delayedLibraryList, String packageDir,
-    {Iterable<String> excludeLibs, bool linkApi: false}) {
-  return _compileDocs(ctx, targetBranch, delayedLibraryList, packageDir,
-      excludeLibs, linkApi, null);
-}
-
 Future<bool> _compileDocs(TaskContext ctx, String targetBranch,
     dynamic delayedLibraryList, String packageDir,
     Iterable<String> excludeLibs, bool linkApi, Func2<TaskContext, String, Future> postBuild) {
