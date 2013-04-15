@@ -1,4 +1,4 @@
-# HOP
+![HOP!](https://raw.github.com/kevmoo/hop.dart/master/resource/logo.png)
 ## An object-oriented framework creating and reusing scripts in Dart.
 
 [![Build Status](https://drone.io/github.com/kevmoo/hop.dart/status.png)](https://drone.io/github.com/kevmoo/hop.dart/latest)
