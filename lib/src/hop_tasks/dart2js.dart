@@ -2,6 +2,16 @@ part of hop_tasks;
 
 // TODO: output does not work if there is more than one file provided, moron!
 
+class CompilerTargetType {
+  final String _value;
+  const CompilerTargetType._internal(this._value);
+  String toString() => 'CompilerTargetType.$_value';
+  String get fileExt => _value;
+
+  static const JS = const CompilerTargetType._internal('js');
+  static const DART = const CompilerTargetType._internal('dart');
+}
+
 @deprecated
 Task createDart2JsTask(dynamic delayedRootList, {String output: null,
   String packageRoot: null, bool minify: false, bool allowUnsafeEval: true,
@@ -14,24 +24,23 @@ Task createDart2JsTask(dynamic delayedRootList, {String output: null,
       allowUnsafeEval: allowUnsafeEval,
       liveTypeAnalysis: liveTypeAnalysis,
       rejectDeprecatedFeatures: rejectDeprecatedFeatures,
-      outputType: 'js');
+      outputType: CompilerTargetType.JS);
 }
 
 /**
  * [delayedRootList] a [List<String>] mapping to paths to libraries or some
  * combinations of [Future] or [Function] values that return a [List<String>].
  *
- * [outputType] must be one of *js* or *dart*.
+ * [outputType] must be one of type [CompilerTargetType].
  */
 Task createDartCompilerTask(dynamic delayedRootList, {String output: null,
   String packageRoot: null, bool minify: false, bool allowUnsafeEval: true,
   bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false,
-  String outputType: "js"}) {
+  CompilerTargetType outputType: CompilerTargetType.JS}) {
 
-  requireArgumentNotNullOrEmpty(outputType, 'outputType');
-  requireArgument(outputType == 'js' || outputType == 'dart', 'outputType');
+  requireArgument(outputType == CompilerTargetType.JS || outputType == CompilerTargetType.DART, 'outputType');
 
-  final friendlyName = (outputType == 'js') ? 'Javascript' : 'Dart';
+  final friendlyName = (outputType == CompilerTargetType.JS) ? 'Javascript' : 'Dart';
 
   return new Task.async((context) {
     bool errors = false;
@@ -63,13 +72,13 @@ Task createDartCompilerTask(dynamic delayedRootList, {String output: null,
 
 Future<bool> _dart2js(TaskContext ctx, String file,
     String output, String packageRoot, bool minify, bool allowUnsafeEval,
-    bool liveTypeAnalysis, bool rejectDeprecatedFeatures, String outputType) {
+    bool liveTypeAnalysis, bool rejectDeprecatedFeatures, CompilerTargetType outputType) {
 
   if(output == null) {
     output = file;
 
-    if(!output.endsWith(outputType)) {
-      output = '$output.$outputType';
+    if(!output.endsWith(outputType.fileExt)) {
+      output = '$output.${outputType.fileExt}';
     }
   }
 
@@ -84,7 +93,7 @@ Future<bool> _dart2js(TaskContext ctx, String file,
   final args = ["--package-root=${packageDir.path}",
                 '--throw-on-error',
                 '-v',
-                "--output-type=$outputType",
+                "--output-type=${outputType.fileExt}",
                 "--out=$output",
                 file];
 
