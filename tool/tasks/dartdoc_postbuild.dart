@@ -49,7 +49,7 @@ Future<String> _updateTitle(String source) {
   source = source.replaceAll(weirdDoubleTitle, _sourceTitle);
 
   source = source.replaceAll(_sourceTitle, _outputTitle);
-  return new Future<String>.immediate(source);
+  return new Future<String>.value(source);
 }
 
 Future<Document> _updateIndex(Document source) {
@@ -96,7 +96,7 @@ Future<Document> _updateIndex(Document source) {
   doSection('Hop Task Framework', hopHeaders);
   doSection('Dependencies', otherHeaders);
 
-  return new Future<Document>.immediate(source);
+  return new Future<Document>.value(source);
 }
 
 Element _getAboutElement() {

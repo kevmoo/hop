@@ -39,7 +39,7 @@ Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction) {
 
       ctx.info(list.join('\n'));
 
-      return new Future.immediate(true);
+      return new Future.value(true);
     }
 
     unittest.runTests();

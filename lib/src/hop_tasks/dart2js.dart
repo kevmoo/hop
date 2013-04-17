@@ -17,7 +17,7 @@ Task createDart2JsTask(dynamic delayedRootList, {String output: null,
           return Future.forEach(inputs, (path) {
             if(errors) {
               context.warning('Compile errors. Skipping $path');
-              return new Future.immediate(null);
+              return new Future.value(null);
             }
 
             return _dart2js(context, path,
