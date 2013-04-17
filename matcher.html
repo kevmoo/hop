@@ -1120,7 +1120,7 @@ Matcher isIn(expected) =&gt; new _In(expected);
 <p>Returns a matcher that matches if the match argument contains
 the expected value. For <code>String</code>s this means substring matching;
 for <code>Map</code>s it means the map has the key, and for <code>Iterable</code>s
-(including <code>Collection</code>s) it means the iterable has a matching
+(including <code>Iterable</code>s) it means the iterable has a matching
 element. In the case of iterables, 
 <span class="param">expected</span> can itself be a
 matcher.</p>
@@ -1229,7 +1229,7 @@ Matcher orderedEquals(Iterable expected) =&gt; new _OrderedEquals(expected);
 <a href="matcher/Matcher.html">Matcher</a> <strong>someElement</strong>(matcher) <a class="anchor-link" href="#someElement"
               title="Permalink to someElement">#</a></h4>
 <div class="doc">
-<p>Returns a matcher which matches <code>Collection</code>s in which at least one
+<p>Returns a matcher which matches <code>Iterable</code>s in which at least one
 element matches the given 
 <span class="param">matcher</span>.</p>
 <pre class="source">
@@ -1242,7 +1242,7 @@ Matcher someElement(matcher) =&gt; new _SomeElement(wrapMatcher(matcher));
 <a href="matcher/Matcher.html">Matcher</a> <strong>everyElement</strong>(matcher) <a class="anchor-link" href="#everyElement"
               title="Permalink to everyElement">#</a></h4>
 <div class="doc">
-<p>Returns a matcher which matches <code>Collection</code>s in which all elements
+<p>Returns a matcher which matches <code>Iterable</code>s in which all elements
 match the given 
 <span class="param">matcher</span>.</p>
 <pre class="source">

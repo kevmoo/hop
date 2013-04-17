@@ -36,7 +36,7 @@
 class Grouping&lt;K, V&gt; {
  final HashMap&lt;K, List&lt;V&gt;&gt; _values = new HashMap&lt;K, List&lt;V&gt;&gt;();
 
- Grouping(Iterable&lt;V&gt; source, [Func1&lt;V, K&gt; keyFunc = null]) {
+ Grouping(Iterable&lt;V&gt; source, [K keyFunc(V) = null]) {
    if(keyFunc == null) {
      keyFunc = (v) =&gt; v;
    }
@@ -91,11 +91,11 @@ class Grouping&lt;K, V&gt; {
 <h3>Constructors</h3>
 <div class="method"><h4 id="Grouping">
 <button class="show-code">Code</button>
-new <strong>Grouping</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/Grouping.html">V</a>&gt; source, [<a href="../bot/Func1.html">Func1</a> keyFunc = null]) <a class="anchor-link" href="#Grouping"
+new <strong>Grouping</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/Grouping.html">V</a>&gt; source, [keyFunc = null]) <a class="anchor-link" href="#Grouping"
               title="Permalink to Grouping&lt;K, V&gt;.Grouping">#</a></h4>
 <div class="doc">
 <pre class="source">
-Grouping(Iterable&lt;V&gt; source, [Func1&lt;V, K&gt; keyFunc = null]) {
+Grouping(Iterable&lt;V&gt; source, [K keyFunc(V) = null]) {
  if(keyFunc == null) {
    keyFunc = (v) =&gt; v;
  }

@@ -238,7 +238,7 @@ class Builder {
    // Filter out empty parts that exist due to multiple separators in a row.
    parsed.parts = parsed.parts.where((part) =&gt; !part.isEmpty)
                               .toList();
-   if (parsed.root != null) parsed.parts.insertRange(0, 1, parsed.root);
+   if (parsed.root != null) parsed.parts.insert(0, parsed.root);
    return parsed.parts;
  }
 
@@ -333,9 +333,9 @@ class Builder {
 
    // If there are any directories left in the root path, we need to walk up
    // out of them.
-   pathParsed.parts.insertRange(0, fromParsed.parts.length, '..');
-   pathParsed.separators.insertRange(0, fromParsed.parts.length,
-       style.separator);
+   _growListFront(pathParsed.parts, fromParsed.parts.length, '..');
+   _growListFront(
+       pathParsed.separators, fromParsed.parts.length, style.separator);
 
    // Corner case: the paths completely collapsed.
    if (pathParsed.parts.length == 0) return '.';
@@ -757,9 +757,9 @@ String relative(String path, {String from}) {
 
  // If there are any directories left in the root path, we need to walk up
  // out of them.
- pathParsed.parts.insertRange(0, fromParsed.parts.length, '..');
- pathParsed.separators.insertRange(0, fromParsed.parts.length,
-     style.separator);
+ _growListFront(pathParsed.parts, fromParsed.parts.length, '..');
+ _growListFront(
+     pathParsed.separators, fromParsed.parts.length, style.separator);
 
  // Corner case: the paths completely collapsed.
  if (pathParsed.parts.length == 0) return '.';
@@ -843,7 +843,7 @@ List&lt;String&gt; split(String path) {
  // Filter out empty parts that exist due to multiple separators in a row.
  parsed.parts = parsed.parts.where((part) =&gt; !part.isEmpty)
                             .toList();
- if (parsed.root != null) parsed.parts.insertRange(0, 1, parsed.root);
+ if (parsed.root != null) parsed.parts.insert(0, parsed.root);
  return parsed.parts;
 }
 </pre>

@@ -47,6 +47,42 @@ const String COMPLETION_COMMAND_NAME = 'completion'
 </div>
 <div>
 <h3>Functions</h3>
+<div class="method"><h4 id="expandStream">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a> <strong>expandStream</strong>(<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a> source, <a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a> convert(input), {<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a> onDone()}) <a class="anchor-link" href="#expandStream"
+              title="Permalink to expandStream">#</a></h4>
+<div class="doc">
+<pre class="source">
+Stream expandStream(Stream source, Stream convert(input), {Stream onDone()}) {
+ final controller = new StreamController();
+
+ Future itemFuture;
+
+ source.listen((sourceItem) {
+   Stream subStream = convert(sourceItem);
+   Future next = _pipeStreamToController(controller, subStream);
+   if(itemFuture == null) {
+     itemFuture = next;
+   } else {
+     itemFuture = itemFuture.then((_) =&gt; next);
+   }
+ }, onDone: () {
+   Future next = _pipeStreamToController(controller, onDone());
+   if(itemFuture == null) {
+     itemFuture = next;
+   } else {
+     itemFuture = itemFuture.then((_) =&gt; next);
+   }
+   itemFuture.whenComplete(() {
+     controller.close();
+   });
+ });
+
+ return controller.stream;
+}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="getArgsCompletions">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; <strong>getArgsCompletions</strong>(<a href="args/ArgParser.html">ArgParser</a> parser, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; providedArgs, <a href="http://api.dartlang.org/dart_core/String.html">String</a> compLine, <a href="http://api.dartlang.org/dart_core/int.html">int</a> compPoint) <a class="anchor-link" href="#getArgsCompletions"
@@ -389,6 +425,12 @@ void enableScriptLogListener() {
           
           <div class="type">
           <h4>
+            <a href="bot_io/EntityValidator.html"><strong>EntityValidator</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
             <a href="bot_io/ShellString.html"><strong>ShellString</strong></a>
           </h4>
           </div>
@@ -411,6 +453,12 @@ void enableScriptLogListener() {
           <div class="type">
           <h4>
             <a href="bot_io/Console.html"><strong>Console</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="bot_io/EntityExistsValidator.html"><strong>EntityExistsValidator</strong></a>
           </h4>
           </div>
           

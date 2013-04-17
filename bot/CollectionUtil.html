@@ -47,14 +47,7 @@ class CollectionUtil {
    return true;
  }
 
- /**
-  * Use [source.expand] instead.
-  */
- @deprecated
- static Enumerable selectMany(Iterable source, Func1&lt;dynamic, Iterable&gt; func) =&gt;
-     $(source.expand(func));
-
- static int count(Iterable source, Func1&lt;dynamic, bool&gt; test) {
+ static int count(Iterable source, bool test(dynamic)) {
    return source.fold(0, (int previous, dynamic element) {
      if(test(element)) {
        return previous + 1;
@@ -67,10 +60,11 @@ class CollectionUtil {
  static Iterable exclude(Iterable source, Iterable itemsToExclude) {
    requireArgumentNotNull(itemsToExclude, 'itemsToExclude');
    Func1&lt;dynamic, bool&gt; f = (e) =&gt; !itemsToExclude.contains(e);
-   return $(IterableMixinWorkaround.where(source, f));
+   return $(source.where(f));
  }
 
- static Iterable distinct(Iterable source, [Func2&lt;dynamic, dynamic, bool&gt; comparer = null]) {
+ static Iterable distinct(Iterable source,
+                          [bool comparer(dynamic a, dynamic b) = null]) {
    if(comparer == null) {
      comparer = (a,b) =&gt; a == b;
    }
@@ -85,14 +79,7 @@ class CollectionUtil {
    }
  }
 
- /**
-  * Use [toMap] instead.
-  */
- @deprecated
- static Map toHashMap(Iterable source, Func1 valueFunc, [Func1 keyFunc]) =&gt;
-     toMap(source, valueFunc, keyFunc);
-
- static Map toMap(Iterable source, Func1 valueFunc, [Func1 keyFunc]) {
+ static Map toMap(Iterable source, Func1 valueFunc, [dynamic keyFunc(dynamic)]) {
    if(keyFunc == null) {
      keyFunc = (a) =&gt; a;
    }
@@ -106,18 +93,6 @@ class CollectionUtil {
      map[k] = valueFunc(e);
    }
    return map;
- }
-
- /**
-  * Use `Iterable.map(...).toSet()` instead.
-  */
- @deprecated
- static Set toHashSet(Iterable source, [Func1 f]) {
-   if(f == null) {
-     return new Set.from(source);
-   } else {
-     return new Set.from(source.map(f));
-   }
  }
 }
 </pre>
@@ -145,26 +120,13 @@ static bool allUnique(Iterable items) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="selectMany">
-<button class="show-code">Code</button>
-<a href="../bot/Enumerable.html">Enumerable</a> <strong>selectMany</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> source, <a href="../bot/Func1.html">Func1</a> func) <a class="anchor-link" href="#selectMany"
-              title="Permalink to CollectionUtil.selectMany">#</a></h4>
-<div class="doc">
-<p>Use <code>source.expand</code> instead.</p>
-<pre class="source">
-@deprecated
-static Enumerable selectMany(Iterable source, Func1&lt;dynamic, Iterable&gt; func) =&gt;
-   $(source.expand(func));
-</pre>
-</div>
-</div>
 <div class="method"><h4 id="count">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>count</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> source, <a href="../bot/Func1.html">Func1</a> test) <a class="anchor-link" href="#count"
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>count</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> source, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(dynamic)) <a class="anchor-link" href="#count"
               title="Permalink to CollectionUtil.count">#</a></h4>
 <div class="doc">
 <pre class="source">
-static int count(Iterable source, Func1&lt;dynamic, bool&gt; test) {
+static int count(Iterable source, bool test(dynamic)) {
  return source.fold(0, (int previous, dynamic element) {
    if(test(element)) {
      return previous + 1;
@@ -185,18 +147,19 @@ static int count(Iterable source, Func1&lt;dynamic, bool&gt; test) {
 static Iterable exclude(Iterable source, Iterable itemsToExclude) {
  requireArgumentNotNull(itemsToExclude, 'itemsToExclude');
  Func1&lt;dynamic, bool&gt; f = (e) =&gt; !itemsToExclude.contains(e);
- return $(IterableMixinWorkaround.where(source, f));
+ return $(source.where(f));
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="distinct">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> <strong>distinct</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> source, [<a href="../bot/Func2.html">Func2</a> comparer = null]) <a class="anchor-link" href="#distinct"
+<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> <strong>distinct</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> source, [comparer = null]) <a class="anchor-link" href="#distinct"
               title="Permalink to CollectionUtil.distinct">#</a></h4>
 <div class="doc">
 <pre class="source">
-static Iterable distinct(Iterable source, [Func2&lt;dynamic, dynamic, bool&gt; comparer = null]) {
+static Iterable distinct(Iterable source,
+                        [bool comparer(dynamic a, dynamic b) = null]) {
  if(comparer == null) {
    comparer = (a,b) =&gt; a == b;
  }
@@ -221,26 +184,13 @@ static void forEachWithIndex(Iterable source, Action2&lt;dynamic, int&gt; f) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="toHashMap">
-<button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Map.html">Map</a> <strong>toHashMap</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> source, <a href="../bot/Func1.html">Func1</a> valueFunc, [<a href="../bot/Func1.html">Func1</a> keyFunc]) <a class="anchor-link" href="#toHashMap"
-              title="Permalink to CollectionUtil.toHashMap">#</a></h4>
-<div class="doc">
-<p>Use <a class="crossref" href="../bot/CollectionUtil.html#toMap">toMap</a> instead.</p>
-<pre class="source">
-@deprecated
-static Map toHashMap(Iterable source, Func1 valueFunc, [Func1 keyFunc]) =&gt;
-   toMap(source, valueFunc, keyFunc);
-</pre>
-</div>
-</div>
 <div class="method"><h4 id="toMap">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Map.html">Map</a> <strong>toMap</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> source, <a href="../bot/Func1.html">Func1</a> valueFunc, [<a href="../bot/Func1.html">Func1</a> keyFunc]) <a class="anchor-link" href="#toMap"
+<a href="http://api.dartlang.org/dart_core/Map.html">Map</a> <strong>toMap</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> source, <a href="../bot/Func1.html">Func1</a> valueFunc, [keyFunc(dynamic)]) <a class="anchor-link" href="#toMap"
               title="Permalink to CollectionUtil.toMap">#</a></h4>
 <div class="doc">
 <pre class="source">
-static Map toMap(Iterable source, Func1 valueFunc, [Func1 keyFunc]) {
+static Map toMap(Iterable source, Func1 valueFunc, [dynamic keyFunc(dynamic)]) {
  if(keyFunc == null) {
    keyFunc = (a) =&gt; a;
  }
@@ -254,24 +204,6 @@ static Map toMap(Iterable source, Func1 valueFunc, [Func1 keyFunc]) {
    map[k] = valueFunc(e);
  }
  return map;
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="toHashSet">
-<button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Set.html">Set</a> <strong>toHashSet</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> source, [<a href="../bot/Func1.html">Func1</a> f]) <a class="anchor-link" href="#toHashSet"
-              title="Permalink to CollectionUtil.toHashSet">#</a></h4>
-<div class="doc">
-<p>Use <code>Iterable.map(...).toSet()</code> instead.</p>
-<pre class="source">
-@deprecated
-static Set toHashSet(Iterable source, [Func1 f]) {
- if(f == null) {
-   return new Set.from(source);
- } else {
-   return new Set.from(source.map(f));
- }
 }
 </pre>
 </div>

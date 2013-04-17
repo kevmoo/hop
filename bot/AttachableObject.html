@@ -52,22 +52,22 @@ class AttachableObject extends DisposableImpl {
  async.Stream _getStream(Attachable property) {
    validateNotDisposed();
    var handle = _eventHandlers.putIfAbsent(property,
-       () =&gt; new EventHandle(onSubscriptionStateChange: () =&gt; _onSubscriptionChanged(property)));
+       () =&gt; new EventHandle(onCancel: () =&gt; _onCancel(property)));
    return handle.stream;
  }
 
  bool _hasSubscribers(Attachable property) {
    validateNotDisposed();
    final handle = _eventHandlers[property];
-   return handle != null &amp;&amp; handle.hasSubscribers;
+   return handle != null &amp;&amp; handle.hasListener;
  }
 
- void _onSubscriptionChanged(Attachable property) {
+ void _onCancel(Attachable property) {
    assert(property != null);
    if(!isDisposed) {
      var handle = _eventHandlers[property];
      assert(handle != null);
-     if(!handle.hasSubscribers) {
+     if(!handle.hasListener) {
        handle.dispose();
        _eventHandlers.remove(property);
      }

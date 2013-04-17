@@ -64,8 +64,7 @@ class Console {
    final headerInclude = includeHeader ? 1 : 0;
 
    final cells = new Array2d&lt;String&gt;(columns.length, source.length + headerInclude);
-   final maxWidths = new List&lt;int&gt;();
-   maxWidths.insertRange(0, columns.length, 0);
+   final maxWidths = new List&lt;int&gt;.filled(columns.length, 0);
 
    if(includeHeader) {
      // populate header first
@@ -159,8 +158,7 @@ static Iterable&lt;String&gt; getTable(Iterable source,
  final headerInclude = includeHeader ? 1 : 0;
 
  final cells = new Array2d&lt;String&gt;(columns.length, source.length + headerInclude);
- final maxWidths = new List&lt;int&gt;();
- maxWidths.insertRange(0, columns.length, 0);
+ final maxWidths = new List&lt;int&gt;.filled(columns.length, 0);
 
  if(includeHeader) {
    // populate header first

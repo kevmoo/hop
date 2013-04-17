@@ -64,11 +64,11 @@ Task createUnitTestTask(Action1&lt;unittest.Configuration&gt; unitTestAction) {
 
      list.sort();
 
-     list.insertRange(0, 1, 'Test cases:');
+     list.insert(0, 'Test cases:');
 
      ctx.info(list.join('\n'));
 
-     return new Future.immediate(true);
+     return new Future.value(true);
    }
 
    unittest.runTests();
@@ -253,43 +253,6 @@ Task getBranchForDirTask(String sourceBranch, String sourceDir,
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="compileDocs">
-<button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>compileDocs</strong>(<a href="hop/TaskContext.html">TaskContext</a> ctx, <a href="http://api.dartlang.org/dart_core/String.html">String</a> targetBranch, delayedLibraryList, <a href="http://api.dartlang.org/dart_core/String.html">String</a> packageDir, {<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; excludeLibs, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> linkApi: false}) <a class="anchor-link" href="#compileDocs"
-              title="Permalink to compileDocs">#</a></h4>
-<div class="doc">
-<p>This method is deprecated. Use <a class="crossref" href="hop_tasks.html#createDartDocTask">createDartDocTask</a> instead.</p>
-<pre class="source">
-@deprecated
-Future&lt;bool&gt; compileDocs(TaskContext ctx, String targetBranch,
-   dynamic delayedLibraryList, String packageDir,
-   {Iterable&lt;String&gt; excludeLibs, bool linkApi: false}) {
- return _compileDocs(ctx, targetBranch, delayedLibraryList, packageDir,
-     excludeLibs, linkApi, null);
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="getCompileDocsFunc">
-<button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>getCompileDocsFunc</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> targetBranch, <a href="http://api.dartlang.org/dart_core/String.html">String</a> packageDir, delayedLibraryList, {<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; excludeLibs, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> linkApi: false}) <a class="anchor-link" href="#getCompileDocsFunc"
-              title="Permalink to getCompileDocsFunc">#</a></h4>
-<div class="doc">
-<p>This method is deprecated. Use <a class="crossref" href="hop_tasks.html#createDartDocTask">createDartDocTask</a> instead.</p>
-<pre class="source">
-@deprecated
-Task getCompileDocsFunc(String targetBranch, String packageDir,
-                       dynamic delayedLibraryList,
-                       {Iterable&lt;String&gt; excludeLibs, bool linkApi: false}) {
- return createDartDocTask(delayedLibraryList,
-     targetBranch: targetBranch,
-     packageDir: packageDir,
-     excludeLibs:excludeLibs,
-     linkApi:linkApi);
-}
-</pre>
-</div>
-</div>
 <div class="method"><h4 id="createDartDocTask">
 <button class="show-code">Code</button>
 <a href="hop/Task.html">Task</a> <strong>createDartDocTask</strong>(delayedLibraryList, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> targetBranch: 'gh-pages', <a href="http://api.dartlang.org/dart_core/String.html">String</a> packageDir: 'packages/', <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; excludeLibs, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> linkApi: false, <a href="bot/Func2.html">Func2</a> postBuild}) <a class="anchor-link" href="#createDartDocTask"
@@ -352,7 +315,7 @@ Task createDart2JsTask(dynamic delayedRootList, {String output: null,
          return Future.forEach(inputs, (path) {
            if(errors) {
              context.warning('Compile errors. Skipping $path');
-             return new Future.immediate(null);
+             return new Future.value(null);
            }
 
            return _dart2js(context, path,

@@ -35,9 +35,9 @@
 <pre class="source">
 class EventHandle&lt;T&gt; extends async.StreamController&lt;T&gt; implements Disposable {
  bool _disposed = false;
+ async.Stream _broadcastCache;
 
- EventHandle({void onSubscriptionStateChange()}) :
-   super.broadcast(onSubscriptionStateChange: onSubscriptionStateChange);
+ EventHandle({void onCancel()}) : super(onCancel: onCancel);
 
  void dispose(){
    if(_disposed) {
@@ -49,13 +49,20 @@ class EventHandle&lt;T&gt; extends async.StreamController&lt;T&gt; implements Di
    super.close();
  }
 
+ async.Stream get stream {
+   if(_broadcastCache == null) {
+     _broadcastCache = super.stream.asBroadcastStream();
+   }
+   return _broadcastCache;
+ }
+
  bool get isDisposed =&gt; _disposed;
 }
 </pre>
 </div>
 <h3>Extends</h3>
 <p>
-<span class="type-box"><span class="icon-class"></span><a href="../dart_async/EventSink.html">EventSink&lt;T&gt;</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../dart_async/StreamSink.html">StreamSink&lt;T&gt;</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../dart_async/StreamController.html">StreamController&lt;T&gt;</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>EventHandle&lt;T&gt;</strong></span></p>
+<span class="type-box"><span class="icon-class"></span><a href="../dart_async/EventSink.html">EventSink&lt;T&gt;</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../dart_async/StreamController.html">StreamController&lt;T&gt;</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>EventHandle&lt;T&gt;</strong></span></p>
 <h3>Implements</h3>
 <p>
 <span class="type-box"><span class="icon-class"></span><a href="../bot/Disposable.html">Disposable</a></span></p>
@@ -63,28 +70,27 @@ class EventHandle&lt;T&gt; extends async.StreamController&lt;T&gt; implements Di
 <h3>Constructors</h3>
 <div class="method"><h4 id="EventHandle">
 <button class="show-code">Code</button>
-new <strong>EventHandle</strong>({void onSubscriptionStateChange()}) <a class="anchor-link" href="#EventHandle"
+new <strong>EventHandle</strong>({void onCancel()}) <a class="anchor-link" href="#EventHandle"
               title="Permalink to EventHandle&lt;T&gt;.EventHandle">#</a></h4>
 <div class="doc">
 <pre class="source">
-EventHandle({void onSubscriptionStateChange()}) :
- super.broadcast(onSubscriptionStateChange: onSubscriptionStateChange);
+EventHandle({void onCancel()}) : super(onCancel: onCancel);
 </pre>
 </div>
 </div>
 </div>
 <div>
 <h3>Properties</h3>
-<div class="field inherited"><h4 id="hasSubscribers">
+<div class="field inherited"><h4 id="hasListener">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>hasSubscribers</strong> <a class="anchor-link"
-            href="#hasSubscribers"
-            title="Permalink to EventHandle&lt;T&gt;.hasSubscribers">#</a>
+final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>hasListener</strong> <a class="anchor-link"
+            href="#hasListener"
+            title="Permalink to EventHandle&lt;T&gt;.hasListener">#</a>
         </h4>
         <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_async/StreamController.html">StreamController</a> </div><div class="doc">
 <p>Whether there are currently any subscribers on this <code>Stream</code>. </p>
 <pre class="source">
-bool get hasSubscribers =&gt; stream._hasSubscribers;
+bool get hasListener =&gt; stream._hasListener;
 </pre>
 </div>
 </div>
@@ -137,19 +143,24 @@ final <a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&
         <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_async/StreamController.html">StreamController</a> </div><div class="doc">
 <p>Returns a view of this object that only exposes the <code>EventSink</code> interface.</p>
 <pre class="source">
-EventSink&lt;T&gt; get sink =&gt; new EventSinkView&lt;T&gt;(this);
+EventSink&lt;T&gt; get sink =&gt; new _EventSinkView&lt;T&gt;(this);
 </pre>
 </div>
 </div>
-<div class="field inherited"><h4 id="stream">
+<div class="field"><h4 id="stream">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_async/_StreamImpl.html">_StreamImpl</a>&lt;<a href="../bot/EventHandle.html">T</a>&gt;         <strong>stream</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>         <strong>stream</strong> <a class="anchor-link"
             href="#stream"
             title="Permalink to EventHandle&lt;T&gt;.stream">#</a>
         </h4>
-        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_async/StreamController.html">StreamController</a> </div><div class="doc">
+        <div class="doc">
 <pre class="source">
-final _StreamImpl&lt;T&gt; stream
+async.Stream get stream {
+ if(_broadcastCache == null) {
+   _broadcastCache = super.stream.asBroadcastStream();
+ }
+ return _broadcastCache;
+}
 </pre>
 </div>
 </div>
@@ -173,26 +184,16 @@ void <strong>addError</strong>(<a href="http://api.dartlang.org/dart_core/Object
               title="Permalink to EventHandle&lt;T&gt;.addError">#</a></h4>
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_async/StreamController.html">StreamController</a> </div><div class="doc">
 <p>Send or enqueue an error event.</p>
-<p>If 
-<span class="param">error</span> is not an <code>AsyncError</code>, 
-<span class="param">error</span> and an optional 
-<span class="param">stackTrace</span>
-is combined into an <code>AsyncError</code> and sent this stream's listeners.</p>
-<p>Otherwise, if 
-<span class="param">error</span> is an <code>AsyncError</code>, it is used directly as the
-error object reported to listeners, and the 
-<span class="param">stackTrace</span> is ignored.</p>
 <p>If a subscription has requested to be unsubscribed on errors,
 it will be unsubscribed after receiving this event.</p>
 <pre class="source">
 void addError(Object error, [Object stackTrace]) {
- AsyncError asyncError;
- if (error is AsyncError) {
-   asyncError = error;
- } else {
-   asyncError = new AsyncError(error, stackTrace);
+ if (stackTrace != null) {
+   // Force stack trace overwrite. Even if the error already contained
+   // a stack trace.
+   _attachStackTrace(error, stackTrace);
  }
- stream._addError(asyncError);
+ stream._addError(error);
 }
 </pre>
 </div>
@@ -225,17 +226,6 @@ void dispose(){
  this._disposed = true;
  super.close();
 }
-</pre>
-</div>
-</div>
-<div class="method inherited"><h4 id="signalError">
-<button class="show-code">Code</button>
-void <strong>signalError</strong>(<a href="http://api.dartlang.org/dart_async/AsyncError.html">AsyncError</a> errorEvent) <a class="anchor-link" href="#signalError"
-              title="Permalink to EventHandle&lt;T&gt;.signalError">#</a></h4>
-<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_async/StreamSink.html">StreamSink</a> </div><div class="doc">
-<p><em>Deprecated</em>. Use <code>EventSink.addError</code> instead.</p>
-<pre class="source">
-void signalError(AsyncError errorEvent) { addError(errorEvent); }
 </pre>
 </div>
 </div>

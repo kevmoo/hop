@@ -113,7 +113,7 @@ class Mock {
   * return value. If we find no [Behavior] to apply an exception is
   * thrown.
   */
- noSuchMethod(InvocationMirror invocation) {
+ noSuchMethod(Invocation invocation) {
    var method = invocation.memberName;
    var args = invocation.positionalArguments;
    if (invocation.isGetter) {
@@ -490,7 +490,7 @@ LogEntryList getLogs([CallMatcher logFilter,
 </div>
 <div class="method"><h4 id="noSuchMethod">
 <button class="show-code">Code</button>
-dynamic<strong>noSuchMethod</strong>(<a href="http://api.dartlang.org/dart_core/InvocationMirror.html">InvocationMirror</a> invocation) <a class="anchor-link" href="#noSuchMethod"
+dynamic <strong>noSuchMethod</strong>(<a href="http://api.dartlang.org/dart_core/Invocation.html">Invocation</a> invocation) <a class="anchor-link" href="#noSuchMethod"
               title="Permalink to Mock.noSuchMethod">#</a></h4>
 <div class="doc">
 <p>This is the handler for method calls. We loop through the list
@@ -499,7 +499,7 @@ values available, and then do the action specified by that
 return value. If we find no <a class="crossref" href="../mock/Behavior.html">Behavior</a> to apply an exception is
 thrown.</p>
 <pre class="source">
-noSuchMethod(InvocationMirror invocation) {
+noSuchMethod(Invocation invocation) {
  var method = invocation.memberName;
  var args = invocation.positionalArguments;
  if (invocation.isGetter) {

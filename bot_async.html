@@ -47,13 +47,13 @@ nor a <code>Function</code> that value is returned wrapped in a <code>Future</co
 <pre class="source">
 Future&lt;dynamic&gt; getDelayedResult(dynamic input) {
  if(input is Function) {
-   input = new Future.of(input);
+   input = new Future(input);
  }
 
  if(input is Future) {
    return input.then((value) =&gt; getDelayedResult(value));
  } else {
-   return new Future.immediate(input);
+   return new Future.value(input);
  }
 }
 </pre>

@@ -66,7 +66,7 @@ math.Random get rnd {
 <h3>Functions</h3>
 <div class="method"><h4 id="lerp">
 <button class="show-code">Code</button>
-dynamic<strong>lerp</strong>(<a href="http://api.dartlang.org/dart_core/num.html">num</a> a, <a href="http://api.dartlang.org/dart_core/num.html">num</a> b, <a href="http://api.dartlang.org/dart_core/num.html">num</a> x) <a class="anchor-link" href="#lerp"
+dynamic <strong>lerp</strong>(<a href="http://api.dartlang.org/dart_core/num.html">num</a> a, <a href="http://api.dartlang.org/dart_core/num.html">num</a> b, <a href="http://api.dartlang.org/dart_core/num.html">num</a> x) <a class="anchor-link" href="#lerp"
               title="Permalink to lerp">#</a></h4>
 <div class="doc">
 <p>Performs linear interpolation between values a and b. Returns the value
@@ -137,23 +137,6 @@ void requireArgumentContainsPattern(Pattern pattern, String argValue, String arg
    throw new DetailedArgumentError(argName,
        'The value "$argValue" does not contain the pattern "${pattern}"');
  }
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="requireArgumentMatches">
-<button class="show-code">Code</button>
-void <strong>requireArgumentMatches</strong>(<a href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a> regex, <a href="http://api.dartlang.org/dart_core/String.html">String</a> argValue, <a href="http://api.dartlang.org/dart_core/String.html">String</a> argName) <a class="anchor-link" href="#requireArgumentMatches"
-              title="Permalink to requireArgumentMatches">#</a></h4>
-<div class="doc">
-<p>Use <a class="crossref" href="bot.html#requireArgumentContainsPattern">requireArgumentContainsPattern</a> instead.</p>
-<pre class="source">
-@deprecated
-/**
-* Use [requireArgumentContainsPattern] instead.
-*/
-void requireArgumentMatches(RegExp regex, String argValue, String argName) {
- requireArgumentContainsPattern(regex, argValue, argName);
 }
 </pre>
 </div>

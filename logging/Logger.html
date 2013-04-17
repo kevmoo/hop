@@ -55,6 +55,9 @@ class Logger {
  /** Controller used to notify when log entries are added to this logger. */
  StreamController&lt;LogRecord&gt; _controller;
 
+ /** The broadcast stream associated with the controller. */
+ Stream _stream;
+
  /**
   * Singleton constructor. Calling `new Logger(name)` will return the same
   * actual instance whenever it is called with the same string name.
@@ -184,9 +187,10 @@ class Logger {
  Stream&lt;LogRecord&gt; _getStream() {
    if (hierarchicalLoggingEnabled || parent == null) {
      if (_controller == null) {
-       _controller = new StreamController&lt;LogRecord&gt;.broadcast();
+       _controller = new StreamController&lt;LogRecord&gt;();
+       _stream = _controller.stream.asBroadcastStream();
      }
-     return _controller.stream;
+     return _stream;
    } else {
      return root._getStream();
    }
@@ -307,7 +311,7 @@ Level get level {
 </div>
 <div class="method"><h4 id="level=">
 <button class="show-code">Code</button>
-dynamic<strong>set level</strong>(<a href="../logging/Level.html">Level</a> value) <a class="anchor-link" href="#level="
+dynamic <strong>set level</strong>(<a href="../logging/Level.html">Level</a> value) <a class="anchor-link" href="#level="
               title="Permalink to Logger.set level">#</a></h4>
 <div class="doc">
 <p>Override the level for this particular <a class="crossref" href="../logging/Logger.html#Logger">Logger</a> and its children. </p>
