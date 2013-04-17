@@ -111,7 +111,7 @@ Future<String> _getCommitMessageFuture(GitDir gitDir, bool isClean) {
     });
 }
 
-Future _doDocsPopulate(TaskContext ctx, TempDir dir, Collection<String> libs,
+Future _doDocsPopulate(TaskContext ctx, TempDir dir, Iterable<String> libs,
                        String packageDir, List<String> excludeList,
                        bool linkApi, Func2<TaskContext, String, Future> postBuild) {
   final args = ['--pkg', packageDir, '--omit-generation-time', '--out', dir.path, '--verbose'];

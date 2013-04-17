@@ -57,21 +57,23 @@ class Runner {
             return RunResult.FAIL;
           }
         })
-        .catchError((AsyncError asyncError) {
-          if(asyncError.error == Task._nullFutureResultEx) {
+        .catchError((error) {
+          if(error == Task._nullFutureResultEx) {
             context.severe('The provided task returned null instead of a future');
             return RunResult.ERROR;
-          } else if(asyncError.error is _TaskFailError) {
-            final _TaskFailError e = asyncError.error;
+          } else if(error is _TaskFailError) {
+            final _TaskFailError e = error;
             context.severe(e.message);
             return RunResult.FAIL;
           }
           else {
             // has as exception, need to test this
             context.severe('Exception thrown by task');
-            context.severe(asyncError.error.toString());
-            if(asyncError.stackTrace != null) {
-              context.severe(asyncError.stackTrace.toString());
+            context.severe(error.toString());
+
+            final stack = getAttachedStackTrace(error);
+            if(stack != null) {
+              context.severe(stack.toString());
             }
             return RunResult.EXCEPTION;
           }
@@ -112,11 +114,11 @@ class Runner {
 
     } else if(config.args.rest.length == 0) {
       _printHelp(config.doPrint, config.taskRegistry, config.parser);
-      return new Future.immediate(RunResult.SUCCESS);
+      return new Future.value(RunResult.SUCCESS);
     } else {
       final taskName = config.args.rest[0];
       ctx.log('No task named "$taskName".');
-      return new Future.immediate(RunResult.BAD_USAGE);
+      return new Future.value(RunResult.BAD_USAGE);
     }
   }
 

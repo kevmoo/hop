@@ -39,7 +39,7 @@ class IntegrationTests {
     final list = args.toList();
 
     final hopRunnerPath = 'tool/hop_runner.dart';
-    list.insertRange(0, 1, hopRunnerPath);
+    list.insert(0, hopRunnerPath);
 
     // assuming `dart` is in system path
     env['PATH'] = Platform.environment['PATH'];
