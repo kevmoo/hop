@@ -1,5 +1,5 @@
 name: hop
-version: 0.21.0-dev
+version: 0.21.0
 author: Kevin Moore <kevin@thinkpixellab.com>
 description: Dart Task Framework
 homepage: https://github.com/kevmoo/hop.dart
@@ -8,10 +8,10 @@ environment:
   sdk: '>=0.4.7+1'
 dependencies:
   unittest: '>=0.4.7+1'
-  bot: '>=0.20.0-dev'
   args: '>=0.4.7+1'
-  bot_io: '>=0.20.0-dev'
+  bot: '>=0.20.0'
   logging: '>=0.4.7+1'
+  bot_io: '>=0.20.0'
   pathos: '>=0.4.7+1'
   meta: '>=0.4.7+1'
 dev_dependencies:
