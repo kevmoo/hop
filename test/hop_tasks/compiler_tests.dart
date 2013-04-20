@@ -1,28 +1,38 @@
 part of test_hop_tasks;
 
+// TODO: test error cases w/ bad input names or mappers
+// TODO: test mappers
+
 class CompilerTests {
   static void register() {
     group('compiler', () {
-      group('dart2js', () {
-        test('good input', () {
-          return _testCompiler(_goodTestFile, RunResult.SUCCESS);
-        });
+      [CompilerTargetType.DART, CompilerTargetType.JS].forEach((targetType) {
 
-        test('bad input', () {
-          return _testCompiler(_badTestFile, RunResult.FAIL);
+        group(targetType.toString(), (){
+
+          test('good input', () {
+            return _testCompiler(_goodTestFile, targetType, RunResult.SUCCESS);
+          });
+
+          test('bad input', () {
+            return _testCompiler(_badTestFile, targetType, RunResult.FAIL);
+          });
         });
 
       });
     });
   }
 
-  static Future _testCompiler(String contents, RunResult expectedResult) {
+  static Future _testCompiler(String contents, CompilerTargetType target,
+                              RunResult expectedResult) {
     TempDir tmpDir;
     Task task;
 
     final sourceDirMap = {
       'main.dart' : contents
     };
+
+    List<String> sources;
 
     return TempDir.create()
         .then((TempDir value) {
@@ -34,9 +44,9 @@ class CompilerTests {
         .then((TempDir value) {
           assert(value == tmpDir);
 
-          final sources = [pathos.join(tmpDir.path, 'main.dart')];
+          sources = [pathos.join(tmpDir.path, 'main.dart')];
 
-          task = createDart2JsTask(sources);
+          task = createDartCompilerTask(sources, outputType: target);
 
           return runTaskInTestRunner(task);
 
@@ -44,7 +54,17 @@ class CompilerTests {
         .then((RunResult result) {
           expect(result, expectedResult);
 
-          // TODO: actually verify the contents of the output directory, too
+          return tmpDir.dir.list().toList();
+        })
+        .then((list) {
+          var entityNames = list.map((e) => e.path).toList();
+
+          print("the files: $entityNames");
+          var outFiles = _getOutputFiles(sources, target,
+              expectedResult.success);
+          print('outFiles: $outFiles');
+          expect(entityNames, unorderedEquals(outFiles));
+          print(list);
         })
         .whenComplete(() {
           if(tmpDir != null) {
@@ -52,6 +72,32 @@ class CompilerTests {
           }
         });
   }
+}
+
+List<String> _getOutputFiles(List<String> inputFiles, CompilerTargetType type,
+    bool expectSuccess) {
+  var outputFiles = new List<String>();
+
+  inputFiles.forEach((inFile) {
+    outputFiles.add(inFile);
+
+    if(expectSuccess) {
+      if(type == CompilerTargetType.JS) {
+        var newName = inFile + '.js';
+        outputFiles.add(newName);
+        outputFiles.add(newName + '.deps');
+        outputFiles.add(newName + '.map');
+      } else {
+        assert(type == CompilerTargetType.DART);
+        assert(inFile.endsWith('.dart'));
+        var newName = inFile.substring(0, inFile.length - 5) + '.compiled.dart';
+        outputFiles.add(newName);
+        outputFiles.add(newName + '.deps');
+      }
+    }
+  });
+
+  return outputFiles;
 }
 
 const _goodTestFile = 'main() { print("hello, world!"); }';
