@@ -11,7 +11,7 @@ dependencies:
   args: '>=0.4.7+1'
   bot: '>=0.20.0'
   logging: '>=0.4.7+1'
-  bot_io: '>=0.20.0'
+  bot_io: '>=0.20.2'
   pathos: '>=0.4.7+1'
   meta: '>=0.4.7+1'
 dev_dependencies:
