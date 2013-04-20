@@ -1371,6 +1371,22 @@ $$._Deserializer = {"": "Object;",
 };
 
 $$.TimerImpl = {"": "Object;_once,_inEventLoop,_handle?",
+  cancel$0: function() {
+    if ($.get$globalThis().setTimeout != null) {
+      if (this._inEventLoop)
+        throw $.wrapException($.UnsupportedError$("Timer in event loop cannot be canceled."));
+      if (this._handle == null)
+        return;
+      var t1 = $globalState.topEventLoop;
+      t1.activeTimerCount = t1.activeTimerCount - 1;
+      if (this._once)
+        $.get$globalThis().clearTimeout(this._handle);
+      else
+        $.get$globalThis().clearInterval(this._handle);
+      this._handle = null;
+    } else
+      throw $.wrapException($.UnsupportedError$("Canceling a timer."));
+  },
   TimerImpl$2: function(milliseconds, callback) {
     var t1;
     if (milliseconds === 0)
@@ -3974,6 +3990,16 @@ $$.Stream = {"": "Object;",
     t1.subscription_0 = this.listen$4$cancelOnError$onDone$onError(t2, true, new $.Stream_contains_anon0(future), t3);
     return future;
   },
+  forEach$1: function(_, action) {
+    var t1, future, t2, t3;
+    t1 = {};
+    future = $._FutureImpl$();
+    t1.subscription_0 = null;
+    t2 = new $.Stream_forEach_anon(t1, action, future);
+    t3 = future.get$_setError();
+    t1.subscription_0 = this.listen$4$cancelOnError$onDone$onError(t2, true, new $.Stream_forEach_anon0(future), t3);
+    return future;
+  },
   get$length: function(_) {
     var t1, future, t2, t3;
     t1 = {};
@@ -4027,6 +4053,29 @@ $$.Stream_contains__anon0 = {"": "Closure;box_0,future_5",
 $$.Stream_contains_anon0 = {"": "Closure;future_6",
   call$0: function() {
     this.future_6._setValue$1(false);
+  }
+};
+
+$$.Stream_forEach_anon = {"": "Closure;box_0,action_1,future_2",
+  call$1: function(element) {
+    $._runUserCode(new $.Stream_forEach__anon(this.action_1, element), new $.Stream_forEach__anon0(), $._cancelAndError(this.box_0.subscription_0, this.future_2));
+  }
+};
+
+$$.Stream_forEach__anon = {"": "Closure;action_3,element_4",
+  call$0: function() {
+    return this.action_3.call$1(this.element_4);
+  }
+};
+
+$$.Stream_forEach__anon0 = {"": "Closure;",
+  call$1: function(_) {
+  }
+};
+
+$$.Stream_forEach_anon0 = {"": "Closure;future_5",
+  call$0: function() {
+    this.future_5._setValue$1(null);
   }
 };
 

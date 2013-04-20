@@ -86,7 +86,9 @@ abstract class EntityValidator {
  }
 
  static Stream&lt;String&gt; validate(FileSystemEntity entity, dynamic target) {
-   if(target is String) {
+   if(target is EntityValidator) {
+     return target.validateEntity(entity);
+   } else if(target is String) {
      return validateFileStringContent(entity, target);
    } else if(target is Map) {
      return validateDirectoryFromMap(entity, target);
@@ -185,7 +187,9 @@ static Stream&lt;String&gt; validateDirectoryFromMap(Directory entity,
 <div class="doc">
 <pre class="source">
 static Stream&lt;String&gt; validate(FileSystemEntity entity, dynamic target) {
- if(target is String) {
+ if(target is EntityValidator) {
+   return target.validateEntity(entity);
+ } else if(target is String) {
    return validateFileStringContent(entity, target);
  } else if(target is Map) {
    return validateDirectoryFromMap(entity, target);

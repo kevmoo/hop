@@ -47,12 +47,6 @@ class AnsiColor {
  static const AnsiColor BOLD = const AnsiColor._internal(null, 'bold', _srg: 1);
  static const AnsiColor RESET = const AnsiColor._internal(null, 'reset');
 
- /**
-  * Use [foregroundId] instead.
-  */
- @deprecated
- int get id =&gt; foregroundId;
-
  final int foregroundId;
  final String name;
  final int _srg;
@@ -245,20 +239,6 @@ final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <stro
         <div class="doc">
 <pre class="source">
 final int foregroundId
-</pre>
-</div>
-</div>
-<div class="field"><h4 id="id">
-<button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>id</strong> <a class="anchor-link"
-            href="#id"
-            title="Permalink to AnsiColor.id">#</a>
-        </h4>
-        <div class="doc">
-<p>Use <a class="crossref" href="../bot_io/AnsiColor.html#foregroundId">foregroundId</a> instead.</p>
-<pre class="source">
-@deprecated
-int get id =&gt; foregroundId;
 </pre>
 </div>
 </div>
