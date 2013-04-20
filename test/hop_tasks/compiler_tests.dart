@@ -59,12 +59,10 @@ class CompilerTests {
         .then((list) {
           var entityNames = list.map((e) => e.path).toList();
 
-          print("the files: $entityNames");
           var outFiles = _getOutputFiles(sources, target,
               expectedResult.success);
-          print('outFiles: $outFiles');
+
           expect(entityNames, unorderedEquals(outFiles));
-          print(list);
         })
         .whenComplete(() {
           if(tmpDir != null) {
