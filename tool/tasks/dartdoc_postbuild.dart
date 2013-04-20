@@ -49,7 +49,7 @@ Future<String> _updateTitle(String source) {
   source = source.replaceAll(weirdDoubleTitle, _sourceTitle);
 
   source = source.replaceAll(_sourceTitle, _outputTitle);
-  return new Future<String>.immediate(source);
+  return new Future<String>.value(source);
 }
 
 Future<Document> _updateIndex(Document source) {
@@ -81,9 +81,6 @@ Future<Document> _updateIndex(Document source) {
 
   contentDiv.children.clear();
 
-  contentDiv.children.add(new Element.tag('h2')
-    ..innerHtml = 'Hop: Dart Task Framework');
-
   contentDiv.children.add(_getAboutElement());
 
   final doSection = (String name, List<Element> sectionContent) {
@@ -96,13 +93,26 @@ Future<Document> _updateIndex(Document source) {
 
   };
 
-  doSection('Hop task system', hopHeaders);
+  doSection('Hop Task Framework', hopHeaders);
   doSection('Dependencies', otherHeaders);
 
-  return new Future<Document>.immediate(source);
+  return new Future<Document>.value(source);
 }
 
 Element _getAboutElement() {
+  final logo = new Element.tag('img')
+    ..attributes['src'] = 'logo.png'
+    ..attributes['width'] = '500'
+    ..attributes['height'] = '304'
+    ..attributes['title'] = 'HOP - Dart Task Framework';
+
+  final logoLink = new Element.tag('a')
+    ..attributes['href'] = 'https://github.com/kevmoo/hop.dart'
+    ..children.add(logo);
+
+  final sourceLabel = new Element.tag('strong')
+    ..innerHtml = 'Source code: ';
+
   final ghLink = new Element.tag('a')
   ..attributes['href'] = 'https://github.com/kevmoo/hop.dart'
   ..innerHtml = 'github.com/kevmoo/hop.dart';
@@ -110,6 +120,8 @@ Element _getAboutElement() {
 
   return new Element.tag('div')
     ..attributes['class'] = 'about'
+    ..children.add(logoLink)
     ..children.add(new Element.tag('br'))
+    ..children.add(sourceLabel)
     ..children.add(ghLink);
 }

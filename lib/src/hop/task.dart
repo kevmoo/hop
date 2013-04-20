@@ -12,7 +12,7 @@ class Task {
 
   factory Task.sync(Func1<TaskContext, bool> exec,
       {String description, ArgParserConfigure config, List<TaskArgument> extendedArgs}) {
-    final futureExec = (TaskContext ctx) => new Future.of(() => exec(ctx));
+    final futureExec = (TaskContext ctx) => new Future.sync(() => exec(ctx));
 
     return new Task.async(futureExec,
         description: description, config: config, extendedArgs: extendedArgs);
@@ -56,7 +56,7 @@ class Task {
 
   Future<bool> run(TaskContext ctx) {
     requireArgumentNotNull(ctx, 'ctx');
-    return new Future<bool>.of(() => _exec(ctx));
+    return new Future<bool>.sync(() => _exec(ctx));
   }
 
   @override

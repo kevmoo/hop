@@ -35,11 +35,11 @@ Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction) {
 
       list.sort();
 
-      list.insertRange(0, 1, 'Test cases:');
+      list.insert(0, 'Test cases:');
 
       ctx.info(list.join('\n'));
 
-      return new Future.immediate(true);
+      return new Future.value(true);
     }
 
     unittest.runTests();
