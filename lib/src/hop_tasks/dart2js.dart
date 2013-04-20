@@ -111,8 +111,8 @@ Future<bool> _dart2js(TaskContext ctx, String file,
   requireArgumentNotNullOrEmpty(output, 'output');
 
   if(output == file) {
-    throw 'The provided or derived output value "$output" is the same an input'
-      ' file.';
+    ctx.fail('The provided or derived output value "$output" is the same as the'
+        ' input file.');
   }
 
   final packageDir = new Directory('packages');
