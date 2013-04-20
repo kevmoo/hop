@@ -77,7 +77,7 @@ class CopyDirectoryTests {
           return runTaskInTestRunner(task);
         })
         .then((RunResult runResult) {
-          expect(runResult, RunResult.EXCEPTION);
+          expect(runResult, RunResult.FAIL);
         })
         .whenComplete(() {
           if(tempDirSrc != null) {
@@ -117,7 +117,7 @@ class CopyDirectoryTests {
           return runTaskInTestRunner(task);
         })
         .then((RunResult runResult) {
-          expect(runResult, RunResult.EXCEPTION);
+          expect(runResult, RunResult.FAIL);
         })
         .whenComplete(() {
           if(tempDirSrc != null) {
