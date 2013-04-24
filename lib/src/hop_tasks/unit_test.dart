@@ -18,6 +18,8 @@ Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction) {
         (summaryFlag == _summaryAll || summaryFlag == _summaryFail);
 
     final config = new _HopTestConfiguration(ctx, failSummary, passSummary);
+
+    // TODO: wrap this in a try/catch
     unitTestAction(config);
 
     if(!ctx.arguments.rest.isEmpty) {
