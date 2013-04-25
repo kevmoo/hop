@@ -83,15 +83,15 @@ void main() {
 Future<RunResult> runTaskInTestRunner(Task task, {List<String> extraArgs}) {
   const _testTaskName = 'test-task';
 
-  final taskConfig = new TaskRegistry();
-  taskConfig.addTask(_testTaskName, task);
+  final taskRegistry = new TaskRegistry();
+  taskRegistry.addTask(_testTaskName, task);
 
   final args = [_testTaskName];
   if(extraArgs != null) {
     args.addAll(extraArgs);
   }
 
-  final hopConfig = new HopConfig(taskConfig, args, _testPrint);
+  final hopConfig = new HopConfig(taskRegistry, args, _testPrint);
 
   return Runner.run(hopConfig);
 }
