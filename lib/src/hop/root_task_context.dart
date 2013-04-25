@@ -122,6 +122,15 @@ class _TaskContext extends TaskContext implements _LoggerParent, _LoggerChild {
 
   _TaskContext(this._parent, this._name, this.arguments);
 
+  _TaskContext getSubContext(String name, Task task, List<String> args) {
+    final parser = new ArgParser();
+    task.configureArgParser(parser);
+
+    final arguments = parser.parse(args);
+
+    return new _TaskContext(this, name, arguments);
+  }
+
   @override
   bool get isDisposed => _isDisposed;
 
