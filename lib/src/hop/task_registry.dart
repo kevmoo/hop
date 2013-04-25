@@ -22,15 +22,15 @@ class TaskRegistry {
     return _tasks.containsKey(taskName);
   }
 
-  void addSync(String name, Func1<TaskContext, bool> func) {
-    addTask(name, new Task.sync(func));
+  Task addSync(String name, Func1<TaskContext, bool> func) {
+    return addTask(name, new Task.sync(func));
   }
 
-  void addAsync(String name, TaskDefinition execFuture) {
-    addTask(name, new Task.async(execFuture));
+  Task addAsync(String name, TaskDefinition execFuture) {
+    return addTask(name, new Task.async(execFuture));
   }
 
-  void addTask(String name, Task task) {
+  Task addTask(String name, Task task) {
     require(!isFrozen, "Cannot add a task. Frozen.");
     requireArgumentNotNullOrEmpty(name, 'name');
     requireArgumentContainsPattern(_validNameRegExp, name, 'name');
@@ -41,6 +41,7 @@ class TaskRegistry {
 
     requireArgumentNotNull(task, 'task');
     _tasks[name] = task;
+    return task;
   }
 
   void _requireFrozen() {
