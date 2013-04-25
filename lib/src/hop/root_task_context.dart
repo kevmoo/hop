@@ -19,13 +19,13 @@ class RootTaskContext {
     }
 
   TaskContext getSubContext(String name, ArgResults arguments) =>
-    new _SubTaskContext(this, name, arguments);
+    new _TaskContext(this, name, arguments);
 
   void log(Object message) {
     _printer(message);
   }
 
-  void _subTaskLog(_SubTaskContext subTask, Level logLevel, String message) {
+  void _subTaskLog(_TaskContext subTask, Level logLevel, String message) {
     assert(subTask._parent == this);
     _logCore([subTask._name], logLevel, message);
   }
@@ -80,14 +80,14 @@ class RootTaskContext {
   }
 }
 
-class _SubTaskContext extends TaskContext {
+class _TaskContext extends TaskContext {
   final String _name;
   final RootTaskContext _parent;
   final ArgResults arguments;
 
   bool _isDisposed = false;
 
-  _SubTaskContext(this._parent, this._name, this.arguments);
+  _TaskContext(this._parent, this._name, this.arguments);
 
   bool get isDisposed => _isDisposed;
 
@@ -120,7 +120,7 @@ class _SubTaskContext extends TaskContext {
 
 class _SubLogger extends TaskLogger {
   final String _name;
-  final _SubTaskContext _parent;
+  final _TaskContext _parent;
 
   _SubLogger(this._name, this._parent);
 
