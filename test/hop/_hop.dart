@@ -12,6 +12,7 @@ import 'package:unittest/unittest.dart';
 
 part 'arg_tests.dart';
 part 'async_tests.dart';
+part 'chain_tasks_tests.dart';
 part 'integration_tests.dart';
 part 'sync_tests.dart';
 part 'task_list_tests.dart';
@@ -22,6 +23,7 @@ void main() {
     group('sync tasks', SyncTests.run);
     group('task list', TaskListTests.run);
     group('integration', IntegrationTests.run);
+    group('chain tasks', ChainTasksTests.register);
     registerArgTests();
 
     group('TaskArgument', () {
