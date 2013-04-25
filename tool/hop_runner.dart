@@ -22,7 +22,8 @@ void main() {
   //
   addTask('analyze_libs', createDartAnalyzerTask(_getLibs));
 
-  addTask('analyze_test_libs', createDartAnalyzerTask(['test/test_console.dart']));
+  addTask('analyze_test_libs',
+      createDartAnalyzerTask(['test/harness_console.dart']));
 
   addTask('bench', createBenchTask());
 
