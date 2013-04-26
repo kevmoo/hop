@@ -63,6 +63,10 @@ Task addAsyncTask(String name, TaskDefinition execFuture) {
   return _sharedConfig.addAsync(name, execFuture);
 }
 
+ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames) {
+  return _sharedConfig.addChainedTask(name, existingTaskNames);
+}
+
 void _paranoidHopCheck() {
   var runningScript = new io.Options().script;
   runningScript = path.absolute(runningScript);
