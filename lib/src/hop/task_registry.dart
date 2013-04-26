@@ -32,10 +32,7 @@ class TaskRegistry {
 
   Task addTask(String name, Task task) {
     require(!isFrozen, "Cannot add a task. Frozen.");
-    requireArgumentNotNullOrEmpty(name, 'name');
-    requireArgumentContainsPattern(_validNameRegExp, name, 'name');
-    requireArgument(!_reservedTasks.contains(name), 'task',
-        'The provided task has a reserved name');
+    _validateTaskName(name);
     requireArgument(!_tasks.containsKey(name), 'task',
         'A task with name ${name} already exists');
 
@@ -63,5 +60,12 @@ class TaskRegistry {
 
   Task _getTask(String taskName) {
     return _tasks[taskName];
+  }
+
+  static void _validateTaskName(String name) {
+    requireArgumentNotNullOrEmpty(name, 'name');
+    requireArgumentContainsPattern(_validNameRegExp, name, 'name');
+    requireArgument(!_reservedTasks.contains(name), 'task',
+        'The provided task has a reserved name');
   }
 }
