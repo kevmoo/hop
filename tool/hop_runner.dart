@@ -20,13 +20,12 @@ void main() {
   //
   // Analyzer
   //
-  var analyzeLibs = addTask('analyze_libs', createDartAnalyzerTask(_getLibs));
+  addTask('analyze_libs', createDartAnalyzerTask(_getLibs));
 
-  var analyzeTests = addTask('analyze_test_libs',
+  addTask('analyze_test_libs',
       createDartAnalyzerTask(['test/harness_console.dart']));
 
-  addTask('analyze_all', analyzeLibs.chain('analyze_libs')
-      .and('analyze_test_libs', analyzeTests));
+  addChainedTask('analyze_all', ['analyze_libs', 'analyze_test_libs']);
 
   addTask('bench', createBenchTask());
 

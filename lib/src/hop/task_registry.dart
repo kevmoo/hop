@@ -41,6 +41,18 @@ class TaskRegistry {
     return task;
   }
 
+  ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames) {
+    final list = $(existingTaskNames)
+        .map((String subName) {
+          var task = _tasks[subName];
+          require(task != null, 'The task "$subName" has not be registered');
+          return new _NamedTask(subName, task);
+        })
+        .toReadOnlyCollection();
+
+    return addTask(name, new ChainedTask._impl(list));
+  }
+
   void _requireFrozen() {
     if(!isFrozen) {
       throw "not frozen!";
