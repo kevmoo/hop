@@ -22,12 +22,12 @@ class TaskRegistry {
     return _tasks.containsKey(taskName);
   }
 
-  Task addSync(String name, Func1<TaskContext, bool> func) {
-    return addTask(name, new Task.sync(func));
+  Task addSync(String name, Func1<TaskContext, bool> func, {String description}) {
+    return addTask(name, new Task.sync(func, description: description));
   }
 
-  Task addAsync(String name, TaskDefinition execFuture) {
-    return addTask(name, new Task.async(execFuture));
+  Task addAsync(String name, TaskDefinition execFuture, {String description}) {
+    return addTask(name, new Task.async(execFuture, description: description));
   }
 
   Task addTask(String name, Task task) {
@@ -50,7 +50,8 @@ class TaskRegistry {
         })
         .toReadOnlyCollection();
 
-    return addTask(name, new ChainedTask._impl(list));
+    final chainedTaskDescription = list.fold('Chained Task:', (p, _NamedTask n) => "${p} [${n.name}]");
+    return addTask(name, new ChainedTask._impl(list, description: chainedTaskDescription));
   }
 
   void _requireFrozen() {

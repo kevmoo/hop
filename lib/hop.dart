@@ -55,12 +55,12 @@ Task addTask(String name, Task task) {
   return _sharedConfig.addTask(name, task);
 }
 
-Task addSyncTask(String name, Func1<TaskContext, bool> execFunc) {
-  return _sharedConfig.addSync(name, execFunc);
+Task addSyncTask(String name, Func1<TaskContext, bool> execFunc, {String description}) {
+  return _sharedConfig.addSync(name, execFunc, description: description);
 }
 
-Task addAsyncTask(String name, TaskDefinition execFuture) {
-  return _sharedConfig.addAsync(name, execFuture);
+Task addAsyncTask(String name, TaskDefinition execFuture, {String description}) {
+  return _sharedConfig.addAsync(name, execFuture, description: description);
 }
 
 ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames) {
