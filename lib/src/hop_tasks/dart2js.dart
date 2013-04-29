@@ -1,7 +1,5 @@
 part of hop_tasks;
 
-// TODO: output does not work if there is more than one file provided, moron!
-
 class CompilerTargetType {
   final String _value;
   const CompilerTargetType._internal(this._value);
