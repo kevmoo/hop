@@ -1,0 +1,164 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>EntityPopulater abstract class / bot_io Library / HOP Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="bot_io" data-type="EntityPopulater">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">HOP Documentation</a>
+         &rsaquo; <a href="../bot_io.html">bot_io</a> &rsaquo; <a href="../bot_io/EntityPopulater.html">EntityPopulater</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>EntityPopulater</strong>
+          abstract class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+abstract class EntityPopulater {
+
+ static Future&lt;FileSystemEntity&gt; populate(String path, dynamic source,
+     {bool createParentDirectories: false, bool overwriteExisting: false}) {
+
+   if(source is String) {
+     var stringStream = new Stream.fromIterable([source]);
+     var encoder = new StringEncoder();
+     source = encoder.bind(stringStream);
+   } else if(source is File) {
+     source = source.openRead();
+   }
+
+   if(source is Stream) {
+     return _populateFileWithStream(path, source,
+         createParentDirectories: createParentDirectories,
+         overwriteExisting: overwriteExisting);
+   }
+
+   throw "Don't know how to populate from '$source'...yet?";
+ }
+
+ Future&lt;FileSystemEntity&gt; populatePath(String path,
+     {bool createParentDirectories: false, bool overwriteExisting: false});
+
+
+ static Future&lt;File&gt; _populateFileWithStream(String path,
+     Stream&lt;List&lt;int&gt;&gt; content,
+     {bool createParentDirectories: false, bool overwriteExisting: false}) {
+
+   final dirName = pathos.dirname(path);
+   var parentDir = new Directory(dirName);
+   return parentDir.exists()
+       .then((bool parentDirExists) {
+         if(!parentDirExists &amp;&amp; !createParentDirectories) {
+           throw new EntityPopulatorException._internal(
+               'Parent directory does not exist', path);
+         } else if(parentDirExists) {
+
+           // shouldn't there be an async version of this?
+           var existingType =
+               FileSystemEntity.typeSync(path, followLinks: false);
+
+           if(existingType != FileSystemEntityType.NOT_FOUND) {
+
+             if(overwriteExisting) {
+               switch(existingType) {
+                 case FileSystemEntityType.DIRECTORY:
+                   final dir = new Directory(path);
+                   return dir.delete(recursive: true);
+                 case FileSystemEntityType.LINK:
+                   final link = new Link(path);
+                   return link.delete();
+               }
+
+             } else {
+                 throw new EntityPopulatorException._internal(
+                     'Existing entity.', path);
+             }
+           }
+
+         }
+
+         if(!parentDirExists &amp;&amp; createParentDirectories) {
+           return parentDir.create(recursive: true);
+         }
+       })
+       .then((_) {
+         var file = new File(path);
+         return file.openWrite()
+             .addStream(content)
+             .then((_) {
+               return file;
+             });
+       });
+
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Static Methods</h3>
+<div class="method"><h4 id="populate">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_io/FileSystemEntity.html">FileSystemEntity</a>&gt; <strong>populate</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path, source, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> createParentDirectories: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> overwriteExisting: false}) <a class="anchor-link" href="#populate"
+              title="Permalink to EntityPopulater.populate">#</a></h4>
+<div class="doc">
+<pre class="source">
+static Future&lt;FileSystemEntity&gt; populate(String path, dynamic source,
+   {bool createParentDirectories: false, bool overwriteExisting: false}) {
+
+ if(source is String) {
+   var stringStream = new Stream.fromIterable([source]);
+   var encoder = new StringEncoder();
+   source = encoder.bind(stringStream);
+ } else if(source is File) {
+   source = source.openRead();
+ }
+
+ if(source is Stream) {
+   return _populateFileWithStream(path, source,
+       createParentDirectories: createParentDirectories,
+       overwriteExisting: overwriteExisting);
+ }
+
+ throw "Don't know how to populate from '$source'...yet?";
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="populatePath">
+abstract <a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_io/FileSystemEntity.html">FileSystemEntity</a>&gt; <strong>populatePath</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> createParentDirectories: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> overwriteExisting: false}) <a class="anchor-link" href="#populatePath"
+              title="Permalink to EntityPopulater.populatePath">#</a></h4>
+<div class="doc">
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

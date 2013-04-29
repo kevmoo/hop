@@ -33,7 +33,10 @@
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
 <pre class="source">
-class RootTaskContext {
+class RootTaskContext implements _LoggerParent{
+ static final _childNameChainExpando =
+     new Expando&lt;List&lt;String&gt;&gt;('child names');
+
  final Printer _printer;
  final bool _prefixEnabled;
  final Level _minLogLevel;
@@ -50,15 +53,24 @@ class RootTaskContext {
    }
 
  TaskContext getSubContext(String name, ArgResults arguments) =&gt;
-   new _SubTaskContext(this, name, arguments);
+   new _TaskContext(this, name, arguments);
 
  void log(Object message) {
    _printer(message);
  }
 
- void _subTaskLog(_SubTaskContext subTask, Level logLevel, String message) {
-   assert(subTask._parent == this);
-   _logCore([subTask._name], logLevel, message);
+ @override
+ void _childLog(_LoggerChild subTask, Level logLevel, String message) {
+   List&lt;String&gt; names = _childNameChainExpando[subTask];
+
+   if(names == null) {
+     final chain = _getParentChain(subTask);
+
+     _childNameChainExpando[subTask] = names =
+         chain.map((i) =&gt; i._name).toList();
+   }
+
+   _logCore(names, logLevel, message);
  }
 
  void _logCore(List&lt;String&gt; titleSections, Level logLevel, String message) {
@@ -95,6 +107,27 @@ class RootTaskContext {
    }
 
    _libLogger.log(logLevel, "$title $message");
+ }
+
+ List&lt;_LoggerChild&gt; _getParentChain(_LoggerChild child) {
+   final list = new List&lt;_LoggerChild&gt;();
+
+   _LoggerParent parent;
+
+   do {
+     list.insert(0, child);
+     parent = child._parent;
+     if(parent is _LoggerChild) {
+       child = parent;
+     } else {
+       // once we find something in the chain that's not a child
+       // it should be 'this' -- the root task context
+       assert(parent == this);
+       child = null;
+     }
+   } while(child != null);
+
+   return list;
  }
 
  static AnsiColor getLogColor(Level logLevel) {
@@ -167,7 +200,7 @@ RootTaskContext(Printer printer,
 <div class="doc">
 <pre class="source">
 TaskContext getSubContext(String name, ArgResults arguments) =&gt;
- new _SubTaskContext(this, name, arguments);
+ new _TaskContext(this, name, arguments);
 </pre>
 </div>
 </div>

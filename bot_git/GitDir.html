@@ -368,7 +368,7 @@ class GitDir {
        })
        .whenComplete(() {
          if(tempDirs != null) {
-           tempDirs.dispose();
+           return tempDirs.dispose();
          }
        });
  }
@@ -962,7 +962,7 @@ Future&lt;Commit&gt; populateBranch(String branchName, PopulateTempDir populator
      })
      .whenComplete(() {
        if(tempDirs != null) {
-         tempDirs.dispose();
+         return tempDirs.dispose();
        }
      });
 }

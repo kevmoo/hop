@@ -55,8 +55,8 @@ class CustomMatcher extends BaseMatcher {
  final String _featureName;
  final Matcher _matcher;
 
- const CustomMatcher(this._featureDescription, this._featureName,
-     this._matcher);
+ CustomMatcher(this._featureDescription, this._featureName, matcher)
+     : this._matcher = wrapMatcher(matcher);
 
  /** Override this to extract the interesting feature.*/
  featureValueOf(actual) =&gt; actual;
@@ -88,12 +88,12 @@ class CustomMatcher extends BaseMatcher {
 <h3>Constructors</h3>
 <div class="method"><h4 id="CustomMatcher">
 <button class="show-code">Code</button>
-const <strong>CustomMatcher</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> _featureDescription, <a href="http://api.dartlang.org/dart_core/String.html">String</a> _featureName, <a href="../matcher/Matcher.html">Matcher</a> _matcher) <a class="anchor-link" href="#CustomMatcher"
+new <strong>CustomMatcher</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> _featureDescription, <a href="http://api.dartlang.org/dart_core/String.html">String</a> _featureName, matcher) <a class="anchor-link" href="#CustomMatcher"
               title="Permalink to CustomMatcher.CustomMatcher">#</a></h4>
 <div class="doc">
 <pre class="source">
-const CustomMatcher(this._featureDescription, this._featureName,
-   this._matcher);
+CustomMatcher(this._featureDescription, this._featureName, matcher)
+   : this._matcher = wrapMatcher(matcher);
 </pre>
 </div>
 </div>

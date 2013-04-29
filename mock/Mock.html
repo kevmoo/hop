@@ -114,7 +114,7 @@ class Mock {
   * thrown.
   */
  noSuchMethod(Invocation invocation) {
-   var method = invocation.memberName;
+   var method = MirrorSystem.getName(invocation.memberName);
    var args = invocation.positionalArguments;
    if (invocation.isGetter) {
      method = 'get $method';
@@ -500,7 +500,7 @@ return value. If we find no <a class="crossref" href="../mock/Behavior.html">Beh
 thrown.</p>
 <pre class="source">
 noSuchMethod(Invocation invocation) {
- var method = invocation.memberName;
+ var method = MirrorSystem.getName(invocation.memberName);
  var args = invocation.positionalArguments;
  if (invocation.isGetter) {
    method = 'get $method';

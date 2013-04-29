@@ -28,9 +28,16 @@
 <div class="content">
 <h2><strong>unittest</strong> library</h2>
 <div class="doc"><p>A library for writing dart unit tests.</p>
-<p>To import this library, install the
-<a href="http://pub.dartlang.org/packages/unittest">unittest package</a> via the pub
-package manager. See the <a href="http://pub.dartlang.org/doc">Getting Started</a>
+<h2>Installing</h2>
+<p>Use <a href="http://pub.dartlang.org">pub</a> to install this package. Add the following to your <code>pubspec.yaml</code>
+file.</p>
+<pre><code>dependencies:
+  unittest: any
+</code></pre>
+<p>Then run <code>pub install</code>.</p>
+<p>For more information, see the
+<a href="http://pub.dartlang.org/packages/unittest">unittest package on pub.dartlang.org</a>.</p>
+<p>See the <a href="http://pub.dartlang.org/doc">Getting Started</a>
 guide for more details.</p>
 <h2>Concepts</h2><ul><li>
 <p><strong>Tests</strong>: Tests are specified via the top-level function <a class="crossref" href="unittest.html#test">test</a>, they can be
@@ -175,8 +182,8 @@ final <a href="unittest/TestCase.html">TestCase</a>         <strong>currentTestC
 <p><a class="crossref" href="unittest/TestCase.html">TestCase</a> currently being executed. </p>
 <pre class="source">
 TestCase get currentTestCase =&gt;
-   (_currentTestCaseIndex &gt;= 0 &amp;&amp; _currentTestCaseIndex &lt; _testCases.length)
-       ? _testCases[_currentTestCaseIndex]
+   (_currentTestCaseIndex &gt;= 0 &amp;&amp; _currentTestCaseIndex &lt; testCases.length)
+       ? testCases[_currentTestCaseIndex]
        : null;
 </pre>
 </div>
@@ -238,9 +245,9 @@ final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href=
             title="Permalink to testCases">#</a>
         </h4>
         <div class="doc">
-<p>Get the list of tests. </p>
+<p>Tests executed in this suite. </p>
 <pre class="source">
-final List&lt;TestCase&gt; testCases = new UnmodifiableListView(_testCases)
+final List&lt;TestCase&gt; testCases = new UnmodifiableListView&lt;TestCase&gt;(_testCases)
 </pre>
 </div>
 </div>
@@ -324,9 +331,9 @@ void <strong>setSoloTest</strong>(<a href="http://api.dartlang.org/dart_core/int
 <p>Select a solo test by ID. </p>
 <pre class="source">
 void setSoloTest(int id) {
- for (var i = 0; i &lt; _testCases.length; i++) {
-   if (_testCases[i].id == id) {
-     _soloTest = _testCases[i];
+ for (var i = 0; i &lt; testCases.length; i++) {
+   if (testCases[i].id == id) {
+     _soloTest = testCases[i];
      break;
    }
  }
@@ -355,7 +362,7 @@ void <strong>registerException</strong>(e, [trace]) <a class="anchor-link" href=
 <p>Registers that an exception was caught for the current test.</p>
 <pre class="source">
 void registerException(e, [trace]) {
- _registerException(_currentTestCaseIndex, e, trace);
+ _registerException(currentTestCase, e, trace);
 }
 </pre>
 </div>
@@ -372,7 +379,7 @@ passed to the corresponding test.</p>
 <span class="param">tryBody</span> (if any) is returned by <a class="crossref" href="unittest.html#guardAsync">guardAsync</a>.</p>
 <pre class="source">
 guardAsync(Function tryBody) {
- return _guardAsync(tryBody, null, _currentTestCaseIndex);
+ return _guardAsync(tryBody, null, currentTestCase);
 }
 </pre>
 </div>
@@ -387,7 +394,6 @@ void <strong>runTests</strong>() <a class="anchor-link" href="#runTests"
 void runTests() {
  _ensureInitialized(false);
  _currentTestCaseIndex = 0;
- _currentGroup = '';
 
  // If we are soloing a test, remove all the others.
  if (_soloTest != null) {
@@ -396,7 +402,7 @@ void runTests() {
 
  _config.onStart();
 
- _defer(() {
+ runAsync(() {
    _nextBatch();
  });
 }
@@ -457,7 +463,7 @@ calls to <a class="crossref" href="unittest.html#test">test</a>. The
 case it must return a <code>Future</code>.</p>
 <pre class="source">
 void tearDown(Function teardownTest) {
- _testTeardown = teardownTest;
+ _currentContext.testTeardown = teardownTest;
 }
 </pre>
 </div>
@@ -468,15 +474,14 @@ void <strong>setUp</strong>(<a href="http://api.dartlang.org/dart_core/Function.
               title="Permalink to setUp">#</a></h4>
 <div class="doc">
 <p>Register a <a class="crossref" href="unittest.html#setUp">setUp</a> function for a test <a class="crossref" href="unittest.html#group">group</a>. This function will
-be called before each test in the group is run. Note that if groups
-are nested only the most locally scoped <code>setUpTest</code> function will be run.
+be called before each test in the group is run.
 <a class="crossref" href="unittest.html#setUp">setUp</a> and <a class="crossref" href="unittest.html#tearDown">tearDown</a> should be called within the <a class="crossref" href="unittest.html#group">group</a> before any
 calls to <a class="crossref" href="unittest.html#test">test</a>. The 
 <span class="param">setupTest</span> function can be asynchronous; in this
 case it must return a <code>Future</code>.</p>
 <pre class="source">
 void setUp(Function setupTest) {
- _testSetup = setupTest;
+ _currentContext.testSetup = setupTest;
 }
 </pre>
 </div>
@@ -491,33 +496,15 @@ body of the function passed to this will inherit this group's description.</p>
 <pre class="source">
 void group(String description, void body()) {
  ensureInitialized();
- // Concatenate the new group.
- final parentGroup = _currentGroup;
- if (_currentGroup != '') {
-   // Add a space.
-   _currentGroup = '$_currentGroup$groupSep$description';
- } else {
-   // The first group.
-   _currentGroup = description;
- }
-
- // Groups can be nested, so we need to preserve the current
- // settings for test setup/teardown.
- Function parentSetup = _testSetup;
- Function parentTeardown = _testTeardown;
-
+ _currentContext = new GroupContext(_currentContext, description);
  try {
-   _testSetup = null;
-   _testTeardown = null;
    body();
  } catch (e, trace) {
    var stack = (trace == null) ? '' : ': ${trace.toString()}';
    _uncaughtErrorMessage = "${e.toString()}$stack";
  } finally {
    // Now that the group is over, restore the previous one.
-   _currentGroup = parentGroup;
-   _testSetup = parentSetup;
-   _testTeardown = parentTeardown;
+   _currentContext = _currentContext.parent;
  }
 }
 </pre>
@@ -716,7 +703,8 @@ void solo_test(String spec, TestFunction body) {
 
  ensureInitialized();
 
- _soloTest = new TestCase._internal(_testCases.length + 1, _fullSpec(spec), body);
+ _soloTest = new TestCase._internal(testCases.length + 1, _fullSpec(spec),
+                                    body);
  _testCases.add(_soloTest);
 }
 </pre>
@@ -733,7 +721,7 @@ calls.</p>
 <pre class="source">
 void test(String spec, TestFunction body) {
  ensureInitialized();
- _testCases.add(new TestCase._internal(_testCases.length + 1, _fullSpec(spec),
+ _testCases.add(new TestCase._internal(testCases.length + 1, _fullSpec(spec),
                                        body));
 }
 </pre>
@@ -758,6 +746,12 @@ void logMessage(String message) =&gt;
           <div class="type">
           <h4>
             <a href="unittest/Configuration.html"><strong>Configuration</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="unittest/GroupContext.html"><strong>GroupContext</strong></a>
           </h4>
           </div>
           

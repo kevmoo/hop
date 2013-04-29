@@ -53,12 +53,6 @@ class Grouping&lt;K, V&gt; {
   */
  bool containsKey(K key) =&gt; _values.containsKey(key);
 
- /**
-  * Returns the value for the given [key] or null if [key] is not
-  * in the map. Because null values are supported, one should either
-  * use containsKey to distinguish between an absent key and a null
-  * value, or use the [putIfAbsent] method.
-  */
  List&lt;V&gt; operator [](K key) =&gt; _values[key];
 
  /**
@@ -146,12 +140,6 @@ int get length =&gt; _values.length;
 <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../bot/Grouping.html">V</a>&gt; <strong>operator []</strong>(<a href="../bot/Grouping.html">K</a> key) <a class="anchor-link" href="#[]"
               title="Permalink to Grouping&lt;K, V&gt;.operator []">#</a></h4>
 <div class="doc">
-<p>Returns the value for the given 
-<span class="param">key</span> or null if 
-<span class="param">key</span> is not
-in the map. Because null values are supported, one should either
-use containsKey to distinguish between an absent key and a null
-value, or use the <code>putIfAbsent</code> method.</p>
 <pre class="source">
 List&lt;V&gt; operator [](K key) =&gt; _values[key];
 </pre>

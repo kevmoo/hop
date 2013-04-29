@@ -47,6 +47,42 @@ const String COMPLETION_COMMAND_NAME = 'completion'
 </div>
 <div>
 <h3>Functions</h3>
+<div class="method"><h4 id="fileSha1Hex">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; <strong>fileSha1Hex</strong>(<a href="http://api.dartlang.org/dart_io/File.html">File</a> file) <a class="anchor-link" href="#fileSha1Hex"
+              title="Permalink to fileSha1Hex">#</a></h4>
+<div class="doc">
+<p>Returns the 40-character hex SHA1 value of the provided file.</p>
+<p>If 
+<span class="param">file</span> is null or does not exist, errors will occur.</p>
+<pre class="source">
+Future&lt;String&gt; fileSha1Hex(File file) =&gt;
+ _getFileSha1(file).then(crypto.CryptoUtils.bytesToHex);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="fileContentsMatch">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>fileContentsMatch</strong>(<a href="http://api.dartlang.org/dart_io/File.html">File</a> file1, <a href="http://api.dartlang.org/dart_io/File.html">File</a> file2) <a class="anchor-link" href="#fileContentsMatch"
+              title="Permalink to fileContentsMatch">#</a></h4>
+<div class="doc">
+<p>Returns a <code>Future</code> that evaluates to true if the contents of 
+<span class="param">file1</span> and
+
+<span class="param">file2</span> are the same.</p>
+<p>Equality is determined by comparing the result of <a class="crossref" href="bot_io.html#fileSha1Hex">fileSha1Hex</a> for each
+file.</p>
+<pre class="source">
+Future&lt;bool&gt; fileContentsMatch(File file1, File file2) {
+ return Future.wait([fileSha1Hex(file1), fileSha1Hex(file2)])
+     .then((List&lt;String&gt; shas) {
+       assert(shas.length == 2);
+       return shas[0] == shas[1];
+ });
+}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="expandStream">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a> <strong>expandStream</strong>(<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a> source, <a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a> convert(input), {<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a> onDone()}) <a class="anchor-link" href="#expandStream"
@@ -392,7 +428,7 @@ void <strong>enableScriptLogListener</strong>() <a class="anchor-link" href="#en
 <div class="doc">
 <p>When called, a listener is added to the root <code>Logger</code> and all output is
 appended to a log file named "<code>new Options().script</code>.log".</p>
-<p>The format: <code>LogRecord.time</code> 'tab' <code>LogRecord.level</code> 'tab' <code>LogRecord.loggerName</code> 'tab' <code>LoggerRecord.message</code></p>
+<p>The format: <code>LogRecord.time</code> 'tab' <code>LogRecord.level</code> 'tab' <code>LogRecord.loggerName</code> 'tab' <code>LogRecord.message</code></p>
 <pre class="source">
 void enableScriptLogListener() {
  if(_scriptLogListenerPath == null) {
@@ -420,6 +456,12 @@ void enableScriptLogListener() {
           <div class="type">
           <h4>
             <a href="bot_io/DirectoryPopulater.html"><strong>DirectoryPopulater</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="bot_io/EntityPopulater.html"><strong>EntityPopulater</strong></a>
           </h4>
           </div>
           
@@ -486,6 +528,15 @@ void enableScriptLogListener() {
           <div class="type">
           <h4>
             <a href="bot_io/ArgCompleter.html"><strong>ArgCompleter</strong></a>
+          </h4>
+          </div>
+          
+</div>
+<div>
+<h3>Exceptions</h3>
+          <div class="type">
+          <h4>
+            <a href="bot_io/EntityPopulatorException.html"><strong>EntityPopulatorException</strong></a>
           </h4>
           </div>
           

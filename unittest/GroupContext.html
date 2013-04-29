@@ -1,0 +1,236 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>GroupContext class / unittest Library / HOP Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="unittest" data-type="GroupContext">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">HOP Documentation</a>
+         &rsaquo; <a href="../unittest.html">unittest</a> &rsaquo; <a href="../unittest/GroupContext.html">GroupContext</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>GroupContext</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Setup and teardown functions for a group and its parents, the latter
+for chaining.</p>
+<pre class="source">
+class GroupContext {
+ final GroupContext parent;
+
+ /** Description text of the current test group. */
+ final String _name;
+
+ /** Setup function called before each test in a group. */
+ Function _testSetup;
+
+ get testSetup =&gt; _testSetup;
+
+ get parentSetup =&gt; (parent == null) ? null : parent.testSetup;
+
+ set testSetup(Function setup) {
+   var preSetup = parentSetup;
+   if (preSetup == null) {
+     _testSetup = setup;
+   } else {
+     _testSetup = () {
+       var f = preSetup();
+       if (f is Future) {
+         return f.then((_) =&gt; setup());
+       } else {
+         return setup();
+       }
+     };
+   }
+ }
+
+ /** Teardown function called after each test in a group. */
+ Function _testTeardown;
+
+ get testTeardown =&gt; _testTeardown;
+
+ get parentTeardown =&gt; (parent == null) ? null : parent.testTeardown;
+
+ set testTeardown(Function teardown) {
+   var postTeardown = parentTeardown;
+   if (postTeardown == null) {
+     _testTeardown = teardown;
+   } else {
+     _testTeardown = () {
+       var f = teardown();
+       if (f is Future) {
+         return f.then((_) =&gt; postTeardown());
+       } else {
+         return postTeardown();
+       }
+     };
+   }
+ }
+
+ String get fullName =&gt; (parent == null || parent == _rootContext)
+     ? _name
+     : "${parent.fullName}$groupSep$_name";
+
+ GroupContext([this.parent, this._name = '']) {
+   _testSetup = parentSetup;
+   _testTeardown = parentTeardown;
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="GroupContext">
+<button class="show-code">Code</button>
+new <strong>GroupContext</strong>([<a href="../unittest/GroupContext.html">GroupContext</a> parent, <a href="http://api.dartlang.org/dart_core/String.html">String</a> _name = '']) <a class="anchor-link" href="#GroupContext"
+              title="Permalink to GroupContext.GroupContext">#</a></h4>
+<div class="doc">
+<pre class="source">
+GroupContext([this.parent, this._name = '']) {
+ _testSetup = parentSetup;
+ _testTeardown = parentTeardown;
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="fullName">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>fullName</strong> <a class="anchor-link"
+            href="#fullName"
+            title="Permalink to GroupContext.fullName">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get fullName =&gt; (parent == null || parent == _rootContext)
+   ? _name
+   : "${parent.fullName}$groupSep$_name";
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="parent">
+<button class="show-code">Code</button>
+final <a href="../unittest/GroupContext.html">GroupContext</a>         <strong>parent</strong> <a class="anchor-link"
+            href="#parent"
+            title="Permalink to GroupContext.parent">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final GroupContext parent
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="parentSetup">
+<button class="show-code">Code</button>
+final         <strong>parentSetup</strong> <a class="anchor-link"
+            href="#parentSetup"
+            title="Permalink to GroupContext.parentSetup">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+get parentSetup =&gt; (parent == null) ? null : parent.testSetup;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="parentTeardown">
+<button class="show-code">Code</button>
+final         <strong>parentTeardown</strong> <a class="anchor-link"
+            href="#parentTeardown"
+            title="Permalink to GroupContext.parentTeardown">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+get parentTeardown =&gt; (parent == null) ? null : parent.testTeardown;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="testSetup">
+<button class="show-code">Code</button>
+var         <strong>testSetup</strong> <a class="anchor-link"
+            href="#testSetup"
+            title="Permalink to GroupContext.testSetup">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+get testSetup =&gt; _testSetup;
+</pre>
+<pre class="source">
+set testSetup(Function setup) {
+ var preSetup = parentSetup;
+ if (preSetup == null) {
+   _testSetup = setup;
+ } else {
+   _testSetup = () {
+     var f = preSetup();
+     if (f is Future) {
+       return f.then((_) =&gt; setup());
+     } else {
+       return setup();
+     }
+   };
+ }
+}
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="testTeardown">
+<button class="show-code">Code</button>
+var         <strong>testTeardown</strong> <a class="anchor-link"
+            href="#testTeardown"
+            title="Permalink to GroupContext.testTeardown">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+get testTeardown =&gt; _testTeardown;
+</pre>
+<pre class="source">
+set testTeardown(Function teardown) {
+ var postTeardown = parentTeardown;
+ if (postTeardown == null) {
+   _testTeardown = teardown;
+ } else {
+   _testTeardown = () {
+     var f = teardown();
+     if (f is Future) {
+       return f.then((_) =&gt; postTeardown());
+     } else {
+       return postTeardown();
+     }
+   };
+ }
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

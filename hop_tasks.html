@@ -47,6 +47,8 @@ Task createUnitTestTask(Action1&lt;unittest.Configuration&gt; unitTestAction) {
        (summaryFlag == _summaryAll || summaryFlag == _summaryFail);
 
    final config = new _HopTestConfiguration(ctx, failSummary, passSummary);
+
+   // TODO: wrap this in a try/catch
    unitTestAction(config);
 
    if(!ctx.arguments.rest.isEmpty) {
@@ -403,15 +405,14 @@ Task createDartAnalyzerTask(dynamic delayedFileList) {
  return new Task.async((context) {
    final parseResult = context.arguments;
 
-   final bool enableTypeChecks = parseResult[_enableTypeChecksArgName];
    final bool verbose = parseResult[_verboseArgName];
    final bool formatMachine = parseResult[_formatMachineArgName];
 
    return getDelayedResult(delayedFileList)
        .then((List&lt;String&gt; files) {
          final fileList = files.map((f) =&gt; new Path(f)).toList();
-         return _processAnalyzerFile(context, fileList, enableTypeChecks,
-             verbose, formatMachine);
+         return _processAnalyzerFile(context, fileList, verbose,
+             formatMachine);
        });
  },
  description: 'Run "dart_analyzer" for the provided dart files.',

@@ -63,7 +63,7 @@ class ReadOnlyCollection&lt;T&gt; extends Sequence&lt;T&gt; {
 
  /**
   * Returns the element at the given [index] in the list or throws
-  * an [IndexOutOfRangeException] if [index] is out of bounds.
+  * an [RangeError] if [index] is out of bounds.
   */
  @override
  T operator [](int index) =&gt; _items[index];
@@ -245,7 +245,7 @@ E get single {
 <div class="doc">
 <p>Returns the element at the given 
 <span class="param">index</span> in the list or throws
-an <code>IndexOutOfRangeException</code> if 
+an <code>RangeError</code> if 
 <span class="param">index</span> is out of bounds.</p>
 <pre class="source">
 @override
