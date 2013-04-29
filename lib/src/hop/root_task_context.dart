@@ -2,7 +2,10 @@ part of hop;
 
 typedef void Printer(Object value);
 
-class RootTaskContext {
+class RootTaskContext implements _LoggerParent{
+  static final _childNameChainExpando =
+      new Expando<List<String>>('child names');
+
   final Printer _printer;
   final bool _prefixEnabled;
   final Level _minLogLevel;
@@ -19,15 +22,24 @@ class RootTaskContext {
     }
 
   TaskContext getSubContext(String name, ArgResults arguments) =>
-    new _SubTaskContext(this, name, arguments);
+    new _TaskContext(this, name, arguments);
 
   void log(Object message) {
     _printer(message);
   }
 
-  void _subTaskLog(_SubTaskContext subTask, Level logLevel, String message) {
-    assert(subTask._parent == this);
-    _logCore([subTask._name], logLevel, message);
+  @override
+  void _childLog(_LoggerChild subTask, Level logLevel, String message) {
+    List<String> names = _childNameChainExpando[subTask];
+
+    if(names == null) {
+      final chain = _getParentChain(subTask);
+
+      _childNameChainExpando[subTask] = names =
+          chain.map((i) => i._name).toList();
+    }
+
+    _logCore(names, logLevel, message);
   }
 
   void _logCore(List<String> titleSections, Level logLevel, String message) {
@@ -66,6 +78,27 @@ class RootTaskContext {
     _libLogger.log(logLevel, "$title $message");
   }
 
+  List<_LoggerChild> _getParentChain(_LoggerChild child) {
+    final list = new List<_LoggerChild>();
+
+    _LoggerParent parent;
+
+    do {
+      list.insert(0, child);
+      parent = child._parent;
+      if(parent is _LoggerChild) {
+        child = parent;
+      } else {
+        // once we find something in the chain that's not a child
+        // it should be 'this' -- the root task context
+        assert(parent == this);
+        child = null;
+      }
+    } while(child != null);
+
+    return list;
+  }
+
   static AnsiColor getLogColor(Level logLevel) {
     requireArgumentNotNull(logLevel, 'logLevel');
     if(logLevel.value > Level.WARNING.value) {
@@ -80,35 +113,49 @@ class RootTaskContext {
   }
 }
 
-class _SubTaskContext extends TaskContext {
+class _TaskContext extends TaskContext implements _LoggerParent, _LoggerChild {
   final String _name;
-  final RootTaskContext _parent;
+  final _LoggerParent _parent;
   final ArgResults arguments;
 
   bool _isDisposed = false;
 
-  _SubTaskContext(this._parent, this._name, this.arguments);
+  _TaskContext(this._parent, this._name, this.arguments);
 
-  bool get isDisposed => _isDisposed;
+  _TaskContext getSubContext(String name, Task task, List<String> args) {
+    final parser = new ArgParser();
+    task.configureArgParser(parser);
 
-  void log(Level logLevel, String message) {
-    _assertNotDisposed();
-    _parent._subTaskLog(this, logLevel, message);
+    final arguments = parser.parse(args);
+
+    return new _TaskContext(this, name, arguments);
   }
 
+  @override
+  bool get isDisposed => _isDisposed;
+
+  @override
+  void log(Level logLevel, String message) {
+    _assertNotDisposed();
+    _parent._childLog(this, logLevel, message);
+  }
+
+  @override
   TaskLogger getSubLogger(String name) {
     _assertNotDisposed();
     return new _SubLogger(name, this);
   }
 
+  @override
   void dispose() {
     _assertNotDisposed();
     _isDisposed = true;
   }
 
-  void _subLoggerLog(_SubLogger logger, Level logLevel, String message) {
+  void _childLog(_LoggerChild logger, Level logLevel, String message) {
     _assertNotDisposed();
-    _parent._logCore([_name, logger._name], logLevel, message);
+    // logger should be a descendant
+    _parent._childLog(logger, logLevel, message);
   }
 
   void _assertNotDisposed() {
@@ -118,13 +165,23 @@ class _SubTaskContext extends TaskContext {
   }
 }
 
-class _SubLogger extends TaskLogger {
+abstract class _LoggerChild {
+  String get _name;
+  _LoggerParent get _parent;
+}
+
+abstract class _LoggerParent {
+  void _childLog(_LoggerChild child, Level level, String msg);
+}
+
+class _SubLogger extends TaskLogger implements _LoggerChild {
   final String _name;
-  final _SubTaskContext _parent;
+  final _LoggerParent _parent;
 
   _SubLogger(this._name, this._parent);
 
+  @override
   void log(Level logLevel, String message) {
-    _parent._subLoggerLog(this, logLevel, message);
+    _parent._childLog(this, logLevel, message);
   }
 }

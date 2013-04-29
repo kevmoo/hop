@@ -23,8 +23,9 @@ class IntegrationTests {
         .then((ProcessResult pr) {
           expect(pr.exitCode, equals(RunResult.SUCCESS.exitCode));
           final lines = Util.splitLines(pr.stdout.trim()).toList();
-          expect(lines, orderedEquals(['analyze_libs', 'analyze_test_libs', 'bench',
-                                       'docs', 'help', 'test']));
+          expect(lines, orderedEquals(['analyze_all', 'analyze_libs',
+                                       'analyze_test_libs', 'bench', 'docs',
+                                       'help', 'test']));
     });
   }
 

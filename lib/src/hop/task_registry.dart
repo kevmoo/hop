@@ -22,25 +22,40 @@ class TaskRegistry {
     return _tasks.containsKey(taskName);
   }
 
-  void addSync(String name, Func1<TaskContext, bool> func) {
-    addTask(name, new Task.sync(func));
+  Task addSync(String name, Func1<TaskContext, bool> func, {String description}) {
+    return addTask(name, new Task.sync(func, description: description));
   }
 
-  void addAsync(String name, TaskDefinition execFuture) {
-    addTask(name, new Task.async(execFuture));
+  Task addAsync(String name, TaskDefinition execFuture, {String description}) {
+    return addTask(name, new Task.async(execFuture, description: description));
   }
 
-  void addTask(String name, Task task) {
+  Task addTask(String name, Task task) {
     require(!isFrozen, "Cannot add a task. Frozen.");
-    requireArgumentNotNullOrEmpty(name, 'name');
-    requireArgumentContainsPattern(_validNameRegExp, name, 'name');
-    requireArgument(!_reservedTasks.contains(name), 'task',
-        'The provided task has a reserved name');
+    _validateTaskName(name);
     requireArgument(!_tasks.containsKey(name), 'task',
         'A task with name ${name} already exists');
 
     requireArgumentNotNull(task, 'task');
     _tasks[name] = task;
+    return task;
+  }
+
+  ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames,
+                             {String description}) {
+    final list = $(existingTaskNames)
+        .map((String subName) {
+          var task = _tasks[subName];
+          require(task != null, 'The task "$subName" has not be registered');
+          return new _NamedTask(subName, task);
+        })
+        .toReadOnlyCollection();
+
+    if(description == null) {
+      description = 'Chained Task: ' + list.map((t) => t.name).join(', ');
+    }
+
+    return addTask(name, new ChainedTask._impl(list, description: description));
   }
 
   void _requireFrozen() {
@@ -62,5 +77,12 @@ class TaskRegistry {
 
   Task _getTask(String taskName) {
     return _tasks[taskName];
+  }
+
+  static void _validateTaskName(String name) {
+    requireArgumentNotNullOrEmpty(name, 'name');
+    requireArgumentContainsPattern(_validNameRegExp, name, 'name');
+    requireArgument(!_reservedTasks.contains(name), 'task',
+        'The provided task has a reserved name');
   }
 }

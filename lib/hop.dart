@@ -51,16 +51,22 @@ void runHop({
   Runner._runShell(_sharedConfig, helpTaskName);
 }
 
-void addTask(String name, Task task) {
-  _sharedConfig.addTask(name, task);
+Task addTask(String name, Task task) {
+  return _sharedConfig.addTask(name, task);
 }
 
-void addSyncTask(String name, Func1<TaskContext, bool> execFunc) {
-  _sharedConfig.addSync(name, execFunc);
+Task addSyncTask(String name, Func1<TaskContext, bool> execFunc, {String description}) {
+  return _sharedConfig.addSync(name, execFunc, description: description);
 }
 
-void addAsyncTask(String name, TaskDefinition execFuture) {
-  _sharedConfig.addAsync(name, execFuture);
+Task addAsyncTask(String name, TaskDefinition execFuture, {String description}) {
+  return _sharedConfig.addAsync(name, execFuture, description: description);
+}
+
+ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames,
+                           {String description}) {
+  return _sharedConfig.addChainedTask(name, existingTaskNames,
+      description: description);
 }
 
 void _paranoidHopCheck() {

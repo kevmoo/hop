@@ -12,6 +12,7 @@ import 'package:unittest/unittest.dart';
 
 part 'arg_tests.dart';
 part 'async_tests.dart';
+part 'chain_tasks_tests.dart';
 part 'integration_tests.dart';
 part 'sync_tests.dart';
 part 'task_list_tests.dart';
@@ -22,6 +23,7 @@ void main() {
     group('sync tasks', SyncTests.run);
     group('task list', TaskListTests.run);
     group('integration', IntegrationTests.run);
+    group('chain tasks', ChainTasksTests.register);
     registerArgTests();
 
     group('TaskArgument', () {
@@ -83,15 +85,15 @@ void main() {
 Future<RunResult> runTaskInTestRunner(Task task, {List<String> extraArgs}) {
   const _testTaskName = 'test-task';
 
-  final taskConfig = new TaskRegistry();
-  taskConfig.addTask(_testTaskName, task);
+  final taskRegistry = new TaskRegistry();
+  taskRegistry.addTask(_testTaskName, task);
 
   final args = [_testTaskName];
   if(extraArgs != null) {
     args.addAll(extraArgs);
   }
 
-  final hopConfig = new HopConfig(taskConfig, args, _testPrint);
+  final hopConfig = new HopConfig(taskRegistry, args, _testPrint);
 
   return Runner.run(hopConfig);
 }
