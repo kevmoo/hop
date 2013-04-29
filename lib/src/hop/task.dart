@@ -111,7 +111,7 @@ class ChainedTask extends Task {
     return new ChainedTask._impl(roc);
   }
 
-  ChainedTask._impl(this._tasks) : super._impl('Chained Task');
+  ChainedTask._impl(this._tasks, {String description: 'Chained Task'}) : super._impl(description);
 
   @override
   void configureArgParser(ArgParser parser) {
