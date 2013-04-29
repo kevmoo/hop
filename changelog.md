@@ -1,5 +1,18 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.22.0 2013-04-29 (SDK 0.5.1.0 r22072)
+
+### hop
+
+* Top-level task methods (`addTask`, `addSyncTask`, `addAsyncTask`) return the `Task`
+* Analogous methods on `TaskRegistry` also return `Task`
+
+### hop_tasks
+
+* **DEPRECATED** `createDart2JsTask`
+* **NEW!** `createDartCompilerTask`
+* **BREAKING** Removed unsupported `enable-type-checks` option from `createDartAnalyzerTask`
+
 ## 0.21.0 2013-04-17 (SDK 0.4.7+3 r21604)
 
 * Updated to latest SDK
