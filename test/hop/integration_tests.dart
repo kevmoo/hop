@@ -46,7 +46,7 @@ class IntegrationTests {
     env['PATH'] = Platform.environment['PATH'];
 
     final options = new ProcessOptions()
-      ..workingDirectory = new Directory.current().path
+      ..workingDirectory = Directory.current.path
       ..environment = env;
 
     return Process.run('dart', list, options);
