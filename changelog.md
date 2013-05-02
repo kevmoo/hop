@@ -1,5 +1,9 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.22.1 2013-05-02 (SDK 0.5.3.0 r22223)
+
+Updates for latest SDK
+
 ## 0.22.0 2013-04-29 (SDK 0.5.1.0 r22072)
 
 ### hop
