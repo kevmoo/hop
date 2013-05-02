@@ -55,12 +55,12 @@ class TaskRegistry {
    return _tasks.containsKey(taskName);
  }
 
- Task addSync(String name, Func1&lt;TaskContext, bool&gt; func) {
-   return addTask(name, new Task.sync(func));
+ Task addSync(String name, Func1&lt;TaskContext, bool&gt; func, {String description}) {
+   return addTask(name, new Task.sync(func, description: description));
  }
 
- Task addAsync(String name, TaskDefinition execFuture) {
-   return addTask(name, new Task.async(execFuture));
+ Task addAsync(String name, TaskDefinition execFuture, {String description}) {
+   return addTask(name, new Task.async(execFuture, description: description));
  }
 
  Task addTask(String name, Task task) {
@@ -72,6 +72,23 @@ class TaskRegistry {
    requireArgumentNotNull(task, 'task');
    _tasks[name] = task;
    return task;
+ }
+
+ ChainedTask addChainedTask(String name, Iterable&lt;String&gt; existingTaskNames,
+                            {String description}) {
+   final list = $(existingTaskNames)
+       .map((String subName) {
+         var task = _tasks[subName];
+         require(task != null, 'The task "$subName" has not be registered');
+         return new _NamedTask(subName, task);
+       })
+       .toReadOnlyCollection();
+
+   if(description == null) {
+     description = 'Chained Task: ' + list.map((t) =&gt; t.name).join(', ');
+   }
+
+   return addTask(name, new ChainedTask._impl(list, description: description));
  }
 
  void _requireFrozen() {
@@ -140,24 +157,49 @@ Sequence&lt;String&gt; get taskNames {
 <h3>Methods</h3>
 <div class="method"><h4 id="addAsync">
 <button class="show-code">Code</button>
-<a href="../hop/Task.html">Task</a> <strong>addAsync</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="../hop/TaskDefinition.html">TaskDefinition</a> execFuture) <a class="anchor-link" href="#addAsync"
+<a href="../hop/Task.html">Task</a> <strong>addAsync</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="../hop/TaskDefinition.html">TaskDefinition</a> execFuture, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#addAsync"
               title="Permalink to TaskRegistry.addAsync">#</a></h4>
 <div class="doc">
 <pre class="source">
-Task addAsync(String name, TaskDefinition execFuture) {
- return addTask(name, new Task.async(execFuture));
+Task addAsync(String name, TaskDefinition execFuture, {String description}) {
+ return addTask(name, new Task.async(execFuture, description: description));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="addChainedTask">
+<button class="show-code">Code</button>
+<a href="../hop/ChainedTask.html">ChainedTask</a> <strong>addChainedTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; existingTaskNames, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#addChainedTask"
+              title="Permalink to TaskRegistry.addChainedTask">#</a></h4>
+<div class="doc">
+<pre class="source">
+ChainedTask addChainedTask(String name, Iterable&lt;String&gt; existingTaskNames,
+                          {String description}) {
+ final list = $(existingTaskNames)
+     .map((String subName) {
+       var task = _tasks[subName];
+       require(task != null, 'The task "$subName" has not be registered');
+       return new _NamedTask(subName, task);
+     })
+     .toReadOnlyCollection();
+
+ if(description == null) {
+   description = 'Chained Task: ' + list.map((t) =&gt; t.name).join(', ');
+ }
+
+ return addTask(name, new ChainedTask._impl(list, description: description));
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="addSync">
 <button class="show-code">Code</button>
-<a href="../hop/Task.html">Task</a> <strong>addSync</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="../bot/Func1.html">Func1</a> func) <a class="anchor-link" href="#addSync"
+<a href="../hop/Task.html">Task</a> <strong>addSync</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="../bot/Func1.html">Func1</a> func, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#addSync"
               title="Permalink to TaskRegistry.addSync">#</a></h4>
 <div class="doc">
 <pre class="source">
-Task addSync(String name, Func1&lt;TaskContext, bool&gt; func) {
- return addTask(name, new Task.sync(func));
+Task addSync(String name, Func1&lt;TaskContext, bool&gt; func, {String description}) {
+ return addTask(name, new Task.sync(func, description: description));
 }
 </pre>
 </div>
