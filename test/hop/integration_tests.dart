@@ -45,10 +45,10 @@ class IntegrationTests {
     // assuming `dart` is in system path
     env['PATH'] = Platform.environment['PATH'];
 
-    final options = new ProcessOptions()
-      ..workingDirectory = Directory.current.path
-      ..environment = env;
-
-    return Process.run('dart', list, options);
+    return Process.run(
+        'dart', 
+        list, 
+        workingDirectory: Directory.current.path,
+        environment: env);
   }
 }
