@@ -4,43 +4,39 @@ part of hop_tasks;
 // TODO(adam?): optional out directory param. Used so that repeat runs
 //              are faster
 
-const _verboseArgName = 'verbose';
-const _formatMachineArgName = 'format-machine';
+const _formatMachine = 'machine';
 
 /**
  * [delayedFileList] a [List<String>] mapping to paths to dart files or some
  * combinations of [Future] or [Function] values that return a [List<String>].
  */
-Task createDartAnalyzerTask(dynamic delayedFileList) {
+Task createAnalyzerTask(dynamic delayedFileList) {
   return new Task.async((context) {
     final parseResult = context.arguments;
 
     final bool verbose = parseResult[_verboseArgName];
-    final bool formatMachine = parseResult[_formatMachineArgName];
+    final bool formatMachine = parseResult[_formatMachine];
 
-    print("** The dart_analyzer task is deprecated; please move to the "
-        "dartanalyzer task **");
-    
     return getDelayedResult(delayedFileList)
         .then((List<String> files) {
           final fileList = files.map((f) => new Path(f)).toList();
-          return _processAnalyzerFile(context, fileList, verbose,
+          return _processDartAnalyzerFile(context, fileList, verbose,
               formatMachine);
         });
   },
-  description: 'Run "dart_analyzer" for the provided dart files.',
-  config: _analyzerParserConfig);
+  description: 'Run "dartanalyzer" for the provided dart files.',
+  config: _parserConfig);
 }
 
-void _analyzerParserConfig(ArgParser parser) {
+void _parserConfig(ArgParser parser) {
   parser
     ..addFlag(_verboseArgName, abbr: 'v', defaultsTo: false,
         help: 'verbose output of all errors')
-    ..addFlag(_formatMachineArgName, abbr: 'm', defaultsTo: false,
+    ..addFlag(_formatMachine, abbr: 'm', defaultsTo: false,
         help: 'Print errors in a format suitable for parsing');
 }
 
-Future<bool> _processAnalyzerFile(TaskContext context,
+Future<bool> _processDartAnalyzerFile(TaskContext context,
     List<Path> analyzerFilePaths, bool verbose, bool formatMachine) {
 
   int errorsCount = 0;
@@ -49,7 +45,7 @@ Future<bool> _processAnalyzerFile(TaskContext context,
 
   return Future.forEach(analyzerFilePaths, (Path path) {
     final logger = context.getSubLogger(path.toString());
-    return _analyzer(logger, path, verbose, formatMachine)
+    return _dartAnalyzer(logger, path, verbose, formatMachine)
         .then((int exitCode) {
 
           String prefix;
@@ -82,7 +78,7 @@ Future<bool> _processAnalyzerFile(TaskContext context,
     });
 }
 
-Future<int> _analyzer(TaskLogger logger, Path filePath, bool verbose,
+Future<int> _dartAnalyzer(TaskLogger logger, Path filePath, bool verbose,
     bool formatMachine) {
   TempDir tmpDir;
 
@@ -90,7 +86,7 @@ Future<int> _analyzer(TaskLogger logger, Path filePath, bool verbose,
       .then((TempDir td) {
         tmpDir = td;
 
-        var processArgs = ['--extended-exit-code', '--work', tmpDir.dir.path];
+        var processArgs = [];
 
         if(formatMachine) {
           processArgs.add('--machine');
@@ -98,7 +94,7 @@ Future<int> _analyzer(TaskLogger logger, Path filePath, bool verbose,
 
         processArgs.addAll([filePath.toNativePath()]);
 
-        return Process.start(_getPlatformBin('dart_analyzer'), processArgs);
+        return Process.start(_getPlatformBin('dartanalyzer'), processArgs);
       })
       .then((process) {
         if(verbose) {
