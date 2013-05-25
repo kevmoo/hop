@@ -14,6 +14,7 @@ import '../hop/_hop.dart';
 
 part 'process_tests.dart';
 part 'git_tests.dart';
+part 'dartanalyzer_tests.dart';
 part 'dart_analyzer_tests.dart';
 part 'compiler_tests.dart';
 
@@ -22,6 +23,7 @@ void main() {
     ProcessTests.run();
     GitTests.register();
     DartAnalyzerTests.register();
+    Dart_AnalyzerTests.register();
     CompilerTests.register();
   });
 }

@@ -2,21 +2,21 @@
 
 part of test_hop_tasks;
 
-class Dart_AnalyzerTests {
+class DartAnalyzerTests {
 
   static void register() {
-    group('dart_analyzer', () {
+    group('dartanalyzer', () {
       test('1 pass, 1 warn', () {
         final fileTexts = {"main1.dart": "void main() => print('hello bot');",
                            "main2.dart": "void main() { String i = 42; }"};
 
-        return _testOldAnalyzerTask(fileTexts, RunResult.SUCCESS);
+        return _testAnalyzerTask(fileTexts, RunResult.SUCCESS);
       });
 
       test('failed file', () {
         final fileTexts = {"main.dart": "void main() => asdf { XXXX i = 42; }"};
 
-        return _testOldAnalyzerTask(fileTexts, RunResult.FAIL);
+        return _testAnalyzerTask(fileTexts, RunResult.FAIL);
       });
 
       test('1 pass, 1 warn, 1 error', () {
@@ -24,14 +24,14 @@ class Dart_AnalyzerTests {
                            "main2.dart": "void main() asdf { String i = 42; }",
                            "main3.dart": "void main() asdf { String i = 42; }" };
 
-        return _testOldAnalyzerTask(fileTexts, RunResult.FAIL);
+        return _testAnalyzerTask(fileTexts, RunResult.FAIL);
 
       });
     });
   }
 }
 
-Future _testOldAnalyzerTask(Map<String, String> inputs,
+Future _testAnalyzerTask(Map<String, String> inputs,
                        RunResult expectedResult) {
   TempDir tempDir;
 
@@ -47,7 +47,7 @@ Future _testOldAnalyzerTask(Map<String, String> inputs,
         var fullPaths = inputs.keys.map((e) =>
             new Path(tempDir.path).join(new Path(e)).toNativePath()).toList();
 
-        final task = createDartAnalyzerTask(fullPaths);
+        final task = createAnalyzerTask(fullPaths);
         return runTaskInTestRunner(task);
       })
       .then((RunResult runResult) {

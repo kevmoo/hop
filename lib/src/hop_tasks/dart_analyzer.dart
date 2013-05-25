@@ -11,6 +11,7 @@ const _formatMachineArgName = 'format-machine';
  * [delayedFileList] a [List<String>] mapping to paths to dart files or some
  * combinations of [Future] or [Function] values that return a [List<String>].
  */
+@deprecated
 Task createDartAnalyzerTask(dynamic delayedFileList) {
   return new Task.async((context) {
     final parseResult = context.arguments;
