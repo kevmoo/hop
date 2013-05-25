@@ -1,9 +1,5 @@
 part of hop_tasks;
 
-// TODO(adam): document methods and class
-// TODO(adam?): optional out directory param. Used so that repeat runs
-//              are faster
-
 const _formatMachine = 'machine';
 
 /**
@@ -19,8 +15,20 @@ Task createAnalyzerTask(dynamic delayedFileList) {
 
     return getDelayedResult(delayedFileList)
         .then((List<String> files) {
-          final fileList = files.map((f) => new Path(f)).toList();
-          return _processDartAnalyzerFile(context, fileList, verbose,
+          return Future.forEach(files, (f) {
+            return FileSystemEntity.isFile(f)
+                .then((bool isFile) {
+                  if(!isFile) {
+                    context.fail("$f does not exist or is not a file");
+                  }
+                });
+          })
+          .then((_) {
+            return files;
+          });
+        })
+        .then((List<String> files) {
+          return _processDartAnalyzerFile(context, files, verbose,
               formatMachine);
         });
   },
@@ -37,14 +45,14 @@ void _parserConfig(ArgParser parser) {
 }
 
 Future<bool> _processDartAnalyzerFile(TaskContext context,
-    List<Path> analyzerFilePaths, bool verbose, bool formatMachine) {
+    List<String> analyzerFilePaths, bool verbose, bool formatMachine) {
 
   int errorsCount = 0;
   int passedCount = 0;
   int warningCount = 0;
 
-  return Future.forEach(analyzerFilePaths, (Path path) {
-    final logger = context.getSubLogger(path.toString());
+  return Future.forEach(analyzerFilePaths, (String path) {
+    final logger = context.getSubLogger(path);
     return _dartAnalyzer(logger, path, verbose, formatMachine)
         .then((int exitCode) {
 
@@ -78,11 +86,16 @@ Future<bool> _processDartAnalyzerFile(TaskContext context,
     });
 }
 
-Future<int> _dartAnalyzer(TaskLogger logger, Path filePath, bool verbose,
+Future<int> _dartAnalyzer(TaskLogger logger, String filePath, bool verbose,
     bool formatMachine) {
   TempDir tmpDir;
 
-  return TempDir.create()
+  String packagesPath = null;
+  return _getPackagesDir(filePath)
+      .then((String val) {
+        packagesPath = val;
+        return TempDir.create();
+      })
       .then((TempDir td) {
         tmpDir = td;
 
@@ -92,14 +105,18 @@ Future<int> _dartAnalyzer(TaskLogger logger, Path filePath, bool verbose,
           processArgs.add('--machine');
         }
 
-        processArgs.addAll([filePath.toNativePath()]);
+        if(packagesPath != null) {
+          processArgs.addAll(['--package-root', packagesPath]);
+        }
+
+        processArgs.addAll([path.normalize(filePath)]);
 
         return Process.start(_getPlatformBin('dartanalyzer'), processArgs);
       })
       .then((process) {
         if(verbose) {
           return pipeProcess(process,
-              stdOutWriter: logger.fine,
+              stdOutWriter: logger.info,
               stdErrWriter: logger.severe);
         } else {
           return pipeProcess(process);
@@ -109,5 +126,32 @@ Future<int> _dartAnalyzer(TaskLogger logger, Path filePath, bool verbose,
         if(tmpDir != null) {
           tmpDir.dispose();
         }
+      });
+}
+
+// TODO: (kevmoo) user should be able to provide their own packages dir? Hmm...
+Future<String> _getPackagesDir(String filePath) {
+  var dirName = path.dirname(filePath);
+
+  const packageDirName = 'packages';
+
+  var packagesDirCandidatePath = path.join(dirName, packageDirName);
+  return FileSystemEntity.isDirectory(packagesDirCandidatePath)
+      .then((bool isDir) {
+
+        if(isDir) {
+          return packagesDirCandidatePath;
+        }
+
+        packagesDirCandidatePath =
+            path.join(Directory.current.path, packageDirName);
+
+        return FileSystemEntity.isDirectory(packagesDirCandidatePath)
+            .then((bool isDir2) {
+              if(isDir2) {
+                return packagesDirCandidatePath;
+              }
+              return null;
+            });
       });
 }

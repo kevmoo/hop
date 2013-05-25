@@ -1,4 +1,3 @@
-// TODO(adam): test `--enable_type_checks`
 // TODO(kevmoo): figure out a way to validate output...
 
 part of test_hop_tasks;

@@ -19,9 +19,6 @@ Task createDartAnalyzerTask(dynamic delayedFileList) {
     final bool verbose = parseResult[_verboseArgName];
     final bool formatMachine = parseResult[_formatMachineArgName];
 
-    print("** The dart_analyzer task is deprecated; please move to the "
-        "dartanalyzer task **");
-    
     return getDelayedResult(delayedFileList)
         .then((List<String> files) {
           final fileList = files.map((f) => new Path(f)).toList();
