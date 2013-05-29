@@ -1,5 +1,14 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.22.2 2013-05-28 (SDK 0.5.11.1 r23200)
+
+# Fixes for latest SDK
+
+# hop_tasks
+
+# Deprecated `createDartAnalyzerTask` which uses the old Analyzer
+# Added `createAnalyzerTask` which uses the new Analyzer
+
 ## 0.22.1+1 2013-05-02 (SDK 0.5.3.0 r22223)
 
 Oops..
