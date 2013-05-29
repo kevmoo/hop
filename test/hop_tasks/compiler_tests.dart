@@ -72,9 +72,9 @@ class CompilerTests {
   }
 }
 
-List<String> _getOutputFiles(List<String> inputFiles, CompilerTargetType type,
+Set<String> _getOutputFiles(List<String> inputFiles, CompilerTargetType type,
     bool expectSuccess) {
-  var outputFiles = new List<String>();
+  var outputFiles = new Set<String>();
 
   inputFiles.forEach((inFile) {
     outputFiles.add(inFile);
@@ -82,9 +82,13 @@ List<String> _getOutputFiles(List<String> inputFiles, CompilerTargetType type,
     if(expectSuccess) {
       if(type == CompilerTargetType.JS) {
         var newName = inFile + '.js';
+        var inFileDir = pathos.dirname(inFile);
+
         outputFiles.add(newName);
         outputFiles.add(newName + '.deps');
         outputFiles.add(newName + '.map');
+        outputFiles.add(pathos.join(inFileDir, 'part.js'));
+        outputFiles.add(pathos.join(inFileDir, 'part.js.map'));
       } else {
         assert(type == CompilerTargetType.DART);
         assert(inFile.endsWith('.dart'));

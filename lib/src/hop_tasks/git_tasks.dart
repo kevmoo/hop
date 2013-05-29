@@ -18,7 +18,7 @@ Future<bool> branchForDir(TaskContext ctx, String sourceBranch, String sourceDir
     String targetBranch, {String workingDir}) {
 
   if(workingDir == null) {
-    workingDir = new Directory.current().path;
+    workingDir = path.current;
   }
 
   GitDir gitDir;
