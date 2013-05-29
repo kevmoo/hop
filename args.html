@@ -159,16 +159,41 @@ named argument that has its own set of options. For example, when you run:</p>
 <p>The executable is <code>git</code>, the command is <code>commit</code>, and the <code>-a</code> option is an
 option passed to the command. You can add a command like so:</p>
 <pre><code>var parser = new ArgParser();
-var command = parser.addCommand("commit");
-command.addFlag('all', abbr: 'a');
+var command = parser.addCommand('commit');
 </code></pre>
-<p>It returns another <a class="crossref" href="args/ArgParser.html">ArgParser</a> which you can use to define options and
-subcommands on that command. When an argument list is parsed, you can then
-determine which command was entered and what options were provided for it.</p>
+<p>It returns another <a class="crossref" href="args/ArgParser.html">ArgParser</a> which you can then use to define options
+specific to that command. If you already have an <a class="crossref" href="args/ArgParser.html">ArgParser</a> for the
+command's options, you can pass it to <code>addCommand</code>:</p>
+<pre><code>var parser = new ArgParser();
+var command = new ArgParser();
+parser.addCommand('commit', command);
+</code></pre>
+<p>The <a class="crossref" href="args/ArgParser.html">ArgParser</a> for a command can then define whatever options or flags:</p>
+<pre><code>command.addFlag('all', abbr: 'a');
+</code></pre>
+<p>You can add multiple commands to the same parser so that a user can select
+one from a range of possible commands. When an argument list is parsed,
+you can then determine which command was entered and what options were
+provided for it.</p>
 <pre><code>var results = parser.parse(['commit', '-a']);
 print(results.command.name); // "commit"
 print(results.command['a']); // true
 </code></pre>
+<p>Options for a command must appear after the command in the argument list.
+For example, given the above parser, "git -a commit" is <em>not</em> valid. The
+parser will try to find the right-most command that accepts an option. For
+example:</p>
+<pre><code>var parser = new ArgParser();
+parser.addFlag('all', abbr: 'a');
+var command = new ArgParser().addCommand('commit');
+parser.addFlag('all', abbr: 'a');
+var results = parser.parse(['commit', '-a']);
+print(results.command['a']); // true
+</code></pre>
+<p>Here, both the top-level parser and the "commit" command can accept a "-a"
+(which is probably a bad command line interface, admittedly). In that case,
+when "-a" appears after "commit", it will be applied to that command. If it
+appears to the left of "commit", it will be given to the top-level parser.</p>
 <h2>Displaying usage</h2>
 <p>This library can also be used to automatically generate nice usage help
 text like you get when you run a program with <code>--help</code>. To use this, you

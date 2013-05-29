@@ -50,19 +50,21 @@ class ArgParser {
  ArgParser();
 
  /**
-  * Defines a command. A command is a named argument which may in turn
-  * define its own options and subcommands. Returns an [ArgParser] that can
-  * be used to define the command's options.
+  * Defines a command.
+  *
+  * A command is a named argument which may in turn define its own options and
+  * subcommands using the given parser. If [parser] is omitted, implicitly
+  * creates a new one. Returns the parser for the command.
   */
- ArgParser addCommand(String name) {
+ ArgParser addCommand(String name, [ArgParser parser]) {
    // Make sure the name isn't in use.
    if (commands.containsKey(name)) {
      throw new ArgumentError('Duplicate command "$name".');
    }
 
-   var command = new ArgParser();
-   commands[name] = command;
-   return command;
+   if (parser == null) parser = new ArgParser();
+   commands[name] = parser;
+   return parser;
  }
 
  /**
@@ -195,22 +197,24 @@ final Map&lt;String, Option&gt; options = &lt;String, Option&gt;{}
 <h3>Methods</h3>
 <div class="method"><h4 id="addCommand">
 <button class="show-code">Code</button>
-<a href="../args/ArgParser.html">ArgParser</a> <strong>addCommand</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#addCommand"
+<a href="../args/ArgParser.html">ArgParser</a> <strong>addCommand</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, [<a href="../args/ArgParser.html">ArgParser</a> parser]) <a class="anchor-link" href="#addCommand"
               title="Permalink to ArgParser.addCommand">#</a></h4>
 <div class="doc">
-<p>Defines a command. A command is a named argument which may in turn
-define its own options and subcommands. Returns an <a class="crossref" href="../args/ArgParser.html#ArgParser">ArgParser</a> that can
-be used to define the command's options.</p>
+<p>Defines a command.</p>
+<p>A command is a named argument which may in turn define its own options and
+subcommands using the given parser. If 
+<span class="param">parser</span> is omitted, implicitly
+creates a new one. Returns the parser for the command.</p>
 <pre class="source">
-ArgParser addCommand(String name) {
+ArgParser addCommand(String name, [ArgParser parser]) {
  // Make sure the name isn't in use.
  if (commands.containsKey(name)) {
    throw new ArgumentError('Duplicate command "$name".');
  }
 
- var command = new ArgParser();
- commands[name] = command;
- return command;
+ if (parser == null) parser = new ArgParser();
+ commands[name] = parser;
+ return parser;
 }
 </pre>
 </div>

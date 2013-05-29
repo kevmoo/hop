@@ -68,23 +68,8 @@ class StringDescription implements Description {
  Description addDescriptionOf(value) {
    if (value is Matcher) {
      value.describe(this);
-   } else if (value is String) {
-     _addEscapedString(value);
    } else {
-     String description = (value == null) ? "null" : value.toString();
-     if (description.startsWith('&lt;') &amp;&amp; description.endsWith('&gt;')) {
-         add(description);
-     } else if (description.startsWith("Instance of")) {
-       add('&lt;');
-       add(description);
-       add(':');
-       add(value.hashCode.toString());
-       add('&gt;');
-     } else {
-       add('&lt;');
-       add(description);
-       add('&gt;');
-     }
+     add(prettyPrint(value, maxLineLength: 80, maxItems: 25));
    }
    return this;
  }
@@ -112,24 +97,8 @@ class StringDescription implements Description {
  /** Escape the control characters in [string] so that they are visible. */
  _addEscapedString(String string) {
    add("'");
-   for (var i = 0; i &lt; string.length; i++) {
-     add(_escape(string[i]));
-   }
+   add(escapeString(string));
    add("'");
- }
-
- /** Return the escaped form of a character [ch]. */
- _escape(ch) {
-   if (ch == "'")
-     return "\'";
-   else if (ch == '\n')
-     return '\\n';
-   else if (ch == '\r')
-     return '\\r';
-   else if (ch == '\t')
-     return '\\t';
-   else
-     return ch;
  }
 }
 </pre>
@@ -214,23 +183,8 @@ toString() value and wrap it in angular "quotes".</p>
 Description addDescriptionOf(value) {
  if (value is Matcher) {
    value.describe(this);
- } else if (value is String) {
-   _addEscapedString(value);
  } else {
-   String description = (value == null) ? "null" : value.toString();
-   if (description.startsWith('&lt;') &amp;&amp; description.endsWith('&gt;')) {
-       add(description);
-   } else if (description.startsWith("Instance of")) {
-     add('&lt;');
-     add(description);
-     add(':');
-     add(value.hashCode.toString());
-     add('&gt;');
-   } else {
-     add('&lt;');
-     add(description);
-     add('&gt;');
-   }
+   add(prettyPrint(value, maxLineLength: 80, maxItems: 25));
  }
  return this;
 }

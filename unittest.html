@@ -44,10 +44,10 @@ guide for more details.</p>
    organized together using <a class="crossref" href="unittest.html#group">group</a>.</p></li><li><strong>Checks</strong>: Test expectations can be specified via <code>expect</code></li><li>
 <p><strong>Matchers</strong>: <code>expect</code> assertions are written declaratively using the
    <code>Matcher</code> class.</p></li><li>
-<p><strong>Configuration</strong>: The framework can be adapted by calling <code>configure</code> with a
-   <a class="crossref" href="unittest/Configuration.html">Configuration</a>. See the other libraries in the <code>unittest</code> package for
-   alternative implementations of <a class="crossref" href="unittest/Configuration.html">Configuration</a> including
-   <code>compact_vm_config.dart</code>, <code>html_config.dart</code> and
+<p><strong>Configuration</strong>: The framework can be adapted by setting
+   <a class="crossref" href="unittest.html#unittestConfiguration">unittestConfiguration</a> with a <a class="crossref" href="unittest/Configuration.html">Configuration</a>. See the other libraries
+   in the <code>unittest</code> package for alternative implementations of
+   <a class="crossref" href="unittest/Configuration.html">Configuration</a> including <code>compact_vm_config.dart</code>, <code>html_config.dart</code> and
    <code>html_enhanced_config.dart</code>.</p></li></ul>
 <h2>Examples</h2>
 <p>A trivial test:</p>
@@ -273,9 +273,16 @@ Map testState = {}
 <a href="unittest/Configuration.html">Configuration</a> <strong>get unittestConfiguration</strong> <a class="anchor-link" href="#unittestConfiguration"
               title="Permalink to get unittestConfiguration">#</a></h4>
 <div class="doc">
-<p><a class="crossref" href="unittest/Configuration.html">Configuration</a> used by the unittest library. </p>
+<p><a class="crossref" href="unittest/Configuration.html">Configuration</a> used by the unittest library. Note that if a
+configuration has not been set, calling this getter will create
+a default configuration.</p>
 <pre class="source">
-Configuration get unittestConfiguration =&gt; _config;
+Configuration get unittestConfiguration {
+ if (_config == null) {
+   _config = new Configuration();
+ }
+ return _config;
+}
 </pre>
 </div>
 </div>
@@ -330,14 +337,8 @@ void <strong>setSoloTest</strong>(<a href="http://api.dartlang.org/dart_core/int
 <div class="doc">
 <p>Select a solo test by ID. </p>
 <pre class="source">
-void setSoloTest(int id) {
- for (var i = 0; i &lt; testCases.length; i++) {
-   if (testCases[i].id == id) {
-     _soloTest = testCases[i];
-     break;
-   }
- }
-}
+void setSoloTest(int id) =&gt;
+ _testCases.retainWhere((t) =&gt; t.id == id);
 </pre>
 </div>
 </div>
@@ -394,11 +395,6 @@ void <strong>runTests</strong>() <a class="anchor-link" href="#runTests"
 void runTests() {
  _ensureInitialized(false);
  _currentTestCaseIndex = 0;
-
- // If we are soloing a test, remove all the others.
- if (_soloTest != null) {
-   filterTests((t) =&gt; t == _soloTest);
- }
 
  _config.onStart();
 
@@ -486,6 +482,41 @@ void setUp(Function setupTest) {
 </pre>
 </div>
 </div>
+<div class="method"><h4 id="solo_group">
+<button class="show-code">Code</button>
+void <strong>solo_group</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> description, void body()) <a class="anchor-link" href="#solo_group"
+              title="Permalink to solo_group">#</a></h4>
+<div class="doc">
+<p>Like <a class="crossref" href="unittest.html#solo_test">solo_test</a>, but for groups. </p>
+<pre class="source">
+void solo_group(String description, void body()) {
+ ensureInitialized();
+ if (!_soloTestSeen) {
+   _soloTestSeen = true;
+   // This is the first solo-ed group. Discard all tests up to now.
+   _testCases.clear();
+ }
+ ++_soloNestingLevel;
+ try {
+   group(description, body);
+ } finally {
+   --_soloNestingLevel;
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="skip_group">
+<button class="show-code">Code</button>
+void <strong>skip_group</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> description, void body()) <a class="anchor-link" href="#skip_group"
+              title="Permalink to skip_group">#</a></h4>
+<div class="doc">
+<p>Like <a class="crossref" href="unittest.html#skip_test">skip_test</a>, but for groups. </p>
+<pre class="source">
+void skip_group(String description, void body()) {}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="group">
 <button class="show-code">Code</button>
 void <strong>group</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> description, void body()) <a class="anchor-link" href="#group"
@@ -496,7 +527,7 @@ body of the function passed to this will inherit this group's description.</p>
 <pre class="source">
 void group(String description, void body()) {
  ensureInitialized();
- _currentContext = new GroupContext(_currentContext, description);
+ _currentContext = new _GroupContext(_currentContext, description);
  try {
    body();
  } catch (e, trace) {
@@ -689,24 +720,41 @@ void <strong>solo_test</strong>(<a href="http://api.dartlang.org/dart_core/Strin
 <p>Creates a new test case with the given description and body. The
 description will include the descriptions of any surrounding group()
 calls.</p>
-<p>"solo<em>" means that this will be the only test that is run. All other tests
-will be skipped. This is a convenience function to let you quickly isolate
-a single test by adding "solo</em>" before it to temporarily disable all other
-tests.</p>
+<p>If we use <a class="crossref" href="unittest.html#solo_test">solo_test</a> (or <a class="crossref" href="unittest.html#solo_group">solo_group</a>) instead of test, then all non-solo
+tests will be disabled. Note that if we use <a class="crossref" href="unittest.html#solo_group">solo_group</a>, all tests in
+the group will be enabled, regardless of whether they use <a class="crossref" href="unittest.html#test">test</a> or
+<a class="crossref" href="unittest.html#solo_test">solo_test</a>, or whether they are in a nested <a class="crossref" href="unittest.html#group">group</a> vs <a class="crossref" href="unittest.html#solo_group">solo_group</a>. Put
+another way, if there are any calls to <a class="crossref" href="unittest.html#solo_test">solo_test</a> or <a class="crossref" href="unittest.html#solo_group">solo_group</a> in a test
+file, all tests that are not inside a <a class="crossref" href="unittest.html#solo_group">solo_group</a> will be disabled unless
+they are <a class="crossref" href="unittest.html#solo_test">solo_test</a>s.</p>
+<p><a class="crossref" href="unittest.html#skip_test">skip_test</a> and <a class="crossref" href="unittest.html#skip_group">skip_group</a> take precedence over soloing, by virtue of the
+fact that they are effectively no-ops.</p>
 <pre class="source">
 void solo_test(String spec, TestFunction body) {
- // TODO(rnystrom): Support multiple solos. If more than one test is solo-ed,
- // all of the solo-ed tests and none of the non-solo-ed ones should run.
- if (_soloTest != null) {
-   throw new Exception('Only one test can be soloed right now.');
- }
-
  ensureInitialized();
-
- _soloTest = new TestCase._internal(testCases.length + 1, _fullSpec(spec),
-                                    body);
- _testCases.add(_soloTest);
+ if (!_soloTestSeen) {
+   _soloTestSeen = true;
+   // This is the first solo-ed test. Discard all tests up to now.
+   _testCases.clear();
+ }
+ ++_soloNestingLevel;
+ try {
+   test(spec, body);
+ } finally {
+   --_soloNestingLevel;
+ }
 }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="skip_test">
+<button class="show-code">Code</button>
+void <strong>skip_test</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> spec, <a href="unittest/TestFunction.html">TestFunction</a> body) <a class="anchor-link" href="#skip_test"
+              title="Permalink to skip_test">#</a></h4>
+<div class="doc">
+<p>Convenience function for skipping a test. </p>
+<pre class="source">
+void skip_test(String spec, TestFunction body){}
 </pre>
 </div>
 </div>
@@ -721,8 +769,11 @@ calls.</p>
 <pre class="source">
 void test(String spec, TestFunction body) {
  ensureInitialized();
- _testCases.add(new TestCase._internal(testCases.length + 1, _fullSpec(spec),
-                                       body));
+ if (!_soloTestSeen || _soloNestingLevel &gt; 0) {
+   var testcase = new TestCase._internal(testCases.length + 1, _fullSpec(spec),
+                                       body);
+   _testCases.add(testcase);
+ }
 }
 </pre>
 </div>
@@ -746,12 +797,6 @@ void logMessage(String message) =&gt;
           <div class="type">
           <h4>
             <a href="unittest/Configuration.html"><strong>Configuration</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="unittest/GroupContext.html"><strong>GroupContext</strong></a>
           </h4>
           </div>
           

@@ -40,7 +40,8 @@ abstract class EntityValidator {
    return validateFileContentSha(entity, _getStringSha1(targetContent));
  }
 
- static Stream&lt;String&gt; validateFileContentSha(File entity, String targetSha) {
+ static Stream&lt;String&gt; validateFileContentSha(FileSystemEntity entity,
+     String targetSha) {
    if(entity is! File) {
      return new Stream.fromIterable(['entity is not a File']);
    }
@@ -59,7 +60,7 @@ abstract class EntityValidator {
    return _streamFromIterableFuture(future);
  }
 
- static Stream&lt;String&gt; validateDirectoryFromMap(Directory entity,
+ static Stream&lt;String&gt; validateDirectoryFromMap(FileSystemEntity entity,
      Map&lt;String, dynamic&gt; map) {
    if(entity is! Directory) {
      return new Stream.fromIterable(['entity is not a Directory']);
@@ -122,11 +123,12 @@ static Stream&lt;String&gt; validateFileStringContent(File entity,
 </div>
 <div class="method"><h4 id="validateFileContentSha">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; <strong>validateFileContentSha</strong>(<a href="http://api.dartlang.org/dart_io/File.html">File</a> entity, <a href="http://api.dartlang.org/dart_core/String.html">String</a> targetSha) <a class="anchor-link" href="#validateFileContentSha"
+<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; <strong>validateFileContentSha</strong>(<a href="http://api.dartlang.org/dart_io/FileSystemEntity.html">FileSystemEntity</a> entity, <a href="http://api.dartlang.org/dart_core/String.html">String</a> targetSha) <a class="anchor-link" href="#validateFileContentSha"
               title="Permalink to EntityValidator.validateFileContentSha">#</a></h4>
 <div class="doc">
 <pre class="source">
-static Stream&lt;String&gt; validateFileContentSha(File entity, String targetSha) {
+static Stream&lt;String&gt; validateFileContentSha(FileSystemEntity entity,
+   String targetSha) {
  if(entity is! File) {
    return new Stream.fromIterable(['entity is not a File']);
  }
@@ -149,11 +151,11 @@ static Stream&lt;String&gt; validateFileContentSha(File entity, String targetSha
 </div>
 <div class="method"><h4 id="validateDirectoryFromMap">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; <strong>validateDirectoryFromMap</strong>(<a href="http://api.dartlang.org/dart_io/Directory.html">Directory</a> entity, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, dynamic&gt; map) <a class="anchor-link" href="#validateDirectoryFromMap"
+<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; <strong>validateDirectoryFromMap</strong>(<a href="http://api.dartlang.org/dart_io/FileSystemEntity.html">FileSystemEntity</a> entity, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, dynamic&gt; map) <a class="anchor-link" href="#validateDirectoryFromMap"
               title="Permalink to EntityValidator.validateDirectoryFromMap">#</a></h4>
 <div class="doc">
 <pre class="source">
-static Stream&lt;String&gt; validateDirectoryFromMap(Directory entity,
+static Stream&lt;String&gt; validateDirectoryFromMap(FileSystemEntity entity,
    Map&lt;String, dynamic&gt; map) {
  if(entity is! Directory) {
    return new Stream.fromIterable(['entity is not a Directory']);

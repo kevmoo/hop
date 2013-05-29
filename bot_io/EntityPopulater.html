@@ -36,7 +36,8 @@
 abstract class EntityPopulater {
 
  static Future&lt;FileSystemEntity&gt; populate(String path, dynamic source,
-     {bool createParentDirectories: false, bool overwriteExisting: false}) {
+     {bool createParentDirectories: false, bool overwriteExisting: false,
+   bool leaveExistingDirs: false}) {
 
    if(source is String) {
      var stringStream = new Stream.fromIterable([source]);
@@ -47,21 +48,81 @@ abstract class EntityPopulater {
    }
 
    if(source is Stream) {
-     return _populateFileWithStream(path, source,
-         createParentDirectories: createParentDirectories,
-         overwriteExisting: overwriteExisting);
+     return _ensurePath(path, createParentDirectories: createParentDirectories,
+         overwriteExisting: overwriteExisting,
+         leaveExistingDir: leaveExistingDirs)
+         .then((_) =&gt; _populateFileWithStream(path, source));
+   } else if(source is Map) {
+     return _ensurePath(path, createParentDirectories: createParentDirectories,
+         overwriteExisting: overwriteExisting,
+         leaveExistingDir: leaveExistingDirs)
+         .then((_) =&gt; _populateDirWithMap(path, source, overwriteExisting,
+             leaveExistingDirs));
    }
 
    throw "Don't know how to populate from '$source'...yet?";
  }
 
- Future&lt;FileSystemEntity&gt; populatePath(String path,
-     {bool createParentDirectories: false, bool overwriteExisting: false});
+ static Future&lt;Directory&gt; updateDirectory(String path,
+     Map&lt;String, dynamic&gt; source) {
+   assert(path != null);
+   assert(source != null);
 
+   var existingDir = new Directory(path);
 
+   return existingDir.exists()
+       .then((bool exists) {
+         if(!exists) {
+           throw new EntityPopulatorException._internal('Expected directory to'
+               ' exist at $path', path);
+         }
+
+         return _populateDirWithMap(path, source, true, true);
+       });
+ }
+
+ /**
+  * We assume [_ensurePath] has been called first.
+  */
  static Future&lt;File&gt; _populateFileWithStream(String path,
-     Stream&lt;List&lt;int&gt;&gt; content,
-     {bool createParentDirectories: false, bool overwriteExisting: false}) {
+     Stream&lt;List&lt;int&gt;&gt; content) {
+
+   var file = new File(path);
+   return file.openWrite()
+       .addStream(content)
+       .then((_) {
+         return file;
+       });
+ }
+
+ /**
+  * We assume [_ensurePath] has been called first.
+  */
+ static Future&lt;Directory&gt; _populateDirWithMap(String path,
+     Map&lt;String, dynamic&gt; content, bool overwriteExisting,
+     bool leaveExistingDir) {
+
+   var dir = new Directory(path);
+
+   // calling _ensurePath *should* ensure the parent dir is created
+   return dir.create(recursive: false)
+       .then((_) {
+         return Future.forEach(content.keys, (String entityName) {
+           // TODO: assert entityName has no path characters, right?
+
+           var entityPath = pathos.join(path, entityName);
+           return populate(entityPath, content[entityName],
+               overwriteExisting: overwriteExisting,
+               leaveExistingDirs: leaveExistingDir);
+
+         });
+       })
+       .then((_) =&gt; dir);
+ }
+
+ static Future _ensurePath(String path,
+     {bool createParentDirectories: false, bool overwriteExisting: false,
+   bool leaveExistingDir: false}) {
 
    final dirName = pathos.dirname(path);
    var parentDir = new Directory(dirName);
@@ -81,16 +142,25 @@ abstract class EntityPopulater {
              if(overwriteExisting) {
                switch(existingType) {
                  case FileSystemEntityType.DIRECTORY:
-                   final dir = new Directory(path);
-                   return dir.delete(recursive: true);
+                   if(leaveExistingDir) {
+                     return;
+                   } else {
+                     final dir = new Directory(path);
+                     return dir.delete(recursive: true);
+                   }
+                   // DARTBUG: http://dartbug.com/6563
+                   break;
                  case FileSystemEntityType.LINK:
                    final link = new Link(path);
                    return link.delete();
+                 case FileSystemEntityType.FILE:
+                   final file = new File(path);
+                   return file.delete();
                }
 
              } else {
-                 throw new EntityPopulatorException._internal(
-                     'Existing entity.', path);
+               throw new EntityPopulatorException._internal(
+                   'Existing entity.', path);
              }
            }
 
@@ -99,16 +169,7 @@ abstract class EntityPopulater {
          if(!parentDirExists &amp;&amp; createParentDirectories) {
            return parentDir.create(recursive: true);
          }
-       })
-       .then((_) {
-         var file = new File(path);
-         return file.openWrite()
-             .addStream(content)
-             .then((_) {
-               return file;
-             });
        });
-
  }
 }
 </pre>
@@ -117,12 +178,13 @@ abstract class EntityPopulater {
 <h3>Static Methods</h3>
 <div class="method"><h4 id="populate">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_io/FileSystemEntity.html">FileSystemEntity</a>&gt; <strong>populate</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path, source, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> createParentDirectories: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> overwriteExisting: false}) <a class="anchor-link" href="#populate"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_io/FileSystemEntity.html">FileSystemEntity</a>&gt; <strong>populate</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path, source, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> createParentDirectories: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> overwriteExisting: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> leaveExistingDirs: false}) <a class="anchor-link" href="#populate"
               title="Permalink to EntityPopulater.populate">#</a></h4>
 <div class="doc">
 <pre class="source">
 static Future&lt;FileSystemEntity&gt; populate(String path, dynamic source,
-   {bool createParentDirectories: false, bool overwriteExisting: false}) {
+   {bool createParentDirectories: false, bool overwriteExisting: false,
+ bool leaveExistingDirs: false}) {
 
  if(source is String) {
    var stringStream = new Stream.fromIterable([source]);
@@ -133,9 +195,16 @@ static Future&lt;FileSystemEntity&gt; populate(String path, dynamic source,
  }
 
  if(source is Stream) {
-   return _populateFileWithStream(path, source,
-       createParentDirectories: createParentDirectories,
-       overwriteExisting: overwriteExisting);
+   return _ensurePath(path, createParentDirectories: createParentDirectories,
+       overwriteExisting: overwriteExisting,
+       leaveExistingDir: leaveExistingDirs)
+       .then((_) =&gt; _populateFileWithStream(path, source));
+ } else if(source is Map) {
+   return _ensurePath(path, createParentDirectories: createParentDirectories,
+       overwriteExisting: overwriteExisting,
+       leaveExistingDir: leaveExistingDirs)
+       .then((_) =&gt; _populateDirWithMap(path, source, overwriteExisting,
+           leaveExistingDirs));
  }
 
  throw "Don't know how to populate from '$source'...yet?";
@@ -143,13 +212,30 @@ static Future&lt;FileSystemEntity&gt; populate(String path, dynamic source,
 </pre>
 </div>
 </div>
-</div>
-<div>
-<h3>Methods</h3>
-<div class="method"><h4 id="populatePath">
-abstract <a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_io/FileSystemEntity.html">FileSystemEntity</a>&gt; <strong>populatePath</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> createParentDirectories: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> overwriteExisting: false}) <a class="anchor-link" href="#populatePath"
-              title="Permalink to EntityPopulater.populatePath">#</a></h4>
+<div class="method"><h4 id="updateDirectory">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_io/Directory.html">Directory</a>&gt; <strong>updateDirectory</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, dynamic&gt; source) <a class="anchor-link" href="#updateDirectory"
+              title="Permalink to EntityPopulater.updateDirectory">#</a></h4>
 <div class="doc">
+<pre class="source">
+static Future&lt;Directory&gt; updateDirectory(String path,
+   Map&lt;String, dynamic&gt; source) {
+ assert(path != null);
+ assert(source != null);
+
+ var existingDir = new Directory(path);
+
+ return existingDir.exists()
+     .then((bool exists) {
+       if(!exists) {
+         throw new EntityPopulatorException._internal('Expected directory to'
+             ' exist at $path', path);
+       }
+
+       return _populateDirWithMap(path, source, true, true);
+     });
+}
+</pre>
 </div>
 </div>
 </div>

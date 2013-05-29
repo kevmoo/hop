@@ -252,8 +252,7 @@ E get single {
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
 <div class="inherited">
 <p>Returns true if one element of this collection satisfies the
-predicate 
-<span class="param">f</span>. Returns false otherwise.</p>
+predicate <code>test</code>. Returns false otherwise.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/NumberEnumerable.html">E</a>&gt; </div></div>
 <pre class="source">
 bool any(bool f(E element)) {
@@ -313,9 +312,8 @@ bool contains(E element) {
 <div class="inherited">
 <p>Returns the 
 <span class="param">index</span>th element.</p>
-<p>If [this] [Iterable] has fewer than 
-<span class="param">index</span> elements throws a
-<code>RangeError</code>.</p>
+<p>If <code>this</code> has fewer than 
+<span class="param">index</span> elements throws a <code>RangeError</code>.</p>
 <p>Note: if <code>this</code> does not have a deterministic iteration order then the
 function may simply return any element without any iteration if there are
 at least 
@@ -341,8 +339,7 @@ E elementAt(int index) {
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
 <div class="inherited">
 <p>Returns true if every elements of this collection satisify the
-predicate 
-<span class="param">f</span>. Returns false otherwise.</p>
+predicate <code>test</code>. Returns <code>false</code> otherwise.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/NumberEnumerable.html">E</a>&gt; </div></div>
 <pre class="source">
 bool every(bool f(E element)) {
@@ -380,7 +377,8 @@ Iterable expand(Iterable f(E element)) =&gt;
               title="Permalink to NumberEnumerable&lt;T&gt;.firstWhere">#</a></h4>
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
 <div class="inherited">
-<p>Returns the first element that satisfies the given predicate <code>f</code>.</p>
+<p>Returns the first element that satisfies the given predicate 
+<span class="param">test</span>.</p>
 <p>If none matches, the result of invoking the 
 <span class="param">orElse</span> function is
 returned. By default, when 
@@ -481,7 +479,8 @@ String join([String separator]) {
               title="Permalink to NumberEnumerable&lt;T&gt;.lastWhere">#</a></h4>
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
 <div class="inherited">
-<p>Returns the last element that satisfies the given predicate <code>f</code>.</p>
+<p>Returns the last element that satisfies the given predicate 
+<span class="param">test</span>.</p>
 <p>If none matches, the result of invoking the 
 <span class="param">orElse</span> function is
 returned. By default, when 
@@ -580,7 +579,8 @@ E reduce(E combine(E value, E element)) {
               title="Permalink to NumberEnumerable&lt;T&gt;.singleWhere">#</a></h4>
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
 <div class="inherited">
-<p>Returns the single element that satisfies <code>f</code>. If no or more than one
+<p>Returns the single element that satisfies 
+<span class="param">test</span>. If no or more than one
 element match then a <code>StateError</code> is thrown.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/NumberEnumerable.html">E</a>&gt; </div></div>
 <pre class="source">
@@ -631,12 +631,15 @@ Iterable&lt;E&gt; skip(int n) {
 <p>Returns an <code>Iterable</code> that skips elements while 
 <span class="param">test</span> is satisfied.</p>
 <p>The filtering happens lazily. Every new <code>Iterator</code> of the returned
-<code>Iterable</code> will iterate over all elements of <code>this</code>.
-As long as the iterator's elements do not satisfy 
+<code>Iterable</code> will iterate over all elements of <code>this</code>.</p>
+<p>As long as the iterator's elements do not satisfy 
 <span class="param">test</span> they are
 discarded. Once an element satisfies the 
 <span class="param">test</span> the iterator stops testing
-and uses every element unconditionally.</p>
+and uses every element unconditionally. That is, the elements of the
+returned <code>Iterable</code> are the elements of <code>this</code> starting from the first
+element that doesn't satisfy 
+<span class="param">test</span>.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/NumberEnumerable.html">E</a>&gt; </div></div>
 <pre class="source">
 Iterable&lt;E&gt; skipWhile(bool test(E value)) {
@@ -693,8 +696,8 @@ Iterable&lt;E&gt; take(int n) {
 <p>Returns an <code>Iterable</code> that stops once 
 <span class="param">test</span> is not satisfied anymore.</p>
 <p>The filtering happens lazily. Every new <code>Iterator</code> of the returned
-<code>Iterable</code> will start iterating over the elements of <code>this</code>.
-When the iterator encounters an element <code>e</code> that does not satisfy 
+<code>Iterable</code> will start iterating over the elements of <code>this</code>.</p>
+<p>When the iterator encounters an element <code>e</code> that does not satisfy 
 <span class="param">test</span>,
 it discards <code>e</code> and moves into the finished state. That is, it will not
 ask or provide any more elements.</p>
@@ -743,15 +746,12 @@ Set&lt;E&gt; toSet() =&gt; new Set&lt;E&gt;.from(this);
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
 <div class="inherited">
 <p>Returns a lazy <code>Iterable</code> with all elements that satisfy the
-predicate 
-<span class="param">f</span>.</p>
+predicate <code>test</code>.</p>
 <p>This method returns a view of the mapped elements. As long as the
-returned <code>Iterable</code> is not iterated over, the supplied function 
-<span class="param">f</span> will
+returned <code>Iterable</code> is not iterated over, the supplied function <code>test</code> will
 not be invoked. Iterating will not cache results, and thus iterating
 multiple times over the the returned <code>Iterable</code> will invoke the supplied
-function 
-<span class="param">f</span> multiple times on the same element.</p>
+function <code>test</code> multiple times on the same element.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/NumberEnumerable.html">E</a>&gt; </div></div>
 <pre class="source">
 Iterable&lt;E&gt; where(bool f(E element)) =&gt; new WhereIterable&lt;E&gt;(this, f);

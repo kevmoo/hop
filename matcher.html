@@ -33,11 +33,14 @@ inspiration from <a href="http://code.google.com/p/hamcrest/">Hamcrest</a>.</p>
 <p>Use <a href="http://pub.dartlang.org">pub</a> to install this package. Add the following to your <code>pubspec.yaml</code>
 file.</p>
 <pre><code>dependencies:
-  matcher: any
+  unittest: any
 </code></pre>
 <p>Then run <code>pub install</code>.</p>
-<p>For more information, see the
-<a href="http://pub.dartlang.org/packages/matcher">matcher package on pub.dartlang.org</a>.</p></div>
+<p>Import this into your Dart code with:</p>
+<pre><code>import 'package:unittest/matcher.dart';
+</code></pre>
+<p>For more information, see the <code>unittest package on pub.dartlang.org</code>.
+(http://pub.dartlang.org/packages/unittest).</p></div>
 <div>
 <h3>Properties</h3>
 <div class="field"><h4 id="anything">
@@ -1200,6 +1203,24 @@ Matcher equals(expected, [limit=100]) =&gt;
 as <a href="`===`">object</a>.</p>
 <pre class="source">
 Matcher same(expected) =&gt; new _IsSameAs(expected);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="pairwiseCompare">
+<button class="show-code">Code</button>
+<a href="matcher/Matcher.html">Matcher</a> <strong>pairwiseCompare</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> expected, <a href="http://api.dartlang.org/dart_core/Function.html">Function</a> comparator, <a href="http://api.dartlang.org/dart_core/String.html">String</a> description) <a class="anchor-link" href="#pairwiseCompare"
+              title="Permalink to pairwiseCompare">#</a></h4>
+<div class="doc">
+<p>A pairwise matcher for iterable. You can pass an arbitrary 
+<span class="param">comparator</span>
+function that takes an expected and actual argument which will be applied
+to each pair in order. 
+<span class="param">description</span>  should be a meaningful name for
+the comparator.</p>
+<pre class="source">
+Matcher pairwiseCompare(Iterable expected, Function comparator,
+   String description) =&gt;
+       new _PairwiseCompare(expected, comparator, description);
 </pre>
 </div>
 </div>

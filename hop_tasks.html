@@ -401,6 +401,7 @@ Task createDart2JsTask(dynamic delayedRootList, {String output: null,
 <span class="param">delayedFileList</span> a [List<String>] mapping to paths to dart files or some
 combinations of <code>Future</code> or <code>Function</code> values that return a [List<String>].</p>
 <pre class="source">
+@deprecated
 Task createDartAnalyzerTask(dynamic delayedFileList) {
  return new Task.async((context) {
    final parseResult = context.arguments;
@@ -417,6 +418,47 @@ Task createDartAnalyzerTask(dynamic delayedFileList) {
  },
  description: 'Run "dart_analyzer" for the provided dart files.',
  config: _analyzerParserConfig);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="createAnalyzerTask">
+<button class="show-code">Code</button>
+<a href="hop/Task.html">Task</a> <strong>createAnalyzerTask</strong>(delayedFileList) <a class="anchor-link" href="#createAnalyzerTask"
+              title="Permalink to createAnalyzerTask">#</a></h4>
+<div class="doc">
+<p>
+<span class="param">delayedFileList</span> a [List<String>] mapping to paths to dart files or some
+combinations of <code>Future</code> or <code>Function</code> values that return a [List<String>].</p>
+<pre class="source">
+Task createAnalyzerTask(dynamic delayedFileList) {
+ return new Task.async((context) {
+   final parseResult = context.arguments;
+
+   final bool verbose = parseResult[_verboseArgName];
+   final bool formatMachine = parseResult[_formatMachine];
+
+   return getDelayedResult(delayedFileList)
+       .then((List&lt;String&gt; files) {
+         return Future.forEach(files, (f) {
+           return FileSystemEntity.isFile(f)
+               .then((bool isFile) {
+                 if(!isFile) {
+                   context.fail("$f does not exist or is not a file");
+                 }
+               });
+         })
+         .then((_) {
+           return files;
+         });
+       })
+       .then((List&lt;String&gt; files) {
+         return _processDartAnalyzerFile(context, files, verbose,
+             formatMachine);
+       });
+ },
+ description: 'Run "dartanalyzer" for the provided dart files.',
+ config: _parserConfig);
 }
 </pre>
 </div>
