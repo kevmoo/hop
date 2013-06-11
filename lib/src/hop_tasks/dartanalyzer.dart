@@ -1,6 +1,7 @@
 part of hop_tasks;
 
-const _formatMachine = 'machine';
+const _verboseArgName = 'verbose';
+const _formatMachineArgName = 'format-machine';
 
 /**
  * [delayedFileList] a [List<String>] mapping to paths to dart files or some
@@ -11,7 +12,7 @@ Task createAnalyzerTask(dynamic delayedFileList) {
     final parseResult = context.arguments;
 
     final bool verbose = parseResult[_verboseArgName];
-    final bool formatMachine = parseResult[_formatMachine];
+    final bool formatMachine = parseResult[_formatMachineArgName];
 
     return getDelayedResult(delayedFileList)
         .then((List<String> files) {
@@ -40,7 +41,7 @@ void _parserConfig(ArgParser parser) {
   parser
     ..addFlag(_verboseArgName, abbr: 'v', defaultsTo: false,
         help: 'verbose output of all errors')
-    ..addFlag(_formatMachine, abbr: 'm', defaultsTo: false,
+    ..addFlag(_formatMachineArgName, abbr: 'm', defaultsTo: false,
         help: 'Print errors in a format suitable for parsing');
 }
 

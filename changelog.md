@@ -1,5 +1,10 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.23.0-dev *pre-release* (SDK 0.5.16.0 r23799)
+
+* Updated pub dependencies
+* Removed reference to deprecated `dart_analyzer`
+
 ## 0.22.2 2013-05-28 (SDK 0.5.11.1 r23200)
 
 # Fixes for latest SDK

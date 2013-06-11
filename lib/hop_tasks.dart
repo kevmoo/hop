@@ -18,7 +18,6 @@ import 'package:hop/hop.dart';
 
 part 'src/hop_tasks/bench_task.dart';
 part 'src/hop_tasks/dartanalyzer.dart';
-part 'src/hop_tasks/dart_analyzer.dart';
 part 'src/hop_tasks/dart2js.dart';
 part 'src/hop_tasks/dartdoc.dart';
 part 'src/hop_tasks/git_tasks.dart';
