@@ -10,21 +10,6 @@ class CompilerTargetType {
   static const DART = const CompilerTargetType._internal('dart');
 }
 
-@deprecated
-Task createDart2JsTask(dynamic delayedRootList, {String output: null,
-  String packageRoot: null, bool minify: false, bool allowUnsafeEval: true,
-  bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false}) {
-
-  return createDartCompilerTask(delayedRootList,
-      singleOutput: output,
-      packageRoot: packageRoot,
-      minify: minify,
-      allowUnsafeEval: allowUnsafeEval,
-      liveTypeAnalysis: liveTypeAnalysis,
-      rejectDeprecatedFeatures: rejectDeprecatedFeatures,
-      outputType: CompilerTargetType.JS);
-}
-
 /**
  * [delayedRootList] a [List<String>] mapping to paths to libraries or some
  * combinations of [Future] or [Function] values that return a [List<String>].
