@@ -66,10 +66,10 @@ option isn't provided:</p>
 <pre><code>parser.addOption('mode', defaultsTo: 'debug');
 parser.addFlag('verbose', defaultsTo: false);
 </code></pre>
-<p>The default value for non-flag options can be any <code>String</code>. For flags, it
-must be a <code>bool</code>.</p>
+<p>The default value for non-flag options can be any <a class="crossref" href="dart_core/String.html">String</a>. For flags, it
+must be a <a class="crossref" href="dart_core/bool.html">bool</a>.</p>
 <p>To validate non-flag options, you may provide an allowed set of values. When
-you do, it will throw a <code>FormatException</code> when you parse the arguments if
+you do, it will throw a <a class="crossref" href="dart_core/FormatException.html">FormatException</a> when you parse the arguments if
 the value for an option is not in the allowed set:</p>
 <pre><code>parser.addOption('mode', allowed: ['debug', 'release']);
 </code></pre>
@@ -239,12 +239,6 @@ options.</p></div>
           <div class="type">
           <h4>
             <a href="args/ArgResults.html"><strong>ArgResults</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="args/Option.html"><strong>Option</strong></a>
           </h4>
           </div>
           

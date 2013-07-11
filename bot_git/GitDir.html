@@ -897,7 +897,7 @@ Future&lt;List&lt;TreeEntry&gt;&gt; lsTree(String treeish,
 <p>If the content provided matches the content in the specificed 
 <span class="param">branchName</span>, then
 <code>null</code> is returned.</p>
-<p>If no content is added to the directory, an <code>Error</code> is thrown.</p>
+<p>If no content is added to the directory, an <a class="crossref" href="../dart_core/Error.html">Error</a> is thrown.</p>
 <pre class="source">
 Future&lt;Commit&gt; populateBranch(String branchName, PopulateTempDir populator, String commitMessage) {
  // TODO: ponder restricting branch names
@@ -1035,7 +1035,7 @@ Future&lt;List&lt;CommitReference&gt;&gt; showRef({bool heads:false, bool tags:f
 <div class="doc">
 <p>Given a list of 
 <span class="param">paths</span>, write those files to the object store
-and return a <code>Map</code> where the key is the input path and the value is
+and return a <a class="crossref" href="../dart_core/Map.html">Map</a> where the key is the input path and the value is
 the SHA of the newly written object.</p>
 <pre class="source">
 Future&lt;Map&lt;String, String&gt;&gt; writeObjects(List&lt;String&gt; paths) {

@@ -178,7 +178,7 @@ void <strong>disposeInternal</strong>() <a class="anchor-link" href="#disposeInt
               title="Permalink to AttachableObject.disposeInternal">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Do not call this method directly. Call <code>dispose</code> instead.
+<p>Do not call this method directly. Call <a class="crossref" href="../bot/DisposableImpl.html#dispose">dispose</a> instead.
 Subclasses should override this method to implement <a class="crossref" href="../bot/Disposable.html">Disposable</a> behavior.</p>
 <div class="docs-inherited-from">docs inherited from <a href="../bot/DisposableImpl.html">DisposableImpl</a> </div></div>
 <pre class="source">
@@ -201,7 +201,7 @@ void <strong>validateNotDisposed</strong>() <a class="anchor-link" href="#valida
 <pre class="source">
 void validateNotDisposed() {
  if(_disposed) {
-   throw const DisposedError();
+   throw new DisposedError();
  }
 }
 </pre>

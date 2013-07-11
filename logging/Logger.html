@@ -32,7 +32,7 @@
         
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
-<p>Use a <a class="crossref" href="../logging/Logger.html#Logger">Logger</a> to log debug messages. <a class="crossref" href="../logging/Logger.html#Logger">Logger</a>s are named using a
+<p>Use a <a class="crossref" href="../logging/Logger.html">Logger</a> to log debug messages. <a class="crossref" href="../logging/Logger.html">Logger</a>s are named using a
 hierarchical dot-separated name convention.</p>
 <pre class="source">
 class Logger {
@@ -144,10 +144,9 @@ class Logger {
   * [Level.INFO], [Level.WARNING], etc) you can use their specialized methods
   * instead (e.g. [info], [warning], etc).
   */
- // TODO(sigmund): add support for logging exceptions.
- void log(Level logLevel, String message) {
+ void log(Level logLevel, String message, [exception]) {
    if (isLoggable(logLevel)) {
-     var record = new LogRecord(logLevel, message, fullName);
+     var record = new LogRecord(logLevel, message, fullName, exception);
      if (hierarchicalLoggingEnabled) {
        var target = this;
        while (target != null) {
@@ -161,34 +160,42 @@ class Logger {
  }
 
  /** Log message at level [Level.FINEST]. */
- void finest(String message) =&gt; log(Level.FINEST, message);
+ void finest(String message, [exception]) =&gt;
+     log(Level.FINEST, message, exception);
 
  /** Log message at level [Level.FINER]. */
- void finer(String message) =&gt; log(Level.FINER, message);
+ void finer(String message, [exception]) =&gt;
+     log(Level.FINER, message, exception);
 
  /** Log message at level [Level.FINE]. */
- void fine(String message) =&gt; log(Level.FINE, message);
+ void fine(String message, [exception]) =&gt;
+     log(Level.FINE, message, exception);
 
  /** Log message at level [Level.CONFIG]. */
- void config(String message) =&gt; log(Level.CONFIG, message);
+ void config(String message, [exception]) =&gt;
+     log(Level.CONFIG, message, exception);
 
  /** Log message at level [Level.INFO]. */
- void info(String message) =&gt; log(Level.INFO, message);
+ void info(String message, [exception]) =&gt;
+     log(Level.INFO, message, exception);
 
  /** Log message at level [Level.WARNING]. */
- void warning(String message) =&gt; log(Level.WARNING, message);
+ void warning(String message, [exception]) =&gt;
+     log(Level.WARNING, message, exception);
 
  /** Log message at level [Level.SEVERE]. */
- void severe(String message) =&gt; log(Level.SEVERE, message);
+ void severe(String message, [exception]) =&gt;
+     log(Level.SEVERE, message, exception);
 
  /** Log message at level [Level.SHOUT]. */
- void shout(String message) =&gt; log(Level.SHOUT, message);
+ void shout(String message, [exception]) =&gt;
+     log(Level.SHOUT, message, exception);
 
  Stream&lt;LogRecord&gt; _getStream() {
    if (hierarchicalLoggingEnabled || parent == null) {
      if (_controller == null) {
-       _controller = new StreamController&lt;LogRecord&gt;();
-       _stream = _controller.stream.asBroadcastStream();
+       _controller = new StreamController&lt;LogRecord&gt;.broadcast(sync: true);
+       _stream = _controller.stream;
      }
      return _stream;
    } else {
@@ -219,7 +226,7 @@ final <a href="../logging/Logger.html">Logger</a>         <strong>root</strong> 
             title="Permalink to Logger.root">#</a>
         </h4>
         <div class="doc">
-<p>Top-level root <a class="crossref" href="../logging/Logger.html#Logger">Logger</a>. </p>
+<p>Top-level root <a class="crossref" href="../logging/Logger.html">Logger</a>. </p>
 <pre class="source">
 static Logger get root =&gt; new Logger('');
 </pre>
@@ -314,7 +321,7 @@ Level get level {
 dynamic <strong>set level</strong>(<a href="../logging/Level.html">Level</a> value) <a class="anchor-link" href="#level="
               title="Permalink to Logger.set level">#</a></h4>
 <div class="doc">
-<p>Override the level for this particular <a class="crossref" href="../logging/Logger.html#Logger">Logger</a> and its children. </p>
+<p>Override the level for this particular <a class="crossref" href="../logging/Logger.html">Logger</a> and its children. </p>
 <pre class="source">
 set level(Level value) {
  if (hierarchicalLoggingEnabled &amp;&amp; parent != null) {
@@ -351,7 +358,7 @@ final <a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a 
             title="Permalink to Logger.onRecord">#</a>
         </h4>
         <div class="doc">
-<p>Returns an stream of messages added to this <a class="crossref" href="../logging/Logger.html#Logger">Logger</a>. You can listen for
+<p>Returns an stream of messages added to this <a class="crossref" href="../logging/Logger.html">Logger</a>. You can listen for
 messages using the standard stream APIs, for instance:
    logger.onRecord.listen((record) { ... });</p>
 <pre class="source">
@@ -396,56 +403,61 @@ void clearListeners() {
 </div>
 <div class="method"><h4 id="config">
 <button class="show-code">Code</button>
-void <strong>config</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#config"
+void <strong>config</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [exception]) <a class="anchor-link" href="#config"
               title="Permalink to Logger.config">#</a></h4>
 <div class="doc">
 <p>Log message at level <a class="crossref" href="../logging/Level.html#CONFIG">Level.CONFIG</a>. </p>
 <pre class="source">
-void config(String message) =&gt; log(Level.CONFIG, message);
+void config(String message, [exception]) =&gt;
+   log(Level.CONFIG, message, exception);
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="fine">
 <button class="show-code">Code</button>
-void <strong>fine</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#fine"
+void <strong>fine</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [exception]) <a class="anchor-link" href="#fine"
               title="Permalink to Logger.fine">#</a></h4>
 <div class="doc">
 <p>Log message at level <a class="crossref" href="../logging/Level.html#FINE">Level.FINE</a>. </p>
 <pre class="source">
-void fine(String message) =&gt; log(Level.FINE, message);
+void fine(String message, [exception]) =&gt;
+   log(Level.FINE, message, exception);
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="finer">
 <button class="show-code">Code</button>
-void <strong>finer</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#finer"
+void <strong>finer</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [exception]) <a class="anchor-link" href="#finer"
               title="Permalink to Logger.finer">#</a></h4>
 <div class="doc">
 <p>Log message at level <a class="crossref" href="../logging/Level.html#FINER">Level.FINER</a>. </p>
 <pre class="source">
-void finer(String message) =&gt; log(Level.FINER, message);
+void finer(String message, [exception]) =&gt;
+   log(Level.FINER, message, exception);
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="finest">
 <button class="show-code">Code</button>
-void <strong>finest</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#finest"
+void <strong>finest</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [exception]) <a class="anchor-link" href="#finest"
               title="Permalink to Logger.finest">#</a></h4>
 <div class="doc">
 <p>Log message at level <a class="crossref" href="../logging/Level.html#FINEST">Level.FINEST</a>. </p>
 <pre class="source">
-void finest(String message) =&gt; log(Level.FINEST, message);
+void finest(String message, [exception]) =&gt;
+   log(Level.FINEST, message, exception);
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="info">
 <button class="show-code">Code</button>
-void <strong>info</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#info"
+void <strong>info</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [exception]) <a class="anchor-link" href="#info"
               title="Permalink to Logger.info">#</a></h4>
 <div class="doc">
 <p>Log message at level <a class="crossref" href="../logging/Level.html#INFO">Level.INFO</a>. </p>
 <pre class="source">
-void info(String message) =&gt; log(Level.INFO, message);
+void info(String message, [exception]) =&gt;
+   log(Level.INFO, message, exception);
 </pre>
 </div>
 </div>
@@ -463,7 +475,7 @@ bool isLoggable(Level value) =&gt; (value &gt;= level);
 </div>
 <div class="method"><h4 id="log">
 <button class="show-code">Code</button>
-void <strong>log</strong>(<a href="../logging/Level.html">Level</a> logLevel, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#log"
+void <strong>log</strong>(<a href="../logging/Level.html">Level</a> logLevel, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [exception]) <a class="anchor-link" href="#log"
               title="Permalink to Logger.log">#</a></h4>
 <div class="doc">
 <p>Adds a log record for a 
@@ -474,9 +486,9 @@ user-defined levels. To record a message at a predefined level (e.g.
 <a class="crossref" href="../logging/Level.html#INFO">Level.INFO</a>, <a class="crossref" href="../logging/Level.html#WARNING">Level.WARNING</a>, etc) you can use their specialized methods
 instead (e.g. <a class="crossref" href="../logging/Logger.html#info">info</a>, <a class="crossref" href="../logging/Logger.html#warning">warning</a>, etc).</p>
 <pre class="source">
-void log(Level logLevel, String message) {
+void log(Level logLevel, String message, [exception]) {
  if (isLoggable(logLevel)) {
-   var record = new LogRecord(logLevel, message, fullName);
+   var record = new LogRecord(logLevel, message, fullName, exception);
    if (hierarchicalLoggingEnabled) {
      var target = this;
      while (target != null) {
@@ -493,34 +505,37 @@ void log(Level logLevel, String message) {
 </div>
 <div class="method"><h4 id="severe">
 <button class="show-code">Code</button>
-void <strong>severe</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#severe"
+void <strong>severe</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [exception]) <a class="anchor-link" href="#severe"
               title="Permalink to Logger.severe">#</a></h4>
 <div class="doc">
 <p>Log message at level <a class="crossref" href="../logging/Level.html#SEVERE">Level.SEVERE</a>. </p>
 <pre class="source">
-void severe(String message) =&gt; log(Level.SEVERE, message);
+void severe(String message, [exception]) =&gt;
+   log(Level.SEVERE, message, exception);
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="shout">
 <button class="show-code">Code</button>
-void <strong>shout</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#shout"
+void <strong>shout</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [exception]) <a class="anchor-link" href="#shout"
               title="Permalink to Logger.shout">#</a></h4>
 <div class="doc">
 <p>Log message at level <a class="crossref" href="../logging/Level.html#SHOUT">Level.SHOUT</a>. </p>
 <pre class="source">
-void shout(String message) =&gt; log(Level.SHOUT, message);
+void shout(String message, [exception]) =&gt;
+   log(Level.SHOUT, message, exception);
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="warning">
 <button class="show-code">Code</button>
-void <strong>warning</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#warning"
+void <strong>warning</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [exception]) <a class="anchor-link" href="#warning"
               title="Permalink to Logger.warning">#</a></h4>
 <div class="doc">
 <p>Log message at level <a class="crossref" href="../logging/Level.html#WARNING">Level.WARNING</a>. </p>
 <pre class="source">
-void warning(String message) =&gt; log(Level.WARNING, message);
+void warning(String message, [exception]) =&gt;
+   log(Level.WARNING, message, exception);
 </pre>
 </div>
 </div>

@@ -50,7 +50,7 @@ abstract class FailureHandler {
   * an [ErrorFormatter]) and then call [fail] with this message.
   */
  void failMatch(actual, Matcher matcher, String reason,
-                MatchState matchState, bool verbose);
+                Map matchState, bool verbose);
 }
 </pre>
 </div>
@@ -67,7 +67,7 @@ abstract void <strong>fail</strong>(<a href="http://api.dartlang.org/dart_core/S
 </div>
 </div>
 <div class="method"><h4 id="failMatch">
-abstract void <strong>failMatch</strong>(actual, <a href="../matcher/Matcher.html">Matcher</a> matcher, <a href="http://api.dartlang.org/dart_core/String.html">String</a> reason, <a href="../matcher/MatchState.html">MatchState</a> matchState, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose) <a class="anchor-link" href="#failMatch"
+abstract void <strong>failMatch</strong>(actual, <a href="../matcher/Matcher.html">Matcher</a> matcher, <a href="http://api.dartlang.org/dart_core/String.html">String</a> reason, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a> matchState, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose) <a class="anchor-link" href="#failMatch"
               title="Permalink to FailureHandler.failMatch">#</a></h4>
 <div class="doc">
 <p>This handles failures given the actual <code>value</code>, the 

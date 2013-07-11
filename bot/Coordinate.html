@@ -57,6 +57,7 @@ class Coordinate {
 
  Size toSize() =&gt; new Size(x, y);
 
+ @override
  bool operator ==(Coordinate other) {
    return other != null &amp;&amp; x == other.x &amp;&amp; y == other.y;
  }
@@ -65,8 +66,12 @@ class Coordinate {
    return new Vector(a.x - b.x, a.y - b.y);
  }
 
+ @override
  String toString() =&gt; '{x:${x}, y:${y}}';
 
+ int get hashCode =&gt; Util.getHashCode([x, y]);
+
+ @deprecated
  dynamic toJson() =&gt; { 'x' : x, 'y' : y };
 }
 </pre>
@@ -104,6 +109,28 @@ const Coordinate([this.x = 0, this.y = 0]);
 </div>
 <div>
 <h3>Properties</h3>
+<div class="field"><h4 id="hashCode">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>hashCode</strong> <a class="anchor-link"
+            href="#hashCode"
+            title="Permalink to Coordinate.hashCode">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <a class="crossref" href="../bot/Coordinate.html#hashCode">hashCode</a> it should override the
+equality operator as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+int get hashCode =&gt; Util.getHashCode([x, y]);
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="isValid">
 <button class="show-code">Code</button>
 final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>isValid</strong> <a class="anchor-link"
@@ -159,7 +186,7 @@ Coordinate operator +(Vector other) =&gt;
 <a href="../bot/Vector.html">Vector</a> <strong>operator -</strong>(<a href="../bot/Coordinate.html">Coordinate</a> other) <a class="anchor-link" href="#-"
               title="Permalink to Coordinate.operator -">#</a></h4>
 <div class="doc">
-<p>Subtract a <a class="crossref" href="../bot/Coordinate.html#Coordinate">Coordinate</a> and returns the result as new <a class="crossref" href="../bot/Vector.html">Vector</a>.</p>
+<p>Subtract a <a class="crossref" href="../bot/Coordinate.html">Coordinate</a> and returns the result as new <a class="crossref" href="../bot/Vector.html">Vector</a>.</p>
 <pre class="source">
 Vector operator -(Coordinate other) =&gt; difference(this, other);
 </pre>
@@ -172,13 +199,14 @@ Vector operator -(Coordinate other) =&gt; difference(this, other);
 <div class="doc">
 <div class="inherited">
 <p>The equality operator.</p>
-<p>The default behavior for all <code>Object</code>s is to return true if and
+<p>The default behavior for all <a class="crossref" href="../dart_core/Object.html">Object</a>s is to return true if and
 only if <code>this</code> and 
 <span class="param">other</span> are the same object.</p>
 <p>If a subclass overrides the equality operator it should override
-the <code>hashCode</code> method as well to maintain consistency.</p>
+the <a class="crossref" href="../bot/Coordinate.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
+@override
 bool operator ==(Coordinate other) {
  return other != null &amp;&amp; x == other.x &amp;&amp; y == other.y;
 }
@@ -193,7 +221,7 @@ bool operator ==(Coordinate other) {
 <a href="http://api.dartlang.org/dart_core/num.html">num</a> <strong>getDistance</strong>(<a href="../bot/Coordinate.html">Coordinate</a> other) <a class="anchor-link" href="#getDistance"
               title="Permalink to Coordinate.getDistance">#</a></h4>
 <div class="doc">
-<p>Computes the distance to another <a class="crossref" href="../bot/Coordinate.html#Coordinate">Coordinate</a>.</p>
+<p>Computes the distance to another <a class="crossref" href="../bot/Coordinate.html">Coordinate</a>.</p>
 <pre class="source">
 num getDistance (Coordinate other) =&gt; (this - other).length;
 </pre>
@@ -205,6 +233,7 @@ dynamic <strong>toJson</strong>() <a class="anchor-link" href="#toJson"
               title="Permalink to Coordinate.toJson">#</a></h4>
 <div class="doc">
 <pre class="source">
+@deprecated
 dynamic toJson() =&gt; { 'x' : x, 'y' : y };
 </pre>
 </div>
@@ -228,6 +257,7 @@ Size toSize() =&gt; new Size(x, y);
 <p>Returns a string representation of this object.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
+@override
 String toString() =&gt; '{x:${x}, y:${y}}';
 </pre>
 </div>

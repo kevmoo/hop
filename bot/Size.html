@@ -38,6 +38,7 @@ class Size {
 
  const Size(this.width, this.height);
 
+ @override
  bool operator ==(Size other) {
    return other != null &amp;&amp; width == other.width &amp;&amp; height == other.height;
  }
@@ -90,7 +91,10 @@ class Size {
   * Returns a nice string representing size.
   * Returns in the form (50 x 73).
   */
+ @override
  String toString() =&gt; "(${width} x ${height})";
+
+ int get hashCode =&gt; Util.getHashCode([width, height]);
 }
 </pre>
 </div>
@@ -132,6 +136,28 @@ final <a href="http://api.dartlang.org/dart_core/num.html">num</a>         <stro
 <p>Returns the ratio of the size's width to its height.</p>
 <pre class="source">
 num get aspectRatio =&gt; width / height;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="hashCode">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>hashCode</strong> <a class="anchor-link"
+            href="#hashCode"
+            title="Permalink to Size.hashCode">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <a class="crossref" href="../bot/Size.html#hashCode">hashCode</a> it should override the
+equality operator as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+int get hashCode =&gt; Util.getHashCode([width, height]);
 </pre>
 </div>
 </div>
@@ -193,7 +219,7 @@ final num width
 <a href="../bot/Size.html">Size</a> <strong>operator *</strong>(<a href="http://api.dartlang.org/dart_core/num.html">num</a> magnitude) <a class="anchor-link" href="#*"
               title="Permalink to Size.operator *">#</a></h4>
 <div class="doc">
-<p>Multiplies each dimensions by the provided magnitude and returns a new <a class="crossref" href="../bot/Size.html#Size">Size</a>.</p>
+<p>Multiplies each dimensions by the provided magnitude and returns a new <a class="crossref" href="../bot/Size.html">Size</a>.</p>
 <pre class="source">
 Size operator *(num magnitude) =&gt; this.scale(magnitude);
 </pre>
@@ -206,13 +232,14 @@ Size operator *(num magnitude) =&gt; this.scale(magnitude);
 <div class="doc">
 <div class="inherited">
 <p>The equality operator.</p>
-<p>The default behavior for all <code>Object</code>s is to return true if and
+<p>The default behavior for all <a class="crossref" href="../dart_core/Object.html">Object</a>s is to return true if and
 only if <code>this</code> and 
 <span class="param">other</span> are the same object.</p>
 <p>If a subclass overrides the equality operator it should override
-the <code>hashCode</code> method as well to maintain consistency.</p>
+the <a class="crossref" href="../bot/Size.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
+@override
 bool operator ==(Size other) {
  return other != null &amp;&amp; width == other.width &amp;&amp; height == other.height;
 }
@@ -255,7 +282,7 @@ bool isEmpty() =&gt; area == 0;
 <a href="../bot/Size.html">Size</a> <strong>scale</strong>(<a href="http://api.dartlang.org/dart_core/num.html">num</a> magnitude) <a class="anchor-link" href="#scale"
               title="Permalink to Size.scale">#</a></h4>
 <div class="doc">
-<p>Multiplies each dimensions by the provided magnitude and returns a new <a class="crossref" href="../bot/Size.html#Size">Size</a>.</p>
+<p>Multiplies each dimensions by the provided magnitude and returns a new <a class="crossref" href="../bot/Size.html">Size</a>.</p>
 <pre class="source">
 Size scale(num magnitude) =&gt; new Size(width * magnitude, height * magnitude);
 </pre>
@@ -269,6 +296,7 @@ Size scale(num magnitude) =&gt; new Size(width * magnitude, height * magnitude);
 <p>Returns a nice string representing size.
 Returns in the form (50 x 73).</p>
 <pre class="source">
+@override
 String toString() =&gt; "(${width} x ${height})";
 </pre>
 </div>

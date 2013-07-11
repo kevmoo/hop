@@ -46,7 +46,7 @@ abstract class BaseMatcher implements Matcher {
   * [matchState] may be used to return additional info for
   * the use of [describeMismatch].
   */
- bool matches(item, MatchState matchState);
+ bool matches(item, Map matchState);
 
  /**
   * Creates a textual description of a matcher,
@@ -60,10 +60,13 @@ abstract class BaseMatcher implements Matcher {
   * It does not check whether the [item] fails the match, as it is
   * only called after a failed match. There may be additional info
   * about the mismatch in [matchState].
+  * The base matcher does not add anything as the actual value is
+  * typically sufficient, but matchers that can add valuable info
+  * should override this.
   */
  Description describeMismatch(item, Description mismatchDescription,
-                              MatchState matchState, bool verbose) =&gt;
-   mismatchDescription.add('was ').addDescriptionOf(item);
+                              Map matchState, bool verbose) =&gt;
+   mismatchDescription;
 }
 </pre>
 </div>
@@ -99,7 +102,7 @@ by appending to
 </div>
 <div class="method"><h4 id="describeMismatch">
 <button class="show-code">Code</button>
-<a href="../matcher/Description.html">Description</a> <strong>describeMismatch</strong>(item, <a href="../matcher/Description.html">Description</a> mismatchDescription, <a href="../matcher/MatchState.html">MatchState</a> matchState, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose) <a class="anchor-link" href="#describeMismatch"
+<a href="../matcher/Description.html">Description</a> <strong>describeMismatch</strong>(item, <a href="../matcher/Description.html">Description</a> mismatchDescription, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a> matchState, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose) <a class="anchor-link" href="#describeMismatch"
               title="Permalink to BaseMatcher.describeMismatch">#</a></h4>
 <div class="doc">
 <p>Generates a description of the matcher failed for a particular
@@ -110,16 +113,19 @@ It does not check whether the
 <span class="param">item</span> fails the match, as it is
 only called after a failed match. There may be additional info
 about the mismatch in 
-<span class="param">matchState</span>.</p>
+<span class="param">matchState</span>.
+The base matcher does not add anything as the actual value is
+typically sufficient, but matchers that can add valuable info
+should override this.</p>
 <pre class="source">
 Description describeMismatch(item, Description mismatchDescription,
-                            MatchState matchState, bool verbose) =&gt;
- mismatchDescription.add('was ').addDescriptionOf(item);
+                            Map matchState, bool verbose) =&gt;
+ mismatchDescription;
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="matches">
-abstract <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>matches</strong>(item, <a href="../matcher/MatchState.html">MatchState</a> matchState) <a class="anchor-link" href="#matches"
+abstract <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>matches</strong>(item, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a> matchState) <a class="anchor-link" href="#matches"
               title="Permalink to BaseMatcher.matches">#</a></h4>
 <div class="doc">
 <p>Tests the matcher against a given 

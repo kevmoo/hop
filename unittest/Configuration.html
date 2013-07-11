@@ -270,8 +270,8 @@ class Configuration {
 new <strong>Configuration</strong>() <a class="anchor-link" href="#Configuration"
               title="Permalink to Configuration.Configuration">#</a></h4>
 <div class="doc">
-<p>The constructor sets up a failure handler for <code>expect</code> that redirects
-<code>expect</code> failures to <a class="crossref" href="../unittest/Configuration.html#onExpectFailure">onExpectFailure</a>.</p>
+<p>The constructor sets up a failure handler for <a class="crossref" href="../matcher.html#expect">expect</a> that redirects
+<a class="crossref" href="../matcher.html#expect">expect</a> failures to <a class="crossref" href="../unittest/Configuration.html#onExpectFailure">onExpectFailure</a>.</p>
 <pre class="source">
 Configuration() {
  configureExpectFailureHandler(new _ExpectFailureHandler(this));
@@ -319,7 +319,7 @@ final String name = 'Configuration'
         </h4>
         <div class="doc">
 <p>If true (the default), then tests will stop after the first failed
-<code>expect</code>. If false, failed <code>expect</code>s will not cause the test
+<a class="crossref" href="../matcher.html#expect">expect</a>. If false, failed <a class="crossref" href="../matcher.html#expect">expect</a>s will not cause the test
 to stop (other exceptions will still terminate the test).</p>
 <pre class="source">
 bool stopTestOnExpectFailure = true
@@ -477,7 +477,7 @@ void <strong>onSummary</strong>(<a href="http://api.dartlang.org/dart_core/int.h
               title="Permalink to Configuration.onSummary">#</a></h4>
 <div class="doc">
 <p>Called with the result of all test cases. The default implementation prints
-the result summary using the built-in <code>print</code> command. Browser tests
+the result summary using the built-in <a class="crossref" href="../dart.core.html#print">print</a> command. Browser tests
 commonly override this to reformat the output.</p>
 <p>When 
 <span class="param">uncaughtError</span> is not null, it contains an error that occured outside

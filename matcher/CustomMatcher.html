@@ -61,10 +61,10 @@ class CustomMatcher extends BaseMatcher {
  /** Override this to extract the interesting feature.*/
  featureValueOf(actual) =&gt; actual;
 
- bool matches(item, MatchState matchState) {
+ bool matches(item, Map matchState) {
    var f = featureValueOf(item);
    if (_matcher.matches(f, matchState)) return true;
-   matchState.state = { 'innerState': matchState.state, 'feature': f };
+   addStateInfo(matchState, {'feature': f});
    return false;
  }
 
@@ -72,10 +72,15 @@ class CustomMatcher extends BaseMatcher {
      description.add(_featureDescription).add(' ').addDescriptionOf(_matcher);
 
  Description describeMismatch(item, Description mismatchDescription,
-                              MatchState matchState, bool verbose) {
-   mismatchDescription.add(_featureName).add(' ');
-   _matcher.describeMismatch(matchState.state['feature'], mismatchDescription,
-       matchState.state['innerState'], verbose);
+                              Map matchState, bool verbose) {
+   mismatchDescription.add('has ').add(_featureName).add(' with value ').
+       addDescriptionOf(matchState['feature']);
+   var innerDescription = new StringDescription();
+   _matcher.describeMismatch(matchState['feature'], innerDescription,
+       matchState['state'], verbose);
+   if (innerDescription.length &gt; 0) {
+     mismatchDescription.add(' which ').add(innerDescription.toString());
+   }
    return mismatchDescription;
  }
 }
@@ -117,7 +122,7 @@ Description describe(Description description) =&gt;
 </div>
 <div class="method"><h4 id="describeMismatch">
 <button class="show-code">Code</button>
-<a href="../matcher/Description.html">Description</a> <strong>describeMismatch</strong>(item, <a href="../matcher/Description.html">Description</a> mismatchDescription, <a href="../matcher/MatchState.html">MatchState</a> matchState, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose) <a class="anchor-link" href="#describeMismatch"
+<a href="../matcher/Description.html">Description</a> <strong>describeMismatch</strong>(item, <a href="../matcher/Description.html">Description</a> mismatchDescription, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a> matchState, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose) <a class="anchor-link" href="#describeMismatch"
               title="Permalink to CustomMatcher.describeMismatch">#</a></h4>
 <div class="doc">
 <div class="inherited">
@@ -129,14 +134,22 @@ It does not check whether the
 <span class="param">item</span> fails the match, as it is
 only called after a failed match. There may be additional info
 about the mismatch in 
-<span class="param">matchState</span>.</p>
+<span class="param">matchState</span>.
+The base matcher does not add anything as the actual value is
+typically sufficient, but matchers that can add valuable info
+should override this.</p>
 <div class="docs-inherited-from">docs inherited from <a href="../matcher/BaseMatcher.html">BaseMatcher</a> </div></div>
 <pre class="source">
 Description describeMismatch(item, Description mismatchDescription,
-                            MatchState matchState, bool verbose) {
- mismatchDescription.add(_featureName).add(' ');
- _matcher.describeMismatch(matchState.state['feature'], mismatchDescription,
-     matchState.state['innerState'], verbose);
+                            Map matchState, bool verbose) {
+ mismatchDescription.add('has ').add(_featureName).add(' with value ').
+     addDescriptionOf(matchState['feature']);
+ var innerDescription = new StringDescription();
+ _matcher.describeMismatch(matchState['feature'], innerDescription,
+     matchState['state'], verbose);
+ if (innerDescription.length &gt; 0) {
+   mismatchDescription.add(' which ').add(innerDescription.toString());
+ }
  return mismatchDescription;
 }
 </pre>
@@ -155,7 +168,7 @@ featureValueOf(actual) =&gt; actual;
 </div>
 <div class="method"><h4 id="matches">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>matches</strong>(item, <a href="../matcher/MatchState.html">MatchState</a> matchState) <a class="anchor-link" href="#matches"
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>matches</strong>(item, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a> matchState) <a class="anchor-link" href="#matches"
               title="Permalink to CustomMatcher.matches">#</a></h4>
 <div class="doc">
 <div class="inherited">
@@ -167,10 +180,10 @@ and return true if the match succeeds; false otherwise.
 the use of <a class="crossref" href="../matcher/CustomMatcher.html#describeMismatch">describeMismatch</a>.</p>
 <div class="docs-inherited-from">docs inherited from <a href="../matcher/BaseMatcher.html">BaseMatcher</a> </div></div>
 <pre class="source">
-bool matches(item, MatchState matchState) {
+bool matches(item, Map matchState) {
  var f = featureValueOf(item);
  if (_matcher.matches(f, matchState)) return true;
- matchState.state = { 'innerState': matchState.state, 'feature': f };
+ addStateInfo(matchState, {'feature': f});
  return false;
 }
 </pre>

@@ -46,7 +46,7 @@ class DisposableImpl implements Disposable {
 
  void validateNotDisposed() {
    if(_disposed) {
-     throw const DisposedError();
+     throw new DisposedError();
    }
  }
 
@@ -125,7 +125,7 @@ void <strong>validateNotDisposed</strong>() <a class="anchor-link" href="#valida
 <pre class="source">
 void validateNotDisposed() {
  if(_disposed) {
-   throw const DisposedError();
+   throw new DisposedError();
  }
 }
 </pre>

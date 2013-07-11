@@ -44,11 +44,13 @@ class StringDescription implements Description {
    _out = init;
  }
 
+ int get length =&gt; _out.length;
+
  /** Get the description as a string. */
  String toString() =&gt; _out;
 
- /** Append some plain [text] to the description.  */
- Description add(String text) {
+ /** Append [text] to the description.  */
+ Description add(text) {
    _out = '${_out}${text}';
    return this;
  }
@@ -124,16 +126,31 @@ StringDescription([String init = '']) {
 </div>
 </div>
 <div>
+<h3>Properties</h3>
+<div class="field"><h4 id="length">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>length</strong> <a class="anchor-link"
+            href="#length"
+            title="Permalink to StringDescription.length">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+int get length =&gt; _out.length;
+</pre>
+</div>
+</div>
+</div>
+<div>
 <h3>Methods</h3>
 <div class="method"><h4 id="add">
 <button class="show-code">Code</button>
-<a href="../matcher/Description.html">Description</a> <strong>add</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> text) <a class="anchor-link" href="#add"
+<a href="../matcher/Description.html">Description</a> <strong>add</strong>(text) <a class="anchor-link" href="#add"
               title="Permalink to StringDescription.add">#</a></h4>
 <div class="doc">
-<p>Append some plain 
+<p>Append 
 <span class="param">text</span> to the description.  </p>
 <pre class="source">
-Description add(String text) {
+Description add(text) {
  _out = '${_out}${text}';
  return this;
 }

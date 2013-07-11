@@ -2,7 +2,7 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>Style class / path Library / HOP Documentation</title>
+        <title>Style abstract class / path Library / HOP Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
@@ -27,55 +27,92 @@
 </div>
 <div class="content">
         <h2><strong>Style</strong>
-          class
+          abstract class
         </h2>
         
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
 <p>An enum type describing a "flavor" of path.</p>
 <pre class="source">
-class Style {
+abstract class Style {
  /// POSIX-style paths use "/" (forward slash) as separators. Absolute paths
  /// start with "/". Used by UNIX, Linux, Mac OS X, and others.
- static final posix = new Style._('posix', '/', '/', '/');
+ static final posix = new _PosixStyle();
 
  /// Windows paths use "\" (backslash) as separators. Absolute paths start with
  /// a drive letter followed by a colon (example, "C:") or two backslashes
  /// ("\\") for UNC paths.
  // TODO(rnystrom): The UNC root prefix should include the drive name too, not
  // just the "\\".
- static final windows = new Style._('windows', '\\', r'[/\\]',
-     r'\\\\|[a-zA-Z]:[/\\]');
+ static final windows = new _WindowsStyle();
 
- Style._(this.name, this.separator, String separatorPattern,
-     String rootPattern)
-   : separatorPattern = new RegExp(separatorPattern),
-     _rootPattern = new RegExp('^$rootPattern');
+ /// URLs aren't filesystem paths, but they're supported by Pathos to make it
+ /// easier to manipulate URL paths in the browser.
+ ///
+ /// URLs use "/" (forward slash) as separators. Absolute paths either start
+ /// with a protocol and optional hostname (e.g. `http://dartlang.org`,
+ /// `file://`) or with "/".
+ static final url = new _UrlStyle();
 
  /// The name of this path style. Will be "posix" or "windows".
- final String name;
+ String get name;
 
  /// The path separator for this style. On POSIX, this is `/`. On Windows,
  /// it's `\`.
- final String separator;
+ String get separator;
 
  /// The [Pattern] that can be used to match a separator for a path in this
- /// style. Windows allows both "/" and "\" as path separators even though
- /// "\" is the canonical one.
- final Pattern separatorPattern;
+ /// style. Windows allows both "/" and "\" as path separators even though "\"
+ /// is the canonical one.
+ Pattern get separatorPattern;
 
- // TODO(nweiz): make this a Pattern when issue 7080 is fixed.
- /// The [RegExp] that can be used to match the root prefix of an absolute
+ /// The [Pattern] that matches path components that need a separator after
+ /// them.
+ ///
+ /// Windows and POSIX styles just need separators when the previous component
+ /// doesn't already end in a separator, but the URL always needs to place a
+ /// separator between the root and the first component, even if the root
+ /// already ends in a separator character. For example, to join "file://" and
+ /// "usr", an additional "/" is needed (making "file:///usr").
+ Pattern get needsSeparatorPattern;
+
+ /// The [Pattern] that can be used to match the root prefix of an absolute
  /// path in this style.
- final RegExp _rootPattern;
+ Pattern get rootPattern;
+
+ /// The [Pattern] that can be used to match the root prefix of a root-relative
+ /// path in this style.
+ ///
+ /// This can be null to indicate that this style doesn't support root-relative
+ /// paths.
+ final Pattern relativeRootPattern = null;
 
  /// Gets the root prefix of [path] if path is absolute. If [path] is relative,
  /// returns `null`.
  String getRoot(String path) {
-   var match = _rootPattern.firstMatch(path);
+   var match = rootPattern.firstMatch(path);
+   if (match != null) return match[0];
+   return getRelativeRoot(path);
+ }
+
+ /// Gets the root prefix of [path] if it's root-relative.
+ ///
+ /// If [path] is relative or absolute and not root-relative, returns `null`.
+ String getRelativeRoot(String path) {
+   if (relativeRootPattern == null) return null;
+   var match = relativeRootPattern.firstMatch(path);
    if (match == null) return null;
    return match[0];
  }
+
+ /// Returns the path represented by [uri] in this style.
+ String pathFromUri(Uri uri);
+
+ /// Returns the URI that represents [path].
+ ///
+ /// Pathos will always path an absolute path for [path]. Relative paths are
+ /// handled automatically by [Builder].
+ Uri pathToUri(String path);
 
  String toString() =&gt; name;
 }
@@ -93,7 +130,24 @@ final         <strong>posix</strong> <a class="anchor-link"
 <p>POSIX-style paths use "/" (forward slash) as separators. Absolute paths
 start with "/". Used by UNIX, Linux, Mac OS X, and others.</p>
 <pre class="source">
-static final posix = new Style._('posix', '/', '/', '/')
+static final posix = new _PosixStyle()
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="url">
+<button class="show-code">Code</button>
+final         <strong>url</strong> <a class="anchor-link"
+            href="#url"
+            title="Permalink to Style.url">#</a>
+        </h4>
+        <div class="doc">
+<p>URLs aren't filesystem paths, but they're supported by Pathos to make it
+easier to manipulate URL paths in the browser.</p>
+<p>URLs use "/" (forward slash) as separators. Absolute paths either start
+with a protocol and optional hostname (e.g. <code>http://dartlang.org</code>,
+<code>file://</code>) or with "/".</p>
+<pre class="source">
+static final url = new _UrlStyle()
 </pre>
 </div>
 </div>
@@ -108,8 +162,7 @@ final         <strong>windows</strong> <a class="anchor-link"
 a drive letter followed by a colon (example, "C:") or two backslashes
 ("\\") for UNC paths.</p>
 <pre class="source">
-static final windows = new Style._('windows', '\\', r'[/\\]',
-   r'\\\\|[a-zA-Z]:[/\\]')
+static final windows = new _WindowsStyle()
 </pre>
 </div>
 </div>
@@ -125,7 +178,56 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
         <div class="doc">
 <p>The name of this path style. Will be "posix" or "windows".</p>
 <pre class="source">
-final String name
+String get name;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="needsSeparatorPattern">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a>         <strong>needsSeparatorPattern</strong> <a class="anchor-link"
+            href="#needsSeparatorPattern"
+            title="Permalink to Style.needsSeparatorPattern">#</a>
+        </h4>
+        <div class="doc">
+<p>The <a class="crossref" href="../dart_core/Pattern.html">Pattern</a> that matches path components that need a separator after
+them.</p>
+<p>Windows and POSIX styles just need separators when the previous component
+doesn't already end in a separator, but the URL always needs to place a
+separator between the root and the first component, even if the root
+already ends in a separator character. For example, to join "file://" and
+"usr", an additional "/" is needed (making "file:///usr").</p>
+<pre class="source">
+Pattern get needsSeparatorPattern;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="relativeRootPattern">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a>         <strong>relativeRootPattern</strong> <a class="anchor-link"
+            href="#relativeRootPattern"
+            title="Permalink to Style.relativeRootPattern">#</a>
+        </h4>
+        <div class="doc">
+<p>The <a class="crossref" href="../dart_core/Pattern.html">Pattern</a> that can be used to match the root prefix of a root-relative
+path in this style.</p>
+<p>This can be null to indicate that this style doesn't support root-relative
+paths.</p>
+<pre class="source">
+final Pattern relativeRootPattern = null
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="rootPattern">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a>         <strong>rootPattern</strong> <a class="anchor-link"
+            href="#rootPattern"
+            title="Permalink to Style.rootPattern">#</a>
+        </h4>
+        <div class="doc">
+<p>The <a class="crossref" href="../dart_core/Pattern.html">Pattern</a> that can be used to match the root prefix of an absolute
+path in this style.</p>
+<pre class="source">
+Pattern get rootPattern;
 </pre>
 </div>
 </div>
@@ -139,7 +241,7 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
 <p>The path separator for this style. On POSIX, this is <code>/</code>. On Windows,
 it's <code>\</code>.</p>
 <pre class="source">
-final String separator
+String get separator;
 </pre>
 </div>
 </div>
@@ -150,17 +252,36 @@ final <a href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a>      
             title="Permalink to Style.separatorPattern">#</a>
         </h4>
         <div class="doc">
-<p>The <code>Pattern</code> that can be used to match a separator for a path in this
-style. Windows allows both "/" and "\" as path separators even though
-"\" is the canonical one.</p>
+<p>The <a class="crossref" href="../dart_core/Pattern.html">Pattern</a> that can be used to match a separator for a path in this
+style. Windows allows both "/" and "\" as path separators even though "\"
+is the canonical one.</p>
 <pre class="source">
-final Pattern separatorPattern
+Pattern get separatorPattern;
 </pre>
 </div>
 </div>
 </div>
 <div>
 <h3>Methods</h3>
+<div class="method"><h4 id="getRelativeRoot">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>getRelativeRoot</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#getRelativeRoot"
+              title="Permalink to Style.getRelativeRoot">#</a></h4>
+<div class="doc">
+<p>Gets the root prefix of 
+<span class="param">path</span> if it's root-relative.</p>
+<p>If 
+<span class="param">path</span> is relative or absolute and not root-relative, returns <code>null</code>.</p>
+<pre class="source">
+String getRelativeRoot(String path) {
+ if (relativeRootPattern == null) return null;
+ var match = relativeRootPattern.firstMatch(path);
+ if (match == null) return null;
+ return match[0];
+}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="getRoot">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>getRoot</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#getRoot"
@@ -172,11 +293,30 @@ final Pattern separatorPattern
 returns <code>null</code>.</p>
 <pre class="source">
 String getRoot(String path) {
- var match = _rootPattern.firstMatch(path);
- if (match == null) return null;
- return match[0];
+ var match = rootPattern.firstMatch(path);
+ if (match != null) return match[0];
+ return getRelativeRoot(path);
 }
 </pre>
+</div>
+</div>
+<div class="method"><h4 id="pathFromUri">
+abstract <a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>pathFromUri</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri) <a class="anchor-link" href="#pathFromUri"
+              title="Permalink to Style.pathFromUri">#</a></h4>
+<div class="doc">
+<p>Returns the path represented by 
+<span class="param">uri</span> in this style.</p>
+</div>
+</div>
+<div class="method"><h4 id="pathToUri">
+abstract <a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> <strong>pathToUri</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#pathToUri"
+              title="Permalink to Style.pathToUri">#</a></h4>
+<div class="doc">
+<p>Returns the URI that represents 
+<span class="param">path</span>.</p>
+<p>Pathos will always path an absolute path for 
+<span class="param">path</span>. Relative paths are
+handled automatically by <a class="crossref" href="../path/Builder.html">Builder</a>.</p>
 </div>
 </div>
 <div class="method"><h4 id="toString">

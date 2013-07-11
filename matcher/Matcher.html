@@ -46,7 +46,7 @@ abstract class Matcher {
   * and may be used to add details about the mismatch that are too
   * costly to determine in [describeMismatch].
   */
- bool matches(item, MatchState matchState);
+ bool matches(item, Map matchState);
 
  /** This builds a textual description of the matcher. */
  Description describe(Description description);
@@ -54,7 +54,7 @@ abstract class Matcher {
  /**
   * This builds a textual description of a specific mismatch. [item]
   * is the value that was tested by [matches]; [matchState] is
-  * the [MatchState] that was passed to and supplemented by [matches]
+  * the [Map] that was passed to and supplemented by [matches]
   * with additional information about the mismact, and [mismatchDescription]
   * is the [Description] that is being built to decribe the mismatch.
   * A few matchers make use of the [verbose] flag to provide detailed
@@ -62,7 +62,7 @@ abstract class Matcher {
   * diagnosing failures, such as stack traces.
   */
  Description describeMismatch(item, Description mismatchDescription,
-     MatchState matchState, bool verbose);
+     Map matchState, bool verbose);
 }
 </pre>
 </div>
@@ -79,14 +79,14 @@ abstract <a href="../matcher/Description.html">Description</a> <strong>describe<
 </div>
 </div>
 <div class="method"><h4 id="describeMismatch">
-abstract <a href="../matcher/Description.html">Description</a> <strong>describeMismatch</strong>(item, <a href="../matcher/Description.html">Description</a> mismatchDescription, <a href="../matcher/MatchState.html">MatchState</a> matchState, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose) <a class="anchor-link" href="#describeMismatch"
+abstract <a href="../matcher/Description.html">Description</a> <strong>describeMismatch</strong>(item, <a href="../matcher/Description.html">Description</a> mismatchDescription, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a> matchState, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose) <a class="anchor-link" href="#describeMismatch"
               title="Permalink to Matcher.describeMismatch">#</a></h4>
 <div class="doc">
 <p>This builds a textual description of a specific mismatch. 
 <span class="param">item</span>
 is the value that was tested by <a class="crossref" href="../matcher/Matcher.html#matches">matches</a>; 
 <span class="param">matchState</span> is
-the <a class="crossref" href="../matcher/MatchState.html">MatchState</a> that was passed to and supplemented by <a class="crossref" href="../matcher/Matcher.html#matches">matches</a>
+the <a class="crossref" href="../dart_core/Map.html">Map</a> that was passed to and supplemented by <a class="crossref" href="../matcher/Matcher.html#matches">matches</a>
 with additional information about the mismact, and 
 <span class="param">mismatchDescription</span>
 is the <a class="crossref" href="../matcher/Description.html">Description</a> that is being built to decribe the mismatch.
@@ -97,7 +97,7 @@ diagnosing failures, such as stack traces.</p>
 </div>
 </div>
 <div class="method"><h4 id="matches">
-abstract <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>matches</strong>(item, <a href="../matcher/MatchState.html">MatchState</a> matchState) <a class="anchor-link" href="#matches"
+abstract <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>matches</strong>(item, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a> matchState) <a class="anchor-link" href="#matches"
               title="Permalink to Matcher.matches">#</a></h4>
 <div class="doc">
 <p>This does the matching of the actual vs expected values.

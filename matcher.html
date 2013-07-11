@@ -58,19 +58,19 @@ const Matcher anything = const _IsAnything()
 </div>
 <div class="field"><h4 id="completes">
 <button class="show-code">Code</button>
-<a href="matcher/Matcher.html">Matcher</a>         <strong>completes</strong> <a class="anchor-link"
+final <a href="matcher/Matcher.html">Matcher</a>         <strong>completes</strong> <a class="anchor-link"
             href="#completes"
             title="Permalink to completes">#</a>
         </h4>
         <div class="doc">
-<p>Matches a <code>Future</code> that completes successfully with a value. Note that this
+<p>Matches a <a class="crossref" href="dart_async/Future.html">Future</a> that completes successfully with a value. Note that this
 creates an asynchronous expectation. The call to <code>expect()</code> that includes
 this will return immediately and execution will continue. Later, when the
 future completes, the actual expectation will run.</p>
 <p>To test that a Future completes with an exception, you can use <a class="crossref" href="matcher.html#throws">throws</a> and
 <a class="crossref" href="matcher.html#throwsA">throwsA</a>.</p>
 <pre class="source">
-Matcher completes = const _Completes(null, '')
+final Matcher completes = const _Completes(null, '')
 </pre>
 </div>
 </div>
@@ -381,11 +381,11 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>throws</strong>
         </h4>
         <div class="doc">
 <p>This can be used to match two kinds of objects:</p><ul><li>
-<p>A <code>Function</code> that throws an exception when called. The function cannot
+<p>A <a class="crossref" href="dart_core/Function.html">Function</a> that throws an exception when called. The function cannot
 take any arguments. If you want to test that a function expecting
 arguments throws, wrap it in another zero-argument function that calls
 the one you want to test.</p></li><li>
-<p>A <code>Future</code> that completes with an exception. Note that this creates an
+<p>A <a class="crossref" href="dart_async/Future.html">Future</a> that completes with an exception. Note that this creates an
 asynchronous expectation. The call to <code>expect()</code> that includes this will
 return immediately and execution will continue. Later, when the future
 completes, the actual expectation will run.</p></li></ul>
@@ -937,7 +937,7 @@ Matcher containsValue(value) =&gt; new _ContainsValue(value);
 <a href="matcher/Matcher.html">Matcher</a> <strong>completion</strong>(matcher, [<a href="http://api.dartlang.org/dart_core/String.html">String</a> id = '']) <a class="anchor-link" href="#completion"
               title="Permalink to completion">#</a></h4>
 <div class="doc">
-<p>Matches a <code>Future</code> that completes succesfully with a value that matches
+<p>Matches a <a class="crossref" href="dart_async/Future.html">Future</a> that completes succesfully with a value that matches
 
 <span class="param">matcher</span>. Note that this creates an asynchronous expectation. The call to
 <code>expect()</code> that includes this will return immediately and execution will
@@ -1078,7 +1078,7 @@ void expect(actual, matcher, {String reason, FailureHandler failureHandler,
            bool verbose : false}) {
  matcher = wrapMatcher(matcher);
  bool doesMatch;
- var matchState = new MatchState();
+ var matchState = {};
  try {
    doesMatch = matcher.matches(actual, matchState);
  } catch (e, trace) {
@@ -1093,6 +1093,22 @@ void expect(actual, matcher, {String reason, FailureHandler failureHandler,
    }
    failureHandler.failMatch(actual, matcher, reason, matchState, verbose);
  }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="addStateInfo">
+<button class="show-code">Code</button>
+void <strong>addStateInfo</strong>(<a href="http://api.dartlang.org/dart_core/Map.html">Map</a> matchState, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a> values) <a class="anchor-link" href="#addStateInfo"
+              title="Permalink to addStateInfo">#</a></h4>
+<div class="doc">
+<p>Useful utility for nesting match states.</p>
+<pre class="source">
+void addStateInfo(Map matchState, Map values) {
+ var innerState = new Map.from(matchState);
+ matchState.clear();
+ matchState['state'] = innerState;
+ matchState.addAll(values);
 }
 </pre>
 </div>
@@ -1130,9 +1146,9 @@ Matcher isIn(expected) =&gt; new _In(expected);
               title="Permalink to contains">#</a></h4>
 <div class="doc">
 <p>Returns a matcher that matches if the match argument contains
-the expected value. For <code>String</code>s this means substring matching;
-for <code>Map</code>s it means the map has the key, and for <code>Iterable</code>s
-(including <code>Iterable</code>s) it means the iterable has a matching
+the expected value. For <a class="crossref" href="dart_core/String.html">String</a>s this means substring matching;
+for <a class="crossref" href="dart_core/Map.html">Map</a>s it means the map has the key, and for <a class="crossref" href="dart_core/Iterable.html">Iterable</a>s
+(including <a class="crossref" href="dart_core/Iterable.html">Iterable</a>s) it means the iterable has a matching
 element. In the case of iterables, 
 <span class="param">expected</span> can itself be a
 matcher.</p>
@@ -1161,11 +1177,11 @@ Matcher hasLength(matcher) =&gt;
               title="Permalink to throwsA">#</a></h4>
 <div class="doc">
 <p>This can be used to match two kinds of objects:</p><ul><li>
-<p>A <code>Function</code> that throws an exception when called. The function cannot
+<p>A <a class="crossref" href="dart_core/Function.html">Function</a> that throws an exception when called. The function cannot
 take any arguments. If you want to test that a function expecting
 arguments throws, wrap it in another zero-argument function that calls
 the one you want to test.</p></li><li>
-<p>A <code>Future</code> that completes with an exception. Note that this creates an
+<p>A <a class="crossref" href="dart_async/Future.html">Future</a> that completes with an exception. Note that this creates an
 asynchronous expectation. The call to <code>expect()</code> that includes this will
 return immediately and execution will continue. Later, when the future
 completes, the actual expectation will run.</p></li></ul>
@@ -1190,7 +1206,9 @@ recursion depth
 <span class="param">limit</span> can be provided. The default limit is 100.</p>
 <pre class="source">
 Matcher equals(expected, [limit=100]) =&gt;
-   new _DeepMatcher(expected, limit);
+   expected is String
+       ? new _StringEqualsMatcher(expected)
+       : new _DeepMatcher(expected, limit);
 </pre>
 </div>
 </div>
@@ -1229,7 +1247,7 @@ Matcher pairwiseCompare(Iterable expected, Function comparator,
 <a href="matcher/Matcher.html">Matcher</a> <strong>unorderedEquals</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> expected) <a class="anchor-link" href="#unorderedEquals"
               title="Permalink to unorderedEquals">#</a></h4>
 <div class="doc">
-<p>Returns a matcher which matches <code>Iterable</code>s that have the same
+<p>Returns a matcher which matches <a class="crossref" href="dart_core/Iterable.html">Iterable</a>s that have the same
 length and the same elements as 
 <span class="param">expected</span>, but not necessarily in
 the same order. Note that this is O(n^2) so should only be used on
@@ -1245,7 +1263,7 @@ Matcher unorderedEquals(Iterable expected) =&gt;
 <a href="matcher/Matcher.html">Matcher</a> <strong>orderedEquals</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> expected) <a class="anchor-link" href="#orderedEquals"
               title="Permalink to orderedEquals">#</a></h4>
 <div class="doc">
-<p>Returns a matcher which matches <code>Iterable</code>s that have the same
+<p>Returns a matcher which matches <a class="crossref" href="dart_core/Iterable.html">Iterable</a>s that have the same
 length and the same elements as 
 <span class="param">expected</span>, and in the same order.
 This is equivalent to equals but does not recurse.</p>
@@ -1259,7 +1277,7 @@ Matcher orderedEquals(Iterable expected) =&gt; new _OrderedEquals(expected);
 <a href="matcher/Matcher.html">Matcher</a> <strong>someElement</strong>(matcher) <a class="anchor-link" href="#someElement"
               title="Permalink to someElement">#</a></h4>
 <div class="doc">
-<p>Returns a matcher which matches <code>Iterable</code>s in which at least one
+<p>Returns a matcher which matches <a class="crossref" href="dart_core/Iterable.html">Iterable</a>s in which at least one
 element matches the given 
 <span class="param">matcher</span>.</p>
 <pre class="source">
@@ -1272,7 +1290,7 @@ Matcher someElement(matcher) =&gt; new _SomeElement(wrapMatcher(matcher));
 <a href="matcher/Matcher.html">Matcher</a> <strong>everyElement</strong>(matcher) <a class="anchor-link" href="#everyElement"
               title="Permalink to everyElement">#</a></h4>
 <div class="doc">
-<p>Returns a matcher which matches <code>Iterable</code>s in which all elements
+<p>Returns a matcher which matches <a class="crossref" href="dart_core/Iterable.html">Iterable</a>s in which all elements
 match the given 
 <span class="param">matcher</span>.</p>
 <pre class="source">
@@ -1331,12 +1349,6 @@ Matcher everyElement(matcher) =&gt; new _EveryElement(wrapMatcher(matcher));
           <div class="type">
           <h4>
             <a href="matcher/isInstanceOf.html"><strong>isInstanceOf&lt;T&gt;</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="matcher/MatchState.html"><strong>MatchState</strong></a>
           </h4>
           </div>
           

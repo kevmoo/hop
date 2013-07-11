@@ -41,9 +41,9 @@ file.</p>
 guide for more details.</p>
 <h2>Concepts</h2><ul><li>
 <p><strong>Tests</strong>: Tests are specified via the top-level function <a class="crossref" href="unittest.html#test">test</a>, they can be
-   organized together using <a class="crossref" href="unittest.html#group">group</a>.</p></li><li><strong>Checks</strong>: Test expectations can be specified via <code>expect</code></li><li>
-<p><strong>Matchers</strong>: <code>expect</code> assertions are written declaratively using the
-   <code>Matcher</code> class.</p></li><li>
+   organized together using <a class="crossref" href="unittest.html#group">group</a>.</p></li><li><strong>Checks</strong>: Test expectations can be specified via <a class="crossref" href="matcher.html#expect">expect</a></li><li>
+<p><strong>Matchers</strong>: <a class="crossref" href="matcher.html#expect">expect</a> assertions are written declaratively using the
+   <a class="crossref" href="matcher/Matcher.html">Matcher</a> class.</p></li><li>
 <p><strong>Configuration</strong>: The framework can be adapted by setting
    <a class="crossref" href="unittest.html#unittestConfiguration">unittestConfiguration</a> with a <a class="crossref" href="unittest/Configuration.html">Configuration</a>. See the other libraries
    in the <code>unittest</code> package for alternative implementations of
@@ -131,7 +131,7 @@ that exceptions are properly handled.</p>
 first parameter and a predicate function as the second parameter; after each
 time * the callback is called, the predicate function will be called; if it
 returns false the test will still be considered incomplete.</p>
-<p>Test functions can return <code>Future</code>s, which provide another way of doing
+<p>Test functions can return <a class="crossref" href="dart_async/Future.html">Future</a>s, which provide another way of doing
 asynchronous tests. The test framework will handle exceptions thrown by
 the Future, and will advance to the next test when the Future is complete.
 It is still important to use expectAsync/guardAsync with any parts of the
@@ -166,10 +166,6 @@ main() {
   });
 }
 </code></pre></div>
-<h3>Exports</h3>
-<ul>
-<ul><a href="matcher.html">matcher</a></ul>
-</ul>
 <div>
 <h3>Properties</h3>
 <div class="field"><h4 id="currentTestCase">
@@ -209,6 +205,20 @@ const         <strong>FAIL</strong> <a class="anchor-link"
         <div class="doc">
 <pre class="source">
 const FAIL  = 'fail'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="formatStacks">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>formatStacks</strong> <a class="anchor-link"
+            href="#formatStacks"
+            title="Permalink to formatStacks">#</a>
+        </h4>
+        <div class="doc">
+<p>A flag that controls whether we hide unittest details in exception stacks.
+Useful to disable when debugging unittest or matcher customizations.</p>
+<pre class="source">
+bool formatStacks = true
 </pre>
 </div>
 </div>
@@ -292,7 +302,7 @@ void <strong>set unittestConfiguration</strong>(<a href="unittest/Configuration.
               title="Permalink to set unittestConfiguration">#</a></h4>
 <div class="doc">
 <p>Sets the <a class="crossref" href="unittest/Configuration.html">Configuration</a> used by the unittest library.</p>
-<p>Throws a <code>StateError</code> if there is an existing, incompatible value.</p>
+<p>Throws a <a class="crossref" href="dart_core/StateError.html">StateError</a> if there is an existing, incompatible value.</p>
 <pre class="source">
 void set unittestConfiguration(Configuration value) {
  if(!identical(_config, value)) {
@@ -411,7 +421,7 @@ void <strong>filterTests</strong>(testFilter) <a class="anchor-link" href="#filt
               title="Permalink to filterTests">#</a></h4>
 <div class="doc">
 <p>Filter the tests. 
-<span class="param">testFilter</span> can be a <code>RegExp</code>, a <code>String</code> or a
+<span class="param">testFilter</span> can be a <a class="crossref" href="dart_core/RegExp.html">RegExp</a>, a <a class="crossref" href="dart_core/String.html">String</a> or a
 predicate function. This is different to enabling/disabling tests
 in that it removes the tests completely.</p>
 <pre class="source">
@@ -456,7 +466,7 @@ are nested only the most locally scoped
 <a class="crossref" href="unittest.html#setUp">setUp</a> and <a class="crossref" href="unittest.html#tearDown">tearDown</a> should be called within the <a class="crossref" href="unittest.html#group">group</a> before any
 calls to <a class="crossref" href="unittest.html#test">test</a>. The 
 <span class="param">teardownTest</span> function can be asynchronous; in this
-case it must return a <code>Future</code>.</p>
+case it must return a <a class="crossref" href="dart_async/Future.html">Future</a>.</p>
 <pre class="source">
 void tearDown(Function teardownTest) {
  _currentContext.testTeardown = teardownTest;
@@ -474,7 +484,7 @@ be called before each test in the group is run.
 <a class="crossref" href="unittest.html#setUp">setUp</a> and <a class="crossref" href="unittest.html#tearDown">tearDown</a> should be called within the <a class="crossref" href="unittest.html#group">group</a> before any
 calls to <a class="crossref" href="unittest.html#test">test</a>. The 
 <span class="param">setupTest</span> function can be asynchronous; in this
-case it must return a <code>Future</code>.</p>
+case it must return a <a class="crossref" href="dart_async/Future.html">Future</a>.</p>
 <pre class="source">
 void setUp(Function setupTest) {
  _currentContext.testSetup = setupTest;
@@ -784,7 +794,7 @@ void <strong>logMessage</strong>(<a href="http://api.dartlang.org/dart_core/Stri
               title="Permalink to logMessage">#</a></h4>
 <div class="doc">
 <p>Can be called by tests to log status. Tests should use this
-instead of <code>print</code>.</p>
+instead of <a class="crossref" href="dart.core.html#print">print</a>.</p>
 <pre class="source">
 void logMessage(String message) =&gt;
    _config.onLogMessage(currentTestCase, message);

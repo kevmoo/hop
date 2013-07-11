@@ -39,7 +39,7 @@ class Throws extends BaseMatcher {
  const Throws([Matcher matcher]) :
    this._matcher = matcher;
 
- bool matches(item, MatchState matchState) {
+ bool matches(item, Map matchState) {
    if (item is! Function &amp;&amp; item is! Future) return false;
    if (item is Future) {
      var done = wrapAsync((fn) =&gt; fn());
@@ -72,10 +72,7 @@ class Throws extends BaseMatcher {
      if (_matcher == null ||_matcher.matches(e, matchState)) {
        return true;
      } else {
-       matchState.state = {
-           'exception' :e,
-           'stack': s
-       };
+       addStateInfo(matchState, {'exception': e, 'stack': s});
        return false;
      }
    }
@@ -83,29 +80,26 @@ class Throws extends BaseMatcher {
 
  Description describe(Description description) {
    if (_matcher == null) {
-     return description.add("throws an exception");
+     return description.add("throws");
    } else {
-     return description.add('throws an exception which matches ').
-         addDescriptionOf(_matcher);
+     return description.add('throws ').addDescriptionOf(_matcher);
    }
  }
 
  Description describeMismatch(item, Description mismatchDescription,
-                              MatchState matchState,
+                              Map matchState,
                               bool verbose) {
    if (item is! Function &amp;&amp; item is! Future) {
-     return mismatchDescription.add(' not a Function or Future');
-   } else if (_matcher == null ||  matchState.state == null) {
-     return mismatchDescription.add(' no exception');
+     return mismatchDescription.add('is not a Function or Future');
+   } else if (_matcher == null || matchState['exception'] == null) {
+     return mismatchDescription.add('did not throw');
    } else {
-     mismatchDescription.
-         add(' exception ').addDescriptionOf(matchState.state['exception']);
+     mismatchDescription. add('threw ').
+         addDescriptionOf(matchState['exception']);
      if (verbose) {
-         mismatchDescription.add(' at ').
-         add(matchState.state['stack'].toString());
+       mismatchDescription.add(' at ').add(matchState['stack'].toString());
      }
-      mismatchDescription.add(' does not match ').addDescriptionOf(_matcher);
-      return mismatchDescription;
+     return mismatchDescription;
    }
  }
 }
@@ -142,10 +136,9 @@ by appending to <code>mismatchDescription</code>.</p>
 <pre class="source">
 Description describe(Description description) {
  if (_matcher == null) {
-   return description.add("throws an exception");
+   return description.add("throws");
  } else {
-   return description.add('throws an exception which matches ').
-       addDescriptionOf(_matcher);
+   return description.add('throws ').addDescriptionOf(_matcher);
  }
 }
 </pre>
@@ -153,7 +146,7 @@ Description describe(Description description) {
 </div>
 <div class="method"><h4 id="describeMismatch">
 <button class="show-code">Code</button>
-<a href="../matcher/Description.html">Description</a> <strong>describeMismatch</strong>(item, <a href="../matcher/Description.html">Description</a> mismatchDescription, <a href="../matcher/MatchState.html">MatchState</a> matchState, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose) <a class="anchor-link" href="#describeMismatch"
+<a href="../matcher/Description.html">Description</a> <strong>describeMismatch</strong>(item, <a href="../matcher/Description.html">Description</a> mismatchDescription, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a> matchState, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose) <a class="anchor-link" href="#describeMismatch"
               title="Permalink to Throws.describeMismatch">#</a></h4>
 <div class="doc">
 <div class="inherited">
@@ -165,25 +158,26 @@ It does not check whether the
 <span class="param">item</span> fails the match, as it is
 only called after a failed match. There may be additional info
 about the mismatch in 
-<span class="param">matchState</span>.</p>
+<span class="param">matchState</span>.
+The base matcher does not add anything as the actual value is
+typically sufficient, but matchers that can add valuable info
+should override this.</p>
 <div class="docs-inherited-from">docs inherited from <a href="../matcher/BaseMatcher.html">BaseMatcher</a> </div></div>
 <pre class="source">
 Description describeMismatch(item, Description mismatchDescription,
-                            MatchState matchState,
+                            Map matchState,
                             bool verbose) {
  if (item is! Function &amp;&amp; item is! Future) {
-   return mismatchDescription.add(' not a Function or Future');
- } else if (_matcher == null ||  matchState.state == null) {
-   return mismatchDescription.add(' no exception');
+   return mismatchDescription.add('is not a Function or Future');
+ } else if (_matcher == null || matchState['exception'] == null) {
+   return mismatchDescription.add('did not throw');
  } else {
-   mismatchDescription.
-       add(' exception ').addDescriptionOf(matchState.state['exception']);
+   mismatchDescription. add('threw ').
+       addDescriptionOf(matchState['exception']);
    if (verbose) {
-       mismatchDescription.add(' at ').
-       add(matchState.state['stack'].toString());
+     mismatchDescription.add(' at ').add(matchState['stack'].toString());
    }
-    mismatchDescription.add(' does not match ').addDescriptionOf(_matcher);
-    return mismatchDescription;
+   return mismatchDescription;
  }
 }
 </pre>
@@ -191,7 +185,7 @@ Description describeMismatch(item, Description mismatchDescription,
 </div>
 <div class="method"><h4 id="matches">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>matches</strong>(item, <a href="../matcher/MatchState.html">MatchState</a> matchState) <a class="anchor-link" href="#matches"
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>matches</strong>(item, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a> matchState) <a class="anchor-link" href="#matches"
               title="Permalink to Throws.matches">#</a></h4>
 <div class="doc">
 <div class="inherited">
@@ -203,7 +197,7 @@ and return true if the match succeeds; false otherwise.
 the use of <a class="crossref" href="../matcher/Throws.html#describeMismatch">describeMismatch</a>.</p>
 <div class="docs-inherited-from">docs inherited from <a href="../matcher/BaseMatcher.html">BaseMatcher</a> </div></div>
 <pre class="source">
-bool matches(item, MatchState matchState) {
+bool matches(item, Map matchState) {
  if (item is! Function &amp;&amp; item is! Future) return false;
  if (item is Future) {
    var done = wrapAsync((fn) =&gt; fn());
@@ -236,10 +230,7 @@ bool matches(item, MatchState matchState) {
    if (_matcher == null ||_matcher.matches(e, matchState)) {
      return true;
    } else {
-     matchState.state = {
-         'exception' :e,
-         'stack': s
-     };
+     addStateInfo(matchState, {'exception': e, 'stack': s});
      return false;
    }
  }

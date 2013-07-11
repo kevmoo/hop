@@ -47,8 +47,21 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
         </h4>
         <div class="doc">
 <p>Gets the path to the current working directory.</p>
+<p>In the browser, this means the current URL. When using dart2js, this
+currently returns <code>.</code> due to technical constraints. In the future, it will
+return the current URL.</p>
 <pre class="source">
-String get current =&gt; io.Directory.current.path;
+String get current {
+ if (_io != null) {
+   return _io.classes[const Symbol('Directory')]
+       .getField(const Symbol('current')).reflectee.path;
+ } else if (_html != null) {
+   return _html.getField(const Symbol('window'))
+       .reflectee.location.href;
+ } else {
+   return '.';
+ }
+}
 </pre>
 </div>
 </div>
@@ -69,6 +82,63 @@ String get separator =&gt; _builder.separator;
 </div>
 <div>
 <h3>Functions</h3>
+<div class="method"><h4 id="toUri">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> <strong>toUri</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#toUri"
+              title="Permalink to toUri">#</a></h4>
+<div class="doc">
+<p>Returns the URI that represents 
+<span class="param">path</span>.</p>
+<p>For POSIX and Windows styles, this will return a <code>file:</code> URI. For the URL
+style, this will just convert 
+<span class="param">path</span> to a <a class="crossref" href="dart_core/Uri.html">Uri</a>.</p>
+<p>This will always convert relative paths to absolute ones before converting
+to a URI.</p>
+<pre><code>// POSIX
+path.toUri('/path/to/foo')
+  // -&gt; Uri.parse('file:///path/to/foo')
+
+// Windows
+path.toUri(r'C:\path\to\foo')
+  // -&gt; Uri.parse('file:///C:/path/to/foo')
+
+// URL
+path.toUri('http://dartlang.org/path/to/foo')
+  // -&gt; Uri.parse('http://dartlang.org/path/to/foo')
+</code></pre>
+<pre class="source">
+Uri toUri(String path) =&gt; _builder.toUri(path);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="fromUri">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>fromUri</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri) <a class="anchor-link" href="#fromUri"
+              title="Permalink to fromUri">#</a></h4>
+<div class="doc">
+<p>Returns the path represented by 
+<span class="param">uri</span>.</p>
+<p>For POSIX and Windows styles, 
+<span class="param">uri</span> must be a <code>file:</code> URI. For the URL
+style, this will just convert 
+<span class="param">uri</span> to a string.</p>
+<pre><code>// POSIX
+path.fromUri(Uri.parse('file:///path/to/foo'))
+  // -&gt; '/path/to/foo'
+
+// Windows
+path.fromUri(Uri.parse('file:///C:/path/to/foo'))
+  // -&gt; r'C:\path\to\foo'
+
+// URL
+path.fromUri(Uri.parse('http://dartlang.org/path/to/foo'))
+  // -&gt; 'http://dartlang.org/path/to/foo'
+</code></pre>
+<pre class="source">
+String fromUri(Uri uri) =&gt; _builder.fromUri(uri);
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="withoutExtension">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>withoutExtension</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#withoutExtension"
@@ -104,8 +174,14 @@ path.relative('/root/other.dart',
     from: '/root/path'); // -&gt; '../other.dart'
 </code></pre>
 <p>Since there is no relative path from one drive letter to another on Windows,
-this will return an absolute path in that case.</p>
-<pre><code>path.relative(r'D:\other', from: r'C:\home'); // -&gt; 'D:\other'
+or from one hostname to another for URLs, this will return an absolute path
+in those cases.</p>
+<pre><code>// Windows
+path.relative(r'D:\other', from: r'C:\home'); // -&gt; 'D:\other'
+
+// URL
+path.relative('http://dartlang.org', from: 'http://pub.dartlang.org');
+  // -&gt; 'http://dartlang.org'
 </code></pre>
 <pre class="source">
 String relative(String path, {String from}) =&gt;
@@ -148,6 +224,10 @@ path.split('/path/to/foo'); // -&gt; ['/', 'path', 'to', 'foo']
 
 // Windows
 path.split(r'C:\path\to\foo'); // -&gt; [r'C:\', 'path', 'to', 'foo']
+
+// Browser
+path.split('http://dartlang.org/path/to/foo');
+  // -&gt; ['http://dartlang.org', 'path', 'to', 'foo']
 </code></pre>
 <pre class="source">
 List&lt;String&gt; split(String path) =&gt; _builder.split(path);
@@ -199,6 +279,23 @@ String join(String part1, [String part2, String part3, String part4,
 </pre>
 </div>
 </div>
+<div class="method"><h4 id="isRootRelative">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>isRootRelative</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#isRootRelative"
+              title="Permalink to isRootRelative">#</a></h4>
+<div class="doc">
+<p>Returns <code>true</code> if 
+<span class="param">path</span> is a root-relative path and <code>false</code> if it's not.</p>
+<p>URLs that start with <code>/</code> are known as "root-relative", since they're
+relative to the root of the current URL. Since root-relative paths are still
+absolute in every other sense, <a class="crossref" href="path.html#isAbsolute">isAbsolute</a> will return true for them. They
+can be detected using <a class="crossref" href="path.html#isRootRelative">isRootRelative</a>.</p>
+<p>No POSIX and Windows paths are root-relative.</p>
+<pre class="source">
+bool isRootRelative(String path) =&gt; _builder.isRootRelative(path);
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="isRelative">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>isRelative</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#isRelative"
@@ -221,9 +318,15 @@ bool isRelative(String path) =&gt; _builder.isRelative(path);
 <div class="doc">
 <p>Returns <code>true</code> if 
 <span class="param">path</span> is an absolute path and <code>false</code> if it is a
-relative path. On POSIX systems, absolute paths start with a <code>/</code> (forward
-slash). On Windows, an absolute path starts with <code>\\</code>, or a drive letter
-followed by <code>:/</code> or <code>:\</code>.</p>
+relative path.</p>
+<p>On POSIX systems, absolute paths start with a <code>/</code> (forward slash). On
+Windows, an absolute path starts with <code>\\</code>, or a drive letter followed by
+<code>:/</code> or <code>:\</code>. For URLs, absolute paths either start with a protocol and
+optional hostname (e.g. <code>http://dartlang.org</code>, <code>file://</code>) or with a <code>/</code>.</p>
+<p>URLs that start with <code>/</code> are known as "root-relative", since they're
+relative to the root of the current URL. Since root-relative paths are still
+absolute in every other sense, <a class="crossref" href="path.html#isAbsolute">isAbsolute</a> will return true for them. They
+can be detected using <a class="crossref" href="path.html#isRootRelative">isRootRelative</a>.</p>
 <pre class="source">
 bool isAbsolute(String path) =&gt; _builder.isAbsolute(path);
 </pre>
@@ -244,6 +347,11 @@ path.rootPrefix('/path/to/foo'); // -&gt; '/'
 // Windows
 path.rootPrefix(r'path\to\foo'); // -&gt; ''
 path.rootPrefix(r'C:\path\to\foo'); // -&gt; r'C:\'
+
+// URL
+path.rootPrefix('path/to/foo'); // -&gt; ''
+path.rootPrefix('http://dartlang.org/path/to/foo');
+  // -&gt; 'http://dartlang.org'
 </code></pre>
 <pre class="source">
 String rootPrefix(String path) =&gt; _builder.rootPrefix(path);
@@ -346,16 +454,19 @@ String absolute(String path) =&gt; join(current, path);
 </div>
 </div>
 <div>
+<h3>Abstract Classes</h3>
+          <div class="type">
+          <h4>
+            <a href="path/Style.html"><strong>Style</strong></a>
+          </h4>
+          </div>
+          
+</div>
+<div>
 <h3>Classes</h3>
           <div class="type">
           <h4>
             <a href="path/Builder.html"><strong>Builder</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="path/Style.html"><strong>Style</strong></a>
           </h4>
           </div>
           

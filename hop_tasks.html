@@ -267,9 +267,9 @@ branch doesn't exist, it will be created. Default: <code>gh-pages</code></p>
 <span class="param">packageDir</span> the package directory for the current project. Default: <code>packages/</code></p>
 <p>
 <span class="param">delayedLibraryList</span> a [List<String>] mapping to paths to libraries or some
-combinations of <code>Future</code> or <code>Function</code> values that return a [List<String>].</p>
+combinations of <a class="crossref" href="dart_async/Future.html">Future</a> or <a class="crossref" href="dart_core/Function.html">Function</a> values that return a [List<String>].</p>
 <p>
-<span class="param">postBuild</span> A <code>Function</code> to call before content is committed. It has the
+<span class="param">postBuild</span> A <a class="crossref" href="dart_core/Function.html">Function</a> to call before content is committed. It has the
 signature <code>Future postBuild(TaskLogger logger, String tempDocPath)</code>. Use this
 if you want to modify the doc output.</p>
 <pre class="source">
@@ -302,7 +302,7 @@ Task createDartDocTask(dynamic delayedLibraryList, {
 <div class="doc">
 <p>
 <span class="param">delayedRootList</span> a [List<String>] mapping to paths to libraries or some
-combinations of <code>Future</code> or <code>Function</code> values that return a [List<String>].</p>
+combinations of <a class="crossref" href="dart_async/Future.html">Future</a> or <a class="crossref" href="dart_core/Function.html">Function</a> values that return a [List<String>].</p>
 <p>
 <span class="param">outputType</span> must be one of type <a class="crossref" href="hop_tasks/CompilerTargetType.html">CompilerTargetType</a>.</p>
 <pre class="source">
@@ -392,36 +392,6 @@ Task createDart2JsTask(dynamic delayedRootList, {String output: null,
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="createDartAnalyzerTask">
-<button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>createDartAnalyzerTask</strong>(delayedFileList) <a class="anchor-link" href="#createDartAnalyzerTask"
-              title="Permalink to createDartAnalyzerTask">#</a></h4>
-<div class="doc">
-<p>
-<span class="param">delayedFileList</span> a [List<String>] mapping to paths to dart files or some
-combinations of <code>Future</code> or <code>Function</code> values that return a [List<String>].</p>
-<pre class="source">
-@deprecated
-Task createDartAnalyzerTask(dynamic delayedFileList) {
- return new Task.async((context) {
-   final parseResult = context.arguments;
-
-   final bool verbose = parseResult[_verboseArgName];
-   final bool formatMachine = parseResult[_formatMachineArgName];
-
-   return getDelayedResult(delayedFileList)
-       .then((List&lt;String&gt; files) {
-         final fileList = files.map((f) =&gt; new Path(f)).toList();
-         return _processAnalyzerFile(context, fileList, verbose,
-             formatMachine);
-       });
- },
- description: 'Run "dart_analyzer" for the provided dart files.',
- config: _analyzerParserConfig);
-}
-</pre>
-</div>
-</div>
 <div class="method"><h4 id="createAnalyzerTask">
 <button class="show-code">Code</button>
 <a href="hop/Task.html">Task</a> <strong>createAnalyzerTask</strong>(delayedFileList) <a class="anchor-link" href="#createAnalyzerTask"
@@ -429,14 +399,14 @@ Task createDartAnalyzerTask(dynamic delayedFileList) {
 <div class="doc">
 <p>
 <span class="param">delayedFileList</span> a [List<String>] mapping to paths to dart files or some
-combinations of <code>Future</code> or <code>Function</code> values that return a [List<String>].</p>
+combinations of <a class="crossref" href="dart_async/Future.html">Future</a> or <a class="crossref" href="dart_core/Function.html">Function</a> values that return a [List<String>].</p>
 <pre class="source">
 Task createAnalyzerTask(dynamic delayedFileList) {
  return new Task.async((context) {
    final parseResult = context.arguments;
 
    final bool verbose = parseResult[_verboseArgName];
-   final bool formatMachine = parseResult[_formatMachine];
+   final bool formatMachine = parseResult[_formatMachineArgName];
 
    return getDelayedResult(delayedFileList)
        .then((List&lt;String&gt; files) {

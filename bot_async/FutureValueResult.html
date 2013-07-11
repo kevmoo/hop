@@ -80,12 +80,14 @@ class FutureValueResult&lt;TOutput&gt; {
        value.containsKey(_stackTraceKey);
  }
 
- bool operator ==(FutureValueResult other) {
+ bool operator ==(other) {
    return other != null &amp;&amp;
        other.value == value &amp;&amp;
        other.error == error &amp;&amp;
        other.stackTrace == stackTrace;
  }
+
+ int get hashCode =&gt; Util.getHashCode([value, error, stackTrace]);
 
  dynamic _serialize(TOutput output) {
    if(_outputSerializer == null) {
@@ -177,6 +179,28 @@ final error
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="hashCode">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>hashCode</strong> <a class="anchor-link"
+            href="#hashCode"
+            title="Permalink to FutureValueResult&lt;TOutput&gt;.hashCode">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <a class="crossref" href="../bot_async/FutureValueResult.html#hashCode">hashCode</a> it should override the
+equality operator as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+int get hashCode =&gt; Util.getHashCode([value, error, stackTrace]);
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="isException">
 <button class="show-code">Code</button>
 final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>isException</strong> <a class="anchor-link"
@@ -218,19 +242,19 @@ final TOutput value
 <h3>Operators</h3>
 <div class="method"><h4 id="==">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>operator ==</strong>(<a href="../bot_async/FutureValueResult.html">FutureValueResult</a> other) <a class="anchor-link" href="#=="
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>operator ==</strong>(other) <a class="anchor-link" href="#=="
               title="Permalink to FutureValueResult&lt;TOutput&gt;.operator ==">#</a></h4>
 <div class="doc">
 <div class="inherited">
 <p>The equality operator.</p>
-<p>The default behavior for all <code>Object</code>s is to return true if and
+<p>The default behavior for all <a class="crossref" href="../dart_core/Object.html">Object</a>s is to return true if and
 only if <code>this</code> and 
 <span class="param">other</span> are the same object.</p>
 <p>If a subclass overrides the equality operator it should override
-the <code>hashCode</code> method as well to maintain consistency.</p>
+the <a class="crossref" href="../bot_async/FutureValueResult.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
-bool operator ==(FutureValueResult other) {
+bool operator ==(other) {
  return other != null &amp;&amp;
      other.value == value &amp;&amp;
      other.error == error &amp;&amp;

@@ -43,7 +43,7 @@ class DefaultFailureHandler implements FailureHandler {
    throw new TestFailure(reason);
  }
  void failMatch(actual, Matcher matcher, String reason,
-     MatchState matchState, bool verbose) {
+     Map matchState, bool verbose) {
    fail(_assertErrorFormatter(actual, matcher, reason, matchState, verbose));
  }
 }
@@ -88,7 +88,7 @@ void fail(String reason) {
 </div>
 <div class="method"><h4 id="failMatch">
 <button class="show-code">Code</button>
-void <strong>failMatch</strong>(actual, <a href="../matcher/Matcher.html">Matcher</a> matcher, <a href="http://api.dartlang.org/dart_core/String.html">String</a> reason, <a href="../matcher/MatchState.html">MatchState</a> matchState, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose) <a class="anchor-link" href="#failMatch"
+void <strong>failMatch</strong>(actual, <a href="../matcher/Matcher.html">Matcher</a> matcher, <a href="http://api.dartlang.org/dart_core/String.html">String</a> reason, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a> matchState, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose) <a class="anchor-link" href="#failMatch"
               title="Permalink to DefaultFailureHandler.failMatch">#</a></h4>
 <div class="doc">
 <div class="inherited">
@@ -106,7 +106,7 @@ an <a class="crossref" href="../matcher/ErrorFormatter.html">ErrorFormatter</a>)
 <div class="docs-inherited-from">docs inherited from <a href="../matcher/FailureHandler.html">FailureHandler</a> </div></div>
 <pre class="source">
 void failMatch(actual, Matcher matcher, String reason,
-   MatchState matchState, bool verbose) {
+   Map matchState, bool verbose) {
  fail(_assertErrorFormatter(actual, matcher, reason, matchState, verbose));
 }
 </pre>
