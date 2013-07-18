@@ -7,7 +7,7 @@ import 'package:bot/bot.dart';
 import 'package:bot_io/bot_io.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
-import 'package:pathos/path.dart' as path;
+import 'package:path/path.dart' as path;
 
 part 'src/hop/console_context.dart';
 part 'src/hop/help.dart';
