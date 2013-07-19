@@ -5,6 +5,7 @@ const _summaryFlag = 'summary';
 const _summaryAll = 'all';
 const _summaryFail = 'fail';
 const _summaryPass = 'pass';
+const _summaryError = 'error';
 
 Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction) {
   return new Task.async((TaskContext ctx) {
@@ -17,7 +18,10 @@ Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction) {
     final failSummary =
         (summaryFlag == _summaryAll || summaryFlag == _summaryFail);
 
-    final config = new _HopTestConfiguration(ctx, failSummary, passSummary);
+    final errorSummary =
+        (summaryFlag == _summaryAll || summaryFlag == _summaryError);
+
+    final config = new _HopTestConfiguration(ctx, failSummary, passSummary, errorSummary);
 
     // TODO: wrap this in a try/catch
     unitTestAction(config);
@@ -57,7 +61,7 @@ void _unittestParserConfig(ArgParser parser) {
       help: "Just list the test case names. Don't run them. Any filter is still applied.");
   parser.addOption(_summaryFlag, abbr: 's',
       help: 'Summarize the results of individual tests.',
-      allowed: [_summaryAll, _summaryFail, _summaryPass],
+      allowed: [_summaryAll, _summaryFail, _summaryPass, _summaryError],
       allowMultiple: false);
 }
 
@@ -66,8 +70,9 @@ class _HopTestConfiguration implements unittest.Configuration {
   final TaskContext _context;
   final bool failSummary;
   final bool passSummary;
+  final bool errorSummary;
 
-  _HopTestConfiguration(this._context, this.failSummary, this.passSummary);
+  _HopTestConfiguration(this._context, this.failSummary, this.passSummary, this.errorSummary);
 
   Future<bool> get future => _completer.future;
 
@@ -142,6 +147,13 @@ ${testCase.stackTrace}''');
     if(failSummary) {
       final summaryCtx = _context.getSubLogger('FAIL');
       results.where((tc) => tc.result == unittest.FAIL).forEach((tc) {
+        summaryCtx.severe(tc.description);
+      });
+    }
+
+    if(errorSummary) {
+      final summaryCtx = _context.getSubLogger('ERROR');
+      results.where((tc) => tc.result == unittest.ERROR).forEach((tc) {
         summaryCtx.severe(tc.description);
       });
     }
