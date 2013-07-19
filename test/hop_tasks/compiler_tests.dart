@@ -38,8 +38,7 @@ class CompilerTests {
         .then((TempDir value) {
           tmpDir = value;
 
-          final populater = new MapDirectoryPopulater(sourceDirMap);
-          return tmpDir.populate(populater);
+          return tmpDir.populate(sourceDirMap);
         })
         .then((TempDir value) {
           assert(value == tmpDir);

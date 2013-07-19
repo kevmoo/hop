@@ -38,8 +38,7 @@ Future _testAnalyzerTask(Map<String, String> inputs,
   return TempDir.create()
       .then((TempDir value) {
         tempDir = value;
-        final populater = new MapDirectoryPopulater(inputs);
-        return tempDir.populate(populater);
+        return tempDir.populate(inputs);
       })
       .then((TempDir value) {
         assert(value == tempDir);

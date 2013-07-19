@@ -42,8 +42,7 @@ class GitTests {
               tempDir = value;
 
               // populate the temp dir.
-              final populater = new MapDirectoryPopulater(sourceDirMap);
-              return tempDir.populate(populater);
+              return tempDir.populate(sourceDirMap);
             })
             .then((TempDir value) {
               assert(value == tempDir);
@@ -113,8 +112,7 @@ class GitTests {
               expect(counts[1], 1);
 
               // populate the temp dir.
-              final populater = new MapDirectoryPopulater(testContent2, checkEmpty: false);
-              return tempDir.populate(populater);
+              return tempDir.populate(testContent2);
             })
             .then((_) {
               // now add all files to staging
@@ -150,8 +148,7 @@ class GitTests {
             })
             .then((_) {
               // populate the temp dir.
-              final populater = new MapDirectoryPopulater(testContent3, checkEmpty: false);
-              return tempDir.populate(populater);
+              return tempDir.populate(testContent3);
             })
             .then((_) {
               // now add all files to staging
