@@ -1,5 +1,11 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.24.0 2013-07-19 (SDK 0.6.5.0 r25017)
+
+* **BREAKING** Removed deprecated dart2js method
+* Updated SDK dependency to 0.6.5
+* Moved to renamed `path` package from `pathos`
+
 ## 0.23.0 2013-07-11 (SDK 0.6.3.3 r24898)
 
 * Updated pub dependencies
