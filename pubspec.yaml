@@ -9,7 +9,7 @@ environment:
 dependencies:
   args: '>=0.6.5'
   bot: '>=0.22.1'
-  bot_io: '>=0.22.0'
+  bot_io: '>=0.22.0+1'
   logging: '>=0.6.5'
   meta: '>=0.6.5'
   path: '>=0.6.5'
