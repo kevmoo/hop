@@ -54,17 +54,20 @@ class DetailedArgumentError extends ArgumentError {
 </div>
 <h3>Extends</h3>
 <p>
-<span class="type-box"><span class="icon-exception"></span><a href="../dart_core/Error.html">Error</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-exception"></span><a href="../dart_core/ArgumentError.html">ArgumentError</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-exception"></span><strong>DetailedArgumentError</strong></span></p>
+<span class="type-box"><span class="icon-exception"></span><a href="../dart_core/Error.html">Error</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../dart_core/Error_StackTraceOnThrow.html">Error_StackTraceOnThrow</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-exception"></span><a href="../dart_core/ArgumentError.html">ArgumentError</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-exception"></span><strong>DetailedArgumentError</strong></span></p>
 <h3>Subclasses</h3>
 <p>
 <span class="type-box"><span class="icon-exception"></span><a href="../bot/NullArgumentError.html">NullArgumentError</a></span></p>
 <div>
 <h3>Constructors</h3>
-<div class="method"><h4 id="DetailedArgumentError">
+<div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>DetailedArgumentError</strong>(argument, details) <a class="anchor-link" href="#DetailedArgumentError"
+new <strong>DetailedArgumentError</strong>(argument, details) <a class="anchor-link" href="#"
               title="Permalink to DetailedArgumentError.DetailedArgumentError">#</a></h4>
 <div class="doc">
+<div class="inherited">
+<p>The <a class="crossref" href="../bot/DetailedArgumentError.html#message">message</a> describes the erroneous argument. </p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/ArgumentError.html">ArgumentError</a> </div></div>
 <pre class="source">
 DetailedArgumentError(this.argument, this.details) {
  if(argument == null || argument.length == 0) {
@@ -122,7 +125,13 @@ final <a href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a>
             href="#stackTrace"
             title="Permalink to DetailedArgumentError.stackTrace">#</a>
         </h4>
-        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Error.html">Error</a> </div><div class="doc">
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Error_StackTraceOnThrow.html">Error_StackTraceOnThrow</a> </div><div class="doc">
+<p>Captures the current stack-trace when thrown.</p>
+<p>Classes extending or mixing-in this class will automatically have a stack
+trace captured the first time they are thrown. This stack trace is returned
+by the <a class="crossref" href="../dart_core/StackTraceOnThrow.html#stackTrace">stackTrace</a> getter.</p>
+<p>Throwing the object again will not cause overwrite the first stack trace,
+so bjects that are <code>StackTraceOnThrow</code> instances should not be reused.</p>
 <pre class="source">
 external StackTrace get stackTrace;
 </pre>

@@ -65,11 +65,17 @@ class EventHandle&lt;T&gt; implements Disposable {
 <span class="type-box"><span class="icon-class"></span><a href="../bot/Disposable.html">Disposable</a></span></p>
 <div>
 <h3>Constructors</h3>
-<div class="method"><h4 id="EventHandle">
+<div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>EventHandle</strong>({void onCancel()}) <a class="anchor-link" href="#EventHandle"
+new <strong>EventHandle</strong>({void onCancel()}) <a class="anchor-link" href="#"
               title="Permalink to EventHandle&lt;T&gt;.EventHandle">#</a></h4>
 <div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
 EventHandle({void onCancel()}) :
  this._controller = new async.StreamController.broadcast(onCancel: onCancel, sync: true);

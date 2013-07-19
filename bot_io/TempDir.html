@@ -53,10 +53,13 @@ class TempDir {
 
  bool get isDisposed =&gt; _disposed;
 
- Future&lt;TempDir&gt; populate(DirectoryPopulater populater) {
-   return populater.populate(dir)
+ Future&lt;TempDir&gt; populate(source) {
+   return EntityPopulater.populate(path, source,
+       createParentDirectories: false,
+       overwriteExisting: false,
+       leaveExistingDirs: true)
        .then((Directory outputDir) {
-         assert(dir == outputDir);
+         assert(path == outputDir.path);
          return this;
        });
  }
@@ -175,14 +178,17 @@ Future&lt;bool&gt; isEmpty() {
 </div>
 <div class="method"><h4 id="populate">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../bot_io/TempDir.html">TempDir</a>&gt; <strong>populate</strong>(<a href="../bot_io/DirectoryPopulater.html">DirectoryPopulater</a> populater) <a class="anchor-link" href="#populate"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../bot_io/TempDir.html">TempDir</a>&gt; <strong>populate</strong>(source) <a class="anchor-link" href="#populate"
               title="Permalink to TempDir.populate">#</a></h4>
 <div class="doc">
 <pre class="source">
-Future&lt;TempDir&gt; populate(DirectoryPopulater populater) {
- return populater.populate(dir)
+Future&lt;TempDir&gt; populate(source) {
+ return EntityPopulater.populate(path, source,
+     createParentDirectories: false,
+     overwriteExisting: false,
+     leaveExistingDirs: true)
      .then((Directory outputDir) {
-       assert(dir == outputDir);
+       assert(path == outputDir.path);
        return this;
      });
 }

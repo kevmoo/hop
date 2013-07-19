@@ -46,7 +46,10 @@ Task createUnitTestTask(Action1&lt;unittest.Configuration&gt; unitTestAction) {
    final failSummary =
        (summaryFlag == _summaryAll || summaryFlag == _summaryFail);
 
-   final config = new _HopTestConfiguration(ctx, failSummary, passSummary);
+   final errorSummary =
+       (summaryFlag == _summaryAll || summaryFlag == _summaryError);
+
+   final config = new _HopTestConfiguration(ctx, failSummary, passSummary, errorSummary);
 
    // TODO: wrap this in a try/catch
    unitTestAction(config);
@@ -365,29 +368,6 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
          return !errors;
        });
  }, description: 'Run Dart-to-$friendlyName compiler');
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="createDart2JsTask">
-<button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>createDart2JsTask</strong>(delayedRootList, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> output: null, <a href="http://api.dartlang.org/dart_core/String.html">String</a> packageRoot: null, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> minify: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> allowUnsafeEval: true, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> liveTypeAnalysis: true, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> rejectDeprecatedFeatures: false}) <a class="anchor-link" href="#createDart2JsTask"
-              title="Permalink to createDart2JsTask">#</a></h4>
-<div class="doc">
-<pre class="source">
-@deprecated
-Task createDart2JsTask(dynamic delayedRootList, {String output: null,
- String packageRoot: null, bool minify: false, bool allowUnsafeEval: true,
- bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false}) {
-
- return createDartCompilerTask(delayedRootList,
-     singleOutput: output,
-     packageRoot: packageRoot,
-     minify: minify,
-     allowUnsafeEval: allowUnsafeEval,
-     liveTypeAnalysis: liveTypeAnalysis,
-     rejectDeprecatedFeatures: rejectDeprecatedFeatures,
-     outputType: CompilerTargetType.JS);
 }
 </pre>
 </div>

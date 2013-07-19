@@ -60,7 +60,7 @@ abstract class EntityPopulater {
              leaveExistingDirs));
    }
 
-   throw "Don't know how to populate from '$source'...yet?";
+   throw new Exception("Cannot populate from '$source'.");
  }
 
  static Future&lt;Directory&gt; updateDirectory(String path,
@@ -88,11 +88,9 @@ abstract class EntityPopulater {
      Stream&lt;List&lt;int&gt;&gt; content) {
 
    var file = new File(path);
-   return file.openWrite()
-       .addStream(content)
-       .then((_) {
-         return file;
-       });
+
+   return content.pipe(file.openWrite())
+     .then((_) =&gt; file);
  }
 
  /**
@@ -133,36 +131,34 @@ abstract class EntityPopulater {
                'Parent directory does not exist', path);
          } else if(parentDirExists) {
 
-           // shouldn't there be an async version of this?
-           var existingType =
-               FileSystemEntity.typeSync(path, followLinks: false);
+           return FileSystemEntity.type(path, followLinks: false)
+               .then((FileSystemEntityType existingType) {
 
-           if(existingType != FileSystemEntityType.NOT_FOUND) {
+                 if(existingType != FileSystemEntityType.NOT_FOUND) {
 
-             if(overwriteExisting) {
-               switch(existingType) {
-                 case FileSystemEntityType.DIRECTORY:
-                   if(leaveExistingDir) {
+                   if(leaveExistingDir &amp;&amp; existingType == FileSystemEntityType.DIRECTORY) {
                      return;
-                   } else {
-                     final dir = new Directory(path);
-                     return dir.delete(recursive: true);
                    }
-                   // DARTBUG: http://dartbug.com/6563
-                   break;
-                 case FileSystemEntityType.LINK:
-                   final link = new Link(path);
-                   return link.delete();
-                 case FileSystemEntityType.FILE:
-                   final file = new File(path);
-                   return file.delete();
-               }
 
-             } else {
-               throw new EntityPopulatorException._internal(
-                   'Existing entity.', path);
-             }
-           }
+                   if(overwriteExisting) {
+                     switch(existingType) {
+                       case FileSystemEntityType.DIRECTORY:
+                         final dir = new Directory(path);
+                         return dir.delete(recursive: true);
+                       case FileSystemEntityType.LINK:
+                         final link = new Link(path);
+                         return link.delete();
+                       case FileSystemEntityType.FILE:
+                         final file = new File(path);
+                         return file.delete();
+                     }
+
+                   } else {
+                     throw new EntityPopulatorException._internal(
+                         'Existing entity.', path);
+                   }
+                 }
+               });
 
          }
 
@@ -207,7 +203,7 @@ static Future&lt;FileSystemEntity&gt; populate(String path, dynamic source,
            leaveExistingDirs));
  }
 
- throw "Don't know how to populate from '$source'...yet?";
+ throw new Exception("Cannot populate from '$source'.");
 }
 </pre>
 </div>

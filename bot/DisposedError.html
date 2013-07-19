@@ -40,14 +40,20 @@ class DisposedError extends StateError {
 </div>
 <h3>Extends</h3>
 <p>
-<span class="type-box"><span class="icon-exception"></span><a href="../dart_core/Error.html">Error</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-exception"></span><a href="../dart_core/StateError.html">StateError</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-exception"></span><strong>DisposedError</strong></span></p>
+<span class="type-box"><span class="icon-exception"></span><a href="../dart_core/Error.html">Error</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../dart_core/Error_StackTraceOnThrow.html">Error_StackTraceOnThrow</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-exception"></span><a href="../dart_core/StateError.html">StateError</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-exception"></span><strong>DisposedError</strong></span></p>
 <div>
 <h3>Constructors</h3>
-<div class="method"><h4 id="DisposedError">
+<div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>DisposedError</strong>() <a class="anchor-link" href="#DisposedError"
+new <strong>DisposedError</strong>() <a class="anchor-link" href="#"
               title="Permalink to DisposedError.DisposedError">#</a></h4>
 <div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
 DisposedError() : super('Invalid operation on disposed object');
 </pre>
@@ -74,7 +80,13 @@ final <a href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a>
             href="#stackTrace"
             title="Permalink to DisposedError.stackTrace">#</a>
         </h4>
-        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Error.html">Error</a> </div><div class="doc">
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Error_StackTraceOnThrow.html">Error_StackTraceOnThrow</a> </div><div class="doc">
+<p>Captures the current stack-trace when thrown.</p>
+<p>Classes extending or mixing-in this class will automatically have a stack
+trace captured the first time they are thrown. This stack trace is returned
+by the <a class="crossref" href="../dart_core/StackTraceOnThrow.html#stackTrace">stackTrace</a> getter.</p>
+<p>Throwing the object again will not cause overwrite the first stack trace,
+so bjects that are <code>StackTraceOnThrow</code> instances should not be reused.</p>
 <pre class="source">
 external StackTrace get stackTrace;
 </pre>

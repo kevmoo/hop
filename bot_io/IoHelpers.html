@@ -41,10 +41,13 @@ class IoHelpers {
    return dir.exists()
        .then((bool doesExist) {
          if(!doesExist) {
-           return new Future.value(false);
+           return false;
          } else {
+           // Would rather be using .isEmpty here, but we have a
+           // DARTBUG
+           // https://code.google.com/p/dart/issues/detail?id=10163
            return EntityValidator.validateDirectoryFromMap(dir, content)
-               .isEmpty;
+               .length.then((length) =&gt; length == 0);
          }
        });
  }
@@ -70,10 +73,13 @@ static Future&lt;bool&gt; verifyContents(Directory dir, Map&lt;String, dynamic&g
  return dir.exists()
      .then((bool doesExist) {
        if(!doesExist) {
-         return new Future.value(false);
+         return false;
        } else {
+         // Would rather be using .isEmpty here, but we have a
+         // DARTBUG
+         // https://code.google.com/p/dart/issues/detail?id=10163
          return EntityValidator.validateDirectoryFromMap(dir, content)
-             .isEmpty;
+             .length.then((length) =&gt; length == 0);
        }
      });
 }
