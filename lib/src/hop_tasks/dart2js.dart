@@ -19,6 +19,7 @@ class CompilerTargetType {
 Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
   String packageRoot, bool minify: false, bool allowUnsafeEval: true,
   bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false,
+  bool throwOnError: false, bool verbose: true,
   CompilerTargetType outputType: CompilerTargetType.JS,
   String outputMapper(String source)}) {
 
@@ -63,7 +64,8 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
 
             return _dart2js(context, path,
                 output, packageRoot, minify, allowUnsafeEval,
-                liveTypeAnalysis, rejectDeprecatedFeatures, outputType)
+                liveTypeAnalysis, rejectDeprecatedFeatures,
+                throwOnError, verbose, outputType)
                 .then((bool success) {
                   // should not have been run if we had pending errors
                   assert(errors == false);
@@ -89,7 +91,8 @@ String _dart2DartOutputMapper(String input) {
 
 Future<bool> _dart2js(TaskContext ctx, String file,
     String output, String packageRoot, bool minify, bool allowUnsafeEval,
-    bool liveTypeAnalysis, bool rejectDeprecatedFeatures, CompilerTargetType outputType) {
+    bool liveTypeAnalysis, bool rejectDeprecatedFeatures, bool throwOnError,
+    bool verbose, CompilerTargetType outputType) {
 
   requireArgumentNotNullOrEmpty(output, 'output');
 
@@ -102,11 +105,17 @@ Future<bool> _dart2js(TaskContext ctx, String file,
   assert(packageDir.existsSync());
 
   final args = ["--package-root=${packageDir.path}",
-                '--throw-on-error',
-                '-v',
                 "--output-type=${outputType.fileExt}",
                 "--out=$output",
                 file];
+
+  if (verbose) {
+    args.add('--verbose');
+  }
+
+  if(throwOnError) {
+    args.add('--throw-on-error');
+  }
 
   if(liveTypeAnalysis == false) {
     args.add('--disable-native-live-type-analysis');
