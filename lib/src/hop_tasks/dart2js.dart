@@ -1,13 +1,17 @@
 part of hop_tasks;
 
 class CompilerTargetType {
-  final String _value;
-  const CompilerTargetType._internal(this._value);
-  String toString() => 'CompilerTargetType.$_value';
-  String get fileExt => _value;
 
-  static const JS = const CompilerTargetType._internal('js');
-  static const DART = const CompilerTargetType._internal('dart');
+  static const JS = const CompilerTargetType._('js', 'Javascript');
+  static const DART = const CompilerTargetType._('dart', 'Dart');
+
+  final String fileExt;
+  final String friendlyName;
+
+  const CompilerTargetType._(this.fileExt, this.friendlyName);
+
+  @override
+  String toString() => 'CompilerTargetType.$fileExt';
 }
 
 /**
@@ -24,8 +28,6 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
   String outputMapper(String source)}) {
 
   requireArgument(outputType == CompilerTargetType.JS || outputType == CompilerTargetType.DART, 'outputType');
-
-  final friendlyName = (outputType == CompilerTargetType.JS) ? 'Javascript' : 'Dart';
 
   if(singleOutput != null && outputMapper != null) {
     throw new ArgumentError('Only one of "singleOutput" and "outputMapper" can be set.');
@@ -76,7 +78,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
         .then((_) {
           return !errors;
         });
-  }, description: 'Run Dart-to-$friendlyName compiler');
+  }, description: 'Run Dart-to-${outputType.friendlyName} compiler');
 }
 
 String _dart2jsOutputMapper(String input) => input + '.js';
