@@ -7,7 +7,7 @@ import 'package:unittest/unittest.dart';
 import 'package:bot/bot.dart';
 import 'package:bot_io/bot_git.dart';
 import 'package:bot_io/bot_io.dart';
-import 'package:bot/bot_test.dart';
+import 'package:bot_test/bot_test.dart';
 import 'package:hop/hop.dart';
 import 'package:hop/hop_tasks.dart';
 import '../hop/_hop.dart';
