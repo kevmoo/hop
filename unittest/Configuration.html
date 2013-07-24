@@ -69,8 +69,8 @@ class Configuration {
 
  // If stopTestOnExpectFailure is false, we need to capture failures, which
  // we do with this List.
- List _testLogBuffer = new List();
- 
+ final _testLogBuffer = &lt;Pair&lt;String, Trace&gt;&gt;[];
+
  /**
   * The constructor sets up a failure handler for [expect] that redirects
   * [expect] failures to [onExpectFailure].
@@ -113,24 +113,25 @@ class Configuration {
    if (!stopTestOnExpectFailure &amp;&amp; _testLogBuffer.length &gt; 0) {
      // Write the message/stack pairs up to the last pairs.
      var reason = new StringBuffer();
-     for (var i = 0; i &lt; _testLogBuffer.length - 2; i += 2) {
-       reason.write(_testLogBuffer[i]);
+     for (var reasonAndTrace in
+            _testLogBuffer.take(_testLogBuffer.length - 1)) {
+       reason.write(reasonAndTrace.first);
        reason.write('\n');
-       reason.write(_formatStack(_testLogBuffer[i+1]));
+       reason.write(reasonAndTrace.last);
        reason.write('\n');
      }
+     var lastReasonAndTrace = _testLogBuffer.last;
      // Write the last message.
-     reason.write(_testLogBuffer[_testLogBuffer.length - 2]);
+     reason.write(lastReasonAndTrace.first);
      if (testCase.result == PASS) {
        testCase._result = FAIL;
        testCase._message = reason.toString();
        // Use the last stack as the overall failure stack.    
-       testCase._stackTrace = 
-           _formatStack(_testLogBuffer[_testLogBuffer.length - 1]);
+       testCase._stackTrace = lastReasonAndTrace.last;
      } else {
        // Add the last stack to the message; we have a further stack
        // caused by some other failure.
-       reason.write(_formatStack(_testLogBuffer[_testLogBuffer.length - 1]));
+       reason.write(lastReasonAndTrace.last);
        reason.write('\n');
        // Add the existing reason to the end of the expect log to 
        // create the final message.
@@ -164,11 +165,11 @@ class Configuration {
    if (stopTestOnExpectFailure) {
      throw new TestFailure(reason);
    } else {
-     _testLogBuffer.add(reason);
      try {
        throw '';
      } catch (_, stack) {
-       _testLogBuffer.add(stack);
+       _testLogBuffer.add(
+           new Pair&lt;String, Trace&gt;(reason, new Trace.from(stack)));
      }
    }
  }
@@ -184,12 +185,12 @@ class Configuration {
    result.write("\n");
 
    if (testCase.message != '') {
-     result.write(_indent(testCase.message));
+     result.write(indent(testCase.message));
      result.write("\n");
    }
 
-   if (testCase.stackTrace != null &amp;&amp; testCase.stackTrace != '') {
-     result.write(_indent(testCase.stackTrace));
+   if (testCase.stackTrace != null) {
+     result.write(indent(testCase.stackTrace.toString()));
      result.write("\n");
    }
    return result.toString();
@@ -242,17 +243,10 @@ class Configuration {
    }
  }
 
- String _indent(String str) {
-   // TODO(nweiz): Use this simpler code once issue 2980 is fixed.
-   // return str.replaceAll(new RegExp("^", multiLine: true), "  ");
-
-   return str.split("\n").map((line) =&gt; "  $line").join("\n");
- }
-
  /** Handle errors that happen outside the tests. */
  // TODO(vsm): figure out how to expose the stack trace here
  // Currently e.message works in dartium, but not in dartc.
- void handleExternalError(e, String message, [String stack = '']) =&gt;
+ void handleExternalError(e, String message, [stack]) =&gt;
      _reportTestError('$message\nCaught $e', stack);
 
  _postMessage(String message) {
@@ -357,12 +351,12 @@ String formatResult(TestCase testCase) {
  result.write("\n");
 
  if (testCase.message != '') {
-   result.write(_indent(testCase.message));
+   result.write(indent(testCase.message));
    result.write("\n");
  }
 
- if (testCase.stackTrace != null &amp;&amp; testCase.stackTrace != '') {
-   result.write(_indent(testCase.stackTrace));
+ if (testCase.stackTrace != null) {
+   result.write(indent(testCase.stackTrace.toString()));
    result.write("\n");
  }
  return result.toString();
@@ -372,12 +366,12 @@ String formatResult(TestCase testCase) {
 </div>
 <div class="method"><h4 id="handleExternalError">
 <button class="show-code">Code</button>
-void <strong>handleExternalError</strong>(e, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [<a href="http://api.dartlang.org/dart_core/String.html">String</a> stack = '']) <a class="anchor-link" href="#handleExternalError"
+void <strong>handleExternalError</strong>(e, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [stack]) <a class="anchor-link" href="#handleExternalError"
               title="Permalink to Configuration.handleExternalError">#</a></h4>
 <div class="doc">
 <p>Handle errors that happen outside the tests. </p>
 <pre class="source">
-void handleExternalError(e, String message, [String stack = '']) =&gt;
+void handleExternalError(e, String message, [stack]) =&gt;
    _reportTestError('$message\nCaught $e', stack);
 </pre>
 </div>
@@ -417,11 +411,11 @@ void onExpectFailure(String reason) {
  if (stopTestOnExpectFailure) {
    throw new TestFailure(reason);
  } else {
-   _testLogBuffer.add(reason);
    try {
      throw '';
    } catch (_, stack) {
-     _testLogBuffer.add(stack);
+     _testLogBuffer.add(
+         new Pair&lt;String, Trace&gt;(reason, new Trace.from(stack)));
    }
  }
 }
@@ -522,24 +516,25 @@ void onTestResult(TestCase testCase) {
  if (!stopTestOnExpectFailure &amp;&amp; _testLogBuffer.length &gt; 0) {
    // Write the message/stack pairs up to the last pairs.
    var reason = new StringBuffer();
-   for (var i = 0; i &lt; _testLogBuffer.length - 2; i += 2) {
-     reason.write(_testLogBuffer[i]);
+   for (var reasonAndTrace in
+          _testLogBuffer.take(_testLogBuffer.length - 1)) {
+     reason.write(reasonAndTrace.first);
      reason.write('\n');
-     reason.write(_formatStack(_testLogBuffer[i+1]));
+     reason.write(reasonAndTrace.last);
      reason.write('\n');
    }
+   var lastReasonAndTrace = _testLogBuffer.last;
    // Write the last message.
-   reason.write(_testLogBuffer[_testLogBuffer.length - 2]);
+   reason.write(lastReasonAndTrace.first);
    if (testCase.result == PASS) {
      testCase._result = FAIL;
      testCase._message = reason.toString();
      // Use the last stack as the overall failure stack.    
-     testCase._stackTrace = 
-         _formatStack(_testLogBuffer[_testLogBuffer.length - 1]);
+     testCase._stackTrace = lastReasonAndTrace.last;
    } else {
      // Add the last stack to the message; we have a further stack
      // caused by some other failure.
-     reason.write(_formatStack(_testLogBuffer[_testLogBuffer.length - 1]));
+     reason.write(lastReasonAndTrace.last);
      reason.write('\n');
      // Add the existing reason to the end of the expect log to 
      // create the final message.

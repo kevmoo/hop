@@ -1,0 +1,65 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>stack_trace.src.utils Library / HOP Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="stack_trace.src.utils">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">HOP Documentation</a>
+         &rsaquo; <a href="stack_trace.src.utils.html">stack_trace.src.utils</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>stack_trace.src.utils</strong> library</h2>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="padRight">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>padRight</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> string, <a href="http://api.dartlang.org/dart_core/int.html">int</a> length) <a class="anchor-link" href="#padRight"
+              title="Permalink to padRight">#</a></h4>
+<div class="doc">
+<p>Returns 
+<span class="param">string</span> with enough spaces added to the end to make it 
+<span class="param">length</span>
+characters long.</p>
+<pre class="source">
+String padRight(String string, int length) {
+ if (string.length &gt;= length) return string;
+
+ var result = new StringBuffer();
+ result.write(string);
+ for (var i = 0; i &lt; length - string.length; i++) {
+   result.write(' ');
+ }
+
+ return result.toString();
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

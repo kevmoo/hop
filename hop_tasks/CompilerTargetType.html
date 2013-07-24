@@ -34,13 +34,17 @@
 <div class="doc">
 <pre class="source">
 class CompilerTargetType {
- final String _value;
- const CompilerTargetType._internal(this._value);
- String toString() =&gt; 'CompilerTargetType.$_value';
- String get fileExt =&gt; _value;
 
- static const JS = const CompilerTargetType._internal('js');
- static const DART = const CompilerTargetType._internal('dart');
+ static const JS = const CompilerTargetType._('js', 'Javascript');
+ static const DART = const CompilerTargetType._('dart', 'Dart');
+
+ final String fileExt;
+ final String friendlyName;
+
+ const CompilerTargetType._(this.fileExt, this.friendlyName);
+
+ @override
+ String toString() =&gt; 'CompilerTargetType.$fileExt';
 }
 </pre>
 </div>
@@ -54,7 +58,7 @@ const         <strong>DART</strong> <a class="anchor-link"
         </h4>
         <div class="doc">
 <pre class="source">
-static const DART = const CompilerTargetType._internal('dart')
+static const DART = const CompilerTargetType._('dart', 'Dart')
 </pre>
 </div>
 </div>
@@ -66,7 +70,7 @@ const         <strong>JS</strong> <a class="anchor-link"
         </h4>
         <div class="doc">
 <pre class="source">
-static const JS = const CompilerTargetType._internal('js')
+static const JS = const CompilerTargetType._('js', 'Javascript')
 </pre>
 </div>
 </div>
@@ -81,7 +85,19 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
         </h4>
         <div class="doc">
 <pre class="source">
-String get fileExt =&gt; _value;
+final String fileExt
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="friendlyName">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>friendlyName</strong> <a class="anchor-link"
+            href="#friendlyName"
+            title="Permalink to CompilerTargetType.friendlyName">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String friendlyName
 </pre>
 </div>
 </div>
@@ -97,7 +113,8 @@ String get fileExt =&gt; _value;
 <p>Returns a string representation of this object.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
-String toString() =&gt; 'CompilerTargetType.$_value';
+@override
+String toString() =&gt; 'CompilerTargetType.$fileExt';
 </pre>
 </div>
 </div>

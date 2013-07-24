@@ -1,0 +1,177 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>LazyTrace class / lazy_trace Library / HOP Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="lazy_trace" data-type="LazyTrace">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">HOP Documentation</a>
+         &rsaquo; <a href="../lazy_trace.html">lazy_trace</a> &rsaquo; <a href="../lazy_trace/LazyTrace.html">LazyTrace</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>LazyTrace</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>A wrapper around a <a class="crossref" href="../lazy_trace/TraceThunk.html">TraceThunk</a>. This works around issue 9579 by avoiding
+the conversion of native <a class="crossref" href="../dart_core/StackTrace.html">StackTrace</a>s to strings until it's absolutely
+necessary.</p>
+<pre class="source">
+class LazyTrace implements Trace {
+ final TraceThunk _thunk;
+ Trace _inner;
+
+ LazyTrace(this._thunk);
+
+ Trace get _trace {
+   if (_inner == null) _inner = _thunk();
+   return _inner;
+ }
+
+ List&lt;Frame&gt; get frames =&gt; _trace.frames;
+ StackTrace get vmTrace =&gt; _trace.vmTrace;
+ Trace get terse =&gt; new LazyTrace(() =&gt; _trace.terse);
+ Trace foldFrames(bool predicate(frame)) =&gt;
+   new LazyTrace(() =&gt; _trace.foldFrames(predicate));
+ String toString() =&gt; _trace.toString();
+}
+</pre>
+</div>
+<h3>Implements</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../trace/Trace.html">Trace</a></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>LazyTrace</strong>(<a href="../lazy_trace/TraceThunk.html">TraceThunk</a> _thunk) <a class="anchor-link" href="#"
+              title="Permalink to LazyTrace.LazyTrace">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a new <a class="crossref" href="../trace/Trace.html">Trace</a> comprised of <a class="crossref" href="../lazy_trace/LazyTrace.html#frames">frames</a>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../trace/Trace.html">Trace</a> </div></div>
+<pre class="source">
+LazyTrace(this._thunk);
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="frames">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../frame/Frame.html">Frame</a>&gt;         <strong>frames</strong> <a class="anchor-link"
+            href="#frames"
+            title="Permalink to LazyTrace.frames">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>The stack frames that comprise this stack trace.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../trace/Trace.html">Trace</a> </div></div>
+<pre class="source">
+List&lt;Frame&gt; get frames =&gt; _trace.frames;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="terse">
+<button class="show-code">Code</button>
+final <a href="../trace/Trace.html">Trace</a>         <strong>terse</strong> <a class="anchor-link"
+            href="#terse"
+            title="Permalink to LazyTrace.terse">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>Returns a terser version of <code>this</code>.</p>
+<p>This is accomplished by folding together multiple stack frames from the
+core library, as in <a class="crossref" href="../lazy_trace/LazyTrace.html#foldFrames">foldFrames</a>. Remaining core library frames have their
+libraries, "-patch" suffixes, and line numbers removed.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../trace/Trace.html">Trace</a> </div></div>
+<pre class="source">
+Trace get terse =&gt; new LazyTrace(() =&gt; _trace.terse);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="vmTrace">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a>         <strong>vmTrace</strong> <a class="anchor-link"
+            href="#vmTrace"
+            title="Permalink to LazyTrace.vmTrace">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>Returns a VM-style <a class="crossref" href="../dart_core/StackTrace.html">StackTrace</a> object.</p>
+<p>The return value's <a class="crossref" href="../lazy_trace/LazyTrace.html#toString">toString</a> method will always return a string
+representation in the Dart VM's stack trace format, regardless of what
+platform is being used.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../trace/Trace.html">Trace</a> </div></div>
+<pre class="source">
+StackTrace get vmTrace =&gt; _trace.vmTrace;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="foldFrames">
+<button class="show-code">Code</button>
+<a href="../trace/Trace.html">Trace</a> <strong>foldFrames</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> predicate(frame)) <a class="anchor-link" href="#foldFrames"
+              title="Permalink to LazyTrace.foldFrames">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a new <a class="crossref" href="../trace/Trace.html">Trace</a> based on <code>this</code> where multiple stack frames matching
+
+<span class="param">predicate</span> are folded together. This means that whenever there are
+multiple frames in a row that match 
+<span class="param">predicate</span>, only the last one is
+kept.</p>
+<p>This is useful for limiting the amount of library code that appears in a
+stack trace by only showing user code and code that's called by user code.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../trace/Trace.html">Trace</a> </div></div>
+<pre class="source">
+Trace foldFrames(bool predicate(frame)) =&gt;
+ new LazyTrace(() =&gt; _trace.foldFrames(predicate));
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to LazyTrace.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a human-readable string representation of <code>this</code>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../trace/Trace.html">Trace</a> </div></div>
+<pre class="source">
+String toString() =&gt; _trace.toString();
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

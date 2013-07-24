@@ -29,6 +29,19 @@
 <h2><strong>utils</strong> library</h2>
 <div>
 <h3>Functions</h3>
+<div class="method"><h4 id="indent">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>indent</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> str) <a class="anchor-link" href="#indent"
+              title="Permalink to indent">#</a></h4>
+<div class="doc">
+<p>Indent each line in 
+<span class="param">str</span> by two spaces. </p>
+<pre class="source">
+String indent(String str) =&gt;
+ str.replaceAll(new RegExp("^", multiLine: true), "  ");
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="escapeString">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>escapeString</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> source) <a class="anchor-link" href="#escapeString"
@@ -70,6 +83,15 @@ String typeName(x) {
 </pre>
 </div>
 </div>
+</div>
+<div>
+<h3>Classes</h3>
+          <div class="type">
+          <h4>
+            <a href="utils/Pair.html"><strong>Pair&lt;E, F&gt;</strong></a>
+          </h4>
+          </div>
+          
 </div>
         </div>
         <div class="clear"></div>

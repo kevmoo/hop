@@ -2,19 +2,19 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>ArgCompleter typedef / bot_io Library / HOP Documentation</title>
+        <title>TraceThunk typedef / lazy_trace Library / HOP Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="../favicon.ico">
         
         </head>
-        <body data-library="bot_io" data-type="ArgCompleter">
+        <body data-library="lazy_trace" data-type="TraceThunk">
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
           <a href="../index.html">HOP Documentation</a>
-         &rsaquo; <a href="../bot_io.html">bot_io</a> &rsaquo; <a href="../bot_io/ArgCompleter.html">ArgCompleter</a>        <div id="search-box">
+         &rsaquo; <a href="../lazy_trace.html">lazy_trace</a> &rsaquo; <a href="../lazy_trace/TraceThunk.html">TraceThunk</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
         </div>
@@ -26,23 +26,24 @@
         
 </div>
 <div class="content">
-        <h2><strong>ArgCompleter</strong>
+        <h2><strong>TraceThunk</strong>
           typedef
         </h2>
         
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
+<p>A thunk for lazily constructing a <a class="crossref" href="../trace/Trace.html">Trace</a>.</p>
 <pre class="source">
-typedef List&lt;String&gt; ArgCompleter(List&lt;String&gt; args, String compLine, int compPoint);
+typedef Trace TraceThunk();
 </pre>
 </div>
-<div class="method"><h4 id="ArgCompleter">
+<div class="method"><h4 id="TraceThunk">
 <button class="show-code">Code</button>
-typedef <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; ArgCompleter(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; args, <a href="http://api.dartlang.org/dart_core/String.html">String</a> compLine, <a href="http://api.dartlang.org/dart_core/int.html">int</a> compPoint) <a class="anchor-link" href="#ArgCompleter"
-              title="Permalink to ArgCompleter">#</a></h4>
+typedef <a href="../trace/Trace.html">Trace</a> TraceThunk() <a class="anchor-link" href="#TraceThunk"
+              title="Permalink to TraceThunk">#</a></h4>
 <div class="doc">
 <pre class="source">
-typedef List&lt;String&gt; ArgCompleter(List&lt;String&gt; args, String compLine, int compPoint);
+typedef Trace TraceThunk();
 </pre>
 </div>
 </div>
