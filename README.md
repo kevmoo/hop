@@ -7,7 +7,7 @@
 
 * [Pop, Pop, Win!](https://github.com/dart-lang/pop-pop-win) - Minesweeper with balloons
 * [Dart Widgets](https://github.com/dart-lang/widget.dart) - Reusable Web Components
-* [Lawndart](https://github.com/sethladd/lawndart) - Unified, asynchronous, easy-to-use library for browser-based storage. Kinda sorta a port of Lawnchair to Dart.
+* [Lawndart](https://github.com/sethladd/lawndart) - Unified, asynchronous, easy-to-use library for browser-based storage.
 * [Spectre](https://github.com/johnmccutchan/spectre) - Spectre Graphics Engine for Dart
 * [vector_math](https://github.com/johnmccutchan/vector_math) - A Vector math library for 2D and 3D applications.
 * [Dart Client Generator for Discovery APIs](https://github.com/dart-gde/discovery_api_dart_client_generator)
