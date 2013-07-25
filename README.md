@@ -5,11 +5,15 @@
 
 # Projects using HOP
 
-* [chrome.dart](https://github.com/dart-gde/chrome.dart) - Dart interop with chrome.* APIs for Chrome Packaged Apps
 * [Pop, Pop, Win!](https://github.com/dart-lang/pop-pop-win) - Minesweeper with balloons
+* [Dart Widgets](https://github.com/dart-lang/widget.dart) - Reusable Web Components
+* [Lawndart](https://github.com/sethladd/lawndart) - Unified, asynchronous, easy-to-use library for browser-based storage. Kinda sorta a port of Lawnchair to Dart.
+* [Spectre](https://github.com/johnmccutchan/spectre) - Spectre Graphics Engine for Dart
+* [vector_math](https://github.com/johnmccutchan/vector_math) - A Vector math library for 2D and 3D applications.
+* [Dart Client Generator for Discovery APIs](https://github.com/dart-gde/discovery_api_dart_client_generator)
+* [chrome.dart](https://github.com/dart-gde/chrome.dart) - Dart interop with chrome.* APIs for Chrome Packaged Apps
 * [qr.dart](https://github.com/kevmoo/qr.dart) - Generate QR codes
 * [vote.dart](https://github.com/kevmoo/vote.dart) - Simulate, run, and calculate elections with different election methods
-* [Dart Widgets](https://github.com/kevmoo/widget.dart) - Reusable Web Components
 
 # Try It Now
 
@@ -36,7 +40,7 @@ dependencies:
 
 * We're going to try to keep __HOP__ in line with the [latest integration build](https://gsdview.appspot.com/dart-editor-archive-integration/latest/) of the Dart SDK and Editor.
 * At this point, each SDK release tends to introduce breaking changes, which usually require breaking changes in __HOP__.
-* Keep an eye on the [changelog](https://github.com/kevmoo/hop.dart/blob/master/changelog.md) to see how __HOP__ aligns with each SDK release. 
+* Keep an eye on the [changelog](https://github.com/kevmoo/hop.dart/blob/master/changelog.md) to see how __HOP__ aligns with each SDK release.
 
 # The libraries
 
