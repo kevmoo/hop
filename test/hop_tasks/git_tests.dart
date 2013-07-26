@@ -180,9 +180,7 @@ class GitTests {
             });
   }
 
-  static Task _createBranchTask(String workingDir) {
-    return new Task.async((ctx) =>
-        branchForDir(ctx, _masterBranch, 'docs_dir', _testBranch,
-            workingDir: workingDir));
-  }
+  static Task _createBranchTask(String workingDir) =>
+    getBranchForDirTask(_masterBranch, 'docs_dir', _testBranch,
+            workingDir: workingDir);
 }
