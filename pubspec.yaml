@@ -10,10 +10,10 @@ dependencies:
   args: '>=0.6.9'
   bot: '>=0.23.0'
   bot_io: '>=0.23.1'
+  html5lib: '>=0.4.4'
   logging: '>=0.6.9'
   meta: '>=0.6.9'
   path: '>=0.6.9'
   unittest: '>=0.6.9'
 dev_dependencies:
   bot_test: '>=0.1.1'
-  html5lib: '>=0.4.4'
