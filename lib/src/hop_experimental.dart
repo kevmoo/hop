@@ -9,7 +9,7 @@ import 'package:html5lib/parser.dart';
 import 'package:bot/bot.dart';
 
 Future<bool> transformHtml(String filePath,
-    Func1<dom.Document, Future<dom.Document>> transformer) {
+    Future<dom.Document> transformer(dom.Document doc)) {
 
   return transformFile(filePath, (String content) {
     var parser = new HtmlParser(content, generateSpans: true);
@@ -23,7 +23,7 @@ Future<bool> transformHtml(String filePath,
 }
 
 Future<bool> transformFile(String filePath,
-    Func1<String, Future<String>> transformer) {
+    Future<String> transformer(String input)) {
 
   final file = new File(filePath);
   assert(file.existsSync());
