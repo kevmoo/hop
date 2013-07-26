@@ -14,6 +14,10 @@ const _outputTitle = 'Hop Documentation';
 const _tagLine = 'Hop - Dart Task Framework';
 const _sourceHref = 'https://github.com/kevmoo/hop.dart';
 
+bool _myLibFilter(String libName) {
+  return libName.startsWith('hop');
+}
+
 Future postBuild(TaskLogger logger, String tempDocDir) {
 
   final indexPath = path.join(tempDocDir, 'index.html');
@@ -26,6 +30,7 @@ Future postBuild(TaskLogger logger, String tempDocDir) {
       })
       .then((_) {
         logger.info('Copying resources');
+        // TODO: make this non-bash specific
         return Process.run('bash', ['-c', 'cp resource/* $tempDocDir']);
       })
       .then((ProcessResult pr) {
@@ -60,7 +65,7 @@ Future<Document> _updateIndex(Document source) {
       .singleWhere((Element div) => div.attributes['class'] == 'content');
 
   // should only have h3 and h4 elements
-  final hopHeaders = new List<Element>();
+  final targetLibraryHeaders = new List<Element>();
   final otherHeaders = new List<Element>();
 
   for(final child in contentDiv.children) {
@@ -74,8 +79,8 @@ Future<Document> _updateIndex(Document source) {
 
       final libName = anchor.innerHtml;
 
-      if(libName.startsWith('hop')) {
-        hopHeaders.add(child);
+      if(_myLibFilter(libName)) {
+        targetLibraryHeaders.add(child);
       } else {
         otherHeaders.add(child);
       }
@@ -96,7 +101,7 @@ Future<Document> _updateIndex(Document source) {
 
   };
 
-  doSection(_tagLine, hopHeaders);
+  doSection(_tagLine, targetLibraryHeaders);
   doSection('Dependencies', otherHeaders);
 
   return new Future<Document>.value(source);
