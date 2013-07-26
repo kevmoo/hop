@@ -9,7 +9,10 @@ import 'package:html5lib/dom.dart';
 import 'package:hop/src/hop_experimental.dart';
 
 const _sourceTitle = 'Dart Documentation';
-const _outputTitle = 'HOP Documentation';
+
+const _outputTitle = 'Hop Documentation';
+const _tagLine = 'Hop - Dart Task Framework';
+const _sourceHref = 'https://github.com/kevmoo/hop.dart';
 
 Future postBuild(TaskLogger logger, String tempDocDir) {
 
@@ -93,7 +96,7 @@ Future<Document> _updateIndex(Document source) {
 
   };
 
-  doSection('Hop Task Framework', hopHeaders);
+  doSection(_tagLine, hopHeaders);
   doSection('Dependencies', otherHeaders);
 
   return new Future<Document>.value(source);
@@ -104,19 +107,18 @@ Element _getAboutElement() {
     ..attributes['src'] = 'logo.png'
     ..attributes['width'] = '500'
     ..attributes['height'] = '304'
-    ..attributes['title'] = 'HOP - Dart Task Framework';
+    ..attributes['title'] = _tagLine;
 
   final logoLink = new Element.tag('a')
-    ..attributes['href'] = 'https://github.com/kevmoo/hop.dart'
+    ..attributes['href'] = _sourceHref
     ..children.add(logo);
 
   final sourceLabel = new Element.tag('strong')
     ..innerHtml = 'Source code: ';
 
   final ghLink = new Element.tag('a')
-  ..attributes['href'] = 'https://github.com/kevmoo/hop.dart'
-  ..innerHtml = 'github.com/kevmoo/hop.dart';
-
+  ..attributes['href'] = _sourceHref
+  ..innerHtml = _sourceHref;
 
   return new Element.tag('div')
     ..attributes['class'] = 'about'
