@@ -1,4 +1,4 @@
-library tool.tasks.shared;
+library hop_experimental;
 
 import 'dart:async';
 import 'dart:io';

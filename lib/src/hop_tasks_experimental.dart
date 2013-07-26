@@ -1,4 +1,4 @@
-library tool.tasks.dartdoc;
+library hop_tasks_experimental;
 
 import 'dart:async';
 import 'dart:io';
@@ -6,7 +6,7 @@ import 'package:hop/hop.dart';
 import 'package:path/path.dart' as path;
 import 'package:html5lib/dom.dart';
 
-import 'shared.dart';
+import 'package:hop/src/hop_experimental.dart';
 
 const _sourceTitle = 'Dart Documentation';
 const _outputTitle = 'HOP Documentation';

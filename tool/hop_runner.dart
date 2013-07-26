@@ -7,7 +7,7 @@ import 'package:hop/hop.dart';
 import 'package:hop/hop_tasks.dart';
 import '../test/harness_console.dart' as test_console;
 
-import 'tasks/dartdoc_postbuild.dart' as dartdoc;
+import 'package:hop/src/hop_tasks_experimental.dart' as dartdoc;
 
 void main() {
   // Easy to enable hop-wide logging
