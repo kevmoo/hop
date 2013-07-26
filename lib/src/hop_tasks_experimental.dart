@@ -65,8 +65,8 @@ Future<Document> _updateIndex(Document source) {
       .singleWhere((Element div) => div.attributes['class'] == 'content');
 
   // should only have h3 and h4 elements
-  final targetLibraryHeaders = new List<Element>();
-  final otherHeaders = new List<Element>();
+  final targetLibraryHeaders = new Map<String, Element>();
+  final otherHeaders = new Map<String, Element>();
 
   for(final child in contentDiv.children) {
     assert(child.tagName == 'h2' || child.tagName == 'h3' || child.tagName == 'h4');
@@ -80,9 +80,9 @@ Future<Document> _updateIndex(Document source) {
       final libName = anchor.innerHtml;
 
       if(_myLibFilter(libName)) {
-        targetLibraryHeaders.add(child);
+        targetLibraryHeaders[libName] = child;
       } else {
-        otherHeaders.add(child);
+        otherHeaders[libName] = child;
       }
     }
   }
@@ -91,12 +91,18 @@ Future<Document> _updateIndex(Document source) {
 
   contentDiv.children.add(_getAboutElement());
 
-  final doSection = (String name, List<Element> sectionContent) {
+  final doSection = (String name, Map<String, Element> sectionContent) {
     if(!sectionContent.isEmpty) {
       contentDiv.children.add(new Element.tag('h3')
         ..innerHtml = name);
 
-      contentDiv.children.addAll(sectionContent);
+      var orderedSectionKeys = sectionContent.keys
+          .toList(growable: false)
+          ..sort();
+
+      for(var k in orderedSectionKeys) {
+        contentDiv.children.add(sectionContent[k]);
+      }
     }
 
   };
