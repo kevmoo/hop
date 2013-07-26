@@ -89,16 +89,9 @@ Future<bool> _processDartAnalyzerFile(TaskContext context,
 
 Future<int> _dartAnalyzer(TaskLogger logger, String filePath, bool verbose,
     bool formatMachine) {
-  TempDir tmpDir;
 
-  String packagesPath = null;
   return _getPackagesDir(filePath)
-      .then((String val) {
-        packagesPath = val;
-        return TempDir.create();
-      })
-      .then((TempDir td) {
-        tmpDir = td;
+      .then((String packagesPath) {
 
         var processArgs = [];
 
@@ -121,11 +114,6 @@ Future<int> _dartAnalyzer(TaskLogger logger, String filePath, bool verbose,
               stdErrWriter: logger.severe);
         } else {
           return pipeProcess(process);
-        }
-      })
-      .whenComplete(() {
-        if(tmpDir != null) {
-          tmpDir.dispose();
         }
       });
 }
