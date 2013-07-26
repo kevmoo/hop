@@ -5,51 +5,48 @@ class GitTests {
   static const _masterBranch = 'master';
   static const _testBranch = 'targetBranch';
 
+  static const sourceDirMap = const {
+    'file.txt' : 'file contents',
+    'docs_dir' : const {
+      'doc.txt' : 'the doc'
+    }
+  };
+
+  static const testContent2 = const {
+    'file2.txt': 'file 2 contents',
+    'file3.txt': 'file 3 contents'
+  };
+
+  static const testContent3 = const {
+    'file4.txt': 'file 4 contents',
+    'file5.txt': 'file 5 contents',
+    'docs_dir' : const {
+      'doc2.txt' : 'the other doc'
+    },
+    'foo-dir': const {
+      'foo_file.txt': 'full of foo'
+    }
+  };
+
+
   static void register() {
 
     group('git', () {
+      test('create branch from dir', () => TempDir.then(_testCreateBranch));
+    });
+  }
 
-      test('create branch from dir', () {
+  static Future _testCreateBranch(Directory dir) {
 
-        final sourceDirMap = const {
-          'file.txt' : 'file contents',
-          'docs_dir' : const {
-            'doc.txt' : 'the doc'
-          }
-        };
-
-        final testContent2 = const {
-          'file2.txt': 'file 2 contents',
-          'file3.txt': 'file 3 contents'
-        };
-
-        final testContent3 = const {
-          'file4.txt': 'file 4 contents',
-          'file5.txt': 'file 5 contents',
-          'docs_dir' : const {
-            'doc2.txt' : 'the other doc'
-          },
-          'foo-dir': const {
-            'foo_file.txt': 'full of foo'
-          }
-        };
-
-        TempDir tempDir;
         GitDir gitDir;
 
-        return TempDir.create()
-            .then((TempDir value) {
-              tempDir = value;
-
-              // populate the temp dir.
-              return tempDir.populate(sourceDirMap);
-            })
-            .then((TempDir value) {
-              assert(value == tempDir);
+        return EntityPopulater.populate(dir.path, sourceDirMap, leaveExistingDirs: true)
+            .then((Directory value) {
+              assert(value.path == dir.path);
 
               // new we're populated.
               // now make this a git dir
-              return GitDir.init(tempDir.dir, allowContent: true);
+              return GitDir.init(dir, allowContent: true);
             })
             .then((GitDir value) {
               gitDir = value;
@@ -112,7 +109,7 @@ class GitTests {
               expect(counts[1], 1);
 
               // populate the temp dir.
-              return tempDir.populate(testContent2);
+              return EntityPopulater.populate(dir.path, testContent2, leaveExistingDirs: true);
             })
             .then((_) {
               // now add all files to staging
@@ -148,7 +145,7 @@ class GitTests {
             })
             .then((_) {
               // populate the temp dir.
-              return tempDir.populate(testContent3);
+              return EntityPopulater.populate(dir.path, testContent3, leaveExistingDirs: true);
             })
             .then((_) {
               // now add all files to staging
@@ -180,16 +177,7 @@ class GitTests {
               expect(counts, hasLength(2));
               expect(counts[0], 3);
               expect(counts[1], 2, reason: 'content in docs changed. We have 2 commits now');
-            })
-            .whenComplete(() {
-              if(tempDir != null) {
-                tempDir.dispose();
-              }
             });
-      });
-
-    });
-
   }
 
   static Task _createBranchTask(String workingDir) {
