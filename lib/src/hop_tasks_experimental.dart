@@ -2,6 +2,7 @@ library hop_tasks_experimental;
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:json' as json;
 import 'package:hop/hop.dart';
 import 'package:path/path.dart' as path;
 import 'package:html5lib/dom.dart';
@@ -35,7 +36,34 @@ Future postBuild(TaskLogger logger, String tempDocDir) {
       })
       .then((ProcessResult pr) {
         assert(pr.exitCode == 0);
+
+        logger.info('Fixing apidoc.json');
+        final apiDocJsonPath = path.join(tempDocDir, 'nav.json');
+        assert(FileSystemEntity.isFileSync(apiDocJsonPath));
+        return transformFile(apiDocJsonPath, _fixApiDoc);
       });
+}
+
+Future<String> _fixApiDoc(String jsonInput) {
+
+  List navList = json.parse(jsonInput);
+
+  var navMap = new Map<String, Map>();
+
+  for(var foo in navList) {
+    var name = foo['name'];
+    navMap[name] = foo;
+  }
+
+  var sorted = navMap.keys.toList()
+      ..sort();
+
+  navList = sorted.map((String name) => navMap[name])
+      .toList();
+
+  jsonInput = json.stringify(navList);
+
+  return new Future.value(jsonInput);
 }
 
 Future _updateTitles(String tempDocDir) {
