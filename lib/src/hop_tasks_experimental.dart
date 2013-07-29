@@ -12,7 +12,7 @@ import 'package:hop/src/hop_experimental.dart';
 const _sourceTitle = 'Dart Documentation';
 
 const _outputTitle = 'Hop Documentation';
-const _tagLine = 'Hop - Dart Task Framework';
+const _tagLine = 'Hop - A Dart framework for reusable, object-oriented tasks';
 const _sourceHref = 'https://github.com/kevmoo/hop.dart';
 
 bool _myLibFilter(String libName) {
