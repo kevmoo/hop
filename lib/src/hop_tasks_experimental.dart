@@ -11,23 +11,36 @@ import 'package:hop/src/hop_experimental.dart';
 
 const _sourceTitle = 'Dart Documentation';
 
-const _outputTitle = 'Hop Documentation';
-const _tagLine = 'Hop - A Dart framework for reusable, object-oriented tasks';
-const _sourceHref = 'https://github.com/kevmoo/hop.dart';
+typedef bool LibFilter(String libName);
 
-bool _myLibFilter(String libName) {
-  return libName.startsWith('hop');
+class DocsConfig {
+  final String outputTitle;
+  final String sourceUrl;
+  final String logoPath;
+  final int logoWidth;
+  final int logoHeight;
+
+  final LibFilter libFilter;
+
+  const DocsConfig(this.outputTitle, this.sourceUrl, this.logoPath,
+      this.logoWidth, this.logoHeight, this.libFilter);
 }
 
-Future postBuild(TaskLogger logger, String tempDocDir) {
+Function createPostBuild(DocsConfig cfg) {
+  return (TaskLogger logger, String tempDocDir) {
+    return _postBuild(logger, tempDocDir, cfg);
+  };
+}
+
+Future _postBuild(TaskLogger logger, String tempDocDir, DocsConfig cfg) {
 
   final indexPath = path.join(tempDocDir, 'index.html');
 
   logger.info('Updating main page');
-  return transformHtml(indexPath, _updateIndex)
+  return transformHtml(indexPath, (doc) => _updateIndex(doc, cfg))
       .then((_) {
         logger.info('Fixing titles');
-        return _updateTitles(tempDocDir);
+        return _updateTitles(tempDocDir, cfg.outputTitle);
       })
       .then((_) {
         logger.info('Copying resources');
@@ -66,7 +79,7 @@ Future<String> _fixApiDoc(String jsonInput) {
   return new Future.value(jsonInput);
 }
 
-Future _updateTitles(String tempDocDir) {
+Future _updateTitles(String tempDocDir, String outputTitle) {
   final dir = new Directory(tempDocDir);
   return dir.list(recursive:true)
       .where((FileSystemEntity fse) => fse is File)
@@ -75,20 +88,20 @@ Future _updateTitles(String tempDocDir) {
       .toList()
       .then((List<String> files) {
         return Future.forEach(files, (String filePath) {
-          return transformFile(filePath, _updateTitle);
+          return transformFile(filePath, (filePath) => _updateTitle(filePath, '$outputTitle Documentation'));
         });
       });
 }
 
-Future<String> _updateTitle(String source) {
+Future<String> _updateTitle(String source, String outputTitle) {
   final weirdDoubleTitle = '$_sourceTitle / $_sourceTitle';
   source = source.replaceAll(weirdDoubleTitle, _sourceTitle);
 
-  source = source.replaceAll(_sourceTitle, _outputTitle);
+  source = source.replaceAll(_sourceTitle, outputTitle);
   return new Future<String>.value(source);
 }
 
-Future<Document> _updateIndex(Document source) {
+Future<Document> _updateIndex(Document source, DocsConfig cfg) {
   final contentDiv = source.queryAll('div')
       .singleWhere((Element div) => div.attributes['class'] == 'content');
 
@@ -107,7 +120,7 @@ Future<Document> _updateIndex(Document source) {
 
       final libName = anchor.innerHtml;
 
-      if(_myLibFilter(libName)) {
+      if(cfg.libFilter(libName)) {
         targetLibraryHeaders[libName] = child;
       } else {
         otherHeaders[libName] = child;
@@ -117,7 +130,7 @@ Future<Document> _updateIndex(Document source) {
 
   contentDiv.children.clear();
 
-  contentDiv.children.add(_getAboutElement());
+  contentDiv.children.add(_getAboutElement(cfg));
 
   final doSection = (String name, Map<String, Element> sectionContent) {
     if(!sectionContent.isEmpty) {
@@ -135,29 +148,29 @@ Future<Document> _updateIndex(Document source) {
 
   };
 
-  doSection(_tagLine, targetLibraryHeaders);
+  doSection(cfg.outputTitle, targetLibraryHeaders);
   doSection('Dependencies', otherHeaders);
 
   return new Future<Document>.value(source);
 }
 
-Element _getAboutElement() {
+Element _getAboutElement(DocsConfig cfg) {
   final logo = new Element.tag('img')
-    ..attributes['src'] = 'logo.png'
-    ..attributes['width'] = '500'
-    ..attributes['height'] = '304'
-    ..attributes['title'] = _tagLine;
+    ..attributes['src'] = cfg.logoPath
+    ..attributes['width'] = cfg.logoWidth.toString()
+    ..attributes['height'] = cfg.logoHeight.toString()
+    ..attributes['title'] = cfg.outputTitle;
 
   final logoLink = new Element.tag('a')
-    ..attributes['href'] = _sourceHref
+    ..attributes['href'] = cfg.sourceUrl
     ..children.add(logo);
 
   final sourceLabel = new Element.tag('strong')
     ..innerHtml = 'Source code: ';
 
   final ghLink = new Element.tag('a')
-  ..attributes['href'] = _sourceHref
-  ..innerHtml = _sourceHref;
+  ..attributes['href'] = cfg.sourceUrl
+  ..innerHtml = cfg.sourceUrl;
 
   return new Element.tag('div')
     ..attributes['class'] = 'about'

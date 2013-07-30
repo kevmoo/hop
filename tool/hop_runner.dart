@@ -15,7 +15,7 @@ void main() {
 
   addTask('test', createUnitTestTask(test_console.testCore));
 
-  addTask('docs', createDartDocTask(_getLibs, linkApi: true, postBuild: dartdoc.postBuild));
+  addTask('docs', createDartDocTask(_getLibs, linkApi: true, postBuild: dartdoc.createPostBuild(_cfg)));
 
   //
   // Analyzer
@@ -38,3 +38,6 @@ Future<List<String>> _getLibs() {
       .map((File file) => file.path)
       .toList();
 }
+
+final _cfg = new dartdoc.DocsConfig('Hop', 'https://github.com/kevmoo/hop.dart',
+    'logo.png', 500, 304, (String libName) => libName.startsWith('hop'));
