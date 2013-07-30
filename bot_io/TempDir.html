@@ -2,7 +2,7 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>TempDir class / bot_io Library / HOP Documentation</title>
+        <title>TempDir class / bot_io Library / Hop Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
@@ -13,7 +13,7 @@
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
-          <a href="../index.html">HOP Documentation</a>
+          <a href="../index.html">Hop Documentation</a>
          &rsaquo; <a href="../bot_io.html">bot_io</a> &rsaquo; <a href="../bot_io/TempDir.html">TempDir</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
@@ -37,6 +37,31 @@ class TempDir {
  final Directory dir;
 
  bool _disposed = false;
+
+ /**
+  * An easy way to create and use a temporory directory as part of an
+  * asynchronous flow.
+  *
+  * The underlying [TempDir] will be disposed when the returned [Future]
+  * completes.
+  *
+  * The value returned by [func] (if any) will be returned by [then].
+  */
+ static Future then(Future func(Directory dir)) {
+   TempDir tmpDir;
+
+   return TempDir.create()
+       .then((value) {
+         tmpDir = value;
+
+         return func(tmpDir.dir);
+       })
+       .whenComplete(() {
+         if(tmpDir != null) {
+           return tmpDir.dispose();
+         }
+       });
+ }
 
  static Future&lt;TempDir&gt; create() {
    final startDir = new Directory('');
@@ -90,6 +115,36 @@ class TempDir {
 </div>
 <div>
 <h3>Static Methods</h3>
+<div class="method"><h4 id="then">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a> <strong>then</strong>(<a href="http://api.dartlang.org/dart_async/Future.html">Future</a> func(<a href="http://api.dartlang.org/dart_io/Directory.html">Directory</a> dir)) <a class="anchor-link" href="#then"
+              title="Permalink to TempDir.then">#</a></h4>
+<div class="doc">
+<p>An easy way to create and use a temporory directory as part of an
+asynchronous flow.</p>
+<p>The underlying <a class="crossref" href="../bot_io/TempDir.html">TempDir</a> will be disposed when the returned <a class="crossref" href="../dart_async/Future.html">Future</a>
+completes.</p>
+<p>The value returned by 
+<span class="param">func</span> (if any) will be returned by <a class="crossref" href="../bot_io/TempDir.html#then">then</a>.</p>
+<pre class="source">
+static Future then(Future func(Directory dir)) {
+ TempDir tmpDir;
+
+ return TempDir.create()
+     .then((value) {
+       tmpDir = value;
+
+       return func(tmpDir.dir);
+     })
+     .whenComplete(() {
+       if(tmpDir != null) {
+         return tmpDir.dispose();
+       }
+     });
+}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="create">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../bot_io/TempDir.html">TempDir</a>&gt; <strong>create</strong>() <a class="anchor-link" href="#create"

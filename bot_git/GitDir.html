@@ -2,7 +2,7 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>GitDir class / bot_git Library / HOP Documentation</title>
+        <title>GitDir class / bot_git Library / Hop Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
@@ -13,7 +13,7 @@
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
-          <a href="../index.html">HOP Documentation</a>
+          <a href="../index.html">Hop Documentation</a>
          &rsaquo; <a href="../bot_git.html">bot_git</a> &rsaquo; <a href="../bot_git/GitDir.html">GitDir</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
@@ -378,80 +378,52 @@ class GitDir {
 
  // if branch does not exist, do simple clone, then checkout
  Future&lt;_TempDirs&gt; _getTempDirPairForNewBranch(String newBranchName) {
-   TempDir tempGitHost;
-   TempDir tempWorkDir;
-   GitDir gd;
+   _TempDirs td;
 
-   return TempDir.create()
-       .then((TempDir value) {
-         tempGitHost = value;
+   return _TempDirs.create()
+       .then((_TempDirs val) {
 
-         return TempDir.create();
-       })
-       .then((TempDir value) {
-         tempWorkDir = value;
+         td = val;
 
          // time for crazy clone tricks
          final args = ['clone', '--shared', '--no-checkout', '--bare', path, '.'];
 
-         return Git.runGit(args, processWorkingDir: tempGitHost.path);
+         return Git.runGit(args, processWorkingDir: td.gitHostDir.path);
      })
-     .then((ProcessResult pr) {
-
-       // git init
-       return new GitDir._raw(tempGitHost.path, tempWorkDir.path);
+     .then((ProcessResult _) {
+       return td.gitDir.runCommand(['checkout', '--orphan', newBranchName]);
      })
-     .then((GitDir value) {
-       gd = value;
-       return gd.runCommand(['checkout', '--orphan', newBranchName]);
-     })
-     .then((ProcessResult pr) {
+     .then((ProcessResult _) {
 
        // since we're checked out, need to clear out local content
-       return gd.runCommand(['rm', '-r', '-f', '.']);
+       return td.gitDir.runCommand(['rm', '-r', '-f', '.']);
      })
-     .then((ProcessResult pr) {
-       return new _TempDirs(gd, tempGitHost, tempWorkDir);
-     });
+     .then((ProcessResult _) =&gt; td);
  }
 
  // if branch exists, then clone to that branch, clear it out
  Future&lt;_TempDirs&gt; _getTempDirPair(String existingBranchName) {
-   TempDir tempGitHost;
-   TempDir tempWorkDir;
-   GitDir gd;
+   _TempDirs td;
 
-   return TempDir.create()
-       .then((TempDir value) {
-         tempGitHost = value;
+   return _TempDirs.create()
+       .then((_TempDirs val) {
 
-         return TempDir.create();
-       })
-       .then((TempDir value) {
-         tempWorkDir = value;
+         td = val;
 
          // time for crazy clone tricks
          final args = ['clone', '--shared', '--branch', existingBranchName, '--bare', path, '.'];
 
-         return Git.runGit(args, processWorkingDir: tempGitHost.path);
+         return Git.runGit(args, processWorkingDir: td.gitHostDir.path);
      })
-     .then((ProcessResult pr) {
-
-       // git init
-       return new GitDir._raw(tempGitHost.path, tempWorkDir.path);
+     .then((ProcessResult _) {
+       return td.gitDir.runCommand(['checkout']);
      })
-     .then((GitDir value) {
-       gd = value;
-       return gd.runCommand(['checkout']);
-     })
-     .then((ProcessResult pr) {
+     .then((ProcessResult _) {
 
        // since we're checked out, need to clear out local content
-       return gd.runCommand(['rm', '-r', '.']);
+       return td.gitDir.runCommand(['rm', '-r', '.']);
      })
-     .then((ProcessResult pr) {
-       return new _TempDirs(gd, tempGitHost, tempWorkDir);
-     });
+     .then((ProcessResult _) =&gt; td);
  }
 
  String get _processWorkingDir =&gt; _path.toString();
