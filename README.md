@@ -1,5 +1,5 @@
 ![Hop!](https://raw.github.com/kevmoo/hop.dart/master/resource/logo.png)
-## A Dart framework for reusable, object-oriented tasks
+## A Dart framework for reusable tasks
 
 [![Build Status](https://drone.io/github.com/kevmoo/hop.dart/status.png)](https://drone.io/github.com/kevmoo/hop.dart/latest)
 
