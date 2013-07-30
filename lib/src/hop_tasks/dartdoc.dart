@@ -140,7 +140,6 @@ Future _doDocsPopulate(TaskContext ctx, TempDir dir, Iterable<String> libs,
         assert(dartDocSuccess);
 
         if(postBuild != null) {
-          // TODO: this should be platfrom specific...pathos?
           return postBuild(ctx.getSubLogger('post-build'), dir.path);
         }
       });
