@@ -6,8 +6,6 @@ import 'dart:io';
 import 'package:html5lib/dom.dart' as dom;
 import 'package:html5lib/parser.dart';
 
-import 'package:bot/bot.dart';
-
 Future<bool> transformHtml(String filePath,
     Future<dom.Document> transformer(dom.Document doc)) {
 

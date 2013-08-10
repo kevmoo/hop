@@ -2,7 +2,6 @@ library hop_runner;
 
 import 'dart:async';
 import 'dart:io';
-import 'package:bot/bot.dart';
 import 'package:hop/hop.dart';
 import 'package:hop/hop_tasks.dart';
 import '../test/harness_console.dart' as test_console;

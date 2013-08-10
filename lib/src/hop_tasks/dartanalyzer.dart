@@ -103,7 +103,7 @@ Future<int> _dartAnalyzer(TaskLogger logger, String filePath, bool verbose,
           processArgs.addAll(['--package-root', packagesPath]);
         }
 
-        processArgs.addAll([path.normalize(filePath)]);
+        processArgs.addAll([pathos.normalize(filePath)]);
 
         return Process.start(_getPlatformBin('dartanalyzer'), processArgs);
       })
@@ -120,11 +120,11 @@ Future<int> _dartAnalyzer(TaskLogger logger, String filePath, bool verbose,
 
 // TODO: (kevmoo) user should be able to provide their own packages dir? Hmm...
 Future<String> _getPackagesDir(String filePath) {
-  var dirName = path.dirname(filePath);
+  var dirName = pathos.dirname(filePath);
 
   const packageDirName = 'packages';
 
-  var packagesDirCandidatePath = path.join(dirName, packageDirName);
+  var packagesDirCandidatePath = pathos.join(dirName, packageDirName);
   return FileSystemEntity.isDirectory(packagesDirCandidatePath)
       .then((bool isDir) {
 
@@ -133,7 +133,7 @@ Future<String> _getPackagesDir(String filePath) {
         }
 
         packagesDirCandidatePath =
-            path.join(Directory.current.path, packageDirName);
+            pathos.join(Directory.current.path, packageDirName);
 
         return FileSystemEntity.isDirectory(packagesDirCandidatePath)
             .then((bool isDir2) {

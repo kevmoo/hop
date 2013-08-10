@@ -45,7 +45,7 @@ Future<bool> _compileDocs(TaskContext ctx, String targetBranch,
   final parseResult = ctx.arguments;
   final bool allowDirty = parseResult[_allowDirtyArg];
 
-  final currentWorkingDir = path.current;
+  final currentWorkingDir = pathos.current;
 
   GitDir gitDir;
   List<String> libs;
