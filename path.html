@@ -35,7 +35,27 @@
   path: any
 </code></pre>
 <p>Then run <code>pub install</code>.</p>
-<p>For more information, see the <a href="http://pub.dartlang.org/packages/path">path package on pub.dartlang.org</a>.</p></div>
+<p>For more information, see the <a href="http://pub.dartlang.org/packages/path">path package on pub.dartlang.org</a>.</p>
+<h2>Usage</h2>
+<p>The path library was designed to be imported with a prefix, though you don't
+have to if you don't want to:</p>
+<pre><code>import 'package:path/path.dart' as path;
+</code></pre>
+<p>The most common way to use the library is through the top-level functions.
+These manipulate path strings based on your current working directory and
+the path style (POSIX, Windows, or URLs) of the host platform. For example:</p>
+<pre><code>path.join("directory", "file.txt");
+</code></pre>
+<p>This calls the top-level <a class="crossref" href="path.html#join">join</a> function to join "directory" and "file.txt"
+using the current platform's directory separator.</p>
+<p>If you want to work with paths for a specific platform regardless of the
+underlying platform that the program is running on, you can create a
+<a class="crossref" href="path/Builder.html">Builder</a> and give it an explicit <a class="crossref" href="path/Style.html">Style</a>:</p>
+<pre><code>var builder = new path.Builder(style: Style.windows);
+builder.join("directory", "file.txt");
+</code></pre>
+<p>This will join "directory" and "file.txt" using the Windows path separator,
+even when the program is run on a POSIX machine.</p></div>
 <div>
 <h3>Properties</h3>
 <div class="field"><h4 id="current">
@@ -64,6 +84,19 @@ String get current {
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="posix">
+<button class="show-code">Code</button>
+final         <strong>posix</strong> <a class="anchor-link"
+            href="#posix"
+            title="Permalink to posix">#</a>
+        </h4>
+        <div class="doc">
+<p>A default builder for manipulating POSIX paths.</p>
+<pre class="source">
+final posix = new Builder(style: Style.posix)
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="separator">
 <button class="show-code">Code</button>
 final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>separator</strong> <a class="anchor-link"
@@ -71,10 +104,36 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
             title="Permalink to separator">#</a>
         </h4>
         <div class="doc">
-<p>Gets the path separator for the current platform. On Mac and Linux, this
-is <code>/</code>. On Windows, it's <code>\</code>.</p>
+<p>Gets the path separator for the current platform. This is <code>\</code> on Windows
+and <code>/</code> on other platforms (including the browser).</p>
 <pre class="source">
 String get separator =&gt; _builder.separator;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="url">
+<button class="show-code">Code</button>
+final         <strong>url</strong> <a class="anchor-link"
+            href="#url"
+            title="Permalink to url">#</a>
+        </h4>
+        <div class="doc">
+<p>A default builder for manipulating URLs.</p>
+<pre class="source">
+final url = new Builder(style: Style.url)
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="windows">
+<button class="show-code">Code</button>
+final         <strong>windows</strong> <a class="anchor-link"
+            href="#windows"
+            title="Permalink to windows">#</a>
+        </h4>
+        <div class="doc">
+<p>A default builder for manipulating Windows paths.</p>
+<pre class="source">
+final windows = new Builder(style: Style.windows)
 </pre>
 </div>
 </div>
@@ -91,8 +150,6 @@ String get separator =&gt; _builder.separator;
 <p>For POSIX and Windows styles, this will return a <code>file:</code> URI. For the URL
 style, this will just convert 
 <span class="param">path</span> to a <a class="crossref" href="dart_core/Uri.html">Uri</a>.</p>
-<p>This will always convert relative paths to absolute ones before converting
-to a URI.</p>
 <pre><code>// POSIX
 path.toUri('/path/to/foo')
   // -&gt; Uri.parse('file:///path/to/foo')
@@ -104,6 +161,11 @@ path.toUri(r'C:\path\to\foo')
 // URL
 path.toUri('http://dartlang.org/path/to/foo')
   // -&gt; Uri.parse('http://dartlang.org/path/to/foo')
+</code></pre>
+<p>If 
+<span class="param">path</span> is relative, a relative URI will be returned.</p>
+<pre><code>path.toUri('path/to/foo')
+  // -&gt; Uri.parse('path/to/foo')
 </code></pre>
 <pre class="source">
 Uri toUri(String path) =&gt; _builder.toUri(path);
@@ -172,6 +234,10 @@ path.relative('/root/other.dart'); // -&gt; '../other.dart'
 path.relative('/root/other.dart',
     from: '/root/path'); // -&gt; '../other.dart'
 </code></pre>
+<p>If 
+<span class="param">path</span> and/or 
+<span class="param">from</span> are relative paths, they are assumed to be relative
+to the current directory.</p>
 <p>Since there is no relative path from one drive letter to another on Windows,
 or from one hostname to another for URLs, this will return an absolute path
 in those cases.</p>
@@ -392,6 +458,15 @@ path.dirname('path/to');          // -&gt; 'path'
 </code></pre>
 <p>Trailing separators are ignored.</p>
 <pre><code>builder.dirname('path/to/'); // -&gt; 'path'
+</code></pre>
+<p>If an absolute path contains no directories, only a root, then the root
+is returned.</p>
+<pre><code>path.dirname('/');  // -&gt; '/' (posix)
+path.dirname('c:\');  // -&gt; 'c:\' (windows)
+</code></pre>
+<p>If a relative path has no directories, then '.' is returned.</p>
+<pre><code>path.dirname('foo');  // -&gt; '.'
+path.dirname('');  // -&gt; '.'
 </code></pre>
 <pre class="source">
 String dirname(String path) =&gt; _builder.dirname(path);

@@ -46,13 +46,31 @@ abstract class Style {
  // just the "\\".
  static final windows = new _WindowsStyle();
 
- /// URLs aren't filesystem paths, but they're supported by Pathos to make it
- /// easier to manipulate URL paths in the browser.
+ /// URLs aren't filesystem paths, but they're supported to make it easier to
+ /// manipulate URL paths in the browser.
  ///
  /// URLs use "/" (forward slash) as separators. Absolute paths either start
  /// with a protocol and optional hostname (e.g. `http://dartlang.org`,
  /// `file://`) or with "/".
  static final url = new _UrlStyle();
+
+ /// The style of the host platform.
+ ///
+ /// When running on the command line, this will be [windows] or [posix] based
+ /// on the host operating system. On a browser, this will be [url].
+ static final platform = _getPlatformStyle();
+
+ /// Gets the type of the host platform.
+ static Style _getPlatformStyle() {
+   if (_io == null) return Style.url;
+
+   if (_io.classes[const Symbol('Platform')]
+       .getField(const Symbol('operatingSystem')).reflectee == 'windows') {
+     return Style.windows;
+   }
+
+   return Style.posix;
+ }
 
  /// The name of this path style. Will be "posix" or "windows".
  String get name;
@@ -87,11 +105,15 @@ abstract class Style {
  /// paths.
  final Pattern relativeRootPattern = null;
 
+ /// A [Builder] that uses this style.
+ Builder get builder =&gt; new Builder(style: this);
+
  /// Gets the root prefix of [path] if path is absolute. If [path] is relative,
  /// returns `null`.
  String getRoot(String path) {
-   var match = rootPattern.firstMatch(path);
-   if (match != null) return match[0];
+   // TODO(rnystrom): Use firstMatch() when #7080 is fixed.
+   var matches = rootPattern.allMatches(path);
+   if (matches.isNotEmpty) return matches.first[0];
    return getRelativeRoot(path);
  }
 
@@ -100,19 +122,21 @@ abstract class Style {
  /// If [path] is relative or absolute and not root-relative, returns `null`.
  String getRelativeRoot(String path) {
    if (relativeRootPattern == null) return null;
-   var match = relativeRootPattern.firstMatch(path);
-   if (match == null) return null;
-   return match[0];
+   // TODO(rnystrom): Use firstMatch() when #7080 is fixed.
+   var matches = relativeRootPattern.allMatches(path);
+   if (matches.isEmpty) return null;
+   return matches.first[0];
  }
 
  /// Returns the path represented by [uri] in this style.
  String pathFromUri(Uri uri);
 
- /// Returns the URI that represents [path].
- ///
- /// Pathos will always path an absolute path for [path]. Relative paths are
- /// handled automatically by [Builder].
- Uri pathToUri(String path);
+ /// Returns the URI that represents the relative path made of [parts].
+ Uri relativePathToUri(String path) =&gt;
+     new Uri(pathSegments: builder.split(path));
+
+ /// Returns the URI that represents [path], which is assumed to be absolute.
+ Uri absolutePathToUri(String path);
 
  String toString() =&gt; name;
 }
@@ -120,6 +144,21 @@ abstract class Style {
 </div>
 <div>
 <h3>Static Properties</h3>
+<div class="field"><h4 id="platform">
+<button class="show-code">Code</button>
+final         <strong>platform</strong> <a class="anchor-link"
+            href="#platform"
+            title="Permalink to Style.platform">#</a>
+        </h4>
+        <div class="doc">
+<p>The style of the host platform.</p>
+<p>When running on the command line, this will be <a class="crossref" href="../path/Style.html#windows">windows</a> or <a class="crossref" href="../path/Style.html#posix">posix</a> based
+on the host operating system. On a browser, this will be <a class="crossref" href="../path/Style.html#url">url</a>.</p>
+<pre class="source">
+static final platform = _getPlatformStyle()
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="posix">
 <button class="show-code">Code</button>
 final         <strong>posix</strong> <a class="anchor-link"
@@ -141,8 +180,8 @@ final         <strong>url</strong> <a class="anchor-link"
             title="Permalink to Style.url">#</a>
         </h4>
         <div class="doc">
-<p>URLs aren't filesystem paths, but they're supported by Pathos to make it
-easier to manipulate URL paths in the browser.</p>
+<p>URLs aren't filesystem paths, but they're supported to make it easier to
+manipulate URL paths in the browser.</p>
 <p>URLs use "/" (forward slash) as separators. Absolute paths either start
 with a protocol and optional hostname (e.g. <code>http://dartlang.org</code>,
 <code>file://</code>) or with "/".</p>
@@ -169,6 +208,19 @@ static final windows = new _WindowsStyle()
 </div>
 <div>
 <h3>Properties</h3>
+<div class="field"><h4 id="builder">
+<button class="show-code">Code</button>
+final <a href="../path/Builder.html">Builder</a>         <strong>builder</strong> <a class="anchor-link"
+            href="#builder"
+            title="Permalink to Style.builder">#</a>
+        </h4>
+        <div class="doc">
+<p>A <a class="crossref" href="../path/Builder.html">Builder</a> that uses this style.</p>
+<pre class="source">
+Builder get builder =&gt; new Builder(style: this);
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="name">
 <button class="show-code">Code</button>
 final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>name</strong> <a class="anchor-link"
@@ -263,6 +315,14 @@ Pattern get separatorPattern;
 </div>
 <div>
 <h3>Methods</h3>
+<div class="method"><h4 id="absolutePathToUri">
+abstract <a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> <strong>absolutePathToUri</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#absolutePathToUri"
+              title="Permalink to Style.absolutePathToUri">#</a></h4>
+<div class="doc">
+<p>Returns the URI that represents 
+<span class="param">path</span>, which is assumed to be absolute.</p>
+</div>
+</div>
 <div class="method"><h4 id="getRelativeRoot">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>getRelativeRoot</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#getRelativeRoot"
@@ -275,9 +335,10 @@ Pattern get separatorPattern;
 <pre class="source">
 String getRelativeRoot(String path) {
  if (relativeRootPattern == null) return null;
- var match = relativeRootPattern.firstMatch(path);
- if (match == null) return null;
- return match[0];
+ // TODO(rnystrom): Use firstMatch() when #7080 is fixed.
+ var matches = relativeRootPattern.allMatches(path);
+ if (matches.isEmpty) return null;
+ return matches.first[0];
 }
 </pre>
 </div>
@@ -293,8 +354,9 @@ String getRelativeRoot(String path) {
 returns <code>null</code>.</p>
 <pre class="source">
 String getRoot(String path) {
- var match = rootPattern.firstMatch(path);
- if (match != null) return match[0];
+ // TODO(rnystrom): Use firstMatch() when #7080 is fixed.
+ var matches = rootPattern.allMatches(path);
+ if (matches.isNotEmpty) return matches.first[0];
  return getRelativeRoot(path);
 }
 </pre>
@@ -308,15 +370,16 @@ abstract <a href="http://api.dartlang.org/dart_core/String.html">String</a> <str
 <span class="param">uri</span> in this style.</p>
 </div>
 </div>
-<div class="method"><h4 id="pathToUri">
-abstract <a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> <strong>pathToUri</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#pathToUri"
-              title="Permalink to Style.pathToUri">#</a></h4>
+<div class="method"><h4 id="relativePathToUri">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> <strong>relativePathToUri</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#relativePathToUri"
+              title="Permalink to Style.relativePathToUri">#</a></h4>
 <div class="doc">
-<p>Returns the URI that represents 
-<span class="param">path</span>.</p>
-<p>Pathos will always path an absolute path for 
-<span class="param">path</span>. Relative paths are
-handled automatically by <a class="crossref" href="../path/Builder.html">Builder</a>.</p>
+<p>Returns the URI that represents the relative path made of <code>parts</code>.</p>
+<pre class="source">
+Uri relativePathToUri(String path) =&gt;
+   new Uri(pathSegments: builder.split(path));
+</pre>
 </div>
 </div>
 <div class="method"><h4 id="toString">

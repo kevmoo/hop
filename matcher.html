@@ -74,6 +74,20 @@ final Matcher completes = const _Completes(null, '')
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="isAbstractClassInstantiationError">
+<button class="show-code">Code</button>
+const         <strong>isAbstractClassInstantiationError</strong> <a class="anchor-link"
+            href="#isAbstractClassInstantiationError"
+            title="Permalink to isAbstractClassInstantiationError">#</a>
+        </h4>
+        <div class="doc">
+<p>A matcher for AbstractClassInstantiationError. </p>
+<pre class="source">
+const isAbstractClassInstantiationError =
+   const _AbstractClassInstantiationError()
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="isArgumentError">
 <button class="show-code">Code</button>
 const         <strong>isArgumentError</strong> <a class="anchor-link"
@@ -84,6 +98,32 @@ const         <strong>isArgumentError</strong> <a class="anchor-link"
 <p>A matcher for ArgumentErrors. </p>
 <pre class="source">
 const isArgumentError = const _ArgumentError()
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="isConcurrentModificationError">
+<button class="show-code">Code</button>
+const         <strong>isConcurrentModificationError</strong> <a class="anchor-link"
+            href="#isConcurrentModificationError"
+            title="Permalink to isConcurrentModificationError">#</a>
+        </h4>
+        <div class="doc">
+<p>A matcher for ConcurrentModificationError. </p>
+<pre class="source">
+const isConcurrentModificationError = const _ConcurrentModificationError()
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="isCyclicInitializationError">
+<button class="show-code">Code</button>
+const         <strong>isCyclicInitializationError</strong> <a class="anchor-link"
+            href="#isCyclicInitializationError"
+            title="Permalink to isCyclicInitializationError">#</a>
+        </h4>
+        <div class="doc">
+<p>A matcher for CyclicInitializationError. </p>
+<pre class="source">
+const isCyclicInitializationError = const _CyclicInitializationError()
 </pre>
 </div>
 </div>
@@ -111,6 +151,19 @@ const         <strong>isException</strong> <a class="anchor-link"
 <p>A matcher for Exceptions. </p>
 <pre class="source">
 const isException = const _Exception()
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="isFallThroughError">
+<button class="show-code">Code</button>
+const         <strong>isFallThroughError</strong> <a class="anchor-link"
+            href="#isFallThroughError"
+            title="Permalink to isFallThroughError">#</a>
+        </h4>
+        <div class="doc">
+<p>A matcher for FallThroughError. </p>
+<pre class="source">
+const isFallThroughError = const _FallThroughError()
 </pre>
 </div>
 </div>
@@ -263,6 +316,19 @@ const Matcher isNull = const _IsNull()
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="isNullThrownError">
+<button class="show-code">Code</button>
+const         <strong>isNullThrownError</strong> <a class="anchor-link"
+            href="#isNullThrownError"
+            title="Permalink to isNullThrownError">#</a>
+        </h4>
+        <div class="doc">
+<p>A matcher for NullThrownError. </p>
+<pre class="source">
+const isNullThrownError = const _NullThrownError()
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="isPositive">
 <button class="show-code">Code</button>
 const <a href="matcher/Matcher.html">Matcher</a>         <strong>isPositive</strong> <a class="anchor-link"
@@ -394,6 +460,20 @@ const Matcher throws = const Throws()
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="throwsAbstractClassInstantiationError">
+<button class="show-code">Code</button>
+const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsAbstractClassInstantiationError</strong> <a class="anchor-link"
+            href="#throwsAbstractClassInstantiationError"
+            title="Permalink to throwsAbstractClassInstantiationError">#</a>
+        </h4>
+        <div class="doc">
+<p>A matcher for functions that throw AbstractClassInstantiationError. </p>
+<pre class="source">
+const Matcher throwsAbstractClassInstantiationError =
+   const Throws(isAbstractClassInstantiationError)
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="throwsArgumentError">
 <button class="show-code">Code</button>
 const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsArgumentError</strong> <a class="anchor-link"
@@ -408,6 +488,34 @@ const Matcher throwsArgumentError =
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="throwsConcurrentModificationError">
+<button class="show-code">Code</button>
+const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsConcurrentModificationError</strong> <a class="anchor-link"
+            href="#throwsConcurrentModificationError"
+            title="Permalink to throwsConcurrentModificationError">#</a>
+        </h4>
+        <div class="doc">
+<p>A matcher for functions that throw ConcurrentModificationError. </p>
+<pre class="source">
+const Matcher throwsConcurrentModificationError =
+   const Throws(isConcurrentModificationError)
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="throwsCyclicInitializationError">
+<button class="show-code">Code</button>
+const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsCyclicInitializationError</strong> <a class="anchor-link"
+            href="#throwsCyclicInitializationError"
+            title="Permalink to throwsCyclicInitializationError">#</a>
+        </h4>
+        <div class="doc">
+<p>A matcher for functions that throw CyclicInitializationError. </p>
+<pre class="source">
+const Matcher throwsCyclicInitializationError =
+   const Throws(isCyclicInitializationError)
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="throwsException">
 <button class="show-code">Code</button>
 const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsException</strong> <a class="anchor-link"
@@ -418,6 +526,20 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsException
 <p>A matcher for functions that throw Exception. </p>
 <pre class="source">
 const Matcher throwsException = const Throws(isException)
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="throwsFallThroughError">
+<button class="show-code">Code</button>
+const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsFallThroughError</strong> <a class="anchor-link"
+            href="#throwsFallThroughError"
+            title="Permalink to throwsFallThroughError">#</a>
+        </h4>
+        <div class="doc">
+<p>A matcher for functions that throw FallThroughError. </p>
+<pre class="source">
+const Matcher throwsFallThroughError =
+   const Throws(isFallThroughError)
 </pre>
 </div>
 </div>
@@ -446,6 +568,20 @@ const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsNoSuchMet
 <pre class="source">
 const Matcher throwsNoSuchMethodError =
    const Throws(isNoSuchMethodError)
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="throwsNullThrownError">
+<button class="show-code">Code</button>
+const <a href="matcher/Matcher.html">Matcher</a>         <strong>throwsNullThrownError</strong> <a class="anchor-link"
+            href="#throwsNullThrownError"
+            title="Permalink to throwsNullThrownError">#</a>
+        </h4>
+        <div class="doc">
+<p>A matcher for functions that throw NullThrownError. </p>
+<pre class="source">
+const Matcher throwsNullThrownError =
+   const Throws(isNullThrownError)
 </pre>
 </div>
 </div>
@@ -1272,16 +1408,28 @@ Matcher orderedEquals(Iterable expected) =&gt; new _OrderedEquals(expected);
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="someElement">
+<div class="method"><h4 id="anyElement">
 <button class="show-code">Code</button>
-<a href="matcher/Matcher.html">Matcher</a> <strong>someElement</strong>(matcher) <a class="anchor-link" href="#someElement"
-              title="Permalink to someElement">#</a></h4>
+<a href="matcher/Matcher.html">Matcher</a> <strong>anyElement</strong>(matcher) <a class="anchor-link" href="#anyElement"
+              title="Permalink to anyElement">#</a></h4>
 <div class="doc">
 <p>Returns a matcher which matches <a class="crossref" href="dart_core/Iterable.html">Iterable</a>s in which at least one
 element matches the given 
 <span class="param">matcher</span>.</p>
 <pre class="source">
-Matcher someElement(matcher) =&gt; new _SomeElement(wrapMatcher(matcher));
+Matcher anyElement(matcher) =&gt; new _AnyElement(wrapMatcher(matcher));
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="someElement">
+<button class="show-code">Code</button>
+<a href="matcher/Matcher.html">Matcher</a> <strong>someElement</strong>(matcher) <a class="anchor-link" href="#someElement"
+              title="Permalink to someElement">#</a></h4>
+<div class="doc">
+<p>Deprecated form of <a class="crossref" href="matcher.html#anyElement">anyElement</a>.</p>
+<pre class="source">
+@deprecated
+Matcher someElement(matcher) =&gt; new _AnyElement(wrapMatcher(matcher));
 </pre>
 </div>
 </div>
@@ -1301,12 +1449,6 @@ Matcher everyElement(matcher) =&gt; new _EveryElement(wrapMatcher(matcher));
 </div>
 <div>
 <h3>Abstract Classes</h3>
-          <div class="type">
-          <h4>
-            <a href="matcher/BaseMatcher.html"><strong>BaseMatcher</strong></a>
-          </h4>
-          </div>
-          
           <div class="type">
           <h4>
             <a href="matcher/Description.html"><strong>Description</strong></a>

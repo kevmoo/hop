@@ -39,25 +39,22 @@ class Builder {
  /// Creates a new path builder for the given style and root directory.
  ///
  /// If [style] is omitted, it uses the host operating system's path style. If
- /// [root] is omitted, it defaults to the current working directory. If [root]
- /// is relative, it is considered relative to the current working directory.
+ /// only [root] is omitted, it defaults ".". If *both* [style] and [root] are
+ /// omitted, [root] defaults to the current working directory.
  ///
  /// On the browser, the path style is [Style.url]. In Dartium, [root] defaults
  /// to the current URL. When using dart2js, it currently defaults to `.` due
  /// to technical constraints.
  factory Builder({Style style, String root}) {
-   if (style == null) {
-     if (_io == null) {
-       style = Style.url;
-     } else if (_io.classes[const Symbol('Platform')]
-         .getField(const Symbol('operatingSystem')).reflectee == 'windows') {
-       style = Style.windows;
+   if (root == null) {
+     if (style == null) {
+       root = current;
      } else {
-       style = Style.posix;
+       root = ".";
      }
    }
 
-   if (root == null) root = current;
+   if (style == null) style = Style.platform;
 
    return new Builder._(style, root);
  }
@@ -285,8 +282,6 @@ class Builder {
  ///
  ///     builder.normalize('path/./to/..//file.text'); // -&gt; 'path/file.txt'
  String normalize(String path) {
-   if (path == '') return path;
-
    var parsed = _parse(path);
    parsed.normalize();
    return parsed.toString();
@@ -316,6 +311,9 @@ class Builder {
  ///     builder.relative('/root/other.dart',
  ///         from: '/root/path'); // -&gt; '../other.dart'
  ///
+ /// If [path] and/or [from] are relative paths, they are assumed to be
+ /// relative to [root].
+ ///
  /// Since there is no relative path from one drive letter to another on
  /// Windows, this will return an absolute path in that case.
  ///
@@ -327,8 +325,6 @@ class Builder {
  ///     var builder = new Builder(r'some/relative/path');
  ///     builder.relative(r'/absolute/path'); // -&gt; '/absolute/path'
  String relative(String path, {String from}) {
-   if (path == '') return '.';
-
    from = from == null ? root : this.join(root, from);
 
    // We can't determine the path from a relative path to an absolute path.
@@ -375,8 +371,12 @@ class Builder {
      pathParsed.separators.removeAt(1);
    }
 
-   // If there are any directories left in the root path, we need to walk up
-   // out of them.
+   // If there are any directories left in the from path, we need to walk up
+   // out of them. If a directory left in the from path is '..', it cannot
+   // be cancelled by adding a '..'.
+   if (fromParsed.parts.length &gt; 0 &amp;&amp; fromParsed.parts[0] == '..') {
+     throw new ArgumentError('Unable to find a path to "$path" from "$from".');
+   }
    _growListFront(pathParsed.parts, fromParsed.parts.length, '..');
    pathParsed.separators[0] = '';
    pathParsed.separators.insertAll(1,
@@ -384,6 +384,13 @@ class Builder {
 
    // Corner case: the paths completely collapsed.
    if (pathParsed.parts.length == 0) return '.';
+
+   // Corner case: path was '.' and some '..' directories were added in front.
+   // Don't add a final '/.' in that case.
+   if (pathParsed.parts.length &gt; 1 &amp;&amp; pathParsed.parts.last == '.') {
+     pathParsed.parts.removeLast();
+     pathParsed.separators..removeLast()..removeLast()..add('');
+   }
 
    // Make it relative.
    pathParsed.root = '';
@@ -444,9 +451,9 @@ class Builder {
  ///       // -&gt; Uri.parse('http://dartlang.org/path/to/foo')
  Uri toUri(String path) {
    if (isRelative(path)) {
-     return Uri.parse(path.replaceAll(style.separatorPattern, '/'));
+     return style.relativePathToUri(path);
    } else {
-     return style.pathToUri(join(root, path));
+     return style.absolutePathToUri(join(root, path));
    }
  }
 
@@ -462,8 +469,8 @@ class Builder {
    var parts = [];
    var separators = [];
 
-   var firstSeparator = style.separatorPattern.firstMatch(path);
-   if (firstSeparator != null &amp;&amp; firstSeparator.start == 0) {
+   var firstSeparator = style.separatorPattern.matchAsPrefix(path);
+   if (firstSeparator != null) {
      separators.add(firstSeparator[0]);
      path = path.substring(firstSeparator[0].length);
    } else {
@@ -498,28 +505,27 @@ factory <strong>Builder</strong>({<a href="../path/Style.html">Style</a> style, 
 <p>Creates a new path builder for the given style and root directory.</p>
 <p>If 
 <span class="param">style</span> is omitted, it uses the host operating system's path style. If
-
-<span class="param">root</span> is omitted, it defaults to the current working directory. If 
-<span class="param">root</span>
-is relative, it is considered relative to the current working directory.</p>
+only 
+<span class="param">root</span> is omitted, it defaults ".". If <em>both</em> 
+<span class="param">style</span> and 
+<span class="param">root</span> are
+omitted, 
+<span class="param">root</span> defaults to the current working directory.</p>
 <p>On the browser, the path style is <a class="crossref" href="../path/Style.html#url">Style.url</a>. In Dartium, 
 <span class="param">root</span> defaults
 to the current URL. When using dart2js, it currently defaults to <code>.</code> due
 to technical constraints.</p>
 <pre class="source">
 factory Builder({Style style, String root}) {
- if (style == null) {
-   if (_io == null) {
-     style = Style.url;
-   } else if (_io.classes[const Symbol('Platform')]
-       .getField(const Symbol('operatingSystem')).reflectee == 'windows') {
-     style = Style.windows;
+ if (root == null) {
+   if (style == null) {
+     root = current;
    } else {
-     style = Style.posix;
+     root = ".";
    }
  }
 
- if (root == null) root = current;
+ if (style == null) style = Style.platform;
 
  return new Builder._(style, root);
 }
@@ -835,8 +841,6 @@ removing redundant path separators whenever possible.</p>
 </code></pre>
 <pre class="source">
 String normalize(String path) {
- if (path == '') return path;
-
  var parsed = _parse(path);
  parsed.normalize();
  return parsed.toString();
@@ -864,6 +868,10 @@ builder.relative('/root/other.dart'); // -&gt; '../other.dart'
 builder.relative('/root/other.dart',
     from: '/root/path'); // -&gt; '../other.dart'
 </code></pre>
+<p>If 
+<span class="param">path</span> and/or 
+<span class="param">from</span> are relative paths, they are assumed to be
+relative to <a class="crossref" href="../path/Builder.html#root">root</a>.</p>
 <p>Since there is no relative path from one drive letter to another on
 Windows, this will return an absolute path in that case.</p>
 <pre><code>builder.relative(r'D:\other', from: r'C:\other'); // -&gt; 'D:\other'
@@ -876,8 +884,6 @@ builder.relative(r'/absolute/path'); // -&gt; '/absolute/path'
 </code></pre>
 <pre class="source">
 String relative(String path, {String from}) {
- if (path == '') return '.';
-
  from = from == null ? root : this.join(root, from);
 
  // We can't determine the path from a relative path to an absolute path.
@@ -924,8 +930,12 @@ String relative(String path, {String from}) {
    pathParsed.separators.removeAt(1);
  }
 
- // If there are any directories left in the root path, we need to walk up
- // out of them.
+ // If there are any directories left in the from path, we need to walk up
+ // out of them. If a directory left in the from path is '..', it cannot
+ // be cancelled by adding a '..'.
+ if (fromParsed.parts.length &gt; 0 &amp;&amp; fromParsed.parts[0] == '..') {
+   throw new ArgumentError('Unable to find a path to "$path" from "$from".');
+ }
  _growListFront(pathParsed.parts, fromParsed.parts.length, '..');
  pathParsed.separators[0] = '';
  pathParsed.separators.insertAll(1,
@@ -933,6 +943,13 @@ String relative(String path, {String from}) {
 
  // Corner case: the paths completely collapsed.
  if (pathParsed.parts.length == 0) return '.';
+
+ // Corner case: path was '.' and some '..' directories were added in front.
+ // Don't add a final '/.' in that case.
+ if (pathParsed.parts.length &gt; 1 &amp;&amp; pathParsed.parts.last == '.') {
+   pathParsed.parts.removeLast();
+   pathParsed.separators..removeLast()..removeLast()..add('');
+ }
 
  // Make it relative.
  pathParsed.root = '';
@@ -1049,9 +1066,9 @@ builder.toUri('http://dartlang.org/path/to/foo')
 <pre class="source">
 Uri toUri(String path) {
  if (isRelative(path)) {
-   return Uri.parse(path.replaceAll(style.separatorPattern, '/'));
+   return style.relativePathToUri(path);
  } else {
-   return style.pathToUri(join(root, path));
+   return style.absolutePathToUri(join(root, path));
  }
 }
 </pre>

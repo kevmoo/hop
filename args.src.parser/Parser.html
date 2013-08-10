@@ -62,7 +62,7 @@ class Parser {
  final rest = &lt;String&gt;[];
 
  /** The accumulated parsed options. */
- final Map results = {};
+ final Map&lt;String, dynamic&gt; results = &lt;String, dynamic&gt;{};
 
  Parser(this.commandName, this.grammar, this.args, this.parent, rest,
      {this.allowTrailingOptions: false}) {
@@ -298,12 +298,12 @@ class Parser {
   * Called during parsing to validate the arguments. Throws a
   * [FormatException] if [condition] is `false`.
   */
- validate(bool condition, String message) {
+ void validate(bool condition, String message) {
    if (!condition) throw new FormatException(message);
  }
 
  /** Validates and stores [value] as the value for [option]. */
- setOption(Map results, Option option, value) {
+ void setOption(Map results, Option option, value) {
    // See if it's one of the allowed values.
    if (option.allowed != null) {
      validate(option.allowed.any((allow) =&gt; allow == value),
@@ -438,14 +438,14 @@ final rest = &lt;String&gt;[]
 </div>
 <div class="field"><h4 id="results">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>         <strong>results</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, dynamic&gt;         <strong>results</strong> <a class="anchor-link"
             href="#results"
             title="Permalink to Parser.results">#</a>
         </h4>
         <div class="doc">
 <p>The accumulated parsed options. </p>
 <pre class="source">
-final Map results = {}
+final Map&lt;String, dynamic&gt; results = &lt;String, dynamic&gt;{}
 </pre>
 </div>
 </div>
@@ -716,14 +716,14 @@ void readNextArgAsValue(Option option) {
 </div>
 <div class="method"><h4 id="setOption">
 <button class="show-code">Code</button>
-dynamic <strong>setOption</strong>(<a href="http://api.dartlang.org/dart_core/Map.html">Map</a> results, <a href="../options/Option.html">Option</a> option, value) <a class="anchor-link" href="#setOption"
+void <strong>setOption</strong>(<a href="http://api.dartlang.org/dart_core/Map.html">Map</a> results, <a href="../options/Option.html">Option</a> option, value) <a class="anchor-link" href="#setOption"
               title="Permalink to Parser.setOption">#</a></h4>
 <div class="doc">
 <p>Validates and stores 
 <span class="param">value</span> as the value for 
 <span class="param">option</span>. </p>
 <pre class="source">
-setOption(Map results, Option option, value) {
+void setOption(Map results, Option option, value) {
  // See if it's one of the allowed values.
  if (option.allowed != null) {
    validate(option.allowed.any((allow) =&gt; allow == value),
@@ -741,14 +741,14 @@ setOption(Map results, Option option, value) {
 </div>
 <div class="method"><h4 id="validate">
 <button class="show-code">Code</button>
-dynamic <strong>validate</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> condition, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#validate"
+void <strong>validate</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> condition, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#validate"
               title="Permalink to Parser.validate">#</a></h4>
 <div class="doc">
 <p>Called during parsing to validate the arguments. Throws a
 <a class="crossref" href="../dart_core/FormatException.html">FormatException</a> if 
 <span class="param">condition</span> is <code>false</code>.</p>
 <pre class="source">
-validate(bool condition, String message) {
+void validate(bool condition, String message) {
  if (!condition) throw new FormatException(message);
 }
 </pre>

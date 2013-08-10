@@ -191,7 +191,7 @@ Future&lt;bool&gt; branchForDir(TaskContext ctx, String sourceBranch, String sou
    String targetBranch, {String workingDir}) {
 
  if(workingDir == null) {
-   workingDir = path.current;
+   workingDir = pathos.current;
  }
 
  GitDir gitDir;
@@ -300,7 +300,7 @@ Task createDartDocTask(dynamic delayedLibraryList, {
 </div>
 <div class="method"><h4 id="createDartCompilerTask">
 <button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>createDartCompilerTask</strong>(delayedRootList, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> singleOutput, <a href="http://api.dartlang.org/dart_core/String.html">String</a> packageRoot, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> minify: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> allowUnsafeEval: true, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> liveTypeAnalysis: true, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> rejectDeprecatedFeatures: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> throwOnError: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose: true, <a href="hop_tasks/CompilerTargetType.html">CompilerTargetType</a> outputType: CompilerTargetType.JS, <a href="http://api.dartlang.org/dart_core/String.html">String</a> outputMapper(<a href="http://api.dartlang.org/dart_core/String.html">String</a> source)}) <a class="anchor-link" href="#createDartCompilerTask"
+<a href="hop/Task.html">Task</a> <strong>createDartCompilerTask</strong>(delayedRootList, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> singleOutput, <a href="http://api.dartlang.org/dart_core/String.html">String</a> packageRoot, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> minify: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> allowUnsafeEval: true, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> liveTypeAnalysis: true, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> throwOnError: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose: true, <a href="hop_tasks/CompilerTargetType.html">CompilerTargetType</a> outputType: CompilerTargetType.JS, <a href="http://api.dartlang.org/dart_core/String.html">String</a> outputMapper(<a href="http://api.dartlang.org/dart_core/String.html">String</a> source)}) <a class="anchor-link" href="#createDartCompilerTask"
               title="Permalink to createDartCompilerTask">#</a></h4>
 <div class="doc">
 <p>
@@ -311,8 +311,7 @@ combinations of <a class="crossref" href="dart_async/Future.html">Future</a> or 
 <pre class="source">
 Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
  String packageRoot, bool minify: false, bool allowUnsafeEval: true,
- bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false,
- bool throwOnError: false, bool verbose: true,
+ bool liveTypeAnalysis: true, bool throwOnError: false, bool verbose: true,
  CompilerTargetType outputType: CompilerTargetType.JS,
  String outputMapper(String source)}) {
 
@@ -354,8 +353,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
            String output = outputMapper(path);
 
            return _dart2js(context, path,
-               output, packageRoot, minify, allowUnsafeEval,
-               liveTypeAnalysis, rejectDeprecatedFeatures,
+               output, packageRoot, minify, allowUnsafeEval, liveTypeAnalysis,
                throwOnError, verbose, outputType)
                .then((bool success) {
                  // should not have been run if we had pending errors

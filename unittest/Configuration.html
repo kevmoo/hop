@@ -208,7 +208,7 @@ class Configuration {
      String uncaughtError) {
    // Print each test's result.
    for (final t in results) {
-     print(formatResult(t));
+     print(formatResult(t).trim());
    }
 
    // Show the summary.
@@ -481,7 +481,7 @@ void onSummary(int passed, int failed, int errors, List&lt;TestCase&gt; results,
    String uncaughtError) {
  // Print each test's result.
  for (final t in results) {
-   print(formatResult(t));
+   print(formatResult(t).trim());
  }
 
  // Show the summary.

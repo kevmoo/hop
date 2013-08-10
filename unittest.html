@@ -143,31 +143,23 @@ depending on the number of positional arguments of the callback. In the
 future, we plan to expose a single <code>expectAsync</code> function that can be used
 regardless of the number of positional arguments. This requires new langauge
 features or fixes to the current spec (e.g. see
-<a href="http://dartbug.com/2706">Issue 2706</a>).</p>
-<p>Meanwhile, we plan to add this alternative API for callbacks of more than 2
-arguments or that take named parameters. (this is not implemented yet,
-but will be coming here soon).</p>
-<pre><code>import 'package:unittest/unittest.dart';
-import 'dart:isolate';
-main() {
-  test('callback is executed', () {
-    // indicate ahead of time that an async callback is expected.
-    var async = startAsync();
-    Timer.run(() {
-      // Guard the body of the callback, so errors are propagated
-      // correctly.
-      guardAsync(() {
-        int x = 2 + 3;
-        expect(x, equals(5));
-      });
-      // indicate that the asynchronous callback was invoked.
-      async.complete();
-    });
-  });
-}
-</code></pre></div>
+<a href="http://dartbug.com/2706">Issue 2706</a>).</p></div>
 <div>
 <h3>Properties</h3>
+<div class="field"><h4 id="BREATH_INTERVAL">
+<button class="show-code">Code</button>
+const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>BREATH_INTERVAL</strong> <a class="anchor-link"
+            href="#BREATH_INTERVAL"
+            title="Permalink to BREATH_INTERVAL">#</a>
+        </h4>
+        <div class="doc">
+<p>Interval (in msecs) after which synchronous tests will insert an async
+delay to allow DOM or other updates.</p>
+<pre class="source">
+const int BREATH_INTERVAL = 200
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="currentTestCase">
 <button class="show-code">Code</button>
 final <a href="unittest/TestCase.html">TestCase</a>         <strong>currentTestCase</strong> <a class="anchor-link"
@@ -406,12 +398,8 @@ void <strong>runTests</strong>() <a class="anchor-link" href="#runTests"
 void runTests() {
  _ensureInitialized(false);
  _currentTestCaseIndex = 0;
-
  _config.onStart();
-
- runAsync(() {
-   _nextBatch();
- });
+ _runTest();
 }
 </pre>
 </div>

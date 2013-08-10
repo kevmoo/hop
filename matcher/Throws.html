@@ -33,7 +33,7 @@
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
 <pre class="source">
-class Throws extends BaseMatcher {
+class Throws extends Matcher {
  final Matcher _matcher;
 
  const Throws([Matcher matcher]) :
@@ -107,7 +107,7 @@ class Throws extends BaseMatcher {
 </div>
 <h3>Extends</h3>
 <p>
-<span class="type-box"><span class="icon-class"></span><a href="../matcher/BaseMatcher.html">BaseMatcher</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>Throws</strong></span></p>
+<span class="type-box"><span class="icon-class"></span><a href="../matcher/Matcher.html">Matcher</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>Throws</strong></span></p>
 <div>
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
@@ -136,9 +136,8 @@ const Throws([Matcher matcher]) :
               title="Permalink to Throws.describe">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Creates a textual description of a matcher,
-by appending to <code>mismatchDescription</code>.</p>
-<div class="docs-inherited-from">docs inherited from <a href="../matcher/BaseMatcher.html">BaseMatcher</a> </div></div>
+<p>This builds a textual description of the matcher. </p>
+<div class="docs-inherited-from">docs inherited from <a href="../matcher/Matcher.html">Matcher</a> </div></div>
 <pre class="source">
 Description describe(Description description) {
  if (_matcher == null) {
@@ -156,19 +155,19 @@ Description describe(Description description) {
               title="Permalink to Throws.describeMismatch">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Generates a description of the matcher failed for a particular
-
-<span class="param">item</span>, by appending the description to 
-<span class="param">mismatchDescription</span>.
-It does not check whether the 
-<span class="param">item</span> fails the match, as it is
-only called after a failed match. There may be additional info
-about the mismatch in 
-<span class="param">matchState</span>.
-The base matcher does not add anything as the actual value is
-typically sufficient, but matchers that can add valuable info
-should override this.</p>
-<div class="docs-inherited-from">docs inherited from <a href="../matcher/BaseMatcher.html">BaseMatcher</a> </div></div>
+<p>This builds a textual description of a specific mismatch. 
+<span class="param">item</span>
+is the value that was tested by <a class="crossref" href="../matcher/Throws.html#matches">matches</a>; 
+<span class="param">matchState</span> is
+the <a class="crossref" href="../dart_core/Map.html">Map</a> that was passed to and supplemented by <a class="crossref" href="../matcher/Throws.html#matches">matches</a>
+with additional information about the mismact, and 
+<span class="param">mismatchDescription</span>
+is the <a class="crossref" href="../matcher/Description.html">Description</a> that is being built to decribe the mismatch.
+A few matchers make use of the 
+<span class="param">verbose</span> flag to provide detailed
+information that is not typically included but can be of help in
+diagnosing failures, such as stack traces.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../matcher/Matcher.html">Matcher</a> </div></div>
 <pre class="source">
 Description describeMismatch(item, Description mismatchDescription,
                             Map matchState,
@@ -195,13 +194,13 @@ Description describeMismatch(item, Description mismatchDescription,
               title="Permalink to Throws.matches">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Tests the matcher against a given 
-<span class="param">item</span>
-and return true if the match succeeds; false otherwise.
+<p>This does the matching of the actual vs expected values.
 
-<span class="param">matchState</span> may be used to return additional info for
-the use of <a class="crossref" href="../matcher/Throws.html#describeMismatch">describeMismatch</a>.</p>
-<div class="docs-inherited-from">docs inherited from <a href="../matcher/BaseMatcher.html">BaseMatcher</a> </div></div>
+<span class="param">item</span> is the actual value. 
+<span class="param">matchState</span> can be supplied
+and may be used to add details about the mismatch that are too
+costly to determine in <a class="crossref" href="../matcher/Throws.html#describeMismatch">describeMismatch</a>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../matcher/Matcher.html">Matcher</a> </div></div>
 <pre class="source">
 bool matches(item, Map matchState) {
  if (item is! Function &amp;&amp; item is! Future) return false;

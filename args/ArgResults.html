@@ -37,7 +37,7 @@
 command line arguments.</p>
 <pre class="source">
 class ArgResults {
- final Map _options;
+ final Map&lt;String, dynamic&gt; _options;
 
  /**
   * If these are the results for parsing a command's options, this will be
@@ -59,7 +59,8 @@ class ArgResults {
  final List&lt;String&gt; rest;
 
  /** Creates a new [ArgResults]. */
- ArgResults(this._options, this.name, this.command, this.rest);
+ ArgResults(this._options, this.name, this.command, List&lt;String&gt; rest)
+   : this.rest = new UnmodifiableListView(rest);
 
  /** Gets the parsed command-line option named [name]. */
  operator [](String name) {
@@ -80,12 +81,13 @@ class ArgResults {
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>ArgResults</strong>(<a href="http://api.dartlang.org/dart_core/Map.html">Map</a> _options, <a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="../args/ArgResults.html">ArgResults</a> command, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; rest) <a class="anchor-link" href="#"
+new <strong>ArgResults</strong>(<a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, dynamic&gt; _options, <a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="../args/ArgResults.html">ArgResults</a> command, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; rest) <a class="anchor-link" href="#"
               title="Permalink to ArgResults.ArgResults">#</a></h4>
 <div class="doc">
 <p>Creates a new <a class="crossref" href="../args/ArgResults.html">ArgResults</a>. </p>
 <pre class="source">
-ArgResults(this._options, this.name, this.command, this.rest);
+ArgResults(this._options, this.name, this.command, List&lt;String&gt; rest)
+ : this.rest = new UnmodifiableListView(rest);
 </pre>
 </div>
 </div>
