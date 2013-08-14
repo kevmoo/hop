@@ -76,34 +76,39 @@ class _HopTestConfiguration implements unittest.Configuration {
 
   Future<bool> get future => _completer.future;
 
-  @override
   String get name => 'hop_tasks.unittest';
 
-  @override
   bool get autoStart => false;
 
-  @override
+  /**
+   * If true (the default), throw an exception at the end if any tests failed.
+   */
+  bool throwOnTestFailures = true;
+
+  /**
+   * If true (the default), then tests will stop after the first failed
+   * [expect]. If false, failed [expect]s will not cause the test
+   * to stop (other exceptions will still terminate the test).
+   */
+  bool stopTestOnExpectFailure = true;
+
   void onInit() {
     _context.config('config: onInit');
   }
 
-  @override
   void onStart() {
     _context.config('config: onStart');
   }
 
-  @override
   void onTestStart(unittest.TestCase testCase) {
     _context.config('Starting ${testCase.description}');
   }
 
-  @override
   void onLogMessage(unittest.TestCase testCase, String message) {
     final msg = '${testCase.description}\n$message';
     _context.fine(msg);
   }
 
-  @override
   void onTestResult(unittest.TestCase testCase) {
     // result should not be null here
     assert(testCase.result != null);
@@ -121,7 +126,6 @@ ${testCase.stackTrace}''');
     _context.fine('Duration: ${testCase.runningTime}');
   }
 
-  @override
   void onTestResultChanged(unittest.TestCase testCase) {
     _context.severe('Result changed for ${testCase.description}');
     _context.severe(
@@ -130,7 +134,6 @@ ${testCase.message}
 ${testCase.stackTrace}''');
   }
 
-  @override
   void onSummary(int passed, int failed, int errors, List<unittest.TestCase> results,
               String uncaughtError) {
     final bool success = failed == 0 && errors == 0 && uncaughtError == null;
@@ -165,9 +168,34 @@ ${testCase.stackTrace}''');
     }
   }
 
-  @override
   void onDone(bool success) {
     _completer.complete(success);
+  }
+
+  /**
+   * Format a test result.
+   */
+  String formatResult(unittest.TestCase testCase) {
+    var result = new StringBuffer();
+    result.write(testCase.result.toUpperCase());
+    result.write(": ");
+    result.write(testCase.description);
+    result.write("\n");
+
+    if (testCase.message != '') {
+      result.write(_indent(testCase.message));
+      result.write("\n");
+    }
+
+    if (testCase.stackTrace != null) {
+      result.write(_indent(testCase.stackTrace.toString()));
+      result.write("\n");
+    }
+    return result.toString();
+  }
+
+  void onExpectFailure(String reason) {
+    throw new unittest.TestFailure(reason);
   }
 
   @override
@@ -182,4 +210,8 @@ ${testCase.stackTrace}''');
     }
   }
 }
+
+/** Indent each line in [str] by two spaces. */
+String _indent(String str) =>
+  str.replaceAll(new RegExp("^", multiLine: true), "  ");
 
