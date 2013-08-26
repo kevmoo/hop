@@ -34,18 +34,18 @@
 <div class="doc">
 <p>The objects thrown by the default failure handler. </p>
 <pre class="source">
-class TestFailure {
- String _message;
+class TestFailure extends Error {
+ final String message;
 
- get message =&gt; _message;
- set message(String value) =&gt; _message = value;
+ TestFailure(this.message);
 
- TestFailure(String message) : _message = message;
-
- String toString() =&gt; _message;
+ String toString() =&gt; message;
 }
 </pre>
 </div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-exception"></span><a href="../dart_core/Error.html">Error</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>TestFailure</strong></span></p>
 <div>
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
@@ -60,7 +60,7 @@ through their identity. An <a class="crossref" href="../dart_core/Object.html">O
 only.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
-TestFailure(String message) : _message = message;
+TestFailure(this.message);
 </pre>
 </div>
 </div>
@@ -69,16 +69,25 @@ TestFailure(String message) : _message = message;
 <h3>Properties</h3>
 <div class="field"><h4 id="message">
 <button class="show-code">Code</button>
-var         <strong>message</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>message</strong> <a class="anchor-link"
             href="#message"
             title="Permalink to TestFailure.message">#</a>
         </h4>
         <div class="doc">
 <pre class="source">
-get message =&gt; _message;
+final String message
 </pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="stackTrace">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a>         <strong>stackTrace</strong> <a class="anchor-link"
+            href="#stackTrace"
+            title="Permalink to TestFailure.stackTrace">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_core/Error.html">Error</a> </div><div class="doc">
 <pre class="source">
-set message(String value) =&gt; _message = value;
+external StackTrace get stackTrace;
 </pre>
 </div>
 </div>
@@ -94,7 +103,7 @@ set message(String value) =&gt; _message = value;
 <p>Returns a string representation of this object.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
-String toString() =&gt; _message;
+String toString() =&gt; message;
 </pre>
 </div>
 </div>

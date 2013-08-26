@@ -2,7 +2,7 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>Configuration class / unittest Library / Hop Documentation</title>
+        <title>Configuration abstract class / unittest Library / Hop Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
@@ -27,57 +27,34 @@
 </div>
 <div class="content">
         <h2><strong>Configuration</strong>
-          class
+          abstract class
         </h2>
         
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
-<p>Hooks to configure the unittest library for different platforms. This class
-implements the API in a platform-independent way. Tests that want to take
-advantage of the platform can create a subclass and override methods from
-this class.</p>
+<p>Describes the interface used by the unit test system for communicating the
+results of a test run.</p>
 <pre class="source">
-class Configuration {
- // The VM won't shut down if a receive port is open. Use this to make sure
- // we correctly wait for asynchronous tests.
- ReceivePort _receivePort;
+abstract class Configuration {
 
  /**
-  * Subclasses can override this with something useful for diagnostics.
-  * Particularly useful in cases where we have parent/child configurations
-  * such as layout tests.
+  * Creates an instance of [SimpleConfiguration].
   */
- final String name = 'Configuration';
+ factory Configuration() =&gt; new SimpleConfiguration();
 
  /**
-  * If true, then tests are started automatically (otherwise [runTests]
-  * must be called explicitly after the tests are set up.
+  * Creates an [Configuration] instances that does nothing.
+  *
+  * For use by subclasses which wish to implement only a subset of features.
   */
- final bool autoStart = true;
+ Configuration.blank();
 
  /**
-  * If true (the default), throw an exception at the end if any tests failed.
+  * If [true], tests are started automatically. Otherwise [runTests]
+  * must be called explicitly after tests are set up.
   */
- bool throwOnTestFailures = true;
+ bool get autoStart =&gt; true;
 
- /**
-  * If true (the default), then tests will stop after the first failed
-  * [expect]. If false, failed [expect]s will not cause the test
-  * to stop (other exceptions will still terminate the test).
-  */
- bool stopTestOnExpectFailure = true;
-
- // If stopTestOnExpectFailure is false, we need to capture failures, which
- // we do with this List.
- final _testLogBuffer = &lt;Pair&lt;String, Trace&gt;&gt;[];
-
- /**
-  * The constructor sets up a failure handler for [expect] that redirects
-  * [expect] failures to [onExpectFailure].
-  */
- Configuration() {
-   configureExpectFailureHandler(new _ExpectFailureHandler(this));
- }
  /**
   * Called as soon as the unittest framework becomes initialized. This is done
   * even before tests are added to the test framework. It might be used to
@@ -85,191 +62,78 @@ class Configuration {
   * It is also used to tell the vm or browser that tests are going to be run
   * asynchronously and that the process should wait until they are done.
   */
- void onInit() {
-   _receivePort = new ReceivePort();
-   _postMessage('unittest-suite-wait-for-done');
- }
+ void onInit() {}
 
  /** Called as soon as the unittest framework starts running. */
  void onStart() {}
 
  /**
   * Called when each test starts. Useful to show intermediate progress on
-  * a test suite. Derived classes should call this first before their own
-  * override code.
+  * a test suite.
   */
- void onTestStart(TestCase testCase) {
-   assert(testCase != null);
-   _testLogBuffer.clear();
- }
+ void onTestStart(TestCase testCase) {}
 
  /**
   * Called when each test is first completed. Useful to show intermediate
-  * progress on a test suite. Derived classes should call this first 
-  * before their own override code.
+  * progress on a test suite.
   */
- void onTestResult(TestCase testCase) {
-   assert(testCase != null);
-   if (!stopTestOnExpectFailure &amp;&amp; _testLogBuffer.length &gt; 0) {
-     // Write the message/stack pairs up to the last pairs.
-     var reason = new StringBuffer();
-     for (var reasonAndTrace in
-            _testLogBuffer.take(_testLogBuffer.length - 1)) {
-       reason.write(reasonAndTrace.first);
-       reason.write('\n');
-       reason.write(reasonAndTrace.last);
-       reason.write('\n');
-     }
-     var lastReasonAndTrace = _testLogBuffer.last;
-     // Write the last message.
-     reason.write(lastReasonAndTrace.first);
-     if (testCase.result == PASS) {
-       testCase._result = FAIL;
-       testCase._message = reason.toString();
-       // Use the last stack as the overall failure stack.    
-       testCase._stackTrace = lastReasonAndTrace.last;
-     } else {
-       // Add the last stack to the message; we have a further stack
-       // caused by some other failure.
-       reason.write(lastReasonAndTrace.last);
-       reason.write('\n');
-       // Add the existing reason to the end of the expect log to 
-       // create the final message.
-       testCase._message = '${reason.toString()}\n${testCase._message}';
-     }
-   }
- }
+ void onTestResult(TestCase testCase) {}
 
  /**
-  * Called when an already completed test changes state; for example a test
+  * Called when an already completed test changes state. For example: a test
   * that was marked as passing may later be marked as being in error because
   * it still had callbacks being invoked.
   */
- void onTestResultChanged(TestCase testCase) {
-   assert(testCase != null);
- }
+ void onTestResultChanged(TestCase testCase) {}
 
  /**
-  * Handles the logging of messages by a test case. The default in
-  * this base configuration is to call print();
+  * Handles the logging of messages by a test case.
   */
- void onLogMessage(TestCase testCase, String message) {
-   print(message);
- }
-
- /**
-  * Handles failures from expect(). The default in
-  * this base configuration is to throw an exception;
-  */
- void onExpectFailure(String reason) {
-   if (stopTestOnExpectFailure) {
-     throw new TestFailure(reason);
-   } else {
-     try {
-       throw '';
-     } catch (_, stack) {
-       _testLogBuffer.add(
-           new Pair&lt;String, Trace&gt;(reason, new Trace.from(stack)));
-     }
-   }
- }
- 
- /**
-  * Format a test result.
-  */
- String formatResult(TestCase testCase) {
-   var result = new StringBuffer();
-   result.write(testCase.result.toUpperCase());
-   result.write(": ");
-   result.write(testCase.description);
-   result.write("\n");
-
-   if (testCase.message != '') {
-     result.write(indent(testCase.message));
-     result.write("\n");
-   }
-
-   if (testCase.stackTrace != null) {
-     result.write(indent(testCase.stackTrace.toString()));
-     result.write("\n");
-   }
-   return result.toString();
- }
-
- /**
-  * Called with the result of all test cases. The default implementation prints
-  * the result summary using the built-in [print] command. Browser tests
-  * commonly override this to reformat the output.
-  *
-  * When [uncaughtError] is not null, it contains an error that occured outside
-  * of tests (e.g. setting up the test).
-  */
- void onSummary(int passed, int failed, int errors, List&lt;TestCase&gt; results,
-     String uncaughtError) {
-   // Print each test's result.
-   for (final t in results) {
-     print(formatResult(t).trim());
-   }
-
-   // Show the summary.
-   print('');
-
-   if (passed == 0 &amp;&amp; failed == 0 &amp;&amp; errors == 0 &amp;&amp; uncaughtError == null) {
-     print('No tests found.');
-     // This is considered a failure too.
-   } else if (failed == 0 &amp;&amp; errors == 0 &amp;&amp; uncaughtError == null) {
-     print('All $passed tests passed.');
-   } else {
-     if (uncaughtError != null) {
-       print('Top-level uncaught error: $uncaughtError');
-     }
-     print('$passed PASSED, $failed FAILED, $errors ERRORS');
-   }
- }
+ void onLogMessage(TestCase testCase, String message) {}
 
  /**
   * Called when the unittest framework is done running. [success] indicates
   * whether all tests passed successfully.
   */
- void onDone(bool success) {
-   if (success) {
-     _postMessage('unittest-suite-success');
-     _receivePort.close();
-   } else {
-     _receivePort.close();
-     if (throwOnTestFailures) {
-       throw new Exception('Some tests failed.');
-     }
-   }
- }
+ void onDone(bool success) {}
 
- /** Handle errors that happen outside the tests. */
- // TODO(vsm): figure out how to expose the stack trace here
- // Currently e.message works in dartium, but not in dartc.
- void handleExternalError(e, String message, [stack]) =&gt;
-     _reportTestError('$message\nCaught $e', stack);
-
- _postMessage(String message) {
-   // In dart2js browser tests, the JavaScript-based test controller
-   // intercepts calls to print and listens for "secret" messages.
-   print(message);
- }
+ /**
+  * Called with the result of all test cases. Browser tests commonly override
+  * this to reformat the output.
+  *
+  * When [uncaughtError] is not null, it contains an error that occured outside
+  * of tests (e.g. setting up the test).
+  */
+ void onSummary(int passed, int failed, int errors, List&lt;TestCase&gt; results,
+     String uncaughtError) {}
 }
 </pre>
 </div>
+<h3>Subclasses</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../unittest/SimpleConfiguration.html">SimpleConfiguration</a></span></p>
 <div>
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>Configuration</strong>() <a class="anchor-link" href="#"
+factory <strong>Configuration</strong>() <a class="anchor-link" href="#"
               title="Permalink to Configuration.Configuration">#</a></h4>
 <div class="doc">
-<p>The constructor sets up a failure handler for <a class="crossref" href="../matcher.html#expect">expect</a> that redirects
-<a class="crossref" href="../matcher.html#expect">expect</a> failures to <a class="crossref" href="../unittest/Configuration.html#onExpectFailure">onExpectFailure</a>.</p>
+<p>Creates an instance of <a class="crossref" href="../unittest/SimpleConfiguration.html">SimpleConfiguration</a>.</p>
 <pre class="source">
-Configuration() {
- configureExpectFailureHandler(new _ExpectFailureHandler(this));
-}
+factory Configuration() =&gt; new SimpleConfiguration();
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="blank">
+<button class="show-code">Code</button>
+new <strong>Configuration.blank</strong>() <a class="anchor-link" href="#blank"
+              title="Permalink to Configuration.Configuration.blank">#</a></h4>
+<div class="doc">
+<p>Creates an <a class="crossref" href="../unittest/Configuration.html">Configuration</a> instances that does nothing.</p>
+<p>For use by subclasses which wish to implement only a subset of features.</p>
+<pre class="source">
+Configuration.blank();
 </pre>
 </div>
 </div>
@@ -283,99 +147,16 @@ final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <st
             title="Permalink to Configuration.autoStart">#</a>
         </h4>
         <div class="doc">
-<p>If true, then tests are started automatically (otherwise <a class="crossref" href="../unittest.html#runTests">runTests</a>
-must be called explicitly after the tests are set up.</p>
+<p>If <code>true</code>, tests are started automatically. Otherwise <a class="crossref" href="../unittest.html#runTests">runTests</a>
+must be called explicitly after tests are set up.</p>
 <pre class="source">
-final bool autoStart = true
-</pre>
-</div>
-</div>
-<div class="field"><h4 id="name">
-<button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>name</strong> <a class="anchor-link"
-            href="#name"
-            title="Permalink to Configuration.name">#</a>
-        </h4>
-        <div class="doc">
-<p>Subclasses can override this with something useful for diagnostics.
-Particularly useful in cases where we have parent/child configurations
-such as layout tests.</p>
-<pre class="source">
-final String name = 'Configuration'
-</pre>
-</div>
-</div>
-<div class="field"><h4 id="stopTestOnExpectFailure">
-<button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>stopTestOnExpectFailure</strong> <a class="anchor-link"
-            href="#stopTestOnExpectFailure"
-            title="Permalink to Configuration.stopTestOnExpectFailure">#</a>
-        </h4>
-        <div class="doc">
-<p>If true (the default), then tests will stop after the first failed
-<a class="crossref" href="../matcher.html#expect">expect</a>. If false, failed <a class="crossref" href="../matcher.html#expect">expect</a>s will not cause the test
-to stop (other exceptions will still terminate the test).</p>
-<pre class="source">
-bool stopTestOnExpectFailure = true
-</pre>
-</div>
-</div>
-<div class="field"><h4 id="throwOnTestFailures">
-<button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>throwOnTestFailures</strong> <a class="anchor-link"
-            href="#throwOnTestFailures"
-            title="Permalink to Configuration.throwOnTestFailures">#</a>
-        </h4>
-        <div class="doc">
-<p>If true (the default), throw an exception at the end if any tests failed.</p>
-<pre class="source">
-bool throwOnTestFailures = true
+bool get autoStart =&gt; true;
 </pre>
 </div>
 </div>
 </div>
 <div>
 <h3>Methods</h3>
-<div class="method"><h4 id="formatResult">
-<button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>formatResult</strong>(<a href="../unittest/TestCase.html">TestCase</a> testCase) <a class="anchor-link" href="#formatResult"
-              title="Permalink to Configuration.formatResult">#</a></h4>
-<div class="doc">
-<p>Format a test result.</p>
-<pre class="source">
-String formatResult(TestCase testCase) {
- var result = new StringBuffer();
- result.write(testCase.result.toUpperCase());
- result.write(": ");
- result.write(testCase.description);
- result.write("\n");
-
- if (testCase.message != '') {
-   result.write(indent(testCase.message));
-   result.write("\n");
- }
-
- if (testCase.stackTrace != null) {
-   result.write(indent(testCase.stackTrace.toString()));
-   result.write("\n");
- }
- return result.toString();
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="handleExternalError">
-<button class="show-code">Code</button>
-void <strong>handleExternalError</strong>(e, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [stack]) <a class="anchor-link" href="#handleExternalError"
-              title="Permalink to Configuration.handleExternalError">#</a></h4>
-<div class="doc">
-<p>Handle errors that happen outside the tests. </p>
-<pre class="source">
-void handleExternalError(e, String message, [stack]) =&gt;
-   _reportTestError('$message\nCaught $e', stack);
-</pre>
-</div>
-</div>
 <div class="method"><h4 id="onDone">
 <button class="show-code">Code</button>
 void <strong>onDone</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> success) <a class="anchor-link" href="#onDone"
@@ -385,40 +166,7 @@ void <strong>onDone</strong>(<a href="http://api.dartlang.org/dart_core/bool.htm
 <span class="param">success</span> indicates
 whether all tests passed successfully.</p>
 <pre class="source">
-void onDone(bool success) {
- if (success) {
-   _postMessage('unittest-suite-success');
-   _receivePort.close();
- } else {
-   _receivePort.close();
-   if (throwOnTestFailures) {
-     throw new Exception('Some tests failed.');
-   }
- }
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="onExpectFailure">
-<button class="show-code">Code</button>
-void <strong>onExpectFailure</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> reason) <a class="anchor-link" href="#onExpectFailure"
-              title="Permalink to Configuration.onExpectFailure">#</a></h4>
-<div class="doc">
-<p>Handles failures from expect(). The default in
-this base configuration is to throw an exception;</p>
-<pre class="source">
-void onExpectFailure(String reason) {
- if (stopTestOnExpectFailure) {
-   throw new TestFailure(reason);
- } else {
-   try {
-     throw '';
-   } catch (_, stack) {
-     _testLogBuffer.add(
-         new Pair&lt;String, Trace&gt;(reason, new Trace.from(stack)));
-   }
- }
-}
+void onDone(bool success) {}
 </pre>
 </div>
 </div>
@@ -433,10 +181,7 @@ determine/debug errors that occur before the test harness starts executing.
 It is also used to tell the vm or browser that tests are going to be run
 asynchronously and that the process should wait until they are done.</p>
 <pre class="source">
-void onInit() {
- _receivePort = new ReceivePort();
- _postMessage('unittest-suite-wait-for-done');
-}
+void onInit() {}
 </pre>
 </div>
 </div>
@@ -445,12 +190,9 @@ void onInit() {
 void <strong>onLogMessage</strong>(<a href="../unittest/TestCase.html">TestCase</a> testCase, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#onLogMessage"
               title="Permalink to Configuration.onLogMessage">#</a></h4>
 <div class="doc">
-<p>Handles the logging of messages by a test case. The default in
-this base configuration is to call print();</p>
+<p>Handles the logging of messages by a test case.</p>
 <pre class="source">
-void onLogMessage(TestCase testCase, String message) {
- print(message);
-}
+void onLogMessage(TestCase testCase, String message) {}
 </pre>
 </div>
 </div>
@@ -470,35 +212,14 @@ void onStart() {}
 void <strong>onSummary</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> passed, <a href="http://api.dartlang.org/dart_core/int.html">int</a> failed, <a href="http://api.dartlang.org/dart_core/int.html">int</a> errors, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unittest/TestCase.html">TestCase</a>&gt; results, <a href="http://api.dartlang.org/dart_core/String.html">String</a> uncaughtError) <a class="anchor-link" href="#onSummary"
               title="Permalink to Configuration.onSummary">#</a></h4>
 <div class="doc">
-<p>Called with the result of all test cases. The default implementation prints
-the result summary using the built-in <a class="crossref" href="../dart.core.html#print">print</a> command. Browser tests
-commonly override this to reformat the output.</p>
+<p>Called with the result of all test cases. Browser tests commonly override
+this to reformat the output.</p>
 <p>When 
 <span class="param">uncaughtError</span> is not null, it contains an error that occured outside
 of tests (e.g. setting up the test).</p>
 <pre class="source">
 void onSummary(int passed, int failed, int errors, List&lt;TestCase&gt; results,
-   String uncaughtError) {
- // Print each test's result.
- for (final t in results) {
-   print(formatResult(t).trim());
- }
-
- // Show the summary.
- print('');
-
- if (passed == 0 &amp;&amp; failed == 0 &amp;&amp; errors == 0 &amp;&amp; uncaughtError == null) {
-   print('No tests found.');
-   // This is considered a failure too.
- } else if (failed == 0 &amp;&amp; errors == 0 &amp;&amp; uncaughtError == null) {
-   print('All $passed tests passed.');
- } else {
-   if (uncaughtError != null) {
-     print('Top-level uncaught error: $uncaughtError');
-   }
-   print('$passed PASSED, $failed FAILED, $errors ERRORS');
- }
-}
+   String uncaughtError) {}
 </pre>
 </div>
 </div>
@@ -508,40 +229,9 @@ void <strong>onTestResult</strong>(<a href="../unittest/TestCase.html">TestCase<
               title="Permalink to Configuration.onTestResult">#</a></h4>
 <div class="doc">
 <p>Called when each test is first completed. Useful to show intermediate
-progress on a test suite. Derived classes should call this first 
-before their own override code.</p>
+progress on a test suite.</p>
 <pre class="source">
-void onTestResult(TestCase testCase) {
- assert(testCase != null);
- if (!stopTestOnExpectFailure &amp;&amp; _testLogBuffer.length &gt; 0) {
-   // Write the message/stack pairs up to the last pairs.
-   var reason = new StringBuffer();
-   for (var reasonAndTrace in
-          _testLogBuffer.take(_testLogBuffer.length - 1)) {
-     reason.write(reasonAndTrace.first);
-     reason.write('\n');
-     reason.write(reasonAndTrace.last);
-     reason.write('\n');
-   }
-   var lastReasonAndTrace = _testLogBuffer.last;
-   // Write the last message.
-   reason.write(lastReasonAndTrace.first);
-   if (testCase.result == PASS) {
-     testCase._result = FAIL;
-     testCase._message = reason.toString();
-     // Use the last stack as the overall failure stack.    
-     testCase._stackTrace = lastReasonAndTrace.last;
-   } else {
-     // Add the last stack to the message; we have a further stack
-     // caused by some other failure.
-     reason.write(lastReasonAndTrace.last);
-     reason.write('\n');
-     // Add the existing reason to the end of the expect log to 
-     // create the final message.
-     testCase._message = '${reason.toString()}\n${testCase._message}';
-   }
- }
-}
+void onTestResult(TestCase testCase) {}
 </pre>
 </div>
 </div>
@@ -550,13 +240,11 @@ void onTestResult(TestCase testCase) {
 void <strong>onTestResultChanged</strong>(<a href="../unittest/TestCase.html">TestCase</a> testCase) <a class="anchor-link" href="#onTestResultChanged"
               title="Permalink to Configuration.onTestResultChanged">#</a></h4>
 <div class="doc">
-<p>Called when an already completed test changes state; for example a test
+<p>Called when an already completed test changes state. For example: a test
 that was marked as passing may later be marked as being in error because
 it still had callbacks being invoked.</p>
 <pre class="source">
-void onTestResultChanged(TestCase testCase) {
- assert(testCase != null);
-}
+void onTestResultChanged(TestCase testCase) {}
 </pre>
 </div>
 </div>
@@ -566,13 +254,9 @@ void <strong>onTestStart</strong>(<a href="../unittest/TestCase.html">TestCase</
               title="Permalink to Configuration.onTestStart">#</a></h4>
 <div class="doc">
 <p>Called when each test starts. Useful to show intermediate progress on
-a test suite. Derived classes should call this first before their own
-override code.</p>
+a test suite.</p>
 <pre class="source">
-void onTestStart(TestCase testCase) {
- assert(testCase != null);
- _testLogBuffer.clear();
-}
+void onTestStart(TestCase testCase) {}
 </pre>
 </div>
 </div>

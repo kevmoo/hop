@@ -81,14 +81,20 @@ class Trace implements StackTrace {
  /// [trace] should be formatted in the same way as a Dart VM or browser stack
  /// trace.
  factory Trace.parse(String trace) {
-   if (trace.isEmpty) return new Trace(&lt;Frame&gt;[]);
-   if (trace.startsWith("Error\n")) return new Trace.parseV8(trace);
-   if (trace.contains(_firefoxTrace)) return new Trace.parseFirefox(trace);
-   if (trace.contains(_friendlyTrace)) return new Trace.parseFriendly(trace);
+   try {
+     if (trace.isEmpty) return new Trace(&lt;Frame&gt;[]);
+     if (trace.contains(_v8Trace)) return new Trace.parseV8(trace);
+     // Valid Safari traces are a superset of valid Firefox traces.
+     if (trace.contains(_firefoxTrace)) return new Trace.parseSafari(trace);
+     if (trace.contains(_friendlyTrace)) return new Trace.parseFriendly(trace);
 
-   // Default to parsing the stack trace as a VM trace. This is also hit on IE
-   // and Safari, where the stack trace is just an empty string (issue 11257).
-   return new Trace.parseVM(trace);
+     // Default to parsing the stack trace as a VM trace. This is also hit on
+     // IE and Safari, where the stack trace is just an empty string (issue
+     // 11257).
+     return new Trace.parseVM(trace);
+   } on FormatException catch (error) {
+     throw new FormatException('${error.message}\nStack trace:\n$trace');
+   }
  }
 
  /// Parses a string representation of a Dart VM stack trace.
@@ -97,11 +103,34 @@ class Trace implements StackTrace {
 
  /// Parses a string representation of a Chrome/V8 stack trace.
  Trace.parseV8(String trace)
-     : this(trace.split("\n").skip(1).map((line) =&gt; new Frame.parseV8(line)));
+     : this(trace.split("\n").skip(1)
+         // It's possible that an Exception's description contains a line that
+         // looks like a V8 trace line, which will screw this up.
+         // Unfortunately, that's impossible to detect.
+         .skipWhile((line) =&gt; !line.startsWith("    at "))
+         .map((line) =&gt; new Frame.parseV8(line)));
+
+ /// Parses a string representation of an Internet Explorer stack trace.
+ ///
+ /// IE10+ traces look just like V8 traces. Prior to IE10, stack traces can't
+ /// be retrieved.
+ Trace.parseIE(String trace)
+     : this.parseV8(trace);
 
  /// Parses a string representation of a Firefox stack trace.
  Trace.parseFirefox(String trace)
      : this(trace.trim().split("\n")
+         .map((line) =&gt; new Frame.parseFirefox(line)));
+
+ /// Parses a string representation of a Safari stack trace.
+ ///
+ /// Safari 6+ stack traces look just like Firefox traces, except that they
+ /// sometimes (e.g. in isolates) have a "[native code]" frame. We just ignore
+ /// this frame to make the stack format more consistent between browsers.
+ /// Prior to Safari 6, stack traces can't be retrieved.
+ Trace.parseSafari(String trace)
+     : this(trace.trim().split("\n")
+         .where((line) =&gt; line != '[native code]')
          .map((line) =&gt; new Frame.parseFirefox(line)));
 
  /// Parses this package's a string representation of a stack trace.
@@ -268,14 +297,20 @@ factory <strong>Trace.parse</strong>(<a href="http://api.dartlang.org/dart_core/
 trace.</p>
 <pre class="source">
 factory Trace.parse(String trace) {
- if (trace.isEmpty) return new Trace(&lt;Frame&gt;[]);
- if (trace.startsWith("Error\n")) return new Trace.parseV8(trace);
- if (trace.contains(_firefoxTrace)) return new Trace.parseFirefox(trace);
- if (trace.contains(_friendlyTrace)) return new Trace.parseFriendly(trace);
+ try {
+   if (trace.isEmpty) return new Trace(&lt;Frame&gt;[]);
+   if (trace.contains(_v8Trace)) return new Trace.parseV8(trace);
+   // Valid Safari traces are a superset of valid Firefox traces.
+   if (trace.contains(_firefoxTrace)) return new Trace.parseSafari(trace);
+   if (trace.contains(_friendlyTrace)) return new Trace.parseFriendly(trace);
 
- // Default to parsing the stack trace as a VM trace. This is also hit on IE
- // and Safari, where the stack trace is just an empty string (issue 11257).
- return new Trace.parseVM(trace);
+   // Default to parsing the stack trace as a VM trace. This is also hit on
+   // IE and Safari, where the stack trace is just an empty string (issue
+   // 11257).
+   return new Trace.parseVM(trace);
+ } on FormatException catch (error) {
+   throw new FormatException('${error.message}\nStack trace:\n$trace');
+ }
 }
 </pre>
 </div>
@@ -306,6 +341,38 @@ Trace.parseFriendly(String trace)
 </pre>
 </div>
 </div>
+<div class="method"><h4 id="parseIE">
+<button class="show-code">Code</button>
+new <strong>Trace.parseIE</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseIE"
+              title="Permalink to Trace.Trace.parseIE">#</a></h4>
+<div class="doc">
+<p>Parses a string representation of an Internet Explorer stack trace.</p>
+<p>IE10+ traces look just like V8 traces. Prior to IE10, stack traces can't
+be retrieved.</p>
+<pre class="source">
+Trace.parseIE(String trace)
+   : this.parseV8(trace);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="parseSafari">
+<button class="show-code">Code</button>
+new <strong>Trace.parseSafari</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseSafari"
+              title="Permalink to Trace.Trace.parseSafari">#</a></h4>
+<div class="doc">
+<p>Parses a string representation of a Safari stack trace.</p>
+<p>Safari 6+ stack traces look just like Firefox traces, except that they
+sometimes (e.g. in isolates) have a "<code>native code</code>" frame. We just ignore
+this frame to make the stack format more consistent between browsers.
+Prior to Safari 6, stack traces can't be retrieved.</p>
+<pre class="source">
+Trace.parseSafari(String trace)
+   : this(trace.trim().split("\n")
+       .where((line) =&gt; line != '[native code]')
+       .map((line) =&gt; new Frame.parseFirefox(line)));
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="parseV8">
 <button class="show-code">Code</button>
 new <strong>Trace.parseV8</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseV8"
@@ -314,7 +381,12 @@ new <strong>Trace.parseV8</strong>(<a href="http://api.dartlang.org/dart_core/St
 <p>Parses a string representation of a Chrome/V8 stack trace.</p>
 <pre class="source">
 Trace.parseV8(String trace)
-   : this(trace.split("\n").skip(1).map((line) =&gt; new Frame.parseV8(line)));
+   : this(trace.split("\n").skip(1)
+       // It's possible that an Exception's description contains a line that
+       // looks like a V8 trace line, which will screw this up.
+       // Unfortunately, that's impossible to detect.
+       .skipWhile((line) =&gt; !line.startsWith("    at "))
+       .map((line) =&gt; new Frame.parseV8(line)));
 </pre>
 </div>
 </div>

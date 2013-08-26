@@ -649,7 +649,7 @@ const Matcher throwsUnsupportedError = const Throws(isUnsupportedError)
         <div class="doc">
 <p>Some matchers, like those for Futures and exception testing,
 can fail in asynchronous sections, and throw exceptions.
-A user of this library will typically want to catch and handle 
+A user of this library will typically want to catch and handle
 such exceptions. The <a class="crossref" href="matcher.html#wrapAsync">wrapAsync</a> property is a function that
 can wrap callbacks used by these Matchers so that they can be
 used safely. For example, the unittest library will set this

@@ -99,6 +99,12 @@ class Frame {
 
  /// Parses a string representation of a Dart VM stack frame.
  factory Frame.parseVM(String frame) {
+   // The VM sometimes folds multiple stack frames together and replaces them
+   // with "...".
+   if (frame == '...') {
+     return new Frame(new Uri(), null, null, '...');
+   }
+
    var match = _vmFrame.firstMatch(frame);
    if (match == null) {
      throw new FormatException("Couldn't parse VM stack trace line '$frame'.");
@@ -130,6 +136,12 @@ class Frame {
    }
  }
 
+ /// Parses a string representation of an IE stack frame.
+ ///
+ /// IE10+ frames look just like V8 frames. Prior to IE10, stack traces can't
+ /// be retrieved.
+ factory Frame.parseIE(String frame) =&gt; new Frame.parseV8(frame);
+
  /// Parses a string representation of a Firefox stack frame.
  factory Frame.parseFirefox(String frame) {
    var match = _firefoxFrame.firstMatch(frame);
@@ -150,6 +162,12 @@ class Frame {
    member = member.replaceFirst(_initialDot, '');
    return new Frame(uri, int.parse(match[4]), null, member);
  }
+
+ /// Parses a string representation of a Safari stack frame.
+ ///
+ /// Safari 6+ frames look just like Firefox frames. Prior to Safari 6, stack
+ /// traces can't be retrieved.
+ factory Frame.parseSafari(String frame) =&gt; new Frame.parseFirefox(frame);
 
  /// Parses this package's string representation of a stack frame.
  factory Frame.parseFriendly(String frame) {
@@ -275,6 +293,32 @@ factory Frame.parseFriendly(String frame) {
 </pre>
 </div>
 </div>
+<div class="method"><h4 id="parseIE">
+<button class="show-code">Code</button>
+factory <strong>Frame.parseIE</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseIE"
+              title="Permalink to Frame.Frame.parseIE">#</a></h4>
+<div class="doc">
+<p>Parses a string representation of an IE stack frame.</p>
+<p>IE10+ frames look just like V8 frames. Prior to IE10, stack traces can't
+be retrieved.</p>
+<pre class="source">
+factory Frame.parseIE(String frame) =&gt; new Frame.parseV8(frame);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="parseSafari">
+<button class="show-code">Code</button>
+factory <strong>Frame.parseSafari</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseSafari"
+              title="Permalink to Frame.Frame.parseSafari">#</a></h4>
+<div class="doc">
+<p>Parses a string representation of a Safari stack frame.</p>
+<p>Safari 6+ frames look just like Firefox frames. Prior to Safari 6, stack
+traces can't be retrieved.</p>
+<pre class="source">
+factory Frame.parseSafari(String frame) =&gt; new Frame.parseFirefox(frame);
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="parseV8">
 <button class="show-code">Code</button>
 factory <strong>Frame.parseV8</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseV8"
@@ -312,6 +356,12 @@ factory <strong>Frame.parseVM</strong>(<a href="http://api.dartlang.org/dart_cor
 <p>Parses a string representation of a Dart VM stack frame.</p>
 <pre class="source">
 factory Frame.parseVM(String frame) {
+ // The VM sometimes folds multiple stack frames together and replaces them
+ // with "...".
+ if (frame == '...') {
+   return new Frame(new Uri(), null, null, '...');
+ }
+
  var match = _vmFrame.firstMatch(frame);
  if (match == null) {
    throw new FormatException("Couldn't parse VM stack trace line '$frame'.");

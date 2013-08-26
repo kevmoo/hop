@@ -72,6 +72,25 @@ const override = const _Override()
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="proxy">
+<button class="show-code">Code</button>
+const         <strong>proxy</strong> <a class="anchor-link"
+            href="#proxy"
+            title="Permalink to proxy">#</a>
+        </h4>
+        <div class="doc">
+<p>An annotation used to mark a class that should be considered to implement
+every possible getter, setter and method. Tools can use this annotation to
+suppress warnings when there is no explicit implementation of a referenced
+member. Tools should provide a hint if this annotation is applied to a class
+that does not implement or inherit an implementation of the method
+<code>noSuchMethod</code> (other than the implementation in <a class="crossref" href="dart_core/Object.html">Object</a>). Note that
+classes are not affected by the use of this annotation on a supertype.</p>
+<pre class="source">
+const proxy = const _Proxy()
+</pre>
+</div>
+</div>
 </div>
         </div>
         <div class="clear"></div>

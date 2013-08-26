@@ -84,7 +84,7 @@ new <strong>UnmodifiableMapView</strong>(<a href="http://api.dartlang.org/dart_c
               title="Permalink to UnmodifiableMapView&lt;K, V&gt;.UnmodifiableMapView">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Creates a map with the default implementation.</p>
+<p>Creates a Map instance with the default implementation.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
 <pre class="source">
 UnmodifiableMapView(Map&lt;K, V&gt; source) : _source = source;
@@ -182,7 +182,7 @@ Iterable&lt;V&gt; get values =&gt; _source.values;
 <span class="param">key</span> or null if 
 <span class="param">key</span> is not
 in the map. Because null values are supported, one should either
-use containsKey to distinguish between an absent key and a null
+use <a class="crossref" href="../unmodifiable_collection/UnmodifiableMapView.html#containsKey">containsKey</a> to distinguish between an absent key and a null
 value, or use the <a class="crossref" href="../unmodifiable_collection/UnmodifiableMapView.html#putIfAbsent">putIfAbsent</a> method.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
 <pre class="source">
@@ -247,8 +247,7 @@ void clear() =&gt; _throw();
               title="Permalink to UnmodifiableMapView&lt;K, V&gt;.containsKey">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Returns whether this map contains the given 
-<span class="param">key</span>.</p>
+<p>Returns true if this map contains the given key.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
 <pre class="source">
 bool containsKey(K key) =&gt; _source.containsKey(key);
@@ -261,8 +260,7 @@ bool containsKey(K key) =&gt; _source.containsKey(key);
               title="Permalink to UnmodifiableMapView&lt;K, V&gt;.containsValue">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Returns whether this map contains the given 
-<span class="param">value</span>.</p>
+<p>Returns true if this map contains the given value.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
 <pre class="source">
 bool containsValue(V value) =&gt; _source.containsValue(value);
@@ -297,7 +295,7 @@ updates the map by mapping
 <span class="param">key</span> to the value returned by
 
 <span class="param">ifAbsent</span>. Returns the value in the map.</p>
-<p>It is an error to add or remove keys from map during the call to
+<p>It is an error to add or remove keys from the map during the call to
 
 <span class="param">ifAbsent</span>.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>

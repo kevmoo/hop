@@ -443,6 +443,25 @@ void rerunTests() {
 </pre>
 </div>
 </div>
+<div class="method"><h4 id="handleExternalError">
+<button class="show-code">Code</button>
+void <strong>handleExternalError</strong>(e, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [stack]) <a class="anchor-link" href="#handleExternalError"
+              title="Permalink to handleExternalError">#</a></h4>
+<div class="doc">
+<p>Handle errors that happen outside the tests. </p>
+<pre class="source">
+void handleExternalError(e, String message, [stack]) {
+ var msg = '$message\nCaught $e';
+
+ if (currentTestCase != null) {
+   currentTestCase.error(msg, stack);
+ } else {
+   _uncaughtErrorMessage = "$msg: $stack";
+ }
+}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="tearDown">
 <button class="show-code">Code</button>
 void <strong>tearDown</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> teardownTest) <a class="anchor-link" href="#tearDown"
@@ -792,10 +811,19 @@ void logMessage(String message) =&gt;
 </div>
 </div>
 <div>
-<h3>Classes</h3>
+<h3>Abstract Classes</h3>
           <div class="type">
           <h4>
             <a href="unittest/Configuration.html"><strong>Configuration</strong></a>
+          </h4>
+          </div>
+          
+</div>
+<div>
+<h3>Classes</h3>
+          <div class="type">
+          <h4>
+            <a href="unittest/SimpleConfiguration.html"><strong>SimpleConfiguration</strong></a>
           </h4>
           </div>
           
