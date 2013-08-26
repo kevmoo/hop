@@ -87,7 +87,7 @@ class RootTaskContext implements _LoggerParent{
       list.insert(0, child);
       parent = child._parent;
       if(parent is _LoggerChild) {
-        child = parent;
+        child = parent as _LoggerChild;
       } else {
         // once we find something in the chain that's not a child
         // it should be 'this' -- the root task context

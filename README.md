@@ -1,19 +1,23 @@
-![HOP!](https://raw.github.com/kevmoo/hop.dart/master/resource/logo.png)
-## An object-oriented framework reusable Dart tasks.
+![Hop!](https://raw.github.com/kevmoo/hop.dart/master/resource/logo.png)
+## A Dart framework for reusable tasks
 
 [![Build Status](https://drone.io/github.com/kevmoo/hop.dart/status.png)](https://drone.io/github.com/kevmoo/hop.dart/latest)
 
-# Projects using HOP
+# Projects using Hop
 
-* [chrome.dart](https://github.com/dart-gde/chrome.dart) - Dart interop with chrome.* APIs for Chrome Packaged Apps
 * [Pop, Pop, Win!](https://github.com/dart-lang/pop-pop-win) - Minesweeper with balloons
+* [Dart Widgets](https://github.com/dart-lang/widget.dart) - Reusable Web Components
+* [Lawndart](https://github.com/sethladd/lawndart) - Unified, asynchronous, easy-to-use library for browser-based storage.
+* [Spectre](https://github.com/johnmccutchan/spectre) - Spectre Graphics Engine for Dart
+* [vector_math](https://github.com/johnmccutchan/vector_math) - A Vector math library for 2D and 3D applications.
+* [Dart Client Generator for Discovery APIs](https://github.com/dart-gde/discovery_api_dart_client_generator)
+* [chrome.dart](https://github.com/dart-gde/chrome.dart) - Dart interop with chrome.* APIs for Chrome Packaged Apps
 * [qr.dart](https://github.com/kevmoo/qr.dart) - Generate QR codes
 * [vote.dart](https://github.com/kevmoo/vote.dart) - Simulate, run, and calculate elections with different election methods
-* [Dart Widgets](https://github.com/kevmoo/widget.dart) - Reusable Web Components
 
 # Try It Now
 
-The __The HOP task management system for Dart__ is hosted on [pub.dartlang.org](http://pub.dartlang.org/packages/hop). Add the __HOP__ package to your `pubspec.yaml` file, selecting a version range that works with your version of the SDK. _Always check the [HOP page](http://pub.dartlang.org/packages/hop) on pub to find the latest release._
+The __The Hop task management system for Dart__ is hosted on [pub.dartlang.org](http://pub.dartlang.org/packages/hop). Add the __Hop__ package to your `pubspec.yaml` file, selecting a version range that works with your version of the SDK. _Always check the [Hop page](http://pub.dartlang.org/packages/hop) on pub to find the latest release._
 
 See the [changelog](https://github.com/kevmoo/hop.dart/blob/master/changelog.md) to find the version that works best for you.
 
@@ -27,16 +31,16 @@ dependencies:
 # Versioning
 
 * We follow [Semantic Versioning](http://semver.org/).
-* We are not planning a V1 for __HOP__ until Dart releases V1.
+* We are not planning a V1 for __Hop__ until Dart releases V1.
 	* In the mean time, the version will remain `0.Y.Z`.
 	* Changes to the _minor_ version - Y - will indicate breaking changes.
 	* Changes to the _patch_ version - Z - indicate non-breaking changes.
 
 # Dart SDK dependency
 
-* We're going to try to keep __HOP__ in line with the [latest integration build](https://gsdview.appspot.com/dart-editor-archive-integration/latest/) of the Dart SDK and Editor.
-* At this point, each SDK release tends to introduce breaking changes, which usually require breaking changes in __HOP__.
-* Keep an eye on the [changelog](https://github.com/kevmoo/hop.dart/blob/master/changelog.md) to see how __HOP__ aligns with each SDK release. 
+* We're going to try to keep __Hop__ in line with the [latest integration build](https://gsdview.appspot.com/dart-editor-archive-integration/latest/) of the Dart SDK and Editor.
+* At this point, each SDK release tends to introduce breaking changes, which usually require breaking changes in __Hop__.
+* Keep an eye on the [changelog](https://github.com/kevmoo/hop.dart/blob/master/changelog.md) to see how __Hop__ aligns with each SDK release.
 
 # The libraries
 

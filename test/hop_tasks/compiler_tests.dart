@@ -38,8 +38,7 @@ class CompilerTests {
         .then((TempDir value) {
           tmpDir = value;
 
-          final populater = new MapDirectoryPopulater(sourceDirMap);
-          return tmpDir.populate(populater);
+          return tmpDir.populate(sourceDirMap);
         })
         .then((TempDir value) {
           assert(value == tmpDir);
@@ -87,8 +86,6 @@ Set<String> _getOutputFiles(List<String> inputFiles, CompilerTargetType type,
         outputFiles.add(newName);
         outputFiles.add(newName + '.deps');
         outputFiles.add(newName + '.map');
-        outputFiles.add(pathos.join(inFileDir, 'part.js'));
-        outputFiles.add(pathos.join(inFileDir, 'part.js.map'));
       } else {
         assert(type == CompilerTargetType.DART);
         assert(inFile.endsWith('.dart'));

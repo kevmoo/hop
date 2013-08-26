@@ -33,29 +33,23 @@ class DartAnalyzerTests {
 
 Future _testAnalyzerTask(Map<String, String> inputs,
                        RunResult expectedResult) {
-  TempDir tempDir;
+  String path;
+  return TempDir
+      .then((Directory dir) {
+        path = dir.path;
+        return EntityPopulater.populate(path, inputs, leaveExistingDirs: true)
+          .then((Directory value) {
+            assert(value.path == path);
 
-  return TempDir.create()
-      .then((TempDir value) {
-        tempDir = value;
-        final populater = new MapDirectoryPopulater(inputs);
-        return tempDir.populate(populater);
-      })
-      .then((TempDir value) {
-        assert(value == tempDir);
+            var fullPaths = inputs.keys
+                .map((e) => pathos.absolute(pathos.join(path, e)))
+                .toList();
 
-        var fullPaths = inputs.keys.map((e) =>
-            new Path(tempDir.path).join(new Path(e)).toNativePath()).toList();
-
-        final task = createAnalyzerTask(fullPaths);
-        return runTaskInTestRunner(task);
-      })
-      .then((RunResult runResult) {
-        expect(runResult, expectedResult);
-      })
-      .whenComplete(() {
-        if(tempDir != null) {
-          tempDir.dispose();
-        }
+            final task = createAnalyzerTask(fullPaths);
+            return runTaskInTestRunner(task);
+          })
+          .then((RunResult runResult) {
+            expect(runResult, expectedResult);
+          });
       });
 }

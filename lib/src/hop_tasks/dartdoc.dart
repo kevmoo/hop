@@ -45,7 +45,7 @@ Future<bool> _compileDocs(TaskContext ctx, String targetBranch,
   final parseResult = ctx.arguments;
   final bool allowDirty = parseResult[_allowDirtyArg];
 
-  final currentWorkingDir = path.current;
+  final currentWorkingDir = pathos.current;
 
   GitDir gitDir;
   List<String> libs;
@@ -140,7 +140,6 @@ Future _doDocsPopulate(TaskContext ctx, TempDir dir, Iterable<String> libs,
         assert(dartDocSuccess);
 
         if(postBuild != null) {
-          // TODO: this should be platfrom specific...pathos?
           return postBuild(ctx.getSubLogger('post-build'), dir.path);
         }
       });

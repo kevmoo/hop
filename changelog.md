@@ -1,5 +1,34 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.24.3 2013-08-26 (SDK 0.6.21.2 r26619)
+
+* Latest SDK
+
+## 0.24.2 2013-08-10 (SDK 0.6.17.0 r25990)
+
+* Latest SDK
+
+## 0.24.1 2013-07-24 (SDK 0.6.9.2 r25388)
+
+* Latest SDK
+
+# hop_tasks
+
+* `createDartCompilerTask` added optional args
+    * `throwOnError: false`
+    * `verbose: true`
+
+## 0.24.0 2013-07-19 (SDK 0.6.5.0 r25017)
+
+* **BREAKING** Removed deprecated dart2js method
+* Updated SDK dependency to 0.6.5
+* Moved to renamed `path` package from `pathos`
+
+## 0.23.0 2013-07-11 (SDK 0.6.3.3 r24898)
+
+* Updated pub dependencies
+* Removed reference to deprecated `dart_analyzer`
+
 ## 0.22.2 2013-05-28 (SDK 0.5.11.1 r23200)
 
 # Fixes for latest SDK

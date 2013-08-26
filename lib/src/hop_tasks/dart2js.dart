@@ -1,28 +1,17 @@
 part of hop_tasks;
 
 class CompilerTargetType {
-  final String _value;
-  const CompilerTargetType._internal(this._value);
-  String toString() => 'CompilerTargetType.$_value';
-  String get fileExt => _value;
 
-  static const JS = const CompilerTargetType._internal('js');
-  static const DART = const CompilerTargetType._internal('dart');
-}
+  static const JS = const CompilerTargetType._('js', 'Javascript');
+  static const DART = const CompilerTargetType._('dart', 'Dart');
 
-@deprecated
-Task createDart2JsTask(dynamic delayedRootList, {String output: null,
-  String packageRoot: null, bool minify: false, bool allowUnsafeEval: true,
-  bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false}) {
+  final String fileExt;
+  final String friendlyName;
 
-  return createDartCompilerTask(delayedRootList,
-      singleOutput: output,
-      packageRoot: packageRoot,
-      minify: minify,
-      allowUnsafeEval: allowUnsafeEval,
-      liveTypeAnalysis: liveTypeAnalysis,
-      rejectDeprecatedFeatures: rejectDeprecatedFeatures,
-      outputType: CompilerTargetType.JS);
+  const CompilerTargetType._(this.fileExt, this.friendlyName);
+
+  @override
+  String toString() => 'CompilerTargetType.$fileExt';
 }
 
 /**
@@ -33,13 +22,11 @@ Task createDart2JsTask(dynamic delayedRootList, {String output: null,
  */
 Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
   String packageRoot, bool minify: false, bool allowUnsafeEval: true,
-  bool liveTypeAnalysis: true, bool rejectDeprecatedFeatures: false,
+  bool liveTypeAnalysis: true, bool throwOnError: false, bool verbose: true,
   CompilerTargetType outputType: CompilerTargetType.JS,
   String outputMapper(String source)}) {
 
   requireArgument(outputType == CompilerTargetType.JS || outputType == CompilerTargetType.DART, 'outputType');
-
-  final friendlyName = (outputType == CompilerTargetType.JS) ? 'Javascript' : 'Dart';
 
   if(singleOutput != null && outputMapper != null) {
     throw new ArgumentError('Only one of "singleOutput" and "outputMapper" can be set.');
@@ -77,8 +64,8 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
             String output = outputMapper(path);
 
             return _dart2js(context, path,
-                output, packageRoot, minify, allowUnsafeEval,
-                liveTypeAnalysis, rejectDeprecatedFeatures, outputType)
+                output, packageRoot, minify, allowUnsafeEval, liveTypeAnalysis,
+                throwOnError, verbose, outputType)
                 .then((bool success) {
                   // should not have been run if we had pending errors
                   assert(errors == false);
@@ -89,7 +76,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
         .then((_) {
           return !errors;
         });
-  }, description: 'Run Dart-to-$friendlyName compiler');
+  }, description: 'Run Dart-to-${outputType.friendlyName} compiler');
 }
 
 String _dart2jsOutputMapper(String input) => input + '.js';
@@ -104,7 +91,8 @@ String _dart2DartOutputMapper(String input) {
 
 Future<bool> _dart2js(TaskContext ctx, String file,
     String output, String packageRoot, bool minify, bool allowUnsafeEval,
-    bool liveTypeAnalysis, bool rejectDeprecatedFeatures, CompilerTargetType outputType) {
+    bool liveTypeAnalysis, bool throwOnError, bool verbose,
+    CompilerTargetType outputType) {
 
   requireArgumentNotNullOrEmpty(output, 'output');
 
@@ -117,18 +105,20 @@ Future<bool> _dart2js(TaskContext ctx, String file,
   assert(packageDir.existsSync());
 
   final args = ["--package-root=${packageDir.path}",
-                '--throw-on-error',
-                '-v',
                 "--output-type=${outputType.fileExt}",
                 "--out=$output",
                 file];
 
-  if(liveTypeAnalysis == false) {
-    args.add('--disable-native-live-type-analysis');
+  if (verbose) {
+    args.add('--verbose');
   }
 
-  if(rejectDeprecatedFeatures) {
-    args.add('--reject-deprecated-language-features');
+  if(throwOnError) {
+    args.add('--throw-on-error');
+  }
+
+  if(liveTypeAnalysis == false) {
+    args.add('--disable-native-live-type-analysis');
   }
 
   if(minify) {

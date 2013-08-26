@@ -185,7 +185,7 @@ class Runner {
 
   static void _colorPrinter(Object value) {
     if(value is ShellString) {
-      value = value.format(true);
+      value = (value as ShellString).format(true);
     }
     print(value);
   }

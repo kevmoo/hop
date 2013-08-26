@@ -2,12 +2,11 @@ library hop_runner;
 
 import 'dart:async';
 import 'dart:io';
-import 'package:bot/bot.dart';
 import 'package:hop/hop.dart';
 import 'package:hop/hop_tasks.dart';
 import '../test/harness_console.dart' as test_console;
 
-import 'tasks/dartdoc_postbuild.dart' as dartdoc;
+import 'package:hop/src/hop_tasks_experimental.dart' as dartdoc;
 
 void main() {
   // Easy to enable hop-wide logging
@@ -15,7 +14,7 @@ void main() {
 
   addTask('test', createUnitTestTask(test_console.testCore));
 
-  addTask('docs', createDartDocTask(_getLibs, linkApi: true, postBuild: dartdoc.postBuild));
+  addTask('docs', createDartDocTask(_getLibs, linkApi: true, postBuild: dartdoc.createPostBuild(_cfg)));
 
   //
   // Analyzer
@@ -38,3 +37,6 @@ Future<List<String>> _getLibs() {
       .map((File file) => file.path)
       .toList();
 }
+
+final _cfg = new dartdoc.DocsConfig('Hop', 'https://github.com/kevmoo/hop.dart',
+    'logo.png', 500, 304, (String libName) => libName.startsWith('hop'));

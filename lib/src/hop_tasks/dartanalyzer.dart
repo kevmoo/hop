@@ -1,6 +1,7 @@
 part of hop_tasks;
 
-const _formatMachine = 'machine';
+const _verboseArgName = 'verbose';
+const _formatMachineArgName = 'format-machine';
 
 /**
  * [delayedFileList] a [List<String>] mapping to paths to dart files or some
@@ -11,7 +12,7 @@ Task createAnalyzerTask(dynamic delayedFileList) {
     final parseResult = context.arguments;
 
     final bool verbose = parseResult[_verboseArgName];
-    final bool formatMachine = parseResult[_formatMachine];
+    final bool formatMachine = parseResult[_formatMachineArgName];
 
     return getDelayedResult(delayedFileList)
         .then((List<String> files) {
@@ -40,7 +41,7 @@ void _parserConfig(ArgParser parser) {
   parser
     ..addFlag(_verboseArgName, abbr: 'v', defaultsTo: false,
         help: 'verbose output of all errors')
-    ..addFlag(_formatMachine, abbr: 'm', defaultsTo: false,
+    ..addFlag(_formatMachineArgName, abbr: 'm', defaultsTo: false,
         help: 'Print errors in a format suitable for parsing');
 }
 
@@ -88,16 +89,9 @@ Future<bool> _processDartAnalyzerFile(TaskContext context,
 
 Future<int> _dartAnalyzer(TaskLogger logger, String filePath, bool verbose,
     bool formatMachine) {
-  TempDir tmpDir;
 
-  String packagesPath = null;
   return _getPackagesDir(filePath)
-      .then((String val) {
-        packagesPath = val;
-        return TempDir.create();
-      })
-      .then((TempDir td) {
-        tmpDir = td;
+      .then((String packagesPath) {
 
         var processArgs = [];
 
@@ -109,7 +103,7 @@ Future<int> _dartAnalyzer(TaskLogger logger, String filePath, bool verbose,
           processArgs.addAll(['--package-root', packagesPath]);
         }
 
-        processArgs.addAll([path.normalize(filePath)]);
+        processArgs.addAll([pathos.normalize(filePath)]);
 
         return Process.start(_getPlatformBin('dartanalyzer'), processArgs);
       })
@@ -121,21 +115,16 @@ Future<int> _dartAnalyzer(TaskLogger logger, String filePath, bool verbose,
         } else {
           return pipeProcess(process);
         }
-      })
-      .whenComplete(() {
-        if(tmpDir != null) {
-          tmpDir.dispose();
-        }
       });
 }
 
 // TODO: (kevmoo) user should be able to provide their own packages dir? Hmm...
 Future<String> _getPackagesDir(String filePath) {
-  var dirName = path.dirname(filePath);
+  var dirName = pathos.dirname(filePath);
 
   const packageDirName = 'packages';
 
-  var packagesDirCandidatePath = path.join(dirName, packageDirName);
+  var packagesDirCandidatePath = pathos.join(dirName, packageDirName);
   return FileSystemEntity.isDirectory(packagesDirCandidatePath)
       .then((bool isDir) {
 
@@ -144,7 +133,7 @@ Future<String> _getPackagesDir(String filePath) {
         }
 
         packagesDirCandidatePath =
-            path.join(Directory.current.path, packageDirName);
+            pathos.join(Directory.current.path, packageDirName);
 
         return FileSystemEntity.isDirectory(packagesDirCandidatePath)
             .then((bool isDir2) {
