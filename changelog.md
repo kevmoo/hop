@@ -1,5 +1,10 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.24.3+1 2013-08-27 (SDK 0.6.21.3 r26639)
+
+* Latest SDK
+* New `dart2js` feature for Devon.
+
 ## 0.24.3 2013-08-26 (SDK 0.6.21.2 r26619)
 
 * Latest SDK
