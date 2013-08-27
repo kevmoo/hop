@@ -23,7 +23,7 @@ class CompilerTargetType {
 Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
   String packageRoot, bool minify: false, bool allowUnsafeEval: true,
   bool liveTypeAnalysis: true, bool throwOnError: false, bool verbose: true,
-  CompilerTargetType outputType: CompilerTargetType.JS,
+  bool suppressWarnings: false, CompilerTargetType outputType: CompilerTargetType.JS,
   String outputMapper(String source)}) {
 
   requireArgument(outputType == CompilerTargetType.JS || outputType == CompilerTargetType.DART, 'outputType');
@@ -65,7 +65,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
 
             return _dart2js(context, path,
                 output, packageRoot, minify, allowUnsafeEval, liveTypeAnalysis,
-                throwOnError, verbose, outputType)
+                throwOnError, verbose, suppressWarnings, outputType)
                 .then((bool success) {
                   // should not have been run if we had pending errors
                   assert(errors == false);
@@ -91,7 +91,7 @@ String _dart2DartOutputMapper(String input) {
 
 Future<bool> _dart2js(TaskContext ctx, String file,
     String output, String packageRoot, bool minify, bool allowUnsafeEval,
-    bool liveTypeAnalysis, bool throwOnError, bool verbose,
+    bool liveTypeAnalysis, bool throwOnError, bool verbose, bool suppressWarnings,
     CompilerTargetType outputType) {
 
   requireArgumentNotNullOrEmpty(output, 'output');
@@ -111,6 +111,10 @@ Future<bool> _dart2js(TaskContext ctx, String file,
 
   if (verbose) {
     args.add('--verbose');
+  }
+
+  if (suppressWarnings) {
+    args.add('--suppress-warnings');
   }
 
   if(throwOnError) {
