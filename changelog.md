@@ -1,5 +1,9 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.24.3+2 2013-08-27 (SDK 0.6.21.3 r26639)
+
+* Updated `bot_io` min dependency.
+
 ## 0.24.3+1 2013-08-27 (SDK 0.6.21.3 r26639)
 
 * Latest SDK
