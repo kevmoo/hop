@@ -5,7 +5,6 @@ args="--checked \
 --enable_asserts=true \
 --enable_checked_mode=true \
 --enable_type_checks=true \
---error_on_malformed_type \
 --package-root=$PACK_DIR \
 --verbose_debug=true \
 --verbose_stacktrace=true \
