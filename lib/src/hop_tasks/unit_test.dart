@@ -110,12 +110,14 @@ class _HopTestConfiguration extends unittest.Configuration {
 
     if(testCase.result == unittest.PASS) {
       _context.info('${testCase.description} -- PASS');
-    }
-    else {
-      _context.severe(
-'''[${testCase.result}] ${testCase.description}
-${testCase.message}
-${testCase.stackTrace}''');
+    } else {
+      var msg = '''[${testCase.result}] ${testCase.description}
+${testCase.message}''';
+      if(testCase.stackTrace != null) {
+        msg = msg + '''
+${testCase.stackTrace}''';
+      }
+      _context.severe(msg);
     }
 
     _context.fine('Duration: ${testCase.runningTime}');
