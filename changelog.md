@@ -1,5 +1,10 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.24.4 2013-09-05 (SDK 0.7.1 r27025)
+
+* Updated min SDK to 0.7.1
+* Added optional `timeout` option to `createUnitTestTask`
+
 ## 0.24.3+2 2013-08-27 (SDK 0.6.21.3 r26639)
 
 * Updated `bot_io` min dependency.
