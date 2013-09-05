@@ -86,9 +86,8 @@ class ChainedTask extends Task {
 
    final namedTask = _tasks[index];
 
-   assert(ctx is _TaskContext);
    // TODO: passing in args?
-   var subCtx = ctx.getSubContext(namedTask.name, namedTask.task, []);
+   var subCtx = (ctx as _TaskContext).getSubContext(namedTask.name, namedTask.task, []);
 
    return namedTask.task.run(subCtx)
        .then((bool result) {

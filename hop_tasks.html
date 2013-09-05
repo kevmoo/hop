@@ -31,11 +31,12 @@
 <h3>Functions</h3>
 <div class="method"><h4 id="createUnitTestTask">
 <button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>createUnitTestTask</strong>(<a href="bot/Action1.html">Action1</a> unitTestAction) <a class="anchor-link" href="#createUnitTestTask"
+<a href="hop/Task.html">Task</a> <strong>createUnitTestTask</strong>(<a href="bot/Action1.html">Action1</a> unitTestAction, {<a href="http://api.dartlang.org/dart_core/Duration.html">Duration</a> timeout: const Duration(seconds:20)}) <a class="anchor-link" href="#createUnitTestTask"
               title="Permalink to createUnitTestTask">#</a></h4>
 <div class="doc">
 <pre class="source">
-Task createUnitTestTask(Action1&lt;unittest.Configuration&gt; unitTestAction) {
+Task createUnitTestTask(Action1&lt;unittest.Configuration&gt; unitTestAction,
+                       {Duration timeout: const Duration(seconds: 20)}) {
  return new Task.async((TaskContext ctx) {
 
    final summaryFlag = ctx.arguments[_summaryFlag];
@@ -49,7 +50,8 @@ Task createUnitTestTask(Action1&lt;unittest.Configuration&gt; unitTestAction) {
    final errorSummary =
        (summaryFlag == _summaryAll || summaryFlag == _summaryError);
 
-   final config = new _HopTestConfiguration(ctx, failSummary, passSummary, errorSummary);
+   final config = new _HopTestConfiguration(ctx, failSummary, passSummary,
+       errorSummary, timeout);
 
    // TODO: wrap this in a try/catch
    unitTestAction(config);
@@ -300,7 +302,7 @@ Task createDartDocTask(dynamic delayedLibraryList, {
 </div>
 <div class="method"><h4 id="createDartCompilerTask">
 <button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>createDartCompilerTask</strong>(delayedRootList, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> singleOutput, <a href="http://api.dartlang.org/dart_core/String.html">String</a> packageRoot, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> minify: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> allowUnsafeEval: true, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> liveTypeAnalysis: true, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> throwOnError: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose: true, <a href="hop_tasks/CompilerTargetType.html">CompilerTargetType</a> outputType: CompilerTargetType.JS, <a href="http://api.dartlang.org/dart_core/String.html">String</a> outputMapper(<a href="http://api.dartlang.org/dart_core/String.html">String</a> source)}) <a class="anchor-link" href="#createDartCompilerTask"
+<a href="hop/Task.html">Task</a> <strong>createDartCompilerTask</strong>(delayedRootList, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> singleOutput, <a href="http://api.dartlang.org/dart_core/String.html">String</a> packageRoot, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> minify: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> allowUnsafeEval: true, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> liveTypeAnalysis: true, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> throwOnError: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> verbose: true, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> suppressWarnings: false, <a href="hop_tasks/CompilerTargetType.html">CompilerTargetType</a> outputType: CompilerTargetType.JS, <a href="http://api.dartlang.org/dart_core/String.html">String</a> outputMapper(<a href="http://api.dartlang.org/dart_core/String.html">String</a> source)}) <a class="anchor-link" href="#createDartCompilerTask"
               title="Permalink to createDartCompilerTask">#</a></h4>
 <div class="doc">
 <p>
@@ -312,7 +314,7 @@ combinations of <a class="crossref" href="dart_async/Future.html">Future</a> or 
 Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
  String packageRoot, bool minify: false, bool allowUnsafeEval: true,
  bool liveTypeAnalysis: true, bool throwOnError: false, bool verbose: true,
- CompilerTargetType outputType: CompilerTargetType.JS,
+ bool suppressWarnings: false, CompilerTargetType outputType: CompilerTargetType.JS,
  String outputMapper(String source)}) {
 
  requireArgument(outputType == CompilerTargetType.JS || outputType == CompilerTargetType.DART, 'outputType');
@@ -354,7 +356,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
 
            return _dart2js(context, path,
                output, packageRoot, minify, allowUnsafeEval, liveTypeAnalysis,
-               throwOnError, verbose, outputType)
+               throwOnError, verbose, suppressWarnings, outputType)
                .then((bool success) {
                  // should not have been run if we had pending errors
                  assert(errors == false);

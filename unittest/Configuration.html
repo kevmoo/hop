@@ -55,6 +55,9 @@ abstract class Configuration {
   */
  bool get autoStart =&gt; true;
 
+ /// How long a [TestCase] can run before it is considered an error.
+ Duration get timeout =&gt; const Duration(seconds: 20);
+
  /**
   * Called as soon as the unittest framework becomes initialized. This is done
   * even before tests are added to the test framework. It might be used to
@@ -151,6 +154,19 @@ final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <st
 must be called explicitly after tests are set up.</p>
 <pre class="source">
 bool get autoStart =&gt; true;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="timeout">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/Duration.html">Duration</a>         <strong>timeout</strong> <a class="anchor-link"
+            href="#timeout"
+            title="Permalink to Configuration.timeout">#</a>
+        </h4>
+        <div class="doc">
+<p>How long a <a class="crossref" href="../unittest/TestCase.html">TestCase</a> can run before it is considered an error.</p>
+<pre class="source">
+Duration get timeout =&gt; const Duration(seconds: 20);
 </pre>
 </div>
 </div>

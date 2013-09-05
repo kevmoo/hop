@@ -72,7 +72,7 @@ class EntityExistsValidator implements EntityValidator {
    } else if(entity is Link) {
      return entity.exists();
    }
-   throw 'entity $entity is not supported';
+   throw new ArgumentError('entity $entity is not supported');
  }
 
  static FileSystemEntityType _getType(FileSystemEntity entity) {

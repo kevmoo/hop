@@ -32,7 +32,12 @@
         
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
-<p>A <a class="crossref" href="../dart_core/Map.html">Map</a> wrapper that acts as an unmodifiable map.</p>
+<p>An unmodifiable map.</p>
+<p>An UnmodifiableMapView contains a <a class="crossref" href="../dart_core/Map.html">Map</a> object and ensures 
+that it does not change.
+Methods that would change the map,
+such as <a class="crossref" href="../unmodifiable_collection/UnmodifiableMapView.html#addAll">addAll</a> and <a class="crossref" href="../unmodifiable_collection/UnmodifiableMapView.html#remove">remove</a>, throw an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>.
+Permitted operations defer to the wrapped map.</p>
 <pre class="source">
 class UnmodifiableMapView&lt;K, V&gt; implements Map&lt;K, V&gt; {
  Map&lt;K, V&gt; _source;
@@ -61,14 +66,34 @@ class UnmodifiableMapView&lt;K, V&gt; implements Map&lt;K, V&gt; {
  Iterable&lt;V&gt; get values =&gt; _source.values;
 
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the map are disallowed.
+  */
  void operator []=(K key, V value) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the map are disallowed.
+  */
  V putIfAbsent(K key, V ifAbsent()) { _throw(); }
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the map are disallowed.
+  */
  void addAll(Map&lt;K, V&gt; other) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the map are disallowed.
+  */
  V remove(K key) { _throw(); }
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the map are disallowed.
+  */
  void clear() =&gt; _throw();
 }
 </pre>
@@ -195,11 +220,8 @@ V operator [](K key) =&gt; _source[key];
 void <strong>operator []=</strong>(<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a> key, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a> value) <a class="anchor-link" href="#[]="
               title="Permalink to UnmodifiableMapView&lt;K, V&gt;.operator []=">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Associates the 
-<span class="param">key</span> with the given 
-<span class="param">value</span>.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the map are disallowed.</p>
 <pre class="source">
 void operator []=(K key, V value) =&gt; _throw();
 </pre>
@@ -213,16 +235,8 @@ void operator []=(K key, V value) =&gt; _throw();
 void <strong>addAll</strong>(<a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; other) <a class="anchor-link" href="#addAll"
               title="Permalink to UnmodifiableMapView&lt;K, V&gt;.addAll">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Adds all key-value pairs of 
-<span class="param">other</span> to this map.</p>
-<p>If a key of 
-<span class="param">other</span> is already in this map, its value is overwritten.</p>
-<p>The operation is equivalent to doing <code>this[key] = value</code> for each key
-and associated value in other. It iterates over 
-<span class="param">other</span>, which must
-therefore not change during the iteration.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the map are disallowed.</p>
 <pre class="source">
 void addAll(Map&lt;K, V&gt; other) =&gt; _throw();
 </pre>
@@ -233,9 +247,8 @@ void addAll(Map&lt;K, V&gt; other) =&gt; _throw();
 void <strong>clear</strong>() <a class="anchor-link" href="#clear"
               title="Permalink to UnmodifiableMapView&lt;K, V&gt;.clear">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes all pairs from the map.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the map are disallowed.</p>
 <pre class="source">
 void clear() =&gt; _throw();
 </pre>
@@ -287,18 +300,8 @@ void forEach(void f(K key, V value)) =&gt; _source.forEach(f);
 <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a> <strong>putIfAbsent</strong>(<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a> key, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a> ifAbsent()) <a class="anchor-link" href="#putIfAbsent"
               title="Permalink to UnmodifiableMapView&lt;K, V&gt;.putIfAbsent">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>If 
-<span class="param">key</span> is not associated to a value, calls 
-<span class="param">ifAbsent</span> and
-updates the map by mapping 
-<span class="param">key</span> to the value returned by
-
-<span class="param">ifAbsent</span>. Returns the value in the map.</p>
-<p>It is an error to add or remove keys from the map during the call to
-
-<span class="param">ifAbsent</span>.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the map are disallowed.</p>
 <pre class="source">
 V putIfAbsent(K key, V ifAbsent()) { _throw(); }
 </pre>
@@ -309,15 +312,8 @@ V putIfAbsent(K key, V ifAbsent()) { _throw(); }
 <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a> <strong>remove</strong>(<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a> key) <a class="anchor-link" href="#remove"
               title="Permalink to UnmodifiableMapView&lt;K, V&gt;.remove">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes the association for the given 
-<span class="param">key</span>. Returns the value for
-
-<span class="param">key</span> in the map or null if 
-<span class="param">key</span> is not in the map. Note that values
-can be null and a returned null value does not always imply that the
-key is absent.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the map are disallowed.</p>
 <pre class="source">
 V remove(K key) { _throw(); }
 </pre>

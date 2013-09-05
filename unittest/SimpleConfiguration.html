@@ -65,7 +65,10 @@ class SimpleConfiguration extends Configuration {
 
  // If stopTestOnExpectFailure is false, we need to capture failures, which
  // we do with this List.
- final _testLogBuffer = &lt;Pair&lt;String, Trace&gt;&gt;[];
+ final _testLogBuffer = &lt;Pair&lt;String, StackTrace&gt;&gt;[];
+
+ /// How long a [TestCase] can run before it is considered an error.
+ Duration timeout = const Duration(seconds: 20);
 
  /**
   * The constructor sets up a failure handler for [expect] that redirects
@@ -76,6 +79,10 @@ class SimpleConfiguration extends Configuration {
  }
 
  void onInit() {
+   // For Dart internal tests, we don't want stack frame filtering.
+   // We turn it off here in the default config, but by default turn
+   // it back on in the vm and html configs.
+   filterStacks = false;
    _receivePort = new ReceivePort();
    _postMessage('unittest-suite-wait-for-done');
  }
@@ -150,8 +157,9 @@ class SimpleConfiguration extends Configuration {
      try {
        throw '';
      } catch (_, stack) {
-       _testLogBuffer.add(
-           new Pair&lt;String, Trace&gt;(reason, new Trace.from(stack)));
+       var trace = _getTrace(stack);
+       if (trace == null) trace = stack;
+       _testLogBuffer.add(new Pair&lt;String, StackTrace&gt;(reason, trace));
      }
    }
  }
@@ -310,6 +318,19 @@ bool throwOnTestFailures = true
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="timeout">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Duration.html">Duration</a>         <strong>timeout</strong> <a class="anchor-link"
+            href="#timeout"
+            title="Permalink to SimpleConfiguration.timeout">#</a>
+        </h4>
+        <div class="doc">
+<p>How long a <a class="crossref" href="../unittest/TestCase.html">TestCase</a> can run before it is considered an error.</p>
+<pre class="source">
+Duration timeout = const Duration(seconds: 20)
+</pre>
+</div>
+</div>
 </div>
 <div>
 <h3>Methods</h3>
@@ -381,8 +402,9 @@ void onExpectFailure(String reason) {
    try {
      throw '';
    } catch (_, stack) {
-     _testLogBuffer.add(
-         new Pair&lt;String, Trace&gt;(reason, new Trace.from(stack)));
+     var trace = _getTrace(stack);
+     if (trace == null) trace = stack;
+     _testLogBuffer.add(new Pair&lt;String, StackTrace&gt;(reason, trace));
    }
  }
 }
@@ -403,6 +425,10 @@ asynchronously and that the process should wait until they are done.</p>
 <div class="docs-inherited-from">docs inherited from <a href="../unittest/Configuration.html">Configuration</a> </div></div>
 <pre class="source">
 void onInit() {
+ // For Dart internal tests, we don't want stack frame filtering.
+ // We turn it off here in the default config, but by default turn
+ // it back on in the vm and html configs.
+ filterStacks = false;
  _receivePort = new ReceivePort();
  _postMessage('unittest-suite-wait-for-done');
 }

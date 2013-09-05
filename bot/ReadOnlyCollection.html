@@ -180,7 +180,7 @@ final <a href="http://api.dartlang.org/dart_core/Iterator.html">Iterator</a>&lt;
         </h4>
         <div class="inherited-from">inherited from <a href="../bot/Sequence.html">Sequence</a> </div><div class="doc">
 <div class="inherited">
-<p>Returns an <a class="crossref" href="../dart_core/Iterator.html">Iterator</a> that iterates over this <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> object.</p>
+<p>Returns an Iterator that iterates over this Iterable object.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/ReadOnlyCollection.html">E</a>&gt; </div></div>
 <pre class="source">
 @override
@@ -321,7 +321,7 @@ Enumerable&lt;T&gt; concat(Iterable&lt;T&gt; source) =&gt;
               title="Permalink to ReadOnlyCollection&lt;T&gt;.contains">#</a></h4>
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
 <div class="inherited">
-<p>Check whether the collection contains an element equal to 
+<p>Returns true if the collection contains an element equal to 
 <span class="param">element</span>.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/ReadOnlyCollection.html">E</a>&gt; </div></div>
 <pre class="source">
@@ -413,11 +413,11 @@ Enumerable&lt;T&gt; exclude(Iterable&lt;T&gt; items) =&gt;
               title="Permalink to ReadOnlyCollection&lt;T&gt;.expand">#</a></h4>
 <div class="inherited-from">inherited from <a href="../bot/Enumerable.html">Enumerable</a> </div><div class="doc">
 <div class="inherited">
-<p>Expand each element of this <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> into zero or more elements.</p>
-<p>The resulting Iterable will run through the elements returned
+<p>Expands each element of this <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> into zero or more elements.</p>
+<p>The resulting Iterable runs through the elements returned
 by 
 <span class="param">f</span> for each element of this, in order.</p>
-<p>The returned <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> is lazy, and will call 
+<p>The returned <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> is lazy, and calls 
 <span class="param">f</span> for each element
 of this every time it's iterated.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/ReadOnlyCollection.html">E</a>&gt; </div></div>
@@ -561,7 +561,7 @@ bool itemsEqual(Sequence other) {
 </div>
 <div class="method inherited"><h4 id="join">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>join</strong>([<a href="http://api.dartlang.org/dart_core/String.html">String</a> separator]) <a class="anchor-link" href="#join"
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>join</strong>([<a href="http://api.dartlang.org/dart_core/String.html">String</a> separator = ""]) <a class="anchor-link" href="#join"
               title="Permalink to ReadOnlyCollection&lt;T&gt;.join">#</a></h4>
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
 <div class="inherited">
@@ -572,7 +572,7 @@ Then concatenates the strings, optionally separated by the
 string.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/ReadOnlyCollection.html">E</a>&gt; </div></div>
 <pre class="source">
-String join([String separator]) {
+String join([String separator = ""]) {
  Iterator&lt;E&gt; iterator = this.iterator;
  if (!iterator.moveNext()) return "";
  StringBuffer buffer = new StringBuffer();
@@ -735,11 +735,11 @@ E singleWhere(bool test(E value)) {
               title="Permalink to ReadOnlyCollection&lt;T&gt;.skip">#</a></h4>
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
 <div class="inherited">
-<p>Returns an <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> that skips the first 
+<p>Returns an Iterable that skips the first 
 <span class="param">n</span> elements.</p>
 <p>If <code>this</code> has fewer than 
-<span class="param">n</span> elements, then the resulting <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> will
-be empty.</p>
+<span class="param">n</span> elements, then the resulting Iterable is 
+empty.</p>
 <p>It is an error if 
 <span class="param">n</span> is negative.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/ReadOnlyCollection.html">E</a>&gt; </div></div>
@@ -756,16 +756,16 @@ Iterable&lt;E&gt; skip(int n) {
               title="Permalink to ReadOnlyCollection&lt;T&gt;.skipWhile">#</a></h4>
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
 <div class="inherited">
-<p>Returns an <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> that skips elements while 
+<p>Returns an Iterable that skips elements while 
 <span class="param">test</span> is satisfied.</p>
-<p>The filtering happens lazily. Every new <a class="crossref" href="../dart_core/Iterator.html">Iterator</a> of the returned
-<a class="crossref" href="../dart_core/Iterable.html">Iterable</a> iterates over all elements of <code>this</code>.</p>
+<p>The filtering happens lazily. Every new Iterator of the returned
+Iterable iterates over all elements of <code>this</code>.</p>
 <p>As long as the iterator's elements satisfy 
 <span class="param">test</span> they are
 discarded. Once an element does not satisfy the 
 <span class="param">test</span> the iterator stops
 testing and uses every later element unconditionally. That is, the elements
-of the returned <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> are the elements of <code>this</code> starting from the
+of the returned Iterable are the elements of <code>this</code> starting from the
 first element that does not satisfy 
 <span class="param">test</span>.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/ReadOnlyCollection.html">E</a>&gt; </div></div>
@@ -804,14 +804,14 @@ Iterable&lt;E&gt; take(int n) {
               title="Permalink to ReadOnlyCollection&lt;T&gt;.takeWhile">#</a></h4>
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
 <div class="inherited">
-<p>Returns an <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> that stops once 
+<p>Returns an Iterable that stops once 
 <span class="param">test</span> is not satisfied anymore.</p>
-<p>The filtering happens lazily. Every new <a class="crossref" href="../dart_core/Iterator.html">Iterator</a> of the returned
-<a class="crossref" href="../dart_core/Iterable.html">Iterable</a> will start iterating over the elements of <code>this</code>.</p>
+<p>The filtering happens lazily. Every new Iterator of the returned
+Iterable starts iterating over the elements of <code>this</code>.</p>
 <p>When the iterator encounters an element <code>e</code> that does not satisfy 
 <span class="param">test</span>,
-it discards <code>e</code> and moves into the finished state. That is, it will not
-ask or provide any more elements.</p>
+it discards <code>e</code> and moves into the finished state. That is, it does not
+get or provide any more elements.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/ReadOnlyCollection.html">E</a>&gt; </div></div>
 <pre class="source">
 Iterable&lt;E&gt; takeWhile(bool test(E value)) {
@@ -827,7 +827,7 @@ Iterable&lt;E&gt; takeWhile(bool test(E value)) {
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
 <div class="inherited">
 <p>Creates a <a class="crossref" href="../dart_core/List.html">List</a> containing the elements of this <a class="crossref" href="../dart_core/Iterable.html">Iterable</a>.</p>
-<p>The elements will be in iteration order. The list is fixed-length
+<p>The elements are in iteration order. The list is fixed-length
 if 
 <span class="param">growable</span> is false.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/ReadOnlyCollection.html">E</a>&gt; </div></div>
@@ -896,7 +896,7 @@ predicate <code>test</code>.</p>
 <p>This method returns a view of the mapped elements. As long as the
 returned <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> is not iterated over, the supplied function <code>test</code> will
 not be invoked. Iterating will not cache results, and thus iterating
-multiple times over the the returned <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> will invoke the supplied
+multiple times over the returned <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> will invoke the supplied
 function <code>test</code> multiple times on the same element.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/ReadOnlyCollection.html">E</a>&gt; </div></div>
 <pre class="source">

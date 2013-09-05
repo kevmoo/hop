@@ -107,7 +107,7 @@ class Trace implements StackTrace {
          // It's possible that an Exception's description contains a line that
          // looks like a V8 trace line, which will screw this up.
          // Unfortunately, that's impossible to detect.
-         .skipWhile((line) =&gt; !line.startsWith("    at "))
+         .skipWhile((line) =&gt; !line.startsWith(_v8TraceLine))
          .map((line) =&gt; new Frame.parseV8(line)));
 
  /// Parses a string representation of an Internet Explorer stack trace.
@@ -385,7 +385,7 @@ Trace.parseV8(String trace)
        // It's possible that an Exception's description contains a line that
        // looks like a V8 trace line, which will screw this up.
        // Unfortunately, that's impossible to detect.
-       .skipWhile((line) =&gt; !line.startsWith("    at "))
+       .skipWhile((line) =&gt; !line.startsWith(_v8TraceLine))
        .map((line) =&gt; new Frame.parseV8(line)));
 </pre>
 </div>

@@ -66,9 +66,11 @@ abstract class EntityValidator {
      return new Stream.fromIterable(['entity is not a Directory']);
    }
 
+   Directory dir = entity;
+
    final expectedItems = new Set.from(map.keys);
 
-   return expandStream(entity.list(), (FileSystemEntity item) {
+   return expandStream(dir.list(), (FileSystemEntity item) {
 
      final relative = pathos.relative(item.path,
          from: entity.path);
@@ -95,7 +97,7 @@ abstract class EntityValidator {
    } else if(target is Map) {
      return validateDirectoryFromMap(entity, target);
    } else {
-     throw "Don't know how to deal with $target";
+     throw new ArgumentError("Don't know how to deal with $target");
    }
  }
 
@@ -161,9 +163,11 @@ static Stream&lt;String&gt; validateDirectoryFromMap(FileSystemEntity entity,
    return new Stream.fromIterable(['entity is not a Directory']);
  }
 
+ Directory dir = entity;
+
  final expectedItems = new Set.from(map.keys);
 
- return expandStream(entity.list(), (FileSystemEntity item) {
+ return expandStream(dir.list(), (FileSystemEntity item) {
 
    final relative = pathos.relative(item.path,
        from: entity.path);
@@ -198,7 +202,7 @@ static Stream&lt;String&gt; validate(FileSystemEntity entity, dynamic target) {
  } else if(target is Map) {
    return validateDirectoryFromMap(entity, target);
  } else {
-   throw "Don't know how to deal with $target";
+   throw new ArgumentError("Don't know how to deal with $target");
  }
 }
 </pre>

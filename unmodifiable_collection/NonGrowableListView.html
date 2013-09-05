@@ -32,9 +32,14 @@
         
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
-<p>A <a class="crossref" href="../dart_core/List.html">List</a> wrapper that acts as a non-growable list.</p>
-<p>Writes to the list are written through to the source list, but operations
-that change the length is not allowed.</p>
+<p>A fixed-length list.</p>
+<p>A NonGrowableListView contains a <a class="crossref" href="../dart_core/List.html">List</a> object and ensures that
+its length does not change.
+Methods that would change the length of the list,
+such as <a class="crossref" href="../unmodifiable_collection/NonGrowableListView.html#add">add</a> and <a class="crossref" href="../unmodifiable_collection/NonGrowableListView.html#remove">remove</a>, throw an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>.</p>
+<p>This class <em>does</em> allow changes to the contents of the wrapped list.
+You can, for example, <a class="crossref" href="../unmodifiable_collection/NonGrowableListView.html#sort">sort</a> the list.
+Permitted operations defer to the wrapped list.</p>
 <pre class="source">
 class NonGrowableListView&lt;E&gt; extends _IterableView&lt;E&gt;
                                     implements List&lt;E&gt; {
@@ -81,30 +86,82 @@ class NonGrowableListView&lt;E&gt; extends _IterableView&lt;E&gt;
  }
 
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  void set length(int newLength) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  void add(E value) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  void addAll(Iterable&lt;E&gt; iterable) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  void insert(int index, E element) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  void insertAll(int index, Iterable&lt;E&gt; iterable) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  bool remove(Object value) { _throw(); }
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  E removeAt(int index) { _throw(); }
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  E removeLast() { _throw(); }
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  void removeWhere(bool test(E element)) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  void retainWhere(bool test(E element)) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  void removeRange(int start, int end) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  void replaceRange(int start, int end, Iterable&lt;E&gt; iterable) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the length of the list are disallowed.
+  */
  void clear() =&gt; _throw();
 }
 </pre>
@@ -215,13 +272,8 @@ int get length =&gt; _source.length;
 void <strong>set length</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> newLength) <a class="anchor-link" href="#length="
               title="Permalink to NonGrowableListView&lt;E&gt;.set length">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Changes the length of this list.</p>
-<p>If 
-<span class="param">newLength</span> is greater than
-the current <a class="crossref" href="../unmodifiable_collection/NonGrowableListView.html#length">length</a>, entries are initialized to <code>null</code>.</p>
-<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a> if the list is fixed-length.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 void set length(int newLength) =&gt; _throw();
 </pre>
@@ -298,12 +350,8 @@ void operator []=(int index, E value) { _source[index] = value; }
 void <strong>add</strong>(<a href="../unmodifiable_collection/NonGrowableListView.html">E</a> value) <a class="anchor-link" href="#add"
               title="Permalink to NonGrowableListView&lt;E&gt;.add">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Adds 
-<span class="param">value</span> to the end of this list,
-extending the length by one.</p>
-<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a> if the list is fixed-length.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 void add(E value) =&gt; _throw();
 </pre>
@@ -314,13 +362,8 @@ void add(E value) =&gt; _throw();
 void <strong>addAll</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; iterable) <a class="anchor-link" href="#addAll"
               title="Permalink to NonGrowableListView&lt;E&gt;.addAll">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Appends all objects of 
-<span class="param">iterable</span> to the end of this list.</p>
-<p>Extends the length of the list by the number of objects in 
-<span class="param">iterable</span>.
-Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a> if this list is fixed-length.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 void addAll(Iterable&lt;E&gt; iterable) =&gt; _throw();
 </pre>
@@ -357,12 +400,8 @@ Map&lt;int, E&gt; asMap() =&gt; _source.asMap();
 void <strong>clear</strong>() <a class="anchor-link" href="#clear"
               title="Permalink to NonGrowableListView&lt;E&gt;.clear">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes all objects from this list;
-the length of the list becomes zero.</p>
-<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>, and retains all objects, if this 
-is a fixed-length list.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 void clear() =&gt; _throw();
 </pre>
@@ -520,15 +559,8 @@ int indexOf(E element, [int start = 0]) =&gt; _source.indexOf(element, start);
 void <strong>insert</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> index, <a href="../unmodifiable_collection/NonGrowableListView.html">E</a> element) <a class="anchor-link" href="#insert"
               title="Permalink to NonGrowableListView&lt;E&gt;.insert">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Inserts the object at position 
-<span class="param">index</span> in this list.</p>
-<p>This increases the length of the list by one and shifts all objects
-at or after the index towards the end of the list.</p>
-<p>An error occurs if the 
-<span class="param">index</span> is less than 0 or greater than length.
-An <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a> occurs if the list is fixed-length.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 void insert(int index, E element) =&gt; _throw();
 </pre>
@@ -539,17 +571,8 @@ void insert(int index, E element) =&gt; _throw();
 void <strong>insertAll</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> index, <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; iterable) <a class="anchor-link" href="#insertAll"
               title="Permalink to NonGrowableListView&lt;E&gt;.insertAll">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Inserts all objects of 
-<span class="param">iterable</span> at position 
-<span class="param">index</span> in this list.</p>
-<p>This increases the length of the list by the length of 
-<span class="param">iterable</span> and
-shifts all later objects towards the end of the list.</p>
-<p>An error occurs if the 
-<span class="param">index</span> is less than 0 or greater than length.
-An <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a> occurs if the list is fixed-length.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 void insertAll(int index, Iterable&lt;E&gt; iterable) =&gt; _throw();
 </pre>
@@ -624,16 +647,8 @@ E reduce(E combine(E value, E element)) =&gt; _source.reduce(combine);
 <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>remove</strong>(<a href="http://api.dartlang.org/dart_core/Object.html">Object</a> value) <a class="anchor-link" href="#remove"
               title="Permalink to NonGrowableListView&lt;E&gt;.remove">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes 
-<span class="param">value</span> from this list.</p>
-<p>Returns true if 
-<span class="param">value</span> was in the list.
-Returns false otherwise.
-The method has no effect if 
-<span class="param">value</span> was not in the list.</p>
-<p>An <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a> occurs if the list is fixed-length.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 bool remove(Object value) { _throw(); }
 </pre>
@@ -644,17 +659,8 @@ bool remove(Object value) { _throw(); }
 <a href="../unmodifiable_collection/NonGrowableListView.html">E</a> <strong>removeAt</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> index) <a class="anchor-link" href="#removeAt"
               title="Permalink to NonGrowableListView&lt;E&gt;.removeAt">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes the object at position 
-<span class="param">index</span> from this list.</p>
-<p>This method reduces the length of <code>this</code> by one and moves all later objects
-down by one position.</p>
-<p>Returns the removed object.</p><ul><li>Throws an <a class="crossref" href="../dart_core/ArgumentError.html">ArgumentError</a> if 
-<span class="param">index</span> is not an <a class="crossref" href="../dart_core/int.html">int</a>.</li><li>Throws a <a class="crossref" href="../dart_core/RangeError.html">RangeError</a> if the 
-<span class="param">index</span> is out of range for this list.</li><li>
-<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>, and doesn't remove the object,
-if this is a fixed-length list.</p></li></ul>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 E removeAt(int index) { _throw(); }
 </pre>
@@ -665,10 +671,8 @@ E removeAt(int index) { _throw(); }
 <a href="../unmodifiable_collection/NonGrowableListView.html">E</a> <strong>removeLast</strong>() <a class="anchor-link" href="#removeLast"
               title="Permalink to NonGrowableListView&lt;E&gt;.removeLast">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Pops and returns the last object in this list.</p>
-<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a> if this is a fixed-length list.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 E removeLast() { _throw(); }
 </pre>
@@ -679,15 +683,8 @@ E removeLast() { _throw(); }
 void <strong>removeRange</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> start, <a href="http://api.dartlang.org/dart_core/int.html">int</a> end) <a class="anchor-link" href="#removeRange"
               title="Permalink to NonGrowableListView&lt;E&gt;.removeRange">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes the objects in the range 
-<span class="param">start</span> inclusive to 
-<span class="param">end</span> exclusive.</p>
-<p>An error occurs if 
-<span class="param">start</span>..
-<span class="param">end</span> is not a valid range for <code>this</code>.
-Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a> if this is a fixed-length list.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 void removeRange(int start, int end) =&gt; _throw();
 </pre>
@@ -698,13 +695,8 @@ void removeRange(int start, int end) =&gt; _throw();
 void <strong>removeWhere</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../unmodifiable_collection/NonGrowableListView.html">E</a> element)) <a class="anchor-link" href="#removeWhere"
               title="Permalink to NonGrowableListView&lt;E&gt;.removeWhere">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes all objects from this list that satisfy 
-<span class="param">test</span>.</p>
-<p>An object <code>o</code> satisfies 
-<span class="param">test</span> if <code>test(o)</code> is true.</p>
-<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a> if this is a fixed-length list.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 void removeWhere(bool test(E element)) =&gt; _throw();
 </pre>
@@ -715,21 +707,8 @@ void removeWhere(bool test(E element)) =&gt; _throw();
 void <strong>replaceRange</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> start, <a href="http://api.dartlang.org/dart_core/int.html">int</a> end, <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; iterable) <a class="anchor-link" href="#replaceRange"
               title="Permalink to NonGrowableListView&lt;E&gt;.replaceRange">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes the objects in the range 
-<span class="param">start</span> inclusive to 
-<span class="param">end</span> exclusive
-and replaces them with the contents of the 
-<span class="param">iterable</span>.</p>
-<p>An error occurs if 
-<span class="param">start</span>..
-<span class="param">end</span> is not a valid range for <code>this</code>.</p>
-<p>Example:</p>
-<pre><code>var list = [1, 2, 3, 4, 5];
-list.replaceRange(1, 3, [6, 7, 8, 9]);
-print(list);  // [1, 6, 7, 8, 9, 4, 5]
-</code></pre>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 void replaceRange(int start, int end, Iterable&lt;E&gt; iterable) =&gt; _throw();
 </pre>
@@ -740,13 +719,8 @@ void replaceRange(int start, int end, Iterable&lt;E&gt; iterable) =&gt; _throw()
 void <strong>retainWhere</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../unmodifiable_collection/NonGrowableListView.html">E</a> element)) <a class="anchor-link" href="#retainWhere"
               title="Permalink to NonGrowableListView&lt;E&gt;.retainWhere">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes all objects from this list that fail to satisfy 
-<span class="param">test</span>.</p>
-<p>An object <code>o</code> satisfies 
-<span class="param">test</span> if <code>test(o)</code> is true.</p>
-<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a> if this is a fixed-length list.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the length of the list are disallowed.</p>
 <pre class="source">
 void retainWhere(bool test(E element)) =&gt; _throw();
 </pre>

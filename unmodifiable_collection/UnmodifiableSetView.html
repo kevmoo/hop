@@ -32,7 +32,12 @@
         
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
-<p>A <a class="crossref" href="../dart_core/Set.html">Set</a> wrapper that acts as an unmodifiable set.</p>
+<p>An unmodifiable set.</p>
+<p>An UnmodifiableSetView contains a <a class="crossref" href="../dart_core/Set.html">Set</a> object and ensures 
+that it does not change.
+Methods that would change the set,
+such as <a class="crossref" href="../unmodifiable_collection/UnmodifiableSetView.html#add">add</a> and <a class="crossref" href="../unmodifiable_collection/UnmodifiableSetView.html#remove">remove</a>, throw an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>.
+Permitted operations defer to the wrapped set.</p>
 <pre class="source">
 class UnmodifiableSetView&lt;E&gt; extends _IterableView&lt;E&gt;
                                      implements Set&lt;E&gt; {
@@ -52,20 +57,52 @@ class UnmodifiableSetView&lt;E&gt; extends _IterableView&lt;E&gt;
  Set&lt;E&gt; difference(Set&lt;E&gt; other) =&gt; _source.difference(other);
 
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the set are disallowed.
+  */
  void add(E value) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the set are disallowed.
+  */
  void addAll(Iterable&lt;E&gt; elements) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the set are disallowed.
+  */
  bool remove(Object value) { _throw(); }
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the set are disallowed.
+  */
  void removeAll(Iterable elements) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the set are disallowed.
+  */
  void retainAll(Iterable elements) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the set are disallowed.
+  */
  void removeWhere(bool test(E element)) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the set are disallowed.
+  */
  void retainWhere(bool test(E element)) =&gt; _throw();
 
+ /**
+  * Throws an [UnsupportedError];
+  * operations that change the set are disallowed.
+  */
  void clear() =&gt; _throw();
 }
 </pre>
@@ -189,12 +226,8 @@ E get single =&gt; _source.single;
 void <strong>add</strong>(<a href="../unmodifiable_collection/UnmodifiableSetView.html">E</a> value) <a class="anchor-link" href="#add"
               title="Permalink to UnmodifiableSetView&lt;E&gt;.add">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Adds 
-<span class="param">value</span> into the set.</p>
-<p>The method has no effect if 
-<span class="param">value</span> is already in the set.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Set.html">Set</a>&lt;<a href="../unmodifiable_collection/UnmodifiableSetView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the set are disallowed.</p>
 <pre class="source">
 void add(E value) =&gt; _throw();
 </pre>
@@ -205,13 +238,8 @@ void add(E value) =&gt; _throw();
 void <strong>addAll</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../unmodifiable_collection/UnmodifiableSetView.html">E</a>&gt; elements) <a class="anchor-link" href="#addAll"
               title="Permalink to UnmodifiableSetView&lt;E&gt;.addAll">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Adds all of 
-<span class="param">elements</span> to this Set.</p>
-<p>Equivalent to adding each element in 
-<span class="param">elements</span> using <a class="crossref" href="../unmodifiable_collection/UnmodifiableSetView.html#add">add</a>,
-but some collections may be able to optimize it.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Set.html">Set</a>&lt;<a href="../unmodifiable_collection/UnmodifiableSetView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the set are disallowed.</p>
 <pre class="source">
 void addAll(Iterable&lt;E&gt; elements) =&gt; _throw();
 </pre>
@@ -232,9 +260,8 @@ bool any(bool test(E element)) =&gt; _source.any(test);
 void <strong>clear</strong>() <a class="anchor-link" href="#clear"
               title="Permalink to UnmodifiableSetView&lt;E&gt;.clear">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes all elements in the set.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Set.html">Set</a>&lt;<a href="../unmodifiable_collection/UnmodifiableSetView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the set are disallowed.</p>
 <pre class="source">
 void clear() =&gt; _throw();
 </pre>
@@ -407,14 +434,8 @@ E reduce(E combine(E value, E element)) =&gt; _source.reduce(combine);
 <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>remove</strong>(<a href="http://api.dartlang.org/dart_core/Object.html">Object</a> value) <a class="anchor-link" href="#remove"
               title="Permalink to UnmodifiableSetView&lt;E&gt;.remove">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes 
-<span class="param">value</span> from the set. Returns true if 
-<span class="param">value</span> was
-in the set. Returns false otherwise. The method has no effect
-if 
-<span class="param">value</span> value was not in the set.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Set.html">Set</a>&lt;<a href="../unmodifiable_collection/UnmodifiableSetView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the set are disallowed.</p>
 <pre class="source">
 bool remove(Object value) { _throw(); }
 </pre>
@@ -425,10 +446,8 @@ bool remove(Object value) { _throw(); }
 void <strong>removeAll</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> elements) <a class="anchor-link" href="#removeAll"
               title="Permalink to UnmodifiableSetView&lt;E&gt;.removeAll">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes each element of 
-<span class="param">elements</span> from this set.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Set.html">Set</a>&lt;<a href="../unmodifiable_collection/UnmodifiableSetView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the set are disallowed.</p>
 <pre class="source">
 void removeAll(Iterable elements) =&gt; _throw();
 </pre>
@@ -439,10 +458,8 @@ void removeAll(Iterable elements) =&gt; _throw();
 void <strong>removeWhere</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../unmodifiable_collection/UnmodifiableSetView.html">E</a> element)) <a class="anchor-link" href="#removeWhere"
               title="Permalink to UnmodifiableSetView&lt;E&gt;.removeWhere">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes all elements of this set that satisfy 
-<span class="param">test</span>.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Set.html">Set</a>&lt;<a href="../unmodifiable_collection/UnmodifiableSetView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the set are disallowed.</p>
 <pre class="source">
 void removeWhere(bool test(E element)) =&gt; _throw();
 </pre>
@@ -453,10 +470,8 @@ void removeWhere(bool test(E element)) =&gt; _throw();
 void <strong>retainAll</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a> elements) <a class="anchor-link" href="#retainAll"
               title="Permalink to UnmodifiableSetView&lt;E&gt;.retainAll">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes all elements of this set that are not elements in 
-<span class="param">elements</span>.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Set.html">Set</a>&lt;<a href="../unmodifiable_collection/UnmodifiableSetView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the set are disallowed.</p>
 <pre class="source">
 void retainAll(Iterable elements) =&gt; _throw();
 </pre>
@@ -467,10 +482,8 @@ void retainAll(Iterable elements) =&gt; _throw();
 void <strong>retainWhere</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> test(<a href="../unmodifiable_collection/UnmodifiableSetView.html">E</a> element)) <a class="anchor-link" href="#retainWhere"
               title="Permalink to UnmodifiableSetView&lt;E&gt;.retainWhere">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Removes all elements of this set that fail to satisfy 
-<span class="param">test</span>.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Set.html">Set</a>&lt;<a href="../unmodifiable_collection/UnmodifiableSetView.html">E</a>&gt; </div></div>
+<p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
+operations that change the set are disallowed.</p>
 <pre class="source">
 void retainWhere(bool test(E element)) =&gt; _throw();
 </pre>
