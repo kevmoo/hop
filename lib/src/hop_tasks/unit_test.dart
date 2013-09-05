@@ -7,7 +7,8 @@ const _summaryFail = 'fail';
 const _summaryPass = 'pass';
 const _summaryError = 'error';
 
-Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction) {
+Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction,
+                        {Duration timeout: const Duration(seconds: 20)}) {
   return new Task.async((TaskContext ctx) {
 
     final summaryFlag = ctx.arguments[_summaryFlag];
@@ -21,7 +22,8 @@ Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction) {
     final errorSummary =
         (summaryFlag == _summaryAll || summaryFlag == _summaryError);
 
-    final config = new _HopTestConfiguration(ctx, failSummary, passSummary, errorSummary);
+    final config = new _HopTestConfiguration(ctx, failSummary, passSummary,
+        errorSummary, timeout);
 
     // TODO: wrap this in a try/catch
     unitTestAction(config);
@@ -71,9 +73,10 @@ class _HopTestConfiguration extends unittest.Configuration {
   final bool failSummary;
   final bool passSummary;
   final bool errorSummary;
+  final Duration timeout;
 
   _HopTestConfiguration(this._context, this.failSummary, this.passSummary,
-      this.errorSummary) : super.blank();
+      this.errorSummary, this.timeout) : super.blank();
 
   Future<bool> get future => _completer.future;
 
