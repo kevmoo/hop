@@ -99,7 +99,12 @@ class _HopTestConfiguration extends unittest.Configuration {
 
   @override
   void onLogMessage(unittest.TestCase testCase, String message) {
-    final msg = '${testCase.description}\n$message';
+    String msg;
+    if(testCase != null) {
+      msg = '${testCase.description}\n$message';
+    } else {
+      msg = message;
+    }
     _context.fine(msg);
   }
 
