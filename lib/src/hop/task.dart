@@ -85,7 +85,11 @@ class _SimpleTask extends Task {
   @override
   Future<bool> run(TaskContext ctx) {
     requireArgumentNotNull(ctx, 'ctx');
-    return new Future<bool>.sync(() => _exec(ctx));
+
+    // TODO: should be able to do new Future<bool>.sync here
+    // waiting for fix for
+    // https://code.google.com/p/dart/issues/detail?id=13368
+    return new Future.sync(() => _exec(ctx));
   }
 
   @override
