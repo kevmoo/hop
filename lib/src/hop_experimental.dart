@@ -2,7 +2,6 @@ library hop_experimental;
 
 import 'dart:async';
 import 'dart:io';
-
 import 'package:html5lib/dom.dart' as dom;
 import 'package:html5lib/parser.dart';
 
@@ -23,12 +22,20 @@ Future<bool> transformHtml(String filePath,
 Future<bool> transformFile(String filePath,
     Future<String> transformer(String input)) {
 
-  final file = new File(filePath);
-  assert(file.existsSync());
-
   String oldContent;
 
-  return file.readAsString()
+  final file = new File(filePath);
+  return FileSystemEntity.type(filePath)
+      .then((FileSystemEntityType fseType) {
+        if(fseType == FileSystemEntityType.FILE) {
+          return file.readAsString();
+        } else if(fseType == FileSystemEntityType.NOT_FOUND) {
+          return null;
+        } else {
+          throw new UnsupportedError('Cannot overwrite existing entity of'
+              ' type $fseType');
+        }
+      })
       .then((String value) {
         oldContent = value;
         return transformer(oldContent);
