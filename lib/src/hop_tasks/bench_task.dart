@@ -1,19 +1,20 @@
 part of hop_tasks;
 
-const _defaultRunCount = 20;
+const _DEFAULT_RUN_COUNT = 20;
 
 // TODO: options for handling failed processes?
 // TODO: move some of the stat-related code to NumebrEnumerable?
 // TODO: print out all of the summary values
 // TODO: tests?
 
-const String _runCountArgName = 'run-count';
+const String _RUN_COUNT_ARE_NAME = 'run-count';
 
 Task createBenchTask() {
   return new Task.async((ctx) {
     final parseResult = ctx.arguments;
 
-    final count = int.parse(parseResult[_runCountArgName], onError: (s) => _defaultRunCount);
+    final count = int.parse(parseResult[_RUN_COUNT_ARE_NAME],
+        onError: (s) => _DEFAULT_RUN_COUNT);
 
     if(parseResult.rest.isEmpty) {
       ctx.fail('No command provided.');
@@ -37,11 +38,13 @@ Task createBenchTask() {
 }
 
 void _benchParserConfig(ArgParser parser) {
-  parser.addOption(_runCountArgName, abbr: 'r', defaultsTo: _defaultRunCount.toString(),
+  parser.addOption(_RUN_COUNT_ARE_NAME, abbr: 'r',
+      defaultsTo: _DEFAULT_RUN_COUNT.toString(),
       help: 'Specify the number times the specified command should be run');
 }
 
-Future<List<_BenchRunResult>> _runMany(TaskLogger logger, int count, String processName, List<String> args) {
+Future<List<_BenchRunResult>> _runMany(TaskLogger logger, int count,
+    String processName, List<String> args) {
 
   assert(count > 1);
   final countStrLength = count.toString().length;
