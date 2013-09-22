@@ -15,6 +15,8 @@ import 'package:bot_io/bot_git.dart';
 import 'package:bot_io/bot_io.dart';
 import 'package:hop/hop.dart';
 
+export 'src/hop_tasks/copy_js.dart' show createCopyJSTask;
+
 part 'src/hop_tasks/bench_task.dart';
 part 'src/hop_tasks/dartanalyzer.dart';
 part 'src/hop_tasks/dart2js.dart';
