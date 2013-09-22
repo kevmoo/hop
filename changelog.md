@@ -1,5 +1,10 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.24.6 2013-09-22 (SDK 0.7.5 r27701)
+
+* Updated min SDK to 0.7.5
+* new task `createCopyJSTask`
+
 ## 0.24.5 2013-09-17 (SDK 0.7.3 r27487)
 
 * Updated min SDK to 0.7.3
