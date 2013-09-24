@@ -19,7 +19,7 @@ export 'src/hop_tasks/copy_js.dart' show createCopyJSTask;
 
 part 'src/hop_tasks/bench_task.dart';
 part 'src/hop_tasks/dartanalyzer.dart';
-part 'src/hop_tasks/dart2js.dart';
+part 'src/hop_tasks/compiler_task.dart';
 part 'src/hop_tasks/dartdoc.dart';
 part 'src/hop_tasks/git_tasks.dart';
 part 'src/hop_tasks/process.dart';
