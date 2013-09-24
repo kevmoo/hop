@@ -1,5 +1,10 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.25.0 2013-09-23 (SDK 0.7.5+3 r27776)
+
+* Lastest SDK
+* **BREAKING** - Removed optional `allowUnsafeEval` arg from `createDartCompilerTask`
+
 ## 0.24.6 2013-09-22 (SDK 0.7.5 r27701)
 
 * Updated min SDK to 0.7.5
