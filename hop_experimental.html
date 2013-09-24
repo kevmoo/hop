@@ -1,0 +1,104 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>hop_experimental Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="hop_experimental">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Hop Documentation</a>
+         &rsaquo; <a href="hop_experimental.html">hop_experimental</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>hop_experimental</strong> library</h2>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="transformFile">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>transformFile</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> filePath, <a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; transformer(<a href="http://api.dartlang.org/dart_core/String.html">String</a> input)) <a class="anchor-link" href="#transformFile"
+              title="Permalink to transformFile">#</a></h4>
+<div class="doc">
+<pre class="source">
+Future&lt;bool&gt; transformFile(String filePath,
+   Future&lt;String&gt; transformer(String input)) {
+
+ String oldContent;
+
+ final file = new File(filePath);
+ return FileSystemEntity.type(filePath)
+     .then((FileSystemEntityType fseType) {
+       if(fseType == FileSystemEntityType.FILE) {
+         return file.readAsString();
+       } else if(fseType == FileSystemEntityType.NOT_FOUND) {
+         return null;
+       } else {
+         throw new UnsupportedError('Cannot overwrite existing entity of'
+             ' type $fseType');
+       }
+     })
+     .then((String value) {
+       oldContent = value;
+       return transformer(oldContent);
+     })
+     .then((String newContent) {
+       // we're assuming file hasn't changed since we started
+       if(newContent == oldContent) {
+         // nothing changed
+         return false;
+       } else {
+         return file.writeAsString(newContent, mode: FileMode.WRITE)
+             .then((_) =&gt; true);
+       }
+     });
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="transformHtml">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>transformHtml</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> filePath, <a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="dom/Document.html">Document</a>&gt; transformer(<a href="dom/Document.html">Document</a> doc)) <a class="anchor-link" href="#transformHtml"
+              title="Permalink to transformHtml">#</a></h4>
+<div class="doc">
+<pre class="source">
+Future&lt;bool&gt; transformHtml(String filePath,
+   Future&lt;dom.Document&gt; transformer(dom.Document doc)) {
+
+ return transformFile(filePath, (String content) {
+   var parser = new HtmlParser(content, generateSpans: true);
+   var document = parser.parse();
+
+   return transformer(document)
+       .then((dom.Document newDoc) {
+         return newDoc.outerHtml;
+       });
+ });
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

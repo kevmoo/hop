@@ -27,21 +27,15 @@
 </div>
 <div class="content">
 <h2><strong>unittest</strong> library</h2>
-<div class="doc"><p>A library for writing dart unit tests.</p>
-<h2>Installing</h2>
-<p>Use <a href="http://pub.dartlang.org">pub</a> to install this package. Add the following to your <code>pubspec.yaml</code>
-file.</p>
-<pre><code>dependencies:
-  unittest: any
-</code></pre>
-<p>Then run <code>pub install</code>.</p>
-<p>For more information, see the
+<div class="doc"><p>Support for writing Dart unit tests.</p>
+<p>For information on installing and importing this library, see the
 <a href="http://pub.dartlang.org/packages/unittest">unittest package on pub.dartlang.org</a>.</p>
-<p>See the <a href="http://pub.dartlang.org/doc">Getting Started</a>
-guide for more details.</p>
+<p><strong>See also:</strong>
+<a href="http://www.dartlang.org/articles/dart-unit-tests/">Unit Testing with Dart</a></p>
 <h2>Concepts</h2><ul><li>
 <p><strong>Tests</strong>: Tests are specified via the top-level function <a class="crossref" href="unittest.html#test">test</a>, they can be
-   organized together using <a class="crossref" href="unittest.html#group">group</a>.</p></li><li><strong>Checks</strong>: Test expectations can be specified via <a class="crossref" href="matcher.html#expect">expect</a></li><li>
+   organized together using <a class="crossref" href="unittest.html#group">group</a>.</p></li><li>
+<p><strong>Checks</strong>: Test expectations can be specified via <a class="crossref" href="matcher.html#expect">expect</a></p></li><li>
 <p><strong>Matchers</strong>: <a class="crossref" href="matcher.html#expect">expect</a> assertions are written declaratively using the
    <a class="crossref" href="matcher/Matcher.html">Matcher</a> class.</p></li><li>
 <p><strong>Configuration</strong>: The framework can be adapted by setting
@@ -138,7 +132,7 @@ It is still important to use expectAsync/guardAsync with any parts of the
 test that may be invoked from a top level context (for example, with
 Timer.run()], as the Future exception handler may not capture exceptions
 in such code.</p>
-<p>Note: due to some language limitations we have to use different functions
+<p>Note: Due to some language limitations we have to use different functions
 depending on the number of positional arguments of the callback. In the
 future, we plan to expose a single <code>expectAsync</code> function that can be used
 regardless of the number of positional arguments. This requires new langauge

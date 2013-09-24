@@ -1,0 +1,272 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>CodeMarkupVisitor class / dom_parsing Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="dom_parsing" data-type="CodeMarkupVisitor">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../dom_parsing.html">dom_parsing</a> &rsaquo; <a href="../dom_parsing/CodeMarkupVisitor.html">CodeMarkupVisitor</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>CodeMarkupVisitor</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Converts the DOM tree into an HTML string with code markup suitable for
+displaying the HTML's source code with CSS colors for different parts of the
+markup. See also <a class="crossref" href="../dom_parsing.html#htmlToCodeMarkup">htmlToCodeMarkup</a>.</p>
+<pre class="source">
+class CodeMarkupVisitor extends TreeVisitor {
+ final StringBuffer _str;
+
+ CodeMarkupVisitor() : _str = new StringBuffer();
+
+ String toString() =&gt; _str.toString();
+
+ visitDocument(Document node) {
+   _str.write("&lt;pre&gt;");
+   visitChildren(node);
+   _str.write("&lt;/pre&gt;");
+ }
+
+ visitDocumentType(DocumentType node) {
+   _str.write('&lt;code class="markup doctype"&gt;&amp;lt;!DOCTYPE ${node.tagName}&gt;'
+       '&lt;/code&gt;');
+ }
+
+ visitText(Text node) {
+   // TODO(jmesserly): would be nice to use _addOuterHtml directly.
+   _str.write(node.outerHtml);
+ }
+
+ visitElement(Element node) {
+   _str.write('&amp;lt;&lt;code class="markup element-name"&gt;${node.tagName}&lt;/code&gt;');
+   if (node.attributes.length &gt; 0) {
+     node.attributes.forEach((key, v) {
+       v = htmlSerializeEscape(v, attributeMode: true);
+       _str.write(' &lt;code class="markup attribute-name"&gt;$key&lt;/code&gt;'
+           '=&lt;code class="markup attribute-value"&gt;"$v"&lt;/code&gt;');
+     });
+   }
+   if (node.nodes.length &gt; 0) {
+     _str.write("&gt;");
+     visitChildren(node);
+   } else if (isVoidElement(node.tagName)) {
+     _str.write("&gt;");
+     return;
+   }
+   _str.write(
+       '&amp;lt;/&lt;code class="markup element-name"&gt;${node.tagName}&lt;/code&gt;&gt;');
+ }
+
+ visitComment(Comment node) {
+   var data = htmlSerializeEscape(node.data);
+   _str.write('&lt;code class="markup comment"&gt;&amp;lt;!--${data}--&gt;&lt;/code&gt;');
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../dom_parsing/TreeVisitor.html">TreeVisitor</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>CodeMarkupVisitor</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>CodeMarkupVisitor</strong>() <a class="anchor-link" href="#"
+              title="Permalink to CodeMarkupVisitor.CodeMarkupVisitor">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+CodeMarkupVisitor() : _str = new StringBuffer();
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to CodeMarkupVisitor.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+String toString() =&gt; _str.toString();
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="visit">
+<button class="show-code">Code</button>
+dynamic <strong>visit</strong>(<a href="../dom/Node.html">Node</a> node) <a class="anchor-link" href="#visit"
+              title="Permalink to CodeMarkupVisitor.visit">#</a></h4>
+<div class="inherited-from">inherited from <a href="../dom_parsing/TreeVisitor.html">TreeVisitor</a> </div><div class="doc">
+<pre class="source">
+visit(Node node) {
+ switch (node.nodeType) {
+   case Node.ELEMENT_NODE: return visitElement(node);
+   case Node.TEXT_NODE: return visitText(node);
+   case Node.COMMENT_NODE: return visitComment(node);
+   case Node.DOCUMENT_FRAGMENT_NODE: return visitDocumentFragment(node);
+   case Node.DOCUMENT_NODE: return visitDocument(node);
+   case Node.DOCUMENT_TYPE_NODE: return visitDocumentType(node);
+   default: throw new UnsupportedError('DOM node type ${node.nodeType}');
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="visitChildren">
+<button class="show-code">Code</button>
+dynamic <strong>visitChildren</strong>(<a href="../dom/Node.html">Node</a> node) <a class="anchor-link" href="#visitChildren"
+              title="Permalink to CodeMarkupVisitor.visitChildren">#</a></h4>
+<div class="inherited-from">inherited from <a href="../dom_parsing/TreeVisitor.html">TreeVisitor</a> </div><div class="doc">
+<pre class="source">
+visitChildren(Node node) {
+ // Allow for mutations (remove works) while iterating.
+ for (var child in node.nodes.toList()) visit(child);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="visitComment">
+<button class="show-code">Code</button>
+dynamic <strong>visitComment</strong>(<a href="../dom/Comment.html">Comment</a> node) <a class="anchor-link" href="#visitComment"
+              title="Permalink to CodeMarkupVisitor.visitComment">#</a></h4>
+<div class="doc">
+<pre class="source">
+visitComment(Comment node) {
+ var data = htmlSerializeEscape(node.data);
+ _str.write('&lt;code class="markup comment"&gt;&amp;lt;!--${data}--&gt;&lt;/code&gt;');
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="visitDocument">
+<button class="show-code">Code</button>
+dynamic <strong>visitDocument</strong>(<a href="../dom/Document.html">Document</a> node) <a class="anchor-link" href="#visitDocument"
+              title="Permalink to CodeMarkupVisitor.visitDocument">#</a></h4>
+<div class="doc">
+<pre class="source">
+visitDocument(Document node) {
+ _str.write("&lt;pre&gt;");
+ visitChildren(node);
+ _str.write("&lt;/pre&gt;");
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="visitDocumentFragment">
+<button class="show-code">Code</button>
+dynamic <strong>visitDocumentFragment</strong>(<a href="../dom/DocumentFragment.html">DocumentFragment</a> node) <a class="anchor-link" href="#visitDocumentFragment"
+              title="Permalink to CodeMarkupVisitor.visitDocumentFragment">#</a></h4>
+<div class="inherited-from">inherited from <a href="../dom_parsing/TreeVisitor.html">TreeVisitor</a> </div><div class="doc">
+<pre class="source">
+visitDocumentFragment(DocumentFragment node) =&gt; visitDocument(node);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="visitDocumentType">
+<button class="show-code">Code</button>
+dynamic <strong>visitDocumentType</strong>(<a href="../dom/DocumentType.html">DocumentType</a> node) <a class="anchor-link" href="#visitDocumentType"
+              title="Permalink to CodeMarkupVisitor.visitDocumentType">#</a></h4>
+<div class="doc">
+<pre class="source">
+visitDocumentType(DocumentType node) {
+ _str.write('&lt;code class="markup doctype"&gt;&amp;lt;!DOCTYPE ${node.tagName}&gt;'
+     '&lt;/code&gt;');
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="visitElement">
+<button class="show-code">Code</button>
+dynamic <strong>visitElement</strong>(<a href="../dom/Element.html">Element</a> node) <a class="anchor-link" href="#visitElement"
+              title="Permalink to CodeMarkupVisitor.visitElement">#</a></h4>
+<div class="doc">
+<pre class="source">
+visitElement(Element node) {
+ _str.write('&amp;lt;&lt;code class="markup element-name"&gt;${node.tagName}&lt;/code&gt;');
+ if (node.attributes.length &gt; 0) {
+   node.attributes.forEach((key, v) {
+     v = htmlSerializeEscape(v, attributeMode: true);
+     _str.write(' &lt;code class="markup attribute-name"&gt;$key&lt;/code&gt;'
+         '=&lt;code class="markup attribute-value"&gt;"$v"&lt;/code&gt;');
+   });
+ }
+ if (node.nodes.length &gt; 0) {
+   _str.write("&gt;");
+   visitChildren(node);
+ } else if (isVoidElement(node.tagName)) {
+   _str.write("&gt;");
+   return;
+ }
+ _str.write(
+     '&amp;lt;/&lt;code class="markup element-name"&gt;${node.tagName}&lt;/code&gt;&gt;');
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="visitNodeFallback">
+<button class="show-code">Code</button>
+dynamic <strong>visitNodeFallback</strong>(<a href="../dom/Node.html">Node</a> node) <a class="anchor-link" href="#visitNodeFallback"
+              title="Permalink to CodeMarkupVisitor.visitNodeFallback">#</a></h4>
+<div class="inherited-from">inherited from <a href="../dom_parsing/TreeVisitor.html">TreeVisitor</a> </div><div class="doc">
+<p>The fallback handler if the more specific visit method hasn't been
+overriden. Only use this from a subclass of <a class="crossref" href="../dom_parsing/TreeVisitor.html">TreeVisitor</a>, otherwise
+call <a class="crossref" href="../dom_parsing/TreeVisitor.html#visit">visit</a> instead.</p>
+<pre class="source">
+visitNodeFallback(Node node) =&gt; visitChildren(node);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="visitText">
+<button class="show-code">Code</button>
+dynamic <strong>visitText</strong>(<a href="../dom/Text.html">Text</a> node) <a class="anchor-link" href="#visitText"
+              title="Permalink to CodeMarkupVisitor.visitText">#</a></h4>
+<div class="doc">
+<pre class="source">
+visitText(Text node) {
+ // TODO(jmesserly): would be nice to use _addOuterHtml directly.
+ _str.write(node.outerHtml);
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

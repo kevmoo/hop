@@ -1,0 +1,901 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>TreeBuilder class / treebuilder Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="treebuilder" data-type="TreeBuilder">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../treebuilder.html">treebuilder</a> &rsaquo; <a href="../treebuilder/TreeBuilder.html">TreeBuilder</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>TreeBuilder</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Basic treebuilder implementation. </p>
+<pre class="source">
+class TreeBuilder {
+ final String defaultNamespace;
+
+ Document document;
+
+ final openElements = &lt;Node&gt;[];
+
+ final activeFormattingElements = new ActiveFormattingElements();
+
+ Node headPointer;
+
+ Node formPointer;
+
+ /**
+  * Switch the function used to insert an element from the
+  * normal one to the misnested table one and back again
+  */
+ bool insertFromTable;
+
+ TreeBuilder(bool namespaceHTMLElements)
+     : defaultNamespace = namespaceHTMLElements ? Namespaces.html : null {
+   reset();
+ }
+
+ void reset() {
+   openElements.clear();
+   activeFormattingElements.clear();
+
+   //XXX - rename these to headElement, formElement
+   headPointer = null;
+   formPointer = null;
+
+   insertFromTable = false;
+
+   document = new Document();
+ }
+
+ bool elementInScope(target, {String variant}) {
+   //If we pass a node in we match that. if we pass a string
+   //match any node with that name
+   bool exactNode = target is Node &amp;&amp; target.nameTuple != null;
+
+   List listElements1 = scopingElements;
+   List listElements2 = const [];
+   bool invert = false;
+   if (variant != null) {
+     switch (variant) {
+       case "button":
+         listElements2 = const [const Pair(Namespaces.html, "button")];
+         break;
+       case "list":
+         listElements2 = const [const Pair(Namespaces.html, "ol"),
+                                const Pair(Namespaces.html, "ul")];
+         break;
+       case "table":
+         listElements1 = const [const Pair(Namespaces.html, "html"),
+                                const Pair(Namespaces.html, "table")];
+         break;
+       case "select":
+         listElements1 = const [const Pair(Namespaces.html, "optgroup"),
+                                const Pair(Namespaces.html, "option")];
+         invert = true;
+         break;
+       default: assert(false); break;
+     }
+   }
+
+   for (Node node in openElements.reversed) {
+     if (node.tagName == target &amp;&amp; !exactNode ||
+         node == target &amp;&amp; exactNode) {
+       return true;
+     } else if (invert !=
+         (listElements1.contains(node.nameTuple) ||
+          listElements2.contains(node.nameTuple))) {
+       return false;
+     }
+   }
+
+   assert(false); // We should never reach this point
+ }
+
+ void reconstructActiveFormattingElements() {
+   // Within this algorithm the order of steps described in the
+   // specification is not quite the same as the order of steps in the
+   // code. It should still do the same though.
+
+   // Step 1: stop the algorithm when there's nothing to do.
+   if (activeFormattingElements.length == 0) {
+     return;
+   }
+
+   // Step 2 and step 3: we start with the last element. So i is -1.
+   int i = activeFormattingElements.length - 1;
+   var entry = activeFormattingElements[i];
+   if (entry == Marker || openElements.contains(entry)) {
+     return;
+   }
+
+   // Step 6
+   while (entry != Marker &amp;&amp; !openElements.contains(entry)) {
+     if (i == 0) {
+       //This will be reset to 0 below
+       i = -1;
+       break;
+     }
+     i -= 1;
+     // Step 5: let entry be one earlier in the list.
+     entry = activeFormattingElements[i];
+   }
+
+   while (true) {
+     // Step 7
+     i += 1;
+
+     // Step 8
+     entry = activeFormattingElements[i];
+
+     // TODO(jmesserly): optimize this. No need to create a token.
+     var cloneToken = new StartTagToken(
+         entry.tagName,
+         namespace: entry.namespace,
+         data: new LinkedHashMap.from(entry.attributes))
+         ..span = entry.sourceSpan;
+
+     // Step 9
+     var element = insertElement(cloneToken);
+
+     // Step 10
+     activeFormattingElements[i] = element;
+
+     // Step 11
+     if (element == activeFormattingElements.last) {
+       break;
+     }
+   }
+ }
+
+ void clearActiveFormattingElements() {
+   var entry = activeFormattingElements.removeLast();
+   while (activeFormattingElements.length &gt; 0 &amp;&amp; entry != Marker) {
+     entry = activeFormattingElements.removeLast();
+   }
+ }
+
+ /**
+  * Check if an element exists between the end of the active
+  * formatting elements and the last marker. If it does, return it, else
+  * return null.
+  */
+ Node elementInActiveFormattingElements(String name) {
+   for (Node item in activeFormattingElements.reversed) {
+     // Check for Marker first because if it's a Marker it doesn't have a
+     // name attribute.
+     if (item == Marker) {
+       break;
+     } else if (item.tagName == name) {
+       return item;
+     }
+   }
+   return null;
+ }
+
+ void insertRoot(Token token) {
+   var element = createElement(token);
+   openElements.add(element);
+   document.nodes.add(element);
+ }
+
+ void insertDoctype(DoctypeToken token) {
+   var doctype = new DocumentType(token.name, token.publicId, token.systemId)
+       ..sourceSpan = token.span;
+   document.nodes.add(doctype);
+ }
+
+ void insertComment(StringToken token, [Node parent]) {
+   if (parent == null) {
+     parent = openElements.last;
+   }
+   parent.nodes.add(new Comment(token.data)..sourceSpan = token.span);
+ }
+
+ /** Create an element but don't insert it anywhere */
+ Element createElement(StartTagToken token) {
+   var name = token.name;
+   var namespace = token.namespace;
+   if (namespace == null) namespace = defaultNamespace;
+   var element = new Element(name, namespace)
+       ..attributes = token.data
+       ..sourceSpan = token.span;
+   return element;
+ }
+
+ Element insertElement(StartTagToken token) {
+   if (insertFromTable) return insertElementTable(token);
+   return insertElementNormal(token);
+ }
+
+ Element insertElementNormal(StartTagToken token) {
+   var name = token.name;
+   var namespace = token.namespace;
+   if (namespace == null) namespace = defaultNamespace;
+   var element = new Element(name, namespace)
+       ..attributes = token.data
+       ..sourceSpan = token.span;
+   openElements.last.nodes.add(element);
+   openElements.add(element);
+   return element;
+ }
+
+ Element insertElementTable(token) {
+   /** Create an element and insert it into the tree */
+   var element = createElement(token);
+   if (!tableInsertModeElements.contains(openElements.last.tagName)) {
+     return insertElementNormal(token);
+   } else {
+     // We should be in the InTable mode. This means we want to do
+     // special magic element rearranging
+     var nodePos = getTableMisnestedNodePosition();
+     if (nodePos[1] == null) {
+       // TODO(jmesserly): I don't think this is reachable. If insertFromTable
+       // is true, there will be a &lt;table&gt; element open, and it always has a
+       // parent pointer.
+       nodePos[0].nodes.add(element);
+     } else {
+       nodePos[0].insertBefore(element, nodePos[1]);
+     }
+     openElements.add(element);
+   }
+   return element;
+ }
+
+ /** Insert text data. */
+ void insertText(String data, FileSpan span) {
+   var parent = openElements.last;
+
+   if (!insertFromTable || insertFromTable &amp;&amp;
+       !tableInsertModeElements.contains(openElements.last.tagName)) {
+     _insertText(parent, data, span);
+   } else {
+     // We should be in the InTable mode. This means we want to do
+     // special magic element rearranging
+     var nodePos = getTableMisnestedNodePosition();
+     _insertText(nodePos[0], data, span, nodePos[1]);
+   }
+ }
+
+ /**
+  * Insert [data] as text in the current node, positioned before the
+  * start of node [refNode] or to the end of the node's text.
+  */
+ static void _insertText(Node parent, String data, FileSpan span,
+     [Element refNode]) {
+   var nodes = parent.nodes;
+   if (refNode == null) {
+     if (nodes.length &gt; 0 &amp;&amp; nodes.last is Text) {
+       Text last = nodes.last;
+       last.value = '${last.value}$data';
+
+       if (span != null) {
+         last.sourceSpan = span.file.span(last.sourceSpan.start.offset,
+             span.end.offset);
+       }
+     } else {
+       nodes.add(new Text(data)..sourceSpan = span);
+     }
+   } else {
+     int index = nodes.indexOf(refNode);
+     if (index &gt; 0 &amp;&amp; nodes[index - 1] is Text) {
+       Text last = nodes[index - 1];
+       last.value = '${last.value}$data';
+     } else {
+       nodes.insert(index, new Text(data)..sourceSpan = span);
+     }
+   }
+ }
+
+ /**
+  * Get the foster parent element, and sibling to insert before
+  * (or null) when inserting a misnested table node
+  */
+ List&lt;Node&gt; getTableMisnestedNodePosition() {
+   // The foster parent element is the one which comes before the most
+   // recently opened table element
+   // XXX - this is really inelegant
+   Node lastTable = null;
+   Node fosterParent = null;
+   var insertBefore = null;
+   for (Node elm in openElements.reversed) {
+     if (elm.tagName == "table") {
+       lastTable = elm;
+       break;
+     }
+   }
+   if (lastTable != null) {
+     // XXX - we should really check that this parent is actually a
+     // node here
+     if (lastTable.parent != null) {
+       fosterParent = lastTable.parent;
+       insertBefore = lastTable;
+     } else {
+       fosterParent = openElements[openElements.indexOf(lastTable) - 1];
+     }
+   } else {
+     fosterParent = openElements[0];
+   }
+   return [fosterParent, insertBefore];
+ }
+
+ void generateImpliedEndTags([String exclude]) {
+   var name = openElements.last.tagName;
+   // XXX td, th and tr are not actually needed
+   if (name != exclude &amp;&amp; const ["dd", "dt", "li", "option", "optgroup", "p",
+       "rp", "rt"].contains(name)) {
+     openElements.removeLast();
+     // XXX This is not entirely what the specification says. We should
+     // investigate it more closely.
+     generateImpliedEndTags(exclude);
+   }
+ }
+
+ /** Return the final tree. */
+ Document getDocument() =&gt; document;
+
+ /** Return the final fragment. */
+ DocumentFragment getFragment() {
+   //XXX assert innerHTML
+   var fragment = new DocumentFragment();
+   openElements[0].reparentChildren(fragment);
+   return fragment;
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>TreeBuilder</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> namespaceHTMLElements) <a class="anchor-link" href="#"
+              title="Permalink to TreeBuilder.TreeBuilder">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+TreeBuilder(bool namespaceHTMLElements)
+   : defaultNamespace = namespaceHTMLElements ? Namespaces.html : null {
+ reset();
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="activeFormattingElements">
+<button class="show-code">Code</button>
+final         <strong>activeFormattingElements</strong> <a class="anchor-link"
+            href="#activeFormattingElements"
+            title="Permalink to TreeBuilder.activeFormattingElements">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final activeFormattingElements = new ActiveFormattingElements()
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="defaultNamespace">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>defaultNamespace</strong> <a class="anchor-link"
+            href="#defaultNamespace"
+            title="Permalink to TreeBuilder.defaultNamespace">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String defaultNamespace
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="document">
+<button class="show-code">Code</button>
+<a href="../dom/Document.html">Document</a>         <strong>document</strong> <a class="anchor-link"
+            href="#document"
+            title="Permalink to TreeBuilder.document">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Document document
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="formPointer">
+<button class="show-code">Code</button>
+<a href="../dom/Node.html">Node</a>         <strong>formPointer</strong> <a class="anchor-link"
+            href="#formPointer"
+            title="Permalink to TreeBuilder.formPointer">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Node formPointer
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="headPointer">
+<button class="show-code">Code</button>
+<a href="../dom/Node.html">Node</a>         <strong>headPointer</strong> <a class="anchor-link"
+            href="#headPointer"
+            title="Permalink to TreeBuilder.headPointer">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Node headPointer
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="insertFromTable">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>insertFromTable</strong> <a class="anchor-link"
+            href="#insertFromTable"
+            title="Permalink to TreeBuilder.insertFromTable">#</a>
+        </h4>
+        <div class="doc">
+<p>Switch the function used to insert an element from the
+normal one to the misnested table one and back again</p>
+<pre class="source">
+bool insertFromTable
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="openElements">
+<button class="show-code">Code</button>
+final         <strong>openElements</strong> <a class="anchor-link"
+            href="#openElements"
+            title="Permalink to TreeBuilder.openElements">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final openElements = &lt;Node&gt;[]
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="clearActiveFormattingElements">
+<button class="show-code">Code</button>
+void <strong>clearActiveFormattingElements</strong>() <a class="anchor-link" href="#clearActiveFormattingElements"
+              title="Permalink to TreeBuilder.clearActiveFormattingElements">#</a></h4>
+<div class="doc">
+<pre class="source">
+void clearActiveFormattingElements() {
+ var entry = activeFormattingElements.removeLast();
+ while (activeFormattingElements.length &gt; 0 &amp;&amp; entry != Marker) {
+   entry = activeFormattingElements.removeLast();
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="createElement">
+<button class="show-code">Code</button>
+<a href="../dom/Element.html">Element</a> <strong>createElement</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#createElement"
+              title="Permalink to TreeBuilder.createElement">#</a></h4>
+<div class="doc">
+<p>Create an element but don't insert it anywhere </p>
+<pre class="source">
+Element createElement(StartTagToken token) {
+ var name = token.name;
+ var namespace = token.namespace;
+ if (namespace == null) namespace = defaultNamespace;
+ var element = new Element(name, namespace)
+     ..attributes = token.data
+     ..sourceSpan = token.span;
+ return element;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="elementInActiveFormattingElements">
+<button class="show-code">Code</button>
+<a href="../dom/Node.html">Node</a> <strong>elementInActiveFormattingElements</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#elementInActiveFormattingElements"
+              title="Permalink to TreeBuilder.elementInActiveFormattingElements">#</a></h4>
+<div class="doc">
+<p>Check if an element exists between the end of the active
+formatting elements and the last marker. If it does, return it, else
+return null.</p>
+<pre class="source">
+Node elementInActiveFormattingElements(String name) {
+ for (Node item in activeFormattingElements.reversed) {
+   // Check for Marker first because if it's a Marker it doesn't have a
+   // name attribute.
+   if (item == Marker) {
+     break;
+   } else if (item.tagName == name) {
+     return item;
+   }
+ }
+ return null;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="elementInScope">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>elementInScope</strong>(target, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> variant}) <a class="anchor-link" href="#elementInScope"
+              title="Permalink to TreeBuilder.elementInScope">#</a></h4>
+<div class="doc">
+<pre class="source">
+bool elementInScope(target, {String variant}) {
+ //If we pass a node in we match that. if we pass a string
+ //match any node with that name
+ bool exactNode = target is Node &amp;&amp; target.nameTuple != null;
+
+ List listElements1 = scopingElements;
+ List listElements2 = const [];
+ bool invert = false;
+ if (variant != null) {
+   switch (variant) {
+     case "button":
+       listElements2 = const [const Pair(Namespaces.html, "button")];
+       break;
+     case "list":
+       listElements2 = const [const Pair(Namespaces.html, "ol"),
+                              const Pair(Namespaces.html, "ul")];
+       break;
+     case "table":
+       listElements1 = const [const Pair(Namespaces.html, "html"),
+                              const Pair(Namespaces.html, "table")];
+       break;
+     case "select":
+       listElements1 = const [const Pair(Namespaces.html, "optgroup"),
+                              const Pair(Namespaces.html, "option")];
+       invert = true;
+       break;
+     default: assert(false); break;
+   }
+ }
+
+ for (Node node in openElements.reversed) {
+   if (node.tagName == target &amp;&amp; !exactNode ||
+       node == target &amp;&amp; exactNode) {
+     return true;
+   } else if (invert !=
+       (listElements1.contains(node.nameTuple) ||
+        listElements2.contains(node.nameTuple))) {
+     return false;
+   }
+ }
+
+ assert(false); // We should never reach this point
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="generateImpliedEndTags">
+<button class="show-code">Code</button>
+void <strong>generateImpliedEndTags</strong>([<a href="http://api.dartlang.org/dart_core/String.html">String</a> exclude]) <a class="anchor-link" href="#generateImpliedEndTags"
+              title="Permalink to TreeBuilder.generateImpliedEndTags">#</a></h4>
+<div class="doc">
+<pre class="source">
+void generateImpliedEndTags([String exclude]) {
+ var name = openElements.last.tagName;
+ // XXX td, th and tr are not actually needed
+ if (name != exclude &amp;&amp; const ["dd", "dt", "li", "option", "optgroup", "p",
+     "rp", "rt"].contains(name)) {
+   openElements.removeLast();
+   // XXX This is not entirely what the specification says. We should
+   // investigate it more closely.
+   generateImpliedEndTags(exclude);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getDocument">
+<button class="show-code">Code</button>
+<a href="../dom/Document.html">Document</a> <strong>getDocument</strong>() <a class="anchor-link" href="#getDocument"
+              title="Permalink to TreeBuilder.getDocument">#</a></h4>
+<div class="doc">
+<p>Return the final tree. </p>
+<pre class="source">
+Document getDocument() =&gt; document;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getFragment">
+<button class="show-code">Code</button>
+<a href="../dom/DocumentFragment.html">DocumentFragment</a> <strong>getFragment</strong>() <a class="anchor-link" href="#getFragment"
+              title="Permalink to TreeBuilder.getFragment">#</a></h4>
+<div class="doc">
+<p>Return the final fragment. </p>
+<pre class="source">
+DocumentFragment getFragment() {
+ //XXX assert innerHTML
+ var fragment = new DocumentFragment();
+ openElements[0].reparentChildren(fragment);
+ return fragment;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getTableMisnestedNodePosition">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../dom/Node.html">Node</a>&gt; <strong>getTableMisnestedNodePosition</strong>() <a class="anchor-link" href="#getTableMisnestedNodePosition"
+              title="Permalink to TreeBuilder.getTableMisnestedNodePosition">#</a></h4>
+<div class="doc">
+<p>Get the foster parent element, and sibling to insert before
+(or null) when inserting a misnested table node</p>
+<pre class="source">
+List&lt;Node&gt; getTableMisnestedNodePosition() {
+ // The foster parent element is the one which comes before the most
+ // recently opened table element
+ // XXX - this is really inelegant
+ Node lastTable = null;
+ Node fosterParent = null;
+ var insertBefore = null;
+ for (Node elm in openElements.reversed) {
+   if (elm.tagName == "table") {
+     lastTable = elm;
+     break;
+   }
+ }
+ if (lastTable != null) {
+   // XXX - we should really check that this parent is actually a
+   // node here
+   if (lastTable.parent != null) {
+     fosterParent = lastTable.parent;
+     insertBefore = lastTable;
+   } else {
+     fosterParent = openElements[openElements.indexOf(lastTable) - 1];
+   }
+ } else {
+   fosterParent = openElements[0];
+ }
+ return [fosterParent, insertBefore];
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="insertComment">
+<button class="show-code">Code</button>
+void <strong>insertComment</strong>(<a href="../token/StringToken.html">StringToken</a> token, [<a href="../dom/Node.html">Node</a> parent]) <a class="anchor-link" href="#insertComment"
+              title="Permalink to TreeBuilder.insertComment">#</a></h4>
+<div class="doc">
+<pre class="source">
+void insertComment(StringToken token, [Node parent]) {
+ if (parent == null) {
+   parent = openElements.last;
+ }
+ parent.nodes.add(new Comment(token.data)..sourceSpan = token.span);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="insertDoctype">
+<button class="show-code">Code</button>
+void <strong>insertDoctype</strong>(<a href="../token/DoctypeToken.html">DoctypeToken</a> token) <a class="anchor-link" href="#insertDoctype"
+              title="Permalink to TreeBuilder.insertDoctype">#</a></h4>
+<div class="doc">
+<pre class="source">
+void insertDoctype(DoctypeToken token) {
+ var doctype = new DocumentType(token.name, token.publicId, token.systemId)
+     ..sourceSpan = token.span;
+ document.nodes.add(doctype);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="insertElement">
+<button class="show-code">Code</button>
+<a href="../dom/Element.html">Element</a> <strong>insertElement</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#insertElement"
+              title="Permalink to TreeBuilder.insertElement">#</a></h4>
+<div class="doc">
+<pre class="source">
+Element insertElement(StartTagToken token) {
+ if (insertFromTable) return insertElementTable(token);
+ return insertElementNormal(token);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="insertElementNormal">
+<button class="show-code">Code</button>
+<a href="../dom/Element.html">Element</a> <strong>insertElementNormal</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#insertElementNormal"
+              title="Permalink to TreeBuilder.insertElementNormal">#</a></h4>
+<div class="doc">
+<pre class="source">
+Element insertElementNormal(StartTagToken token) {
+ var name = token.name;
+ var namespace = token.namespace;
+ if (namespace == null) namespace = defaultNamespace;
+ var element = new Element(name, namespace)
+     ..attributes = token.data
+     ..sourceSpan = token.span;
+ openElements.last.nodes.add(element);
+ openElements.add(element);
+ return element;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="insertElementTable">
+<button class="show-code">Code</button>
+<a href="../dom/Element.html">Element</a> <strong>insertElementTable</strong>(token) <a class="anchor-link" href="#insertElementTable"
+              title="Permalink to TreeBuilder.insertElementTable">#</a></h4>
+<div class="doc">
+<pre class="source">
+Element insertElementTable(token) {
+ /** Create an element and insert it into the tree */
+ var element = createElement(token);
+ if (!tableInsertModeElements.contains(openElements.last.tagName)) {
+   return insertElementNormal(token);
+ } else {
+   // We should be in the InTable mode. This means we want to do
+   // special magic element rearranging
+   var nodePos = getTableMisnestedNodePosition();
+   if (nodePos[1] == null) {
+     // TODO(jmesserly): I don't think this is reachable. If insertFromTable
+     // is true, there will be a &lt;table&gt; element open, and it always has a
+     // parent pointer.
+     nodePos[0].nodes.add(element);
+   } else {
+     nodePos[0].insertBefore(element, nodePos[1]);
+   }
+   openElements.add(element);
+ }
+ return element;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="insertRoot">
+<button class="show-code">Code</button>
+void <strong>insertRoot</strong>(<a href="../token/Token.html">Token</a> token) <a class="anchor-link" href="#insertRoot"
+              title="Permalink to TreeBuilder.insertRoot">#</a></h4>
+<div class="doc">
+<pre class="source">
+void insertRoot(Token token) {
+ var element = createElement(token);
+ openElements.add(element);
+ document.nodes.add(element);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="insertText">
+<button class="show-code">Code</button>
+void <strong>insertText</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> data, <a href="../source_maps.span/FileSpan.html">FileSpan</a> span) <a class="anchor-link" href="#insertText"
+              title="Permalink to TreeBuilder.insertText">#</a></h4>
+<div class="doc">
+<p>Insert text data. </p>
+<pre class="source">
+void insertText(String data, FileSpan span) {
+ var parent = openElements.last;
+
+ if (!insertFromTable || insertFromTable &amp;&amp;
+     !tableInsertModeElements.contains(openElements.last.tagName)) {
+   _insertText(parent, data, span);
+ } else {
+   // We should be in the InTable mode. This means we want to do
+   // special magic element rearranging
+   var nodePos = getTableMisnestedNodePosition();
+   _insertText(nodePos[0], data, span, nodePos[1]);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="reconstructActiveFormattingElements">
+<button class="show-code">Code</button>
+void <strong>reconstructActiveFormattingElements</strong>() <a class="anchor-link" href="#reconstructActiveFormattingElements"
+              title="Permalink to TreeBuilder.reconstructActiveFormattingElements">#</a></h4>
+<div class="doc">
+<pre class="source">
+void reconstructActiveFormattingElements() {
+ // Within this algorithm the order of steps described in the
+ // specification is not quite the same as the order of steps in the
+ // code. It should still do the same though.
+
+ // Step 1: stop the algorithm when there's nothing to do.
+ if (activeFormattingElements.length == 0) {
+   return;
+ }
+
+ // Step 2 and step 3: we start with the last element. So i is -1.
+ int i = activeFormattingElements.length - 1;
+ var entry = activeFormattingElements[i];
+ if (entry == Marker || openElements.contains(entry)) {
+   return;
+ }
+
+ // Step 6
+ while (entry != Marker &amp;&amp; !openElements.contains(entry)) {
+   if (i == 0) {
+     //This will be reset to 0 below
+     i = -1;
+     break;
+   }
+   i -= 1;
+   // Step 5: let entry be one earlier in the list.
+   entry = activeFormattingElements[i];
+ }
+
+ while (true) {
+   // Step 7
+   i += 1;
+
+   // Step 8
+   entry = activeFormattingElements[i];
+
+   // TODO(jmesserly): optimize this. No need to create a token.
+   var cloneToken = new StartTagToken(
+       entry.tagName,
+       namespace: entry.namespace,
+       data: new LinkedHashMap.from(entry.attributes))
+       ..span = entry.sourceSpan;
+
+   // Step 9
+   var element = insertElement(cloneToken);
+
+   // Step 10
+   activeFormattingElements[i] = element;
+
+   // Step 11
+   if (element == activeFormattingElements.last) {
+     break;
+   }
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="reset">
+<button class="show-code">Code</button>
+void <strong>reset</strong>() <a class="anchor-link" href="#reset"
+              title="Permalink to TreeBuilder.reset">#</a></h4>
+<div class="doc">
+<pre class="source">
+void reset() {
+ openElements.clear();
+ activeFormattingElements.clear();
+
+ //XXX - rename these to headElement, formElement
+ headPointer = null;
+ formPointer = null;
+
+ insertFromTable = false;
+
+ document = new Document();
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

@@ -1,0 +1,250 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Utf8DecoderTransformer class / utf Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="utf" data-type="Utf8DecoderTransformer">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../utf.html">utf</a> &rsaquo; <a href="../utf/Utf8DecoderTransformer.html">Utf8DecoderTransformer</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Utf8DecoderTransformer</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>StringTransformer that decodes a stream of UTF-8 encoded bytes.</p>
+<pre class="source">
+class Utf8DecoderTransformer extends _StringDecoder {
+ Utf8DecoderTransformer(
+     [int replacementChar = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT])
+   : super(replacementChar);
+
+ int _processBytes(int getNext()) {
+   int value = getNext();
+   if ((value &amp; 0xFF) != value) return -1;  // Not a byte.
+   if ((value &amp; 0x80) == 0x80) {
+     int additionalBytes;
+     int min;
+     if ((value &amp; 0xe0) == 0xc0) {  // 110xxxxx
+       value = value &amp; 0x1F;
+       additionalBytes = 1;
+       min = 0x80;
+     } else if ((value &amp; 0xf0) == 0xe0) {  // 1110xxxx
+       value = value &amp; 0x0F;
+       additionalBytes = 2;
+       min = 0x800;
+     } else if ((value &amp; 0xf8) == 0xf0) {  // 11110xxx
+       value = value &amp; 0x07;
+       additionalBytes = 3;
+       min = 0x10000;
+     } else if ((value &amp; 0xfc) == 0xf8) {  // 111110xx
+       value = value &amp; 0x03;
+       additionalBytes = 4;
+       min = 0x200000;
+     } else if ((value &amp; 0xfe) == 0xfc) {  // 1111110x
+       value = value &amp; 0x01;
+       additionalBytes = 5;
+       min = 0x4000000;
+     } else {
+       return -1;
+     }
+     for (int i = 0; i &lt; additionalBytes; i++) {
+       int next = getNext();
+       if (next == null) return 0;  // Not enough chars, reset.
+       if ((next &amp; 0xc0) != 0x80 || (next &amp; 0xff) != next) return -1;
+       value = value &lt;&lt; 6 | (next &amp; 0x3f);
+       if (additionalBytes &gt;= 3 &amp;&amp; i == 0 &amp;&amp; value &lt;&lt; 12 &gt; 0x10FFFF) {
+         _addChar(-1);
+       }
+     }
+     // Invalid charCode if less then minimum expected.
+     if (value &lt; min) value = -1;
+     _addChar(value);
+     return 1 + additionalBytes;
+   }
+   _addChar(value);
+   return 1;
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../dart_async/StreamEventTransformer.html">StreamEventTransformer&lt;List&lt;int&gt;, String&gt;</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../utf/_StringDecoder.html">_StringDecoder</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>Utf8DecoderTransformer</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>Utf8DecoderTransformer</strong>([<a href="http://api.dartlang.org/dart_core/int.html">int</a> replacementChar = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT]) <a class="anchor-link" href="#"
+              title="Permalink to Utf8DecoderTransformer.Utf8DecoderTransformer">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Create a <a class="crossref" href="../dart_async/StreamTransformer.html">StreamTransformer</a> that delegates events to the given functions.</p>
+<p>This is actually a <a class="crossref" href="../dart_async/StreamEventTransformer.html">StreamEventTransformer</a> where the event handling is
+performed by the function arguments.
+If an argument is omitted, it acts as the corresponding default method from
+<a class="crossref" href="../dart_async/StreamEventTransformer.html">StreamEventTransformer</a>.</p>
+<p>Example use:</p>
+<pre><code>stringStream.transform(new StreamTransformer&lt;String, String&gt;(
+    handleData: (String value, EventSink&lt;String&gt; sink) {
+      sink.add(value);
+      sink.add(value);  // Duplicate the incoming events.
+    }));
+</code></pre>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/StreamTransformer.html">StreamTransformer</a>&lt;<a href="../utf/Utf8DecoderTransformer.html">S</a>, <a href="../utf/Utf8DecoderTransformer.html">T</a>&gt; </div></div>
+<pre class="source">
+Utf8DecoderTransformer(
+   [int replacementChar = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT])
+ : super(replacementChar);
+</pre>
+</div>
+</div>
+</div>
+<div class="inherited">
+<h3>Methods</h3>
+<div class="method inherited"><h4 id="bind">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="../utf/Utf8DecoderTransformer.html">T</a>&gt; <strong>bind</strong>(<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="../utf/Utf8DecoderTransformer.html">S</a>&gt; source) <a class="anchor-link" href="#bind"
+              title="Permalink to Utf8DecoderTransformer.bind">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_async/StreamEventTransformer.html">StreamEventTransformer</a> </div><div class="doc">
+<pre class="source">
+Stream&lt;T&gt; bind(Stream&lt;S&gt; source) {
+ return new EventTransformStream&lt;S, T&gt;(source, this);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="handleData">
+<button class="show-code">Code</button>
+void <strong>handleData</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; bytes, <a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; sink) <a class="anchor-link" href="#handleData"
+              title="Permalink to Utf8DecoderTransformer.handleData">#</a></h4>
+<div class="inherited-from">inherited from <a href="../utf/_StringDecoder.html">_StringDecoder</a> </div><div class="doc">
+<div class="inherited">
+<p>Act on incoming data event.</p>
+<p>The method may generate any number of events on the sink, but should
+not throw.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/StreamEventTransformer.html">StreamEventTransformer</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt;, <a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; </div></div>
+<pre class="source">
+void handleData(List&lt;int&gt; bytes, EventSink&lt;String&gt; sink) {
+ try {
+   _buffer = &lt;int&gt;[];
+   List&lt;int&gt; carry = _carry;
+   _carry = null;
+   int pos = 0;
+   int available = bytes.length;
+   // If we have carry-over data, start from negative index, indicating carry
+   // index.
+   int goodChars = 0;
+   if (carry != null) pos = -carry.length;
+   while (pos &lt; available) {
+     int currentPos = pos;
+     int getNext() {
+       if (pos &lt; 0) {
+         return carry[pos++ + carry.length];
+       } else if (pos &lt; available) {
+         return bytes[pos++];
+       }
+       return null;
+     }
+     int consumed = _processBytes(getNext);
+     if (consumed &gt; 0) {
+       goodChars = _buffer.length;
+     } else if (consumed == 0) {
+       _buffer.length = goodChars;
+       if (currentPos &lt; 0) {
+         _carry = [];
+         _carry.addAll(carry);
+         _carry.addAll(bytes);
+       } else {
+         _carry = bytes.sublist(currentPos);
+       }
+       break;
+     } else {
+       // Invalid byte at position pos - 1
+       _buffer.length = goodChars;
+       _addChar(-1);
+       goodChars = _buffer.length;
+     }
+   }
+   if (_buffer.length &gt; 0) {
+     // Limit to 'goodChars', if lower than actual charCodes in the buffer.
+     sink.add(new String.fromCharCodes(_buffer));
+   }
+   _buffer = null;
+ } catch (e) {
+   sink.addError(e);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="handleDone">
+<button class="show-code">Code</button>
+void <strong>handleDone</strong>(<a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; sink) <a class="anchor-link" href="#handleDone"
+              title="Permalink to Utf8DecoderTransformer.handleDone">#</a></h4>
+<div class="inherited-from">inherited from <a href="../utf/_StringDecoder.html">_StringDecoder</a> </div><div class="doc">
+<div class="inherited">
+<p>Act on incoming done event.</p>
+<p>The method may generate any number of events on the sink, but should
+not throw.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/StreamEventTransformer.html">StreamEventTransformer</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt;, <a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; </div></div>
+<pre class="source">
+void handleDone(EventSink&lt;String&gt; sink) {
+ if (_carry != null) {
+   if (_replacementChar != null) {
+     sink.add(new String.fromCharCodes(
+         new List.filled(_carry.length, _replacementChar)));
+   } else {
+     throw new ArgumentError('Invalid codepoint');
+   }
+ }
+ sink.close();
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="handleError">
+<button class="show-code">Code</button>
+void <strong>handleError</strong>(error, <a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&lt;<a href="../utf/Utf8DecoderTransformer.html">T</a>&gt; sink) <a class="anchor-link" href="#handleError"
+              title="Permalink to Utf8DecoderTransformer.handleError">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_async/StreamEventTransformer.html">StreamEventTransformer</a> </div><div class="doc">
+<p>Act on incoming error event.</p>
+<p>The method may generate any number of events on the sink, but should
+not throw.</p>
+<pre class="source">
+void handleError(error, EventSink&lt;T&gt; sink) {
+ sink.addError(error);
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

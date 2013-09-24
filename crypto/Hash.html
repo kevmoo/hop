@@ -45,7 +45,7 @@ abstract class Hash {
  /**
   * Add a list of bytes to the hash computation.
   */
- add(List&lt;int&gt; data);
+ void add(List&lt;int&gt; data);
 
  /**
   * Finish the hash computation and extract the message digest as
@@ -89,7 +89,7 @@ int get blockSize;
 <div>
 <h3>Methods</h3>
 <div class="method"><h4 id="add">
-abstract dynamic <strong>add</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; data) <a class="anchor-link" href="#add"
+abstract void <strong>add</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; data) <a class="anchor-link" href="#add"
               title="Permalink to Hash.add">#</a></h4>
 <div class="doc">
 <p>Add a list of bytes to the hash computation.</p>

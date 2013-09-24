@@ -1,0 +1,144 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>hop_tasks.copy_js Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="hop_tasks.copy_js">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Hop Documentation</a>
+         &rsaquo; <a href="hop_tasks.copy_js.html">hop_tasks.copy_js</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>hop_tasks.copy_js</strong> library</h2>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="BROWSER_DART">
+<button class="show-code">Code</button>
+const         <strong>BROWSER_DART</strong> <a class="anchor-link"
+            href="#BROWSER_DART"
+            title="Permalink to BROWSER_DART">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+const BROWSER_DART = 'browser/dart.js'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BROWSER_INTEROP">
+<button class="show-code">Code</button>
+const         <strong>BROWSER_INTEROP</strong> <a class="anchor-link"
+            href="#BROWSER_INTEROP"
+            title="Permalink to BROWSER_INTEROP">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+const BROWSER_INTEROP = 'browser/interop.js'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="JS_DART_INTEROP">
+<button class="show-code">Code</button>
+const         <strong>JS_DART_INTEROP</strong> <a class="anchor-link"
+            href="#JS_DART_INTEROP"
+            title="Permalink to JS_DART_INTEROP">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+const JS_DART_INTEROP = 'js/dart_interop.js'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="UNITTEST_TEST_CONTROLLER">
+<button class="show-code">Code</button>
+const         <strong>UNITTEST_TEST_CONTROLLER</strong> <a class="anchor-link"
+            href="#UNITTEST_TEST_CONTROLLER"
+            title="Permalink to UNITTEST_TEST_CONTROLLER">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+const UNITTEST_TEST_CONTROLLER = 'unittest/test_controller.js'
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="copyJs">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>copyJs</strong>(<a href="hop/TaskContext.html">TaskContext</a> ctx, <a href="http://api.dartlang.org/dart_core/String.html">String</a> targetDir, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> unittestTestController, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> browserDart, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> browserInterop, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> jsDartInterop) <a class="anchor-link" href="#copyJs"
+              title="Permalink to copyJs">#</a></h4>
+<div class="doc">
+<pre class="source">
+Future&lt;bool&gt; copyJs(TaskContext ctx, String targetDir,
+   bool unittestTestController, bool browserDart, bool browserInterop,
+   bool jsDartInterop) {
+
+ assert(ctx != null);
+ return FileSystemEntity.isDirectory(targetDir)
+     .then((bool isDir) {
+       if(!isDir) {
+         ctx.fail('"targetPath" does not exist or is not a directory: $targetDir');
+       }
+
+       var sources = [];
+       if(unittestTestController) sources.add(UNITTEST_TEST_CONTROLLER);
+       if(browserDart) sources.add(BROWSER_DART);
+       if(browserInterop) sources.add(BROWSER_INTEROP);
+       if(jsDartInterop) sources.add(JS_DART_INTEROP);
+
+       if(sources.isEmpty) {
+         ctx.fail('No source files were provided. NOOP.');
+       }
+
+       return Future.forEach(sources, (String source) {
+         return _copyDependency(ctx, targetDir, source);
+       }).then((_) =&gt; true);
+     });
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="createCopyJSTask">
+<button class="show-code">Code</button>
+<a href="hop/Task.html">Task</a> <strong>createCopyJSTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> targetDir, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> unittestTestController: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> browserDart: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> browserInterop: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> jsDartInterop: false}) <a class="anchor-link" href="#createCopyJSTask"
+              title="Permalink to createCopyJSTask">#</a></h4>
+<div class="doc">
+<pre class="source">
+Task createCopyJSTask(String targetDir, {bool unittestTestController: false,
+ bool browserDart: false,
+ bool browserInterop: false,
+ bool jsDartInterop: false}) {
+
+ return new Task.async((ctx) =&gt; copyJs(ctx, targetDir, unittestTestController,
+     browserDart, browserInterop, jsDartInterop));
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

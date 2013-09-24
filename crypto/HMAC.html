@@ -47,7 +47,7 @@ class HMAC {
  /**
   * Add a list of bytes to the message.
   */
- add(List&lt;int&gt; data) {
+ void add(List&lt;int&gt; data) {
    if (_isClosed) throw new StateError("HMAC is closed");
    _message.addAll(data);
  }
@@ -135,7 +135,7 @@ class HMAC {
  // HMAC internal state.
  Hash _hash;
  List&lt;int&gt; _key;
- List&lt;int&gt; _message;
+ final List&lt;int&gt; _message;
 }
 </pre>
 </div>
@@ -215,12 +215,12 @@ List&lt;int&gt; get digest {
 <h3>Methods</h3>
 <div class="method"><h4 id="add">
 <button class="show-code">Code</button>
-dynamic <strong>add</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; data) <a class="anchor-link" href="#add"
+void <strong>add</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; data) <a class="anchor-link" href="#add"
               title="Permalink to HMAC.add">#</a></h4>
 <div class="doc">
 <p>Add a list of bytes to the message.</p>
 <pre class="source">
-add(List&lt;int&gt; data) {
+void add(List&lt;int&gt; data) {
  if (_isClosed) throw new StateError("HMAC is closed");
  _message.addAll(data);
 }

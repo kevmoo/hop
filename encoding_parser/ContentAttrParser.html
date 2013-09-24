@@ -1,0 +1,174 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>ContentAttrParser class / encoding_parser Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="encoding_parser" data-type="ContentAttrParser">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../encoding_parser.html">encoding_parser</a> &rsaquo; <a href="../encoding_parser/ContentAttrParser.html">ContentAttrParser</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>ContentAttrParser</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class ContentAttrParser {
+ final EncodingBytes data;
+
+ ContentAttrParser(this.data);
+
+ String parse() {
+   try {
+     // Check if the attr name is charset
+     // otherwise return
+     data.jumpTo("charset");
+     data.position += 1;
+     data.skipChars();
+     if (data.currentByte != "=") {
+       // If there is no = sign keep looking for attrs
+       return null;
+     }
+     data.position += 1;
+     data.skipChars();
+     // Look for an encoding between matching quote marks
+     if (data.currentByte == '"' || data.currentByte == "'") {
+       var quoteMark = data.currentByte;
+       data.position += 1;
+       var oldPosition = data.position;
+       if (data.jumpTo(quoteMark)) {
+         return data.slice(oldPosition, data.position);
+       } else {
+         return null;
+       }
+     } else {
+       // Unquoted value
+       var oldPosition = data.position;
+       try {
+         data.skipUntil(isWhitespace);
+         return data.slice(oldPosition, data.position);
+       } on StateError catch (e) {
+         //Return the whole remaining value
+         return data.slice(oldPosition);
+       }
+     }
+   } on StateError catch (e) {
+     return null;
+   }
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>ContentAttrParser</strong>(<a href="../encoding_parser/EncodingBytes.html">EncodingBytes</a> data) <a class="anchor-link" href="#"
+              title="Permalink to ContentAttrParser.ContentAttrParser">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+ContentAttrParser(this.data);
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="data">
+<button class="show-code">Code</button>
+final <a href="../encoding_parser/EncodingBytes.html">EncodingBytes</a>         <strong>data</strong> <a class="anchor-link"
+            href="#data"
+            title="Permalink to ContentAttrParser.data">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final EncodingBytes data
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="parse">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>parse</strong>() <a class="anchor-link" href="#parse"
+              title="Permalink to ContentAttrParser.parse">#</a></h4>
+<div class="doc">
+<pre class="source">
+String parse() {
+ try {
+   // Check if the attr name is charset
+   // otherwise return
+   data.jumpTo("charset");
+   data.position += 1;
+   data.skipChars();
+   if (data.currentByte != "=") {
+     // If there is no = sign keep looking for attrs
+     return null;
+   }
+   data.position += 1;
+   data.skipChars();
+   // Look for an encoding between matching quote marks
+   if (data.currentByte == '"' || data.currentByte == "'") {
+     var quoteMark = data.currentByte;
+     data.position += 1;
+     var oldPosition = data.position;
+     if (data.jumpTo(quoteMark)) {
+       return data.slice(oldPosition, data.position);
+     } else {
+       return null;
+     }
+   } else {
+     // Unquoted value
+     var oldPosition = data.position;
+     try {
+       data.skipUntil(isWhitespace);
+       return data.slice(oldPosition, data.position);
+     } on StateError catch (e) {
+       //Return the whole remaining value
+       return data.slice(oldPosition);
+     }
+   }
+ } on StateError catch (e) {
+   return null;
+ }
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

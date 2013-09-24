@@ -211,6 +211,11 @@ class AffineTransform implements Cloneable&lt;AffineTransform&gt; {
        _shY == other._shY &amp;&amp; _scY == other._scY &amp;&amp; _tY == other._tY;
  }
 
+ // NOTE: AffineTransform is mutable and also implements ==
+ // returning a 0 from hashCode ensures instances don't get lost in hash
+ // implementations. These really shouldn't be used for keys anyway.
+ int get hashCode =&gt; 0;
+
  String toString() =&gt;
    [scaleX, shearY, shearX, scaleY, translateX, translateY].join(', ');
 }
@@ -290,6 +295,28 @@ final <a href="http://api.dartlang.org/dart_core/num.html">num</a>         <stro
         <div class="doc">
 <pre class="source">
 num get determinant =&gt; _scX * _scY - _shX * _shY;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="hashCode">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>hashCode</strong> <a class="anchor-link"
+            href="#hashCode"
+            title="Permalink to AffineTransform.hashCode">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <a class="crossref" href="../bot/AffineTransform.html#hashCode">hashCode</a> it should override the
+equality operator as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+int get hashCode =&gt; 0;
 </pre>
 </div>
 </div>
@@ -420,7 +447,7 @@ That is, it must be:</p><ul><li>
 should not change over time, or at least only change if one of the objects
 was modified.</p>
 <p>If a subclass overrides the equality operator it should override
-the <a class="crossref" href="../dart_core/Object.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
+the <a class="crossref" href="../bot/AffineTransform.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
 bool operator ==(AffineTransform other) {

@@ -50,9 +50,10 @@ class EventHandle&lt;T&gt; implements Disposable {
    // gets disposed recursively.
    this._disposed = true;
    _controller.close();
+   assert(_controller.isClosed);
  }
 
- async.Stream get stream =&gt; _controller.stream;
+ async.Stream&lt;T&gt; get stream =&gt; _controller.stream;
 
  bool get hasListener =&gt; _controller.hasListener;
 
@@ -111,13 +112,13 @@ bool get isDisposed =&gt; _disposed;
 </div>
 <div class="field"><h4 id="stream">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>         <strong>stream</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="../bot/EventHandle.html">T</a>&gt;         <strong>stream</strong> <a class="anchor-link"
             href="#stream"
             title="Permalink to EventHandle&lt;T&gt;.stream">#</a>
         </h4>
         <div class="doc">
 <pre class="source">
-async.Stream get stream =&gt; _controller.stream;
+async.Stream&lt;T&gt; get stream =&gt; _controller.stream;
 </pre>
 </div>
 </div>
@@ -148,6 +149,7 @@ void dispose(){
  // gets disposed recursively.
  this._disposed = true;
  _controller.close();
+ assert(_controller.isClosed);
 }
 </pre>
 </div>

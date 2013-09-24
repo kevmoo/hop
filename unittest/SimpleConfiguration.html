@@ -68,6 +68,7 @@ class SimpleConfiguration extends Configuration {
  final _testLogBuffer = &lt;Pair&lt;String, StackTrace&gt;&gt;[];
 
  /// How long a [TestCase] can run before it is considered an error.
+ /// A [timeout] value of [:null:] means that the limit is infinite.
  Duration timeout = const Duration(seconds: 20);
 
  /**
@@ -325,7 +326,8 @@ bool throwOnTestFailures = true
             title="Permalink to SimpleConfiguration.timeout">#</a>
         </h4>
         <div class="doc">
-<p>How long a <a class="crossref" href="../unittest/TestCase.html">TestCase</a> can run before it is considered an error.</p>
+<p>How long a <a class="crossref" href="../unittest/TestCase.html">TestCase</a> can run before it is considered an error.
+A <a class="crossref" href="../unittest/SimpleConfiguration.html#timeout">timeout</a> value of <code>null</code> means that the limit is infinite.</p>
 <pre class="source">
 Duration timeout = const Duration(seconds: 20)
 </pre>

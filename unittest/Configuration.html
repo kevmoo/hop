@@ -56,6 +56,7 @@ abstract class Configuration {
  bool get autoStart =&gt; true;
 
  /// How long a [TestCase] can run before it is considered an error.
+ /// A [timeout] value of [:null:] means that the limit is infinite.
  Duration get timeout =&gt; const Duration(seconds: 20);
 
  /**
@@ -164,7 +165,8 @@ final <a href="http://api.dartlang.org/dart_core/Duration.html">Duration</a>    
             title="Permalink to Configuration.timeout">#</a>
         </h4>
         <div class="doc">
-<p>How long a <a class="crossref" href="../unittest/TestCase.html">TestCase</a> can run before it is considered an error.</p>
+<p>How long a <a class="crossref" href="../unittest/TestCase.html">TestCase</a> can run before it is considered an error.
+A <a class="crossref" href="../unittest/Configuration.html#timeout">timeout</a> value of <code>null</code> means that the limit is infinite.</p>
 <pre class="source">
 Duration get timeout =&gt; const Duration(seconds: 20);
 </pre>

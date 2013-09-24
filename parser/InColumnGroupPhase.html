@@ -1,0 +1,394 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>InColumnGroupPhase class / parser Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="parser" data-type="InColumnGroupPhase">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../parser.html">parser</a> &rsaquo; <a href="../parser/InColumnGroupPhase.html">InColumnGroupPhase</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>InColumnGroupPhase</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class InColumnGroupPhase extends Phase {
+ // http://www.whatwg.org/specs/web-apps/current-work///in-column
+ InColumnGroupPhase(parser) : super(parser);
+
+ processStartTag(StartTagToken token) {
+   switch (token.name) {
+     case "html": return startTagHtml(token);
+     case "col": return startTagCol(token);
+     default: return startTagOther(token);
+   }
+ }
+
+ processEndTag(EndTagToken token) {
+   switch (token.name) {
+     case "colgroup": return endTagColgroup(token);
+     case "col": return endTagCol(token);
+     default: return endTagOther(token);
+   }
+ }
+
+ bool ignoreEndTagColgroup() {
+   return tree.openElements.last.tagName == "html";
+ }
+
+ bool processEOF() {
+   var ignoreEndTag = ignoreEndTagColgroup();
+   if (ignoreEndTag) {
+     assert(parser.innerHTMLMode);
+     return false;
+   } else {
+     endTagColgroup(new EndTagToken("colgroup"));
+     return true;
+   }
+ }
+
+ Token processCharacters(CharactersToken token) {
+   var ignoreEndTag = ignoreEndTagColgroup();
+   endTagColgroup(new EndTagToken("colgroup"));
+   return ignoreEndTag ? null : token;
+ }
+
+ void startTagCol(StartTagToken token) {
+   tree.insertElement(token);
+   tree.openElements.removeLast();
+ }
+
+ Token startTagOther(StartTagToken token) {
+   var ignoreEndTag = ignoreEndTagColgroup();
+   endTagColgroup(new EndTagToken("colgroup"));
+   return ignoreEndTag ? null : token;
+ }
+
+ void endTagColgroup(EndTagToken token) {
+   if (ignoreEndTagColgroup()) {
+     // innerHTML case
+     assert(parser.innerHTMLMode);
+     parser.parseError(token.span, "undefined-error");
+   } else {
+     tree.openElements.removeLast();
+     parser.phase = parser._inTablePhase;
+   }
+ }
+
+ void endTagCol(EndTagToken token) {
+   parser.parseError(token.span, "no-end-tag", {"name": "col"});
+ }
+
+ Token endTagOther(EndTagToken token) {
+   var ignoreEndTag = ignoreEndTagColgroup();
+   endTagColgroup(new EndTagToken("colgroup"));
+   return ignoreEndTag ? null : token;
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../parser/Phase.html">Phase</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>InColumnGroupPhase</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>InColumnGroupPhase</strong>(parser) <a class="anchor-link" href="#"
+              title="Permalink to InColumnGroupPhase.InColumnGroupPhase">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+InColumnGroupPhase(parser) : super(parser);
+</pre>
+</div>
+</div>
+</div>
+<div class="inherited">
+<h3>Properties</h3>
+<div class="field inherited"><h4 id="parser">
+<button class="show-code">Code</button>
+final <a href="../parser/HtmlParser.html">HtmlParser</a>         <strong>parser</strong> <a class="anchor-link"
+            href="#parser"
+            title="Permalink to InColumnGroupPhase.parser">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+final HtmlParser parser
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="tree">
+<button class="show-code">Code</button>
+final <a href="../treebuilder/TreeBuilder.html">TreeBuilder</a>         <strong>tree</strong> <a class="anchor-link"
+            href="#tree"
+            title="Permalink to InColumnGroupPhase.tree">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+final TreeBuilder tree
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="endTagCol">
+<button class="show-code">Code</button>
+void <strong>endTagCol</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#endTagCol"
+              title="Permalink to InColumnGroupPhase.endTagCol">#</a></h4>
+<div class="doc">
+<pre class="source">
+void endTagCol(EndTagToken token) {
+ parser.parseError(token.span, "no-end-tag", {"name": "col"});
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="endTagColgroup">
+<button class="show-code">Code</button>
+void <strong>endTagColgroup</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#endTagColgroup"
+              title="Permalink to InColumnGroupPhase.endTagColgroup">#</a></h4>
+<div class="doc">
+<pre class="source">
+void endTagColgroup(EndTagToken token) {
+ if (ignoreEndTagColgroup()) {
+   // innerHTML case
+   assert(parser.innerHTMLMode);
+   parser.parseError(token.span, "undefined-error");
+ } else {
+   tree.openElements.removeLast();
+   parser.phase = parser._inTablePhase;
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="endTagOther">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>endTagOther</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#endTagOther"
+              title="Permalink to InColumnGroupPhase.endTagOther">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token endTagOther(EndTagToken token) {
+ var ignoreEndTag = ignoreEndTagColgroup();
+ endTagColgroup(new EndTagToken("colgroup"));
+ return ignoreEndTag ? null : token;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="ignoreEndTagColgroup">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>ignoreEndTagColgroup</strong>() <a class="anchor-link" href="#ignoreEndTagColgroup"
+              title="Permalink to InColumnGroupPhase.ignoreEndTagColgroup">#</a></h4>
+<div class="doc">
+<pre class="source">
+bool ignoreEndTagColgroup() {
+ return tree.openElements.last.tagName == "html";
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="popOpenElementsUntil">
+<button class="show-code">Code</button>
+void <strong>popOpenElementsUntil</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#popOpenElementsUntil"
+              title="Permalink to InColumnGroupPhase.popOpenElementsUntil">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<p>Helper method for popping openElements. </p>
+<pre class="source">
+void popOpenElementsUntil(String name) {
+ var node = tree.openElements.removeLast();
+ while (node.tagName != name) {
+   node = tree.openElements.removeLast();
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processCharacters">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processCharacters</strong>(<a href="../token/CharactersToken.html">CharactersToken</a> token) <a class="anchor-link" href="#processCharacters"
+              title="Permalink to InColumnGroupPhase.processCharacters">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token processCharacters(CharactersToken token) {
+ var ignoreEndTag = ignoreEndTagColgroup();
+ endTagColgroup(new EndTagToken("colgroup"));
+ return ignoreEndTag ? null : token;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processComment">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processComment</strong>(<a href="../token/CommentToken.html">CommentToken</a> token) <a class="anchor-link" href="#processComment"
+              title="Permalink to InColumnGroupPhase.processComment">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token processComment(CommentToken token) {
+ // For most phases the following is correct. Where it's not it will be
+ // overridden.
+ tree.insertComment(token, tree.openElements.last);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processDoctype">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processDoctype</strong>(<a href="../token/DoctypeToken.html">DoctypeToken</a> token) <a class="anchor-link" href="#processDoctype"
+              title="Permalink to InColumnGroupPhase.processDoctype">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token processDoctype(DoctypeToken token) {
+ parser.parseError(token.span, "unexpected-doctype");
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processEndTag">
+<button class="show-code">Code</button>
+dynamic <strong>processEndTag</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#processEndTag"
+              title="Permalink to InColumnGroupPhase.processEndTag">#</a></h4>
+<div class="doc">
+<pre class="source">
+processEndTag(EndTagToken token) {
+ switch (token.name) {
+   case "colgroup": return endTagColgroup(token);
+   case "col": return endTagCol(token);
+   default: return endTagOther(token);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processEOF">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>processEOF</strong>() <a class="anchor-link" href="#processEOF"
+              title="Permalink to InColumnGroupPhase.processEOF">#</a></h4>
+<div class="doc">
+<pre class="source">
+bool processEOF() {
+ var ignoreEndTag = ignoreEndTagColgroup();
+ if (ignoreEndTag) {
+   assert(parser.innerHTMLMode);
+   return false;
+ } else {
+   endTagColgroup(new EndTagToken("colgroup"));
+   return true;
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processSpaceCharacters">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processSpaceCharacters</strong>(<a href="../token/SpaceCharactersToken.html">SpaceCharactersToken</a> token) <a class="anchor-link" href="#processSpaceCharacters"
+              title="Permalink to InColumnGroupPhase.processSpaceCharacters">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token processSpaceCharacters(SpaceCharactersToken token) {
+ tree.insertText(token.data, token.span);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processStartTag">
+<button class="show-code">Code</button>
+dynamic <strong>processStartTag</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#processStartTag"
+              title="Permalink to InColumnGroupPhase.processStartTag">#</a></h4>
+<div class="doc">
+<pre class="source">
+processStartTag(StartTagToken token) {
+ switch (token.name) {
+   case "html": return startTagHtml(token);
+   case "col": return startTagCol(token);
+   default: return startTagOther(token);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="startTagCol">
+<button class="show-code">Code</button>
+void <strong>startTagCol</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#startTagCol"
+              title="Permalink to InColumnGroupPhase.startTagCol">#</a></h4>
+<div class="doc">
+<pre class="source">
+void startTagCol(StartTagToken token) {
+ tree.insertElement(token);
+ tree.openElements.removeLast();
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="startTagHtml">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>startTagHtml</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#startTagHtml"
+              title="Permalink to InColumnGroupPhase.startTagHtml">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token startTagHtml(StartTagToken token) {
+ if (parser.firstStartTag == false &amp;&amp; token.name == "html") {
+    parser.parseError(token.span, "non-html-root");
+ }
+ // XXX Need a check here to see if the first start tag token emitted is
+ // this token... If it's not, invoke parser.parseError().
+ token.data.forEach((attr, value) {
+   tree.openElements[0].attributes.putIfAbsent(attr, () =&gt; value);
+ });
+ parser.firstStartTag = false;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="startTagOther">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>startTagOther</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#startTagOther"
+              title="Permalink to InColumnGroupPhase.startTagOther">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token startTagOther(StartTagToken token) {
+ var ignoreEndTag = ignoreEndTagColgroup();
+ endTagColgroup(new EndTagToken("colgroup"));
+ return ignoreEndTag ? null : token;
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

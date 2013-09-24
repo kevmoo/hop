@@ -1,0 +1,73 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>source_maps.utils Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="source_maps.utils">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Hop Documentation</a>
+         &rsaquo; <a href="source_maps.utils.html">source_maps.utils</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>source_maps.utils</strong> library</h2>
+<div class="doc"><p>Utilities that shouldn't be in this package.</p></div>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="binarySearch">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>binarySearch</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a> list, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> matches(item)) <a class="anchor-link" href="#binarySearch"
+              title="Permalink to binarySearch">#</a></h4>
+<div class="doc">
+<p>Find the first entry in a sorted 
+<span class="param">list</span> that matches a monotonic predicate.
+Given a result <code>n</code>, that all items before <code>n</code> will not match, <code>n</code> matches,
+and all items after <code>n</code> match too. The result is -1 when there are no
+items, 0 when all items match, and list.length when none does.</p>
+<pre class="source">
+int binarySearch(List list, bool matches(item)) {
+ if (list.length == 0) return -1;
+ if (matches(list.first)) return 0;
+ if (!matches(list.last)) return list.length;
+
+ int min = 0;
+ int max = list.length - 1;
+ while (min &lt; max) {
+   var half = min + ((max - min) ~/ 2);
+   if (matches(list[half])) {
+     max = half;
+   } else {
+     min = half + 1;
+   }
+ }
+ return max;
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

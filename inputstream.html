@@ -1,0 +1,119 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>inputstream Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="inputstream">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Hop Documentation</a>
+         &rsaquo; <a href="inputstream.html">inputstream</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>inputstream</strong> library</h2>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="consoleSupport">
+<button class="show-code">Code</button>
+<a href="inputstream/ConsoleSupport.html">ConsoleSupport</a>         <strong>consoleSupport</strong> <a class="anchor-link"
+            href="#consoleSupport"
+            title="Permalink to consoleSupport">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+ConsoleSupport consoleSupport = new ConsoleSupport()
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="codecName">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>codecName</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> encoding) <a class="anchor-link" href="#codecName"
+              title="Permalink to codecName">#</a></h4>
+<div class="doc">
+<p>Return the python codec name corresponding to an encoding or null if the
+string doesn't correspond to a valid encoding.</p>
+<pre class="source">
+String codecName(String encoding) {
+ final asciiPunctuation = new RegExp(
+     "[\u0009-\u000D\u0020-\u002F\u003A-\u0040\u005B-\u0060\u007B-\u007E]");
+
+ if (encoding == null) return null;
+ var canonicalName = encoding.replaceAll(asciiPunctuation, '').toLowerCase();
+ return encodings[canonicalName];
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="invalidUnicode">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>invalidUnicode</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> c) <a class="anchor-link" href="#invalidUnicode"
+              title="Permalink to invalidUnicode">#</a></h4>
+<div class="doc">
+<pre class="source">
+bool invalidUnicode(int c) {
+ if (0x0001 &lt;= c &amp;&amp; c &lt;= 0x0008) return true;
+ if (0x000E &lt;= c &amp;&amp; c &lt;= 0x001F) return true;
+ if (0x007F &lt;= c &amp;&amp; c &lt;= 0x009F) return true;
+ if (0xD800 &lt;= c &amp;&amp; c &lt;= 0xDFFF) return true;
+ if (0xFDD0 &lt;= c &amp;&amp; c &lt;= 0xFDEF) return true;
+ switch (c) {
+   case 0x000B: case 0xFFFE: case 0xFFFF: case 0x01FFFE: case 0x01FFFF:
+   case 0x02FFFE: case 0x02FFFF: case 0x03FFFE: case 0x03FFFF:
+   case 0x04FFFE: case 0x04FFFF: case 0x05FFFE: case 0x05FFFF:
+   case 0x06FFFE: case 0x06FFFF: case 0x07FFFE: case 0x07FFFF:
+   case 0x08FFFE: case 0x08FFFF: case 0x09FFFE: case 0x09FFFF:
+   case 0x0AFFFE: case 0x0AFFFF: case 0x0BFFFE: case 0x0BFFFF:
+   case 0x0CFFFE: case 0x0CFFFF: case 0x0DFFFE: case 0x0DFFFF:
+   case 0x0EFFFE: case 0x0EFFFF: case 0x0FFFFE: case 0x0FFFFF:
+   case 0x10FFFE: case 0x10FFFF:
+     return true;
+ }
+ return false;
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Classes</h3>
+          <div class="type">
+          <h4>
+            <a href="inputstream/ConsoleSupport.html"><strong>ConsoleSupport</strong></a>
+          </h4>
+          </div>
+          
+          <div class="type">
+          <h4>
+            <a href="inputstream/HtmlInputStream.html"><strong>HtmlInputStream</strong></a>
+          </h4>
+          </div>
+          
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

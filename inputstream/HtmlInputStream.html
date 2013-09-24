@@ -1,0 +1,703 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>HtmlInputStream class / inputstream Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="inputstream" data-type="HtmlInputStream">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../inputstream.html">inputstream</a> &rsaquo; <a href="../inputstream/HtmlInputStream.html">HtmlInputStream</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>HtmlInputStream</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Provides a unicode stream of characters to the HtmlTokenizer.</p>
+<p>This class takes care of character encoding and removing or replacing
+incorrect byte-sequences and also provides column and line tracking.</p>
+<pre class="source">
+class HtmlInputStream {
+ /**
+  * Number of bytes to use when looking for a meta element with
+  * encoding information.
+  */
+ static const int numBytesMeta = 512;
+
+ /** Encoding to use if no other information can be found. */
+ static const String defaultEncoding = 'windows-1252';
+
+ /** The name of the character encoding. */
+ String charEncodingName;
+
+ /** True if we are certain about [charEncodingName], false for tenative. */
+ bool charEncodingCertain = true;
+
+ final bool generateSpans;
+
+ /** Location where the contents of the stream were found. */
+ final String sourceUrl;
+
+ List&lt;int&gt; _rawBytes;
+
+ /** Raw UTF-16 codes, used if a Dart String is passed in. */
+ Iterable&lt;int&gt; _rawChars;
+
+ Queue&lt;String&gt; errors;
+
+ SourceFile fileInfo;
+
+ List&lt;int&gt; _lineStarts;
+
+ List&lt;int&gt; _chars;
+
+ int _offset;
+
+ /**
+  * Initialises the HtmlInputStream.
+  *
+  * HtmlInputStream(source, [encoding]) -&gt; Normalized stream from source
+  * for use by html5lib.
+  *
+  * [source] can be either a [String] or a [List&lt;int&gt;] containing the raw
+  * bytes, or a file if [consoleSupport] is initialized.
+  *
+  * The optional encoding parameter must be a string that indicates
+  * the encoding.  If specified, that encoding will be used,
+  * regardless of any BOM or later declaration (such as in a meta
+  * element)
+  *
+  * [parseMeta] - Look for a &lt;meta&gt; element containing encoding information
+  */
+ HtmlInputStream(source, [String encoding, bool parseMeta = true,
+       this.generateSpans = false, this.sourceUrl])
+     : charEncodingName = codecName(encoding) {
+
+   if (source is String) {
+     _rawChars = toCodepoints(source);
+     charEncodingName = 'utf-8';
+     charEncodingCertain = true;
+   } else if (source is List&lt;int&gt;) {
+     _rawBytes = source;
+   } else {
+     // TODO(jmesserly): it's unfortunate we need to read all bytes in advance,
+     // but it's necessary because of how the UTF decoders work.
+     _rawBytes = consoleSupport.bytesFromFile(source);
+
+     if (_rawBytes == null) {
+       // TODO(jmesserly): we should accept some kind of stream API too.
+       // Unfortunately dart:io InputStream is async only, which won't work.
+       throw new ArgumentError("'source' must be a String or "
+           "List&lt;int&gt; (of bytes). You can also pass a RandomAccessFile if you"
+           "`import 'package:html5lib/parser_console.dart'` and call "
+           "`useConsole()`.");
+     }
+   }
+
+   // Detect encoding iff no explicit "transport level" encoding is supplied
+   if (charEncodingName == null) {
+     detectEncoding(parseMeta);
+   }
+
+   reset();
+ }
+
+ void reset() {
+   errors = new Queue&lt;String&gt;();
+
+   _offset = 0;
+   _lineStarts = &lt;int&gt;[0];
+   _chars = &lt;int&gt;[];
+
+   if (_rawChars == null) {
+     _rawChars = decodeBytes(charEncodingName, _rawBytes);
+   }
+
+   bool skipNewline = false;
+   for (var c in _rawChars) {
+     if (skipNewline) {
+       skipNewline = false;
+       if (c == NEWLINE) continue;
+     }
+
+     if (invalidUnicode(c)) errors.add('invalid-codepoint');
+
+     if (0xD800 &lt;= c &amp;&amp; c &lt;= 0xDFFF) {
+       c = 0xFFFD;
+     } else if (c == RETURN) {
+       skipNewline = true;
+       c = NEWLINE;
+     }
+
+     _chars.add(c);
+     if (c == NEWLINE) _lineStarts.add(_chars.length);
+   }
+
+   // Free decoded characters if they aren't needed anymore.
+   if (_rawBytes != null) _rawChars = null;
+
+   fileInfo = new SourceFile(sourceUrl, _lineStarts,
+       generateSpans ? _chars : null);
+ }
+
+
+ void detectEncoding([bool parseMeta = true]) {
+   // First look for a BOM
+   // This will also read past the BOM if present
+   charEncodingName = detectBOM();
+   charEncodingCertain = true;
+
+   // If there is no BOM need to look for meta elements with encoding
+   // information
+   if (charEncodingName == null &amp;&amp; parseMeta) {
+     charEncodingName = detectEncodingMeta();
+     charEncodingCertain = false;
+   }
+   // If all else fails use the default encoding
+   if (charEncodingName == null) {
+     charEncodingCertain = false;
+     charEncodingName = defaultEncoding;
+   }
+
+   // Substitute for equivalent encodings:
+   if (charEncodingName.toLowerCase() == 'iso-8859-1') {
+     charEncodingName = 'windows-1252';
+   }
+ }
+
+ void changeEncoding(String newEncoding) {
+   if (_rawBytes == null) {
+     // We should never get here -- if encoding is certain we won't try to
+     // change it.
+     throw new StateError('cannot change encoding when parsing a String.');
+   }
+
+   newEncoding = codecName(newEncoding);
+   if (const ['utf-16', 'utf-16-be', 'utf-16-le'].contains(newEncoding)) {
+     newEncoding = 'utf-8';
+   }
+   if (newEncoding == null) {
+     return;
+   } else if (newEncoding == charEncodingName) {
+     charEncodingCertain = true;
+   } else {
+     charEncodingName = newEncoding;
+     charEncodingCertain = true;
+     _rawChars = null;
+     reset();
+     throw new ReparseException(
+         'Encoding changed from $charEncodingName to $newEncoding');
+   }
+ }
+
+ /**
+  * Attempts to detect at BOM at the start of the stream. If
+  * an encoding can be determined from the BOM return the name of the
+  * encoding otherwise return null.
+  */
+ String detectBOM() {
+   // Try detecting the BOM using bytes from the string
+   if (hasUtf8Bom(_rawBytes)) {
+     return 'utf-8';
+   }
+   // Note: we don't need to remember whether it was big or little endian
+   // because the decoder will do that later. It will also eat the BOM for us.
+   if (hasUtf16Bom(_rawBytes)) {
+     return 'utf-16';
+   }
+   if (hasUtf32Bom(_rawBytes)) {
+     return 'utf-32';
+   }
+   return null;
+ }
+
+ /** Report the encoding declared by the meta element. */
+ String detectEncodingMeta() {
+   var parser = new EncodingParser(slice(_rawBytes, 0, numBytesMeta));
+   var encoding = parser.getEncoding();
+
+   if (const ['utf-16', 'utf-16-be', 'utf-16-le'].contains(encoding)) {
+     encoding = 'utf-8';
+   }
+
+   return encoding;
+ }
+
+ /**
+  * Returns the current offset in the stream, i.e. the number of codepoints
+  * since the start of the file.
+  */
+ int get position =&gt; _offset;
+
+ /**
+  * Read one character from the stream or queue if available. Return
+  * EOF when EOF is reached.
+  */
+ String char() {
+   if (_offset &gt;= _chars.length) return EOF;
+   return new String.fromCharCodes([_chars[_offset++]]);
+ }
+
+ String peekChar() {
+   if (_offset &gt;= _chars.length) return EOF;
+   return new String.fromCharCodes([_chars[_offset]]);
+ }
+
+ /**
+  * Returns a string of characters from the stream up to but not
+  * including any character in 'characters' or EOF.
+  */
+ String charsUntil(String characters, [bool opposite = false]) {
+   int start = _offset;
+   String c;
+   while ((c = peekChar()) != null &amp;&amp; characters.contains(c) == opposite) {
+     _offset++;
+   }
+
+   return new String.fromCharCodes(_chars.sublist(start, _offset));
+ }
+
+ void unget(String ch) {
+   // Only one character is allowed to be ungotten at once - it must
+   // be consumed again before any further call to unget
+   if (ch != null) {
+     _offset--;
+     assert(peekChar() == ch);
+   }
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Static Properties</h3>
+<div class="field"><h4 id="defaultEncoding">
+<button class="show-code">Code</button>
+const <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>defaultEncoding</strong> <a class="anchor-link"
+            href="#defaultEncoding"
+            title="Permalink to HtmlInputStream.defaultEncoding">#</a>
+        </h4>
+        <div class="doc">
+<p>Encoding to use if no other information can be found. </p>
+<pre class="source">
+static const String defaultEncoding = 'windows-1252'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="numBytesMeta">
+<button class="show-code">Code</button>
+const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>numBytesMeta</strong> <a class="anchor-link"
+            href="#numBytesMeta"
+            title="Permalink to HtmlInputStream.numBytesMeta">#</a>
+        </h4>
+        <div class="doc">
+<p>Number of bytes to use when looking for a meta element with
+encoding information.</p>
+<pre class="source">
+static const int numBytesMeta = 512
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>HtmlInputStream</strong>(source, [<a href="http://api.dartlang.org/dart_core/String.html">String</a> encoding, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> parseMeta = true, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> generateSpans = false, <a href="http://api.dartlang.org/dart_core/String.html">String</a> sourceUrl]) <a class="anchor-link" href="#"
+              title="Permalink to HtmlInputStream.HtmlInputStream">#</a></h4>
+<div class="doc">
+<p>Initialises the HtmlInputStream.</p>
+<p>HtmlInputStream(source, 
+<span class="param">encoding</span>) -> Normalized stream from source
+for use by html5lib.</p>
+<p>
+<span class="param">source</span> can be either a <a class="crossref" href="../dart_core/String.html">String</a> or a [List<int>] containing the raw
+bytes, or a file if <a class="crossref" href="../inputstream.html#consoleSupport">consoleSupport</a> is initialized.</p>
+<p>The optional encoding parameter must be a string that indicates
+the encoding.  If specified, that encoding will be used,
+regardless of any BOM or later declaration (such as in a meta
+element)</p>
+<p>
+<span class="param">parseMeta</span> - Look for a &lt;meta> element containing encoding information</p>
+<pre class="source">
+HtmlInputStream(source, [String encoding, bool parseMeta = true,
+     this.generateSpans = false, this.sourceUrl])
+   : charEncodingName = codecName(encoding) {
+
+ if (source is String) {
+   _rawChars = toCodepoints(source);
+   charEncodingName = 'utf-8';
+   charEncodingCertain = true;
+ } else if (source is List&lt;int&gt;) {
+   _rawBytes = source;
+ } else {
+   // TODO(jmesserly): it's unfortunate we need to read all bytes in advance,
+   // but it's necessary because of how the UTF decoders work.
+   _rawBytes = consoleSupport.bytesFromFile(source);
+
+   if (_rawBytes == null) {
+     // TODO(jmesserly): we should accept some kind of stream API too.
+     // Unfortunately dart:io InputStream is async only, which won't work.
+     throw new ArgumentError("'source' must be a String or "
+         "List&lt;int&gt; (of bytes). You can also pass a RandomAccessFile if you"
+         "`import 'package:html5lib/parser_console.dart'` and call "
+         "`useConsole()`.");
+   }
+ }
+
+ // Detect encoding iff no explicit "transport level" encoding is supplied
+ if (charEncodingName == null) {
+   detectEncoding(parseMeta);
+ }
+
+ reset();
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="charEncodingCertain">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>charEncodingCertain</strong> <a class="anchor-link"
+            href="#charEncodingCertain"
+            title="Permalink to HtmlInputStream.charEncodingCertain">#</a>
+        </h4>
+        <div class="doc">
+<p>True if we are certain about <a class="crossref" href="../inputstream/HtmlInputStream.html#charEncodingName">charEncodingName</a>, false for tenative. </p>
+<pre class="source">
+bool charEncodingCertain = true
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="charEncodingName">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>charEncodingName</strong> <a class="anchor-link"
+            href="#charEncodingName"
+            title="Permalink to HtmlInputStream.charEncodingName">#</a>
+        </h4>
+        <div class="doc">
+<p>The name of the character encoding. </p>
+<pre class="source">
+String charEncodingName
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="errors">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_collection/Queue.html">Queue</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt;         <strong>errors</strong> <a class="anchor-link"
+            href="#errors"
+            title="Permalink to HtmlInputStream.errors">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Queue&lt;String&gt; errors
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="fileInfo">
+<button class="show-code">Code</button>
+<a href="../source_maps.span/SourceFile.html">SourceFile</a>         <strong>fileInfo</strong> <a class="anchor-link"
+            href="#fileInfo"
+            title="Permalink to HtmlInputStream.fileInfo">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+SourceFile fileInfo
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="generateSpans">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>generateSpans</strong> <a class="anchor-link"
+            href="#generateSpans"
+            title="Permalink to HtmlInputStream.generateSpans">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final bool generateSpans
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="position">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>position</strong> <a class="anchor-link"
+            href="#position"
+            title="Permalink to HtmlInputStream.position">#</a>
+        </h4>
+        <div class="doc">
+<p>Returns the current offset in the stream, i.e. the number of codepoints
+since the start of the file.</p>
+<pre class="source">
+int get position =&gt; _offset;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="sourceUrl">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>sourceUrl</strong> <a class="anchor-link"
+            href="#sourceUrl"
+            title="Permalink to HtmlInputStream.sourceUrl">#</a>
+        </h4>
+        <div class="doc">
+<p>Location where the contents of the stream were found. </p>
+<pre class="source">
+final String sourceUrl
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="changeEncoding">
+<button class="show-code">Code</button>
+void <strong>changeEncoding</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> newEncoding) <a class="anchor-link" href="#changeEncoding"
+              title="Permalink to HtmlInputStream.changeEncoding">#</a></h4>
+<div class="doc">
+<pre class="source">
+void changeEncoding(String newEncoding) {
+ if (_rawBytes == null) {
+   // We should never get here -- if encoding is certain we won't try to
+   // change it.
+   throw new StateError('cannot change encoding when parsing a String.');
+ }
+
+ newEncoding = codecName(newEncoding);
+ if (const ['utf-16', 'utf-16-be', 'utf-16-le'].contains(newEncoding)) {
+   newEncoding = 'utf-8';
+ }
+ if (newEncoding == null) {
+   return;
+ } else if (newEncoding == charEncodingName) {
+   charEncodingCertain = true;
+ } else {
+   charEncodingName = newEncoding;
+   charEncodingCertain = true;
+   _rawChars = null;
+   reset();
+   throw new ReparseException(
+       'Encoding changed from $charEncodingName to $newEncoding');
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="char">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>char</strong>() <a class="anchor-link" href="#char"
+              title="Permalink to HtmlInputStream.char">#</a></h4>
+<div class="doc">
+<p>Read one character from the stream or queue if available. Return
+EOF when EOF is reached.</p>
+<pre class="source">
+String char() {
+ if (_offset &gt;= _chars.length) return EOF;
+ return new String.fromCharCodes([_chars[_offset++]]);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="charsUntil">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>charsUntil</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> characters, [<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> opposite = false]) <a class="anchor-link" href="#charsUntil"
+              title="Permalink to HtmlInputStream.charsUntil">#</a></h4>
+<div class="doc">
+<p>Returns a string of characters from the stream up to but not
+including any character in 'characters' or EOF.</p>
+<pre class="source">
+String charsUntil(String characters, [bool opposite = false]) {
+ int start = _offset;
+ String c;
+ while ((c = peekChar()) != null &amp;&amp; characters.contains(c) == opposite) {
+   _offset++;
+ }
+
+ return new String.fromCharCodes(_chars.sublist(start, _offset));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="detectBOM">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>detectBOM</strong>() <a class="anchor-link" href="#detectBOM"
+              title="Permalink to HtmlInputStream.detectBOM">#</a></h4>
+<div class="doc">
+<p>Attempts to detect at BOM at the start of the stream. If
+an encoding can be determined from the BOM return the name of the
+encoding otherwise return null.</p>
+<pre class="source">
+String detectBOM() {
+ // Try detecting the BOM using bytes from the string
+ if (hasUtf8Bom(_rawBytes)) {
+   return 'utf-8';
+ }
+ // Note: we don't need to remember whether it was big or little endian
+ // because the decoder will do that later. It will also eat the BOM for us.
+ if (hasUtf16Bom(_rawBytes)) {
+   return 'utf-16';
+ }
+ if (hasUtf32Bom(_rawBytes)) {
+   return 'utf-32';
+ }
+ return null;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="detectEncoding">
+<button class="show-code">Code</button>
+void <strong>detectEncoding</strong>([<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> parseMeta = true]) <a class="anchor-link" href="#detectEncoding"
+              title="Permalink to HtmlInputStream.detectEncoding">#</a></h4>
+<div class="doc">
+<pre class="source">
+void detectEncoding([bool parseMeta = true]) {
+ // First look for a BOM
+ // This will also read past the BOM if present
+ charEncodingName = detectBOM();
+ charEncodingCertain = true;
+
+ // If there is no BOM need to look for meta elements with encoding
+ // information
+ if (charEncodingName == null &amp;&amp; parseMeta) {
+   charEncodingName = detectEncodingMeta();
+   charEncodingCertain = false;
+ }
+ // If all else fails use the default encoding
+ if (charEncodingName == null) {
+   charEncodingCertain = false;
+   charEncodingName = defaultEncoding;
+ }
+
+ // Substitute for equivalent encodings:
+ if (charEncodingName.toLowerCase() == 'iso-8859-1') {
+   charEncodingName = 'windows-1252';
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="detectEncodingMeta">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>detectEncodingMeta</strong>() <a class="anchor-link" href="#detectEncodingMeta"
+              title="Permalink to HtmlInputStream.detectEncodingMeta">#</a></h4>
+<div class="doc">
+<p>Report the encoding declared by the meta element. </p>
+<pre class="source">
+String detectEncodingMeta() {
+ var parser = new EncodingParser(slice(_rawBytes, 0, numBytesMeta));
+ var encoding = parser.getEncoding();
+
+ if (const ['utf-16', 'utf-16-be', 'utf-16-le'].contains(encoding)) {
+   encoding = 'utf-8';
+ }
+
+ return encoding;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="peekChar">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>peekChar</strong>() <a class="anchor-link" href="#peekChar"
+              title="Permalink to HtmlInputStream.peekChar">#</a></h4>
+<div class="doc">
+<pre class="source">
+String peekChar() {
+ if (_offset &gt;= _chars.length) return EOF;
+ return new String.fromCharCodes([_chars[_offset]]);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="reset">
+<button class="show-code">Code</button>
+void <strong>reset</strong>() <a class="anchor-link" href="#reset"
+              title="Permalink to HtmlInputStream.reset">#</a></h4>
+<div class="doc">
+<pre class="source">
+void reset() {
+ errors = new Queue&lt;String&gt;();
+
+ _offset = 0;
+ _lineStarts = &lt;int&gt;[0];
+ _chars = &lt;int&gt;[];
+
+ if (_rawChars == null) {
+   _rawChars = decodeBytes(charEncodingName, _rawBytes);
+ }
+
+ bool skipNewline = false;
+ for (var c in _rawChars) {
+   if (skipNewline) {
+     skipNewline = false;
+     if (c == NEWLINE) continue;
+   }
+
+   if (invalidUnicode(c)) errors.add('invalid-codepoint');
+
+   if (0xD800 &lt;= c &amp;&amp; c &lt;= 0xDFFF) {
+     c = 0xFFFD;
+   } else if (c == RETURN) {
+     skipNewline = true;
+     c = NEWLINE;
+   }
+
+   _chars.add(c);
+   if (c == NEWLINE) _lineStarts.add(_chars.length);
+ }
+
+ // Free decoded characters if they aren't needed anymore.
+ if (_rawBytes != null) _rawChars = null;
+
+ fileInfo = new SourceFile(sourceUrl, _lineStarts,
+     generateSpans ? _chars : null);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="unget">
+<button class="show-code">Code</button>
+void <strong>unget</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> ch) <a class="anchor-link" href="#unget"
+              title="Permalink to HtmlInputStream.unget">#</a></h4>
+<div class="doc">
+<pre class="source">
+void unget(String ch) {
+ // Only one character is allowed to be ungotten at once - it must
+ // be consumed again before any further call to unget
+ if (ch != null) {
+   _offset--;
+   assert(peekChar() == ch);
+ }
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

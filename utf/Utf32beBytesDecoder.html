@@ -1,0 +1,276 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Utf32beBytesDecoder class / utf Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="utf" data-type="Utf32beBytesDecoder">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../utf.html">utf</a> &rsaquo; <a href="../utf/Utf32beBytesDecoder.html">Utf32beBytesDecoder</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Utf32beBytesDecoder</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Convert UTF-32BE encoded bytes to codepoints by grouping 4 bytes
+to produce the unicode codepoint.</p>
+<pre class="source">
+class Utf32beBytesDecoder extends Utf32BytesDecoder {
+ Utf32beBytesDecoder(List&lt;int&gt; utf32EncodedBytes, [int offset = 0,
+     int length, bool stripBom = true,
+     int replacementCodepoint = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT]) :
+     super._fromListRangeIterator(
+         (new _ListRange(utf32EncodedBytes, offset, length)).iterator,
+         replacementCodepoint) {
+   if (stripBom &amp;&amp; hasUtf32beBom(utf32EncodedBytes, offset, length)) {
+     skip();
+   }
+ }
+
+ int decode() {
+   utf32EncodedBytesIterator.moveNext();
+   int value = utf32EncodedBytesIterator.current;
+   utf32EncodedBytesIterator.moveNext();
+   value = (value &lt;&lt; 8) + utf32EncodedBytesIterator.current;
+   utf32EncodedBytesIterator.moveNext();
+   value = (value &lt;&lt; 8) + utf32EncodedBytesIterator.current;
+   utf32EncodedBytesIterator.moveNext();
+   value = (value &lt;&lt; 8) + utf32EncodedBytesIterator.current;
+   return value;
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../utf/Utf32BytesDecoder.html">Utf32BytesDecoder</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>Utf32beBytesDecoder</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>Utf32beBytesDecoder</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; utf32EncodedBytes, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> offset = 0, <a href="http://api.dartlang.org/dart_core/int.html">int</a> length, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> stripBom = true, <a href="http://api.dartlang.org/dart_core/int.html">int</a> replacementCodepoint = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT]) <a class="anchor-link" href="#"
+              title="Permalink to Utf32beBytesDecoder.Utf32beBytesDecoder">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+Utf32beBytesDecoder(List&lt;int&gt; utf32EncodedBytes, [int offset = 0,
+   int length, bool stripBom = true,
+   int replacementCodepoint = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT]) :
+   super._fromListRangeIterator(
+       (new _ListRange(utf32EncodedBytes, offset, length)).iterator,
+       replacementCodepoint) {
+ if (stripBom &amp;&amp; hasUtf32beBom(utf32EncodedBytes, offset, length)) {
+   skip();
+ }
+}
+</pre>
+</div>
+</div>
+</div>
+<div class="inherited">
+<h3>Properties</h3>
+<div class="field inherited"><h4 id="current">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>current</strong> <a class="anchor-link"
+            href="#current"
+            title="Permalink to Utf32beBytesDecoder.current">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../utf/Utf32BytesDecoder.html">Utf32BytesDecoder</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns the current element.</p>
+<p>Return <code>null</code> if the iterator has not yet been moved to the first
+element, or if the iterator has been moved after the last element of the
+<a class="crossref" href="../dart_core/Iterable.html">Iterable</a>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterator.html">Iterator</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; </div></div>
+<pre class="source">
+int get current =&gt; _current;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="position">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>position</strong> <a class="anchor-link"
+            href="#position"
+            title="Permalink to Utf32beBytesDecoder.position">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../utf/Utf32BytesDecoder.html">Utf32BytesDecoder</a> </div><div class="doc">
+<pre class="source">
+int get position =&gt; utf32EncodedBytesIterator.position ~/ 4;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="remaining">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>remaining</strong> <a class="anchor-link"
+            href="#remaining"
+            title="Permalink to Utf32beBytesDecoder.remaining">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../utf/Utf32BytesDecoder.html">Utf32BytesDecoder</a> </div><div class="doc">
+<pre class="source">
+int get remaining =&gt; (utf32EncodedBytesIterator.remaining + 3) ~/ 4;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="replacementCodepoint">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>replacementCodepoint</strong> <a class="anchor-link"
+            href="#replacementCodepoint"
+            title="Permalink to Utf32beBytesDecoder.replacementCodepoint">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../utf/Utf32BytesDecoder.html">Utf32BytesDecoder</a> </div><div class="doc">
+<pre class="source">
+final int replacementCodepoint
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="utf32EncodedBytesIterator">
+<button class="show-code">Code</button>
+final <a href="../utf/_ListRangeIterator.html">_ListRangeIterator</a>         <strong>utf32EncodedBytesIterator</strong> <a class="anchor-link"
+            href="#utf32EncodedBytesIterator"
+            title="Permalink to Utf32beBytesDecoder.utf32EncodedBytesIterator">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../utf/Utf32BytesDecoder.html">Utf32BytesDecoder</a> </div><div class="doc">
+<pre class="source">
+final _ListRangeIterator utf32EncodedBytesIterator
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method inherited"><h4 id="backup">
+<button class="show-code">Code</button>
+void <strong>backup</strong>([<a href="http://api.dartlang.org/dart_core/int.html">int</a> by = 1]) <a class="anchor-link" href="#backup"
+              title="Permalink to Utf32beBytesDecoder.backup">#</a></h4>
+<div class="inherited-from">inherited from <a href="../utf/Utf32BytesDecoder.html">Utf32BytesDecoder</a> </div><div class="doc">
+<pre class="source">
+void backup([int by = 1]) {
+ utf32EncodedBytesIterator.backup(4 * by);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="decode">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>decode</strong>() <a class="anchor-link" href="#decode"
+              title="Permalink to Utf32beBytesDecoder.decode">#</a></h4>
+<div class="doc">
+<pre class="source">
+int decode() {
+ utf32EncodedBytesIterator.moveNext();
+ int value = utf32EncodedBytesIterator.current;
+ utf32EncodedBytesIterator.moveNext();
+ value = (value &lt;&lt; 8) + utf32EncodedBytesIterator.current;
+ utf32EncodedBytesIterator.moveNext();
+ value = (value &lt;&lt; 8) + utf32EncodedBytesIterator.current;
+ utf32EncodedBytesIterator.moveNext();
+ value = (value &lt;&lt; 8) + utf32EncodedBytesIterator.current;
+ return value;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="decodeRest">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; <strong>decodeRest</strong>() <a class="anchor-link" href="#decodeRest"
+              title="Permalink to Utf32beBytesDecoder.decodeRest">#</a></h4>
+<div class="inherited-from">inherited from <a href="../utf/Utf32BytesDecoder.html">Utf32BytesDecoder</a> </div><div class="doc">
+<pre class="source">
+List&lt;int&gt; decodeRest() {
+ List&lt;int&gt; codeunits = new List&lt;int&gt;(remaining);
+ int i = 0;
+ while (moveNext()) {
+   codeunits[i++] = current;
+ }
+ return codeunits;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="moveNext">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>moveNext</strong>() <a class="anchor-link" href="#moveNext"
+              title="Permalink to Utf32beBytesDecoder.moveNext">#</a></h4>
+<div class="inherited-from">inherited from <a href="../utf/Utf32BytesDecoder.html">Utf32BytesDecoder</a> </div><div class="doc">
+<div class="inherited">
+<p>Moves to the next element. Returns true if <a class="crossref" href="../utf/Utf32BytesDecoder.html#current">current</a> contains the next
+element. Returns false, if no element was left.</p>
+<p>It is safe to invoke <a class="crossref" href="../utf/Utf32BytesDecoder.html#moveNext">moveNext</a> even when the iterator is already
+positioned after the last element. In this case <a class="crossref" href="../utf/Utf32BytesDecoder.html#moveNext">moveNext</a> has no effect.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterator.html">Iterator</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; </div></div>
+<pre class="source">
+bool moveNext() {
+ _current = null;
+ if (utf32EncodedBytesIterator.remaining &lt; 4) {
+   utf32EncodedBytesIterator.skip(utf32EncodedBytesIterator.remaining);
+   if (replacementCodepoint != null) {
+       _current = replacementCodepoint;
+       return true;
+   } else {
+     throw new ArgumentError(
+         "Invalid UTF32 at ${utf32EncodedBytesIterator.position}");
+   }
+ } else {
+   int codepoint = decode();
+   if (_validCodepoint(codepoint)) {
+     _current = codepoint;
+     return true;
+   } else if (replacementCodepoint != null) {
+     _current = replacementCodepoint;
+     return true;
+   } else {
+     throw new ArgumentError(
+         "Invalid UTF32 at ${utf32EncodedBytesIterator.position}");
+   }
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="skip">
+<button class="show-code">Code</button>
+void <strong>skip</strong>([<a href="http://api.dartlang.org/dart_core/int.html">int</a> count = 1]) <a class="anchor-link" href="#skip"
+              title="Permalink to Utf32beBytesDecoder.skip">#</a></h4>
+<div class="inherited-from">inherited from <a href="../utf/Utf32BytesDecoder.html">Utf32BytesDecoder</a> </div><div class="doc">
+<pre class="source">
+void skip([int count = 1]) {
+ utf32EncodedBytesIterator.skip(4 * count);
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

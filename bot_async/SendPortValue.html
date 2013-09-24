@@ -37,64 +37,25 @@ class SendPortValue&lt;TInput, TOutput&gt; extends FutureValue&lt;TInput, TOutpu
  final SendPort _sendPort;
  final Func1&lt;TInput, dynamic&gt; inputSerializer;
  final Func1&lt;dynamic, TOutput&gt; outputDeserializer;
- Completer&lt;TOutput&gt; _completer;
- Future&lt;TOutput&gt; _innerFuture;
 
  SendPortValue(this._sendPort, {this.inputSerializer, this.outputDeserializer});
 
  Future&lt;TOutput&gt; getFuture(TInput value) {
-   assert(_completer == null);
-   assert(_innerFuture == null);
 
-   _completer = new Completer&lt;TOutput&gt;();
+   dynamic val = (inputSerializer == null) ? value : inputSerializer(value);
 
-   if(inputSerializer == null) {
-     _innerFuture = _sendPort.call(value);
-   } else {
-     var serializedValue = inputSerializer(value);
-     _innerFuture = _sendPort.call(serializedValue);
-   }
-   // I don't think this is working yet in isolates
-   // _future.handleException(_futureException);
-   // DARTBUG: http://dartbug.com/3734
-   _innerFuture.then(__futureCompleted);
-
-   return _completer.future;
- }
-
- void __futureCompleted(value) {
-   assert(_completer != null);
-   assert(_innerFuture != null);
-   _innerFuture = null;
-
-   if(value is Map &amp;&amp; FutureValueResult.isMyMap(value)) {
-     final fvr = new FutureValueResult.fromMap(value);
-     _sendValueResultCompleted(fvr);
-   } else {
-     _complete(value);
-   }
- }
-
- void _sendValueResultCompleted(FutureValueResult&lt;TOutput&gt; value) {
-   if(value.isException) {
-     _completeException(value.error, value.stackTrace);
-   } else {
-     _complete(value.value);
-   }
- }
-
- void _complete(dynamic rawValue) {
-   final c = _completer;
-   _completer = null;
-
-   final value = _deserializer(rawValue);
-   c.complete(value);
- }
-
- void _completeException(exception, stack) {
-   final c = _completer;
-   _completer = null;
-   c.completeError(exception, stack);
+   return _sendPort.call(val)
+       .then((value) {
+         if(value is Map &amp;&amp; FutureValueResult.isMyMap(value)) {
+           final fvr = new FutureValueResult.fromMap(value);
+           if(fvr.isException) {
+             throw new IsolateUnhandledException('Error is SendPortValue', fvr.error, fvr.stackTrace);
+           } else {
+             value = fvr.value;
+           }
+         }
+         return _deserializer(value);
+       });
  }
 
  TOutput _deserializer(dynamic input) {
@@ -236,23 +197,21 @@ final Func1&lt;dynamic, TOutput&gt; outputDeserializer
 <div class="doc">
 <pre class="source">
 Future&lt;TOutput&gt; getFuture(TInput value) {
- assert(_completer == null);
- assert(_innerFuture == null);
 
- _completer = new Completer&lt;TOutput&gt;();
+ dynamic val = (inputSerializer == null) ? value : inputSerializer(value);
 
- if(inputSerializer == null) {
-   _innerFuture = _sendPort.call(value);
- } else {
-   var serializedValue = inputSerializer(value);
-   _innerFuture = _sendPort.call(serializedValue);
- }
- // I don't think this is working yet in isolates
- // _future.handleException(_futureException);
- // DARTBUG: http://dartbug.com/3734
- _innerFuture.then(__futureCompleted);
-
- return _completer.future;
+ return _sendPort.call(val)
+     .then((value) {
+       if(value is Map &amp;&amp; FutureValueResult.isMyMap(value)) {
+         final fvr = new FutureValueResult.fromMap(value);
+         if(fvr.isException) {
+           throw new IsolateUnhandledException('Error is SendPortValue', fvr.error, fvr.stackTrace);
+         } else {
+           value = fvr.value;
+         }
+       }
+       return _deserializer(value);
+     });
 }
 </pre>
 </div>

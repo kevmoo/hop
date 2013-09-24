@@ -150,14 +150,14 @@ int get blockSize {
 <h3>Methods</h3>
 <div class="method inherited"><h4 id="add">
 <button class="show-code">Code</button>
-dynamic <strong>add</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; data) <a class="anchor-link" href="#add"
+void <strong>add</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; data) <a class="anchor-link" href="#add"
               title="Permalink to SHA1.add">#</a></h4>
 <div class="inherited-from">inherited from <a href="../crypto/_HashBase.html">_HashBase</a> </div><div class="doc">
 <div class="inherited">
 <p>Add a list of bytes to the hash computation.</p>
 <div class="docs-inherited-from">docs inherited from <a href="../crypto/Hash.html">Hash</a> </div></div>
 <pre class="source">
-add(List&lt;int&gt; data) {
+void add(List&lt;int&gt; data) {
  if (_digestCalled) {
    throw new StateError(
        'Hash update method called after digest was retrieved');

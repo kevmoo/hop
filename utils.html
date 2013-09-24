@@ -27,58 +27,164 @@
 </div>
 <div class="content">
 <h2><strong>utils</strong> library</h2>
+<div class="doc"><p>Misc things that were useful when porting the code from Python. </p></div>
 <div>
 <h3>Functions</h3>
-<div class="method"><h4 id="indent">
+<div class="method"><h4 id="formatStr">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>indent</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> str) <a class="anchor-link" href="#indent"
-              title="Permalink to indent">#</a></h4>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>formatStr</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> format, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a> data) <a class="anchor-link" href="#formatStr"
+              title="Permalink to formatStr">#</a></h4>
 <div class="doc">
-<p>Indent each line in 
-<span class="param">str</span> by two spaces. </p>
+<p>Format a string like Python's % string format operator. Right now this only
+supports a 
+<span class="param">data</span> dictionary used with %s or %08x. Those were the only things
+needed for <code>errorMessages</code>.</p>
 <pre class="source">
-String indent(String str) =&gt;
- str.replaceAll(new RegExp("^", multiLine: true), "  ");
+String formatStr(String format, Map data) {
+ if (data == null) return format;
+ data.forEach((key, value) {
+   var result = new StringBuffer();
+   var search = '%($key)';
+   int last = 0, match;
+   while ((match = format.indexOf(search, last)) &gt;= 0) {
+     result.write(format.substring(last, match));
+     match += search.length;
+
+     int digits = match;
+     while (isDigit(format[digits])) {
+       digits++;
+     }
+     int numberSize;
+     if (digits &gt; match) {
+       numberSize = int.parse(format.substring(match, digits));
+       match = digits;
+     }
+
+     switch (format[match]) {
+       case 's':
+         result.write(value);
+         break;
+       case 'd':
+         var number = value.toString();
+         result.write(padWithZeros(number, numberSize));
+         break;
+       case 'x':
+         var number = value.toRadixString(16);
+         result.write(padWithZeros(number, numberSize));
+         break;
+       default: throw "not implemented: formatStr does not support format "
+           "character ${format[match]}";
+     }
+
+     last = match + 1;
+   }
+
+   result.write(format.substring(last, format.length));
+   format = result.toString();
+ });
+
+ return format;
+}
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="escapeString">
+<div class="method"><h4 id="padWithZeros">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>escapeString</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> source) <a class="anchor-link" href="#escapeString"
-              title="Permalink to escapeString">#</a></h4>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>padWithZeros</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> str, <a href="http://api.dartlang.org/dart_core/int.html">int</a> size) <a class="anchor-link" href="#padWithZeros"
+              title="Permalink to padWithZeros">#</a></h4>
 <div class="doc">
-<p>Returns 
-<span class="param">source</span> with any control characters replaced by their escape
-sequences.</p>
-<p>This doesn't add quotes to the string, but it does escape single quote
-characters so that single quotes can be applied externally.</p>
 <pre class="source">
-String escapeString(String source) =&gt;
-   source.split("").map(_escapeChar).join("");
+String padWithZeros(String str, int size) {
+ if (str.length == size) return str;
+ var result = new StringBuffer();
+ size -= str.length;
+ for (int i = 0; i &lt; size; i++) result.write('0');
+ result.write(str);
+ return result.toString();
+}
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="typeName">
+<div class="method"><h4 id="allWhitespace">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>typeName</strong>(x) <a class="anchor-link" href="#typeName"
-              title="Permalink to typeName">#</a></h4>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>allWhitespace</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> str) <a class="anchor-link" href="#allWhitespace"
+              title="Permalink to allWhitespace">#</a></h4>
 <div class="doc">
-<p>Returns the name of the type of 
-<span class="param">x</span>, or "Unknown" if the type name can't be
-determined.</p>
 <pre class="source">
-String typeName(x) {
- // dart2js blows up on some objects (e.g. window.navigator).
- // So we play safe here.
- try {
-   if (x == null) return "null";
-   var type = x.runtimeType.toString();
-   // TODO(nweiz): if the object's type is private, find a public superclass to
-   // display once there's a portable API to do that.
-   return type.startsWith("_") ? "?" : type;
- } catch (e) {
-   return "?";
+bool allWhitespace(String str) {
+ for (int i = 0; i &lt; str.length; i++) {
+   if (!isWhitespaceCC(str.codeUnitAt(i))) return false;
  }
+ return true;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="slice">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html">List</a> <strong>slice</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a> list, <a href="http://api.dartlang.org/dart_core/int.html">int</a> start, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> end]) <a class="anchor-link" href="#slice"
+              title="Permalink to slice">#</a></h4>
+<div class="doc">
+<pre class="source">
+List slice(List list, int start, [int end]) {
+ if (end == null) end = list.length;
+ if (end &lt; 0) end += list.length;
+
+ // Ensure the indexes are in bounds.
+ if (end &lt; start) end = start;
+ if (end &gt; list.length) end = list.length;
+ return list.sublist(start, end);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="startsWithAny">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>startsWithAny</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> str, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; prefixes) <a class="anchor-link" href="#startsWithAny"
+              title="Permalink to startsWithAny">#</a></h4>
+<div class="doc">
+<pre class="source">
+bool startsWithAny(String str, List&lt;String&gt; prefixes) {
+ for (var prefix in prefixes) {
+   if (str.startsWith(prefix)) {
+     return true;
+   }
+ }
+ return false;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="any">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>any</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; iterable) <a class="anchor-link" href="#any"
+              title="Permalink to any">#</a></h4>
+<div class="doc">
+<pre class="source">
+bool any(List&lt;bool&gt; iterable) =&gt; iterable.any((f) =&gt; f);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="parseIntRadix">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>parseIntRadix</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> str, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> radix = 10]) <a class="anchor-link" href="#parseIntRadix"
+              title="Permalink to parseIntRadix">#</a></h4>
+<div class="doc">
+<pre class="source">
+int parseIntRadix(String str, [int radix = 10]) {
+ int val = 0;
+ for (int i = 0; i &lt; str.length; i++) {
+   var digit = str.codeUnitAt(i);
+   if (digit &gt;= LOWER_A) {
+     digit += 10 - LOWER_A;
+   } else if (digit &gt;= UPPER_A) {
+     digit += 10 - UPPER_A;
+   } else {
+     digit -= ZERO;
+   }
+   val = val * radix + digit;
+ }
+ return val;
 }
 </pre>
 </div>
@@ -88,7 +194,16 @@ String typeName(x) {
 <h3>Classes</h3>
           <div class="type">
           <h4>
-            <a href="utils/Pair.html"><strong>Pair&lt;E, F&gt;</strong></a>
+            <a href="utils/Pair.html"><strong>Pair&lt;F, S&gt;</strong></a>
+          </h4>
+          </div>
+          
+</div>
+<div>
+<h3>Typedefs</h3>
+          <div class="type">
+          <h4>
+            <a href="utils/Predicate.html"><strong>Predicate</strong></a>
           </h4>
           </div>
           

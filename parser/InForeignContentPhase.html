@@ -1,0 +1,499 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>InForeignContentPhase class / parser Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="parser" data-type="InForeignContentPhase">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../parser.html">parser</a> &rsaquo; <a href="../parser/InForeignContentPhase.html">InForeignContentPhase</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>InForeignContentPhase</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class InForeignContentPhase extends Phase {
+ // TODO(jmesserly): this is sorted so we could binary search.
+ static const breakoutElements = const [
+   'b', 'big', 'blockquote', 'body', 'br','center', 'code', 'dd', 'div', 'dl',
+   'dt', 'em', 'embed', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr', 'i',
+   'img', 'li', 'listing', 'menu', 'meta', 'nobr', 'ol', 'p', 'pre', 'ruby',
+   's', 'small', 'span', 'strike', 'strong', 'sub', 'sup', 'table', 'tt', 'u',
+   'ul', 'var'
+ ];
+
+ InForeignContentPhase(parser) : super(parser);
+
+ void adjustSVGTagNames(token) {
+   final replacements = const {
+     "altglyph":"altGlyph",
+     "altglyphdef":"altGlyphDef",
+     "altglyphitem":"altGlyphItem",
+     "animatecolor":"animateColor",
+     "animatemotion":"animateMotion",
+     "animatetransform":"animateTransform",
+     "clippath":"clipPath",
+     "feblend":"feBlend",
+     "fecolormatrix":"feColorMatrix",
+     "fecomponenttransfer":"feComponentTransfer",
+     "fecomposite":"feComposite",
+     "feconvolvematrix":"feConvolveMatrix",
+     "fediffuselighting":"feDiffuseLighting",
+     "fedisplacementmap":"feDisplacementMap",
+     "fedistantlight":"feDistantLight",
+     "feflood":"feFlood",
+     "fefunca":"feFuncA",
+     "fefuncb":"feFuncB",
+     "fefuncg":"feFuncG",
+     "fefuncr":"feFuncR",
+     "fegaussianblur":"feGaussianBlur",
+     "feimage":"feImage",
+     "femerge":"feMerge",
+     "femergenode":"feMergeNode",
+     "femorphology":"feMorphology",
+     "feoffset":"feOffset",
+     "fepointlight":"fePointLight",
+     "fespecularlighting":"feSpecularLighting",
+     "fespotlight":"feSpotLight",
+     "fetile":"feTile",
+     "feturbulence":"feTurbulence",
+     "foreignobject":"foreignObject",
+     "glyphref":"glyphRef",
+     "lineargradient":"linearGradient",
+     "radialgradient":"radialGradient",
+     "textpath":"textPath"
+   };
+
+   var replace = replacements[token.name];
+   if (replace != null) {
+     token.name = replace;
+   }
+ }
+
+ Token processCharacters(CharactersToken token) {
+   if (token.data == "\u0000") {
+     token.data = "\uFFFD";
+   } else if (parser.framesetOK &amp;&amp; !allWhitespace(token.data)) {
+     parser.framesetOK = false;
+   }
+   super.processCharacters(token);
+ }
+
+ Token processStartTag(StartTagToken token) {
+   var currentNode = tree.openElements.last;
+   if (breakoutElements.contains(token.name) ||
+       (token.name == "font" &amp;&amp;
+        (token.data.containsKey("color") ||
+         token.data.containsKey("face") ||
+         token.data.containsKey("size")))) {
+
+     parser.parseError(token.span,
+         "unexpected-html-element-in-foreign-content", {'name': token.name});
+     while (tree.openElements.last.namespace !=
+          tree.defaultNamespace &amp;&amp;
+          !parser.isHTMLIntegrationPoint(tree.openElements.last) &amp;&amp;
+          !parser.isMathMLTextIntegrationPoint(tree.openElements.last)) {
+       tree.openElements.removeLast();
+     }
+     return token;
+
+   } else {
+     if (currentNode.namespace == Namespaces.mathml) {
+       parser.adjustMathMLAttributes(token);
+     } else if (currentNode.namespace == Namespaces.svg) {
+       adjustSVGTagNames(token);
+       parser.adjustSVGAttributes(token);
+     }
+     parser.adjustForeignAttributes(token);
+     token.namespace = currentNode.namespace;
+     tree.insertElement(token);
+     if (token.selfClosing) {
+       tree.openElements.removeLast();
+       token.selfClosingAcknowledged = true;
+     }
+   }
+ }
+
+ Token processEndTag(EndTagToken token) {
+   var nodeIndex = tree.openElements.length - 1;
+   var node = tree.openElements.last;
+   if (node.tagName != token.name) {
+     parser.parseError(token.span, "unexpected-end-tag", {"name": token.name});
+   }
+
+   var newToken = null;
+   while (true) {
+     if (asciiUpper2Lower(node.tagName) == token.name) {
+       //XXX this isn't in the spec but it seems necessary
+       if (parser.phase == parser._inTableTextPhase) {
+         InTableTextPhase inTableText = parser.phase;
+         inTableText.flushCharacters();
+         parser.phase = inTableText.originalPhase;
+       }
+       while (tree.openElements.removeLast() != node) {
+         assert(tree.openElements.length &gt; 0);
+       }
+       newToken = null;
+       break;
+     }
+     nodeIndex -= 1;
+
+     node = tree.openElements[nodeIndex];
+     if (node.namespace != tree.defaultNamespace) {
+       continue;
+     } else {
+       newToken = parser.phase.processEndTag(token);
+       break;
+     }
+   }
+   return newToken;
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../parser/Phase.html">Phase</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>InForeignContentPhase</strong></span></p>
+<div>
+<h3>Static Properties</h3>
+<div class="field"><h4 id="breakoutElements">
+<button class="show-code">Code</button>
+const         <strong>breakoutElements</strong> <a class="anchor-link"
+            href="#breakoutElements"
+            title="Permalink to InForeignContentPhase.breakoutElements">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const breakoutElements = const [
+ 'b', 'big', 'blockquote', 'body', 'br','center', 'code', 'dd', 'div', 'dl',
+ 'dt', 'em', 'embed', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr', 'i',
+ 'img', 'li', 'listing', 'menu', 'meta', 'nobr', 'ol', 'p', 'pre', 'ruby',
+ 's', 'small', 'span', 'strike', 'strong', 'sub', 'sup', 'table', 'tt', 'u',
+ 'ul', 'var'
+]
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>InForeignContentPhase</strong>(parser) <a class="anchor-link" href="#"
+              title="Permalink to InForeignContentPhase.InForeignContentPhase">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+InForeignContentPhase(parser) : super(parser);
+</pre>
+</div>
+</div>
+</div>
+<div class="inherited">
+<h3>Properties</h3>
+<div class="field inherited"><h4 id="parser">
+<button class="show-code">Code</button>
+final <a href="../parser/HtmlParser.html">HtmlParser</a>         <strong>parser</strong> <a class="anchor-link"
+            href="#parser"
+            title="Permalink to InForeignContentPhase.parser">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+final HtmlParser parser
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="tree">
+<button class="show-code">Code</button>
+final <a href="../treebuilder/TreeBuilder.html">TreeBuilder</a>         <strong>tree</strong> <a class="anchor-link"
+            href="#tree"
+            title="Permalink to InForeignContentPhase.tree">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+final TreeBuilder tree
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="adjustSVGTagNames">
+<button class="show-code">Code</button>
+void <strong>adjustSVGTagNames</strong>(token) <a class="anchor-link" href="#adjustSVGTagNames"
+              title="Permalink to InForeignContentPhase.adjustSVGTagNames">#</a></h4>
+<div class="doc">
+<pre class="source">
+void adjustSVGTagNames(token) {
+ final replacements = const {
+   "altglyph":"altGlyph",
+   "altglyphdef":"altGlyphDef",
+   "altglyphitem":"altGlyphItem",
+   "animatecolor":"animateColor",
+   "animatemotion":"animateMotion",
+   "animatetransform":"animateTransform",
+   "clippath":"clipPath",
+   "feblend":"feBlend",
+   "fecolormatrix":"feColorMatrix",
+   "fecomponenttransfer":"feComponentTransfer",
+   "fecomposite":"feComposite",
+   "feconvolvematrix":"feConvolveMatrix",
+   "fediffuselighting":"feDiffuseLighting",
+   "fedisplacementmap":"feDisplacementMap",
+   "fedistantlight":"feDistantLight",
+   "feflood":"feFlood",
+   "fefunca":"feFuncA",
+   "fefuncb":"feFuncB",
+   "fefuncg":"feFuncG",
+   "fefuncr":"feFuncR",
+   "fegaussianblur":"feGaussianBlur",
+   "feimage":"feImage",
+   "femerge":"feMerge",
+   "femergenode":"feMergeNode",
+   "femorphology":"feMorphology",
+   "feoffset":"feOffset",
+   "fepointlight":"fePointLight",
+   "fespecularlighting":"feSpecularLighting",
+   "fespotlight":"feSpotLight",
+   "fetile":"feTile",
+   "feturbulence":"feTurbulence",
+   "foreignobject":"foreignObject",
+   "glyphref":"glyphRef",
+   "lineargradient":"linearGradient",
+   "radialgradient":"radialGradient",
+   "textpath":"textPath"
+ };
+
+ var replace = replacements[token.name];
+ if (replace != null) {
+   token.name = replace;
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="popOpenElementsUntil">
+<button class="show-code">Code</button>
+void <strong>popOpenElementsUntil</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#popOpenElementsUntil"
+              title="Permalink to InForeignContentPhase.popOpenElementsUntil">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<p>Helper method for popping openElements. </p>
+<pre class="source">
+void popOpenElementsUntil(String name) {
+ var node = tree.openElements.removeLast();
+ while (node.tagName != name) {
+   node = tree.openElements.removeLast();
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processCharacters">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processCharacters</strong>(<a href="../token/CharactersToken.html">CharactersToken</a> token) <a class="anchor-link" href="#processCharacters"
+              title="Permalink to InForeignContentPhase.processCharacters">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token processCharacters(CharactersToken token) {
+ if (token.data == "\u0000") {
+   token.data = "\uFFFD";
+ } else if (parser.framesetOK &amp;&amp; !allWhitespace(token.data)) {
+   parser.framesetOK = false;
+ }
+ super.processCharacters(token);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processComment">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processComment</strong>(<a href="../token/CommentToken.html">CommentToken</a> token) <a class="anchor-link" href="#processComment"
+              title="Permalink to InForeignContentPhase.processComment">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token processComment(CommentToken token) {
+ // For most phases the following is correct. Where it's not it will be
+ // overridden.
+ tree.insertComment(token, tree.openElements.last);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processDoctype">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processDoctype</strong>(<a href="../token/DoctypeToken.html">DoctypeToken</a> token) <a class="anchor-link" href="#processDoctype"
+              title="Permalink to InForeignContentPhase.processDoctype">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token processDoctype(DoctypeToken token) {
+ parser.parseError(token.span, "unexpected-doctype");
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processEndTag">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processEndTag</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#processEndTag"
+              title="Permalink to InForeignContentPhase.processEndTag">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token processEndTag(EndTagToken token) {
+ var nodeIndex = tree.openElements.length - 1;
+ var node = tree.openElements.last;
+ if (node.tagName != token.name) {
+   parser.parseError(token.span, "unexpected-end-tag", {"name": token.name});
+ }
+
+ var newToken = null;
+ while (true) {
+   if (asciiUpper2Lower(node.tagName) == token.name) {
+     //XXX this isn't in the spec but it seems necessary
+     if (parser.phase == parser._inTableTextPhase) {
+       InTableTextPhase inTableText = parser.phase;
+       inTableText.flushCharacters();
+       parser.phase = inTableText.originalPhase;
+     }
+     while (tree.openElements.removeLast() != node) {
+       assert(tree.openElements.length &gt; 0);
+     }
+     newToken = null;
+     break;
+   }
+   nodeIndex -= 1;
+
+   node = tree.openElements[nodeIndex];
+   if (node.namespace != tree.defaultNamespace) {
+     continue;
+   } else {
+     newToken = parser.phase.processEndTag(token);
+     break;
+   }
+ }
+ return newToken;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processEOF">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>processEOF</strong>() <a class="anchor-link" href="#processEOF"
+              title="Permalink to InForeignContentPhase.processEOF">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+bool processEOF() {
+ throw new UnimplementedError();
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processSpaceCharacters">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processSpaceCharacters</strong>(<a href="../token/SpaceCharactersToken.html">SpaceCharactersToken</a> token) <a class="anchor-link" href="#processSpaceCharacters"
+              title="Permalink to InForeignContentPhase.processSpaceCharacters">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token processSpaceCharacters(SpaceCharactersToken token) {
+ tree.insertText(token.data, token.span);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processStartTag">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processStartTag</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#processStartTag"
+              title="Permalink to InForeignContentPhase.processStartTag">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token processStartTag(StartTagToken token) {
+ var currentNode = tree.openElements.last;
+ if (breakoutElements.contains(token.name) ||
+     (token.name == "font" &amp;&amp;
+      (token.data.containsKey("color") ||
+       token.data.containsKey("face") ||
+       token.data.containsKey("size")))) {
+
+   parser.parseError(token.span,
+       "unexpected-html-element-in-foreign-content", {'name': token.name});
+   while (tree.openElements.last.namespace !=
+        tree.defaultNamespace &amp;&amp;
+        !parser.isHTMLIntegrationPoint(tree.openElements.last) &amp;&amp;
+        !parser.isMathMLTextIntegrationPoint(tree.openElements.last)) {
+     tree.openElements.removeLast();
+   }
+   return token;
+
+ } else {
+   if (currentNode.namespace == Namespaces.mathml) {
+     parser.adjustMathMLAttributes(token);
+   } else if (currentNode.namespace == Namespaces.svg) {
+     adjustSVGTagNames(token);
+     parser.adjustSVGAttributes(token);
+   }
+   parser.adjustForeignAttributes(token);
+   token.namespace = currentNode.namespace;
+   tree.insertElement(token);
+   if (token.selfClosing) {
+     tree.openElements.removeLast();
+     token.selfClosingAcknowledged = true;
+   }
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="startTagHtml">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>startTagHtml</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#startTagHtml"
+              title="Permalink to InForeignContentPhase.startTagHtml">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token startTagHtml(StartTagToken token) {
+ if (parser.firstStartTag == false &amp;&amp; token.name == "html") {
+    parser.parseError(token.span, "non-html-root");
+ }
+ // XXX Need a check here to see if the first start tag token emitted is
+ // this token... If it's not, invoke parser.parseError().
+ token.data.forEach((attr, value) {
+   tree.openElements[0].attributes.putIfAbsent(attr, () =&gt; value);
+ });
+ parser.firstStartTag = false;
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

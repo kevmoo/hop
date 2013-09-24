@@ -1,0 +1,394 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>InFramesetPhase class / parser Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="parser" data-type="InFramesetPhase">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../parser.html">parser</a> &rsaquo; <a href="../parser/InFramesetPhase.html">InFramesetPhase</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>InFramesetPhase</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class InFramesetPhase extends Phase {
+ // http://www.whatwg.org/specs/web-apps/current-work///in-frameset
+ InFramesetPhase(parser) : super(parser);
+
+ processStartTag(StartTagToken token) {
+   switch (token.name) {
+     case "html": return startTagHtml(token);
+     case "frameset": return startTagFrameset(token);
+     case "frame": return startTagFrame(token);
+     case "noframes": return startTagNoframes(token);
+     default: return startTagOther(token);
+   }
+ }
+
+ processEndTag(EndTagToken token) {
+   switch (token.name) {
+     case "frameset": return endTagFrameset(token);
+     default: return endTagOther(token);
+   }
+ }
+
+ bool processEOF() {
+   var last = tree.openElements.last;
+   if (last.tagName != "html") {
+     parser.parseError(last.sourceSpan, "eof-in-frameset");
+   } else {
+     assert(parser.innerHTMLMode);
+   }
+   return false;
+ }
+
+ Token processCharacters(CharactersToken token) {
+   parser.parseError(token.span, "unexpected-char-in-frameset");
+ }
+
+ void startTagFrameset(StartTagToken token) {
+   tree.insertElement(token);
+ }
+
+ void startTagFrame(StartTagToken token) {
+   tree.insertElement(token);
+   tree.openElements.removeLast();
+ }
+
+ Token startTagNoframes(StartTagToken token) {
+   return parser._inBodyPhase.processStartTag(token);
+ }
+
+ Token startTagOther(StartTagToken token) {
+   parser.parseError(token.span, "unexpected-start-tag-in-frameset",
+       {"name": token.name});
+ }
+
+ void endTagFrameset(EndTagToken token) {
+   if (tree.openElements.last.tagName == "html") {
+     // innerHTML case
+     parser.parseError(token.span,
+         "unexpected-frameset-in-frameset-innerhtml");
+   } else {
+     tree.openElements.removeLast();
+   }
+   if (!parser.innerHTMLMode &amp;&amp; tree.openElements.last.tagName != "frameset") {
+     // If we're not in innerHTML mode and the the current node is not a
+     // "frameset" element (anymore) then switch.
+     parser.phase = parser._afterFramesetPhase;
+   }
+ }
+
+ void endTagOther(EndTagToken token) {
+   parser.parseError(token.span, "unexpected-end-tag-in-frameset",
+       {"name": token.name});
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../parser/Phase.html">Phase</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>InFramesetPhase</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>InFramesetPhase</strong>(parser) <a class="anchor-link" href="#"
+              title="Permalink to InFramesetPhase.InFramesetPhase">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+InFramesetPhase(parser) : super(parser);
+</pre>
+</div>
+</div>
+</div>
+<div class="inherited">
+<h3>Properties</h3>
+<div class="field inherited"><h4 id="parser">
+<button class="show-code">Code</button>
+final <a href="../parser/HtmlParser.html">HtmlParser</a>         <strong>parser</strong> <a class="anchor-link"
+            href="#parser"
+            title="Permalink to InFramesetPhase.parser">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+final HtmlParser parser
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="tree">
+<button class="show-code">Code</button>
+final <a href="../treebuilder/TreeBuilder.html">TreeBuilder</a>         <strong>tree</strong> <a class="anchor-link"
+            href="#tree"
+            title="Permalink to InFramesetPhase.tree">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+final TreeBuilder tree
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="endTagFrameset">
+<button class="show-code">Code</button>
+void <strong>endTagFrameset</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#endTagFrameset"
+              title="Permalink to InFramesetPhase.endTagFrameset">#</a></h4>
+<div class="doc">
+<pre class="source">
+void endTagFrameset(EndTagToken token) {
+ if (tree.openElements.last.tagName == "html") {
+   // innerHTML case
+   parser.parseError(token.span,
+       "unexpected-frameset-in-frameset-innerhtml");
+ } else {
+   tree.openElements.removeLast();
+ }
+ if (!parser.innerHTMLMode &amp;&amp; tree.openElements.last.tagName != "frameset") {
+   // If we're not in innerHTML mode and the the current node is not a
+   // "frameset" element (anymore) then switch.
+   parser.phase = parser._afterFramesetPhase;
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="endTagOther">
+<button class="show-code">Code</button>
+void <strong>endTagOther</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#endTagOther"
+              title="Permalink to InFramesetPhase.endTagOther">#</a></h4>
+<div class="doc">
+<pre class="source">
+void endTagOther(EndTagToken token) {
+ parser.parseError(token.span, "unexpected-end-tag-in-frameset",
+     {"name": token.name});
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="popOpenElementsUntil">
+<button class="show-code">Code</button>
+void <strong>popOpenElementsUntil</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#popOpenElementsUntil"
+              title="Permalink to InFramesetPhase.popOpenElementsUntil">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<p>Helper method for popping openElements. </p>
+<pre class="source">
+void popOpenElementsUntil(String name) {
+ var node = tree.openElements.removeLast();
+ while (node.tagName != name) {
+   node = tree.openElements.removeLast();
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processCharacters">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processCharacters</strong>(<a href="../token/CharactersToken.html">CharactersToken</a> token) <a class="anchor-link" href="#processCharacters"
+              title="Permalink to InFramesetPhase.processCharacters">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token processCharacters(CharactersToken token) {
+ parser.parseError(token.span, "unexpected-char-in-frameset");
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processComment">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processComment</strong>(<a href="../token/CommentToken.html">CommentToken</a> token) <a class="anchor-link" href="#processComment"
+              title="Permalink to InFramesetPhase.processComment">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token processComment(CommentToken token) {
+ // For most phases the following is correct. Where it's not it will be
+ // overridden.
+ tree.insertComment(token, tree.openElements.last);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processDoctype">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processDoctype</strong>(<a href="../token/DoctypeToken.html">DoctypeToken</a> token) <a class="anchor-link" href="#processDoctype"
+              title="Permalink to InFramesetPhase.processDoctype">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token processDoctype(DoctypeToken token) {
+ parser.parseError(token.span, "unexpected-doctype");
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processEndTag">
+<button class="show-code">Code</button>
+dynamic <strong>processEndTag</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#processEndTag"
+              title="Permalink to InFramesetPhase.processEndTag">#</a></h4>
+<div class="doc">
+<pre class="source">
+processEndTag(EndTagToken token) {
+ switch (token.name) {
+   case "frameset": return endTagFrameset(token);
+   default: return endTagOther(token);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processEOF">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>processEOF</strong>() <a class="anchor-link" href="#processEOF"
+              title="Permalink to InFramesetPhase.processEOF">#</a></h4>
+<div class="doc">
+<pre class="source">
+bool processEOF() {
+ var last = tree.openElements.last;
+ if (last.tagName != "html") {
+   parser.parseError(last.sourceSpan, "eof-in-frameset");
+ } else {
+   assert(parser.innerHTMLMode);
+ }
+ return false;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processSpaceCharacters">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processSpaceCharacters</strong>(<a href="../token/SpaceCharactersToken.html">SpaceCharactersToken</a> token) <a class="anchor-link" href="#processSpaceCharacters"
+              title="Permalink to InFramesetPhase.processSpaceCharacters">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token processSpaceCharacters(SpaceCharactersToken token) {
+ tree.insertText(token.data, token.span);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processStartTag">
+<button class="show-code">Code</button>
+dynamic <strong>processStartTag</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#processStartTag"
+              title="Permalink to InFramesetPhase.processStartTag">#</a></h4>
+<div class="doc">
+<pre class="source">
+processStartTag(StartTagToken token) {
+ switch (token.name) {
+   case "html": return startTagHtml(token);
+   case "frameset": return startTagFrameset(token);
+   case "frame": return startTagFrame(token);
+   case "noframes": return startTagNoframes(token);
+   default: return startTagOther(token);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="startTagFrame">
+<button class="show-code">Code</button>
+void <strong>startTagFrame</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#startTagFrame"
+              title="Permalink to InFramesetPhase.startTagFrame">#</a></h4>
+<div class="doc">
+<pre class="source">
+void startTagFrame(StartTagToken token) {
+ tree.insertElement(token);
+ tree.openElements.removeLast();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="startTagFrameset">
+<button class="show-code">Code</button>
+void <strong>startTagFrameset</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#startTagFrameset"
+              title="Permalink to InFramesetPhase.startTagFrameset">#</a></h4>
+<div class="doc">
+<pre class="source">
+void startTagFrameset(StartTagToken token) {
+ tree.insertElement(token);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="startTagHtml">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>startTagHtml</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#startTagHtml"
+              title="Permalink to InFramesetPhase.startTagHtml">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token startTagHtml(StartTagToken token) {
+ if (parser.firstStartTag == false &amp;&amp; token.name == "html") {
+    parser.parseError(token.span, "non-html-root");
+ }
+ // XXX Need a check here to see if the first start tag token emitted is
+ // this token... If it's not, invoke parser.parseError().
+ token.data.forEach((attr, value) {
+   tree.openElements[0].attributes.putIfAbsent(attr, () =&gt; value);
+ });
+ parser.firstStartTag = false;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="startTagNoframes">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>startTagNoframes</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#startTagNoframes"
+              title="Permalink to InFramesetPhase.startTagNoframes">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token startTagNoframes(StartTagToken token) {
+ return parser._inBodyPhase.processStartTag(token);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="startTagOther">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>startTagOther</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#startTagOther"
+              title="Permalink to InFramesetPhase.startTagOther">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token startTagOther(StartTagToken token) {
+ parser.parseError(token.span, "unexpected-start-tag-in-frameset",
+     {"name": token.name});
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

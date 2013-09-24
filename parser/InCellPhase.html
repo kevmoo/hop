@@ -1,0 +1,446 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>InCellPhase class / parser Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="parser" data-type="InCellPhase">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../parser.html">parser</a> &rsaquo; <a href="../parser/InCellPhase.html">InCellPhase</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>InCellPhase</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class InCellPhase extends Phase {
+ // http://www.whatwg.org/specs/web-apps/current-work///in-cell
+ InCellPhase(parser) : super(parser);
+
+ processStartTag(StartTagToken token) {
+   switch (token.name) {
+     case "html": return startTagHtml(token);
+     case "caption": case "col": case "colgroup": case "tbody": case "td":
+     case "tfoot": case "th": case "thead": case "tr":
+       return startTagTableOther(token);
+     default: return startTagOther(token);
+   }
+ }
+
+ processEndTag(EndTagToken token) {
+   switch (token.name) {
+     case "td": case "th":
+       return endTagTableCell(token);
+     case "body": case "caption": case "col": case "colgroup": case "html":
+       return endTagIgnore(token);
+     case "table": case "tbody": case "tfoot": case "thead": case "tr":
+       return endTagImply(token);
+     default: return endTagOther(token);
+   }
+ }
+
+ // helper
+ void closeCell() {
+   if (tree.elementInScope("td", variant: "table")) {
+     endTagTableCell(new EndTagToken("td"));
+   } else if (tree.elementInScope("th", variant: "table")) {
+     endTagTableCell(new EndTagToken("th"));
+   }
+ }
+
+ // the rest
+ bool processEOF() {
+   parser._inBodyPhase.processEOF();
+   return false;
+ }
+
+ Token processCharacters(CharactersToken token) {
+   return parser._inBodyPhase.processCharacters(token);
+ }
+
+ Token startTagTableOther(StartTagToken token) {
+   if (tree.elementInScope("td", variant: "table") ||
+     tree.elementInScope("th", variant: "table")) {
+     closeCell();
+     return token;
+   } else {
+     // innerHTML case
+     assert(parser.innerHTMLMode);
+     parser.parseError(token.span, "undefined-error");
+   }
+ }
+
+ Token startTagOther(StartTagToken token) {
+   return parser._inBodyPhase.processStartTag(token);
+ }
+
+ void endTagTableCell(EndTagToken token) {
+   if (tree.elementInScope(token.name, variant: "table")) {
+     tree.generateImpliedEndTags(token.name);
+     if (tree.openElements.last.tagName != token.name) {
+       parser.parseError(token.span, "unexpected-cell-end-tag",
+           {"name": token.name});
+       popOpenElementsUntil(token.name);
+     } else {
+       tree.openElements.removeLast();
+     }
+     tree.clearActiveFormattingElements();
+     parser.phase = parser._inRowPhase;
+   } else {
+     parser.parseError(token.span, "unexpected-end-tag", {"name": token.name});
+   }
+ }
+
+ void endTagIgnore(EndTagToken token) {
+   parser.parseError(token.span, "unexpected-end-tag", {"name": token.name});
+ }
+
+ Token endTagImply(EndTagToken token) {
+   if (tree.elementInScope(token.name, variant: "table")) {
+     closeCell();
+     return token;
+   } else {
+     // sometimes innerHTML case
+     parser.parseError(token.span, "undefined-error");
+   }
+ }
+
+ Token endTagOther(EndTagToken token) {
+   return parser._inBodyPhase.processEndTag(token);
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../parser/Phase.html">Phase</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>InCellPhase</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>InCellPhase</strong>(parser) <a class="anchor-link" href="#"
+              title="Permalink to InCellPhase.InCellPhase">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+InCellPhase(parser) : super(parser);
+</pre>
+</div>
+</div>
+</div>
+<div class="inherited">
+<h3>Properties</h3>
+<div class="field inherited"><h4 id="parser">
+<button class="show-code">Code</button>
+final <a href="../parser/HtmlParser.html">HtmlParser</a>         <strong>parser</strong> <a class="anchor-link"
+            href="#parser"
+            title="Permalink to InCellPhase.parser">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+final HtmlParser parser
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="tree">
+<button class="show-code">Code</button>
+final <a href="../treebuilder/TreeBuilder.html">TreeBuilder</a>         <strong>tree</strong> <a class="anchor-link"
+            href="#tree"
+            title="Permalink to InCellPhase.tree">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+final TreeBuilder tree
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="closeCell">
+<button class="show-code">Code</button>
+void <strong>closeCell</strong>() <a class="anchor-link" href="#closeCell"
+              title="Permalink to InCellPhase.closeCell">#</a></h4>
+<div class="doc">
+<pre class="source">
+void closeCell() {
+ if (tree.elementInScope("td", variant: "table")) {
+   endTagTableCell(new EndTagToken("td"));
+ } else if (tree.elementInScope("th", variant: "table")) {
+   endTagTableCell(new EndTagToken("th"));
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="endTagIgnore">
+<button class="show-code">Code</button>
+void <strong>endTagIgnore</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#endTagIgnore"
+              title="Permalink to InCellPhase.endTagIgnore">#</a></h4>
+<div class="doc">
+<pre class="source">
+void endTagIgnore(EndTagToken token) {
+ parser.parseError(token.span, "unexpected-end-tag", {"name": token.name});
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="endTagImply">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>endTagImply</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#endTagImply"
+              title="Permalink to InCellPhase.endTagImply">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token endTagImply(EndTagToken token) {
+ if (tree.elementInScope(token.name, variant: "table")) {
+   closeCell();
+   return token;
+ } else {
+   // sometimes innerHTML case
+   parser.parseError(token.span, "undefined-error");
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="endTagOther">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>endTagOther</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#endTagOther"
+              title="Permalink to InCellPhase.endTagOther">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token endTagOther(EndTagToken token) {
+ return parser._inBodyPhase.processEndTag(token);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="endTagTableCell">
+<button class="show-code">Code</button>
+void <strong>endTagTableCell</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#endTagTableCell"
+              title="Permalink to InCellPhase.endTagTableCell">#</a></h4>
+<div class="doc">
+<pre class="source">
+void endTagTableCell(EndTagToken token) {
+ if (tree.elementInScope(token.name, variant: "table")) {
+   tree.generateImpliedEndTags(token.name);
+   if (tree.openElements.last.tagName != token.name) {
+     parser.parseError(token.span, "unexpected-cell-end-tag",
+         {"name": token.name});
+     popOpenElementsUntil(token.name);
+   } else {
+     tree.openElements.removeLast();
+   }
+   tree.clearActiveFormattingElements();
+   parser.phase = parser._inRowPhase;
+ } else {
+   parser.parseError(token.span, "unexpected-end-tag", {"name": token.name});
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="popOpenElementsUntil">
+<button class="show-code">Code</button>
+void <strong>popOpenElementsUntil</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#popOpenElementsUntil"
+              title="Permalink to InCellPhase.popOpenElementsUntil">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<p>Helper method for popping openElements. </p>
+<pre class="source">
+void popOpenElementsUntil(String name) {
+ var node = tree.openElements.removeLast();
+ while (node.tagName != name) {
+   node = tree.openElements.removeLast();
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processCharacters">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processCharacters</strong>(<a href="../token/CharactersToken.html">CharactersToken</a> token) <a class="anchor-link" href="#processCharacters"
+              title="Permalink to InCellPhase.processCharacters">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token processCharacters(CharactersToken token) {
+ return parser._inBodyPhase.processCharacters(token);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processComment">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processComment</strong>(<a href="../token/CommentToken.html">CommentToken</a> token) <a class="anchor-link" href="#processComment"
+              title="Permalink to InCellPhase.processComment">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token processComment(CommentToken token) {
+ // For most phases the following is correct. Where it's not it will be
+ // overridden.
+ tree.insertComment(token, tree.openElements.last);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processDoctype">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processDoctype</strong>(<a href="../token/DoctypeToken.html">DoctypeToken</a> token) <a class="anchor-link" href="#processDoctype"
+              title="Permalink to InCellPhase.processDoctype">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token processDoctype(DoctypeToken token) {
+ parser.parseError(token.span, "unexpected-doctype");
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processEndTag">
+<button class="show-code">Code</button>
+dynamic <strong>processEndTag</strong>(<a href="../token/EndTagToken.html">EndTagToken</a> token) <a class="anchor-link" href="#processEndTag"
+              title="Permalink to InCellPhase.processEndTag">#</a></h4>
+<div class="doc">
+<pre class="source">
+processEndTag(EndTagToken token) {
+ switch (token.name) {
+   case "td": case "th":
+     return endTagTableCell(token);
+   case "body": case "caption": case "col": case "colgroup": case "html":
+     return endTagIgnore(token);
+   case "table": case "tbody": case "tfoot": case "thead": case "tr":
+     return endTagImply(token);
+   default: return endTagOther(token);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processEOF">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>processEOF</strong>() <a class="anchor-link" href="#processEOF"
+              title="Permalink to InCellPhase.processEOF">#</a></h4>
+<div class="doc">
+<pre class="source">
+bool processEOF() {
+ parser._inBodyPhase.processEOF();
+ return false;
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="processSpaceCharacters">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>processSpaceCharacters</strong>(<a href="../token/SpaceCharactersToken.html">SpaceCharactersToken</a> token) <a class="anchor-link" href="#processSpaceCharacters"
+              title="Permalink to InCellPhase.processSpaceCharacters">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token processSpaceCharacters(SpaceCharactersToken token) {
+ tree.insertText(token.data, token.span);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="processStartTag">
+<button class="show-code">Code</button>
+dynamic <strong>processStartTag</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#processStartTag"
+              title="Permalink to InCellPhase.processStartTag">#</a></h4>
+<div class="doc">
+<pre class="source">
+processStartTag(StartTagToken token) {
+ switch (token.name) {
+   case "html": return startTagHtml(token);
+   case "caption": case "col": case "colgroup": case "tbody": case "td":
+   case "tfoot": case "th": case "thead": case "tr":
+     return startTagTableOther(token);
+   default: return startTagOther(token);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="startTagHtml">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>startTagHtml</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#startTagHtml"
+              title="Permalink to InCellPhase.startTagHtml">#</a></h4>
+<div class="inherited-from">inherited from <a href="../parser/Phase.html">Phase</a> </div><div class="doc">
+<pre class="source">
+Token startTagHtml(StartTagToken token) {
+ if (parser.firstStartTag == false &amp;&amp; token.name == "html") {
+    parser.parseError(token.span, "non-html-root");
+ }
+ // XXX Need a check here to see if the first start tag token emitted is
+ // this token... If it's not, invoke parser.parseError().
+ token.data.forEach((attr, value) {
+   tree.openElements[0].attributes.putIfAbsent(attr, () =&gt; value);
+ });
+ parser.firstStartTag = false;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="startTagOther">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>startTagOther</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#startTagOther"
+              title="Permalink to InCellPhase.startTagOther">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token startTagOther(StartTagToken token) {
+ return parser._inBodyPhase.processStartTag(token);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="startTagTableOther">
+<button class="show-code">Code</button>
+<a href="../token/Token.html">Token</a> <strong>startTagTableOther</strong>(<a href="../token/StartTagToken.html">StartTagToken</a> token) <a class="anchor-link" href="#startTagTableOther"
+              title="Permalink to InCellPhase.startTagTableOther">#</a></h4>
+<div class="doc">
+<pre class="source">
+Token startTagTableOther(StartTagToken token) {
+ if (tree.elementInScope("td", variant: "table") ||
+   tree.elementInScope("th", variant: "table")) {
+   closeCell();
+   return token;
+ } else {
+   // innerHTML case
+   assert(parser.innerHTMLMode);
+   parser.parseError(token.span, "undefined-error");
+ }
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

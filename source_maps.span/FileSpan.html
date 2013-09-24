@@ -1,0 +1,352 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>FileSpan class / source_maps.span Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="source_maps.span" data-type="FileSpan">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../source_maps.span.html">source_maps.span</a> &rsaquo; <a href="../source_maps.span/FileSpan.html">FileSpan</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>FileSpan</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p><a class="crossref" href="../source_maps.span/Span.html">Span</a> where values are computed from an underling <a class="crossref" href="../source_maps.span/SourceFile.html">SourceFile</a>.</p>
+<pre class="source">
+class FileSpan extends Span {
+ /// The source file containing this span.
+ final SourceFile file;
+
+ /// The source text for this span, if available.
+ String get text =&gt; file.getText(start.offset, end.offset);
+
+ factory FileSpan(SourceFile file, int start,
+     [int end, bool isIdentifier = false]) {
+   var startLoc = new FileLocation(file, start);
+   var endLoc = end == null ? startLoc : new FileLocation(file, end);
+   return new FileSpan.locations(startLoc, endLoc, isIdentifier);
+ }
+
+ FileSpan.locations(FileLocation start, FileLocation end,
+     bool isIdentifier)
+     : file = start.file, super(start, end, isIdentifier);
+
+ /// Creates a new span that is the union of two existing spans [start] and
+ /// [end]. Note that the resulting span might contain some positions that were
+ /// not in either of the original spans if [start] and [end] are disjoint.
+ FileSpan.union(FileSpan start, FileSpan end)
+     : file = start.file, super.union(start, end) {
+   if (start.file != end.file) {
+     throw new ArgumentError('start and end must be from the same file');
+   }
+ }
+
+ String getLocationMessage(String message,
+     {bool useColors: false, String color}) {
+   return file.getLocationMessage(message, start.offset, end.offset,
+       useColors: useColors, color: color);
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../source_maps.span/Span.html">Span</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>FileSpan</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+factory <strong>FileSpan</strong>(<a href="../source_maps.span/SourceFile.html">SourceFile</a> file, <a href="http://api.dartlang.org/dart_core/int.html">int</a> start, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> end, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> isIdentifier = false]) <a class="anchor-link" href="#"
+              title="Permalink to FileSpan.FileSpan">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+factory FileSpan(SourceFile file, int start,
+   [int end, bool isIdentifier = false]) {
+ var startLoc = new FileLocation(file, start);
+ var endLoc = end == null ? startLoc : new FileLocation(file, end);
+ return new FileSpan.locations(startLoc, endLoc, isIdentifier);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="locations">
+<button class="show-code">Code</button>
+new <strong>FileSpan.locations</strong>(<a href="../source_maps.span/FileLocation.html">FileLocation</a> start, <a href="../source_maps.span/FileLocation.html">FileLocation</a> end, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> isIdentifier) <a class="anchor-link" href="#locations"
+              title="Permalink to FileSpan.FileSpan.locations">#</a></h4>
+<div class="doc">
+<pre class="source">
+FileSpan.locations(FileLocation start, FileLocation end,
+   bool isIdentifier)
+   : file = start.file, super(start, end, isIdentifier);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="union">
+<button class="show-code">Code</button>
+new <strong>FileSpan.union</strong>(<a href="../source_maps.span/FileSpan.html">FileSpan</a> start, <a href="../source_maps.span/FileSpan.html">FileSpan</a> end) <a class="anchor-link" href="#union"
+              title="Permalink to FileSpan.FileSpan.union">#</a></h4>
+<div class="doc">
+<p>Creates a new span that is the union of two existing spans 
+<span class="param">start</span> and
+
+<span class="param">end</span>. Note that the resulting span might contain some positions that were
+not in either of the original spans if 
+<span class="param">start</span> and 
+<span class="param">end</span> are disjoint.</p>
+<pre class="source">
+FileSpan.union(FileSpan start, FileSpan end)
+   : file = start.file, super.union(start, end) {
+ if (start.file != end.file) {
+   throw new ArgumentError('start and end must be from the same file');
+ }
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field inherited"><h4 id="end">
+<button class="show-code">Code</button>
+final <a href="../source_maps.span/Location.html">Location</a>         <strong>end</strong> <a class="anchor-link"
+            href="#end"
+            title="Permalink to FileSpan.end">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../source_maps.span/Span.html">Span</a> </div><div class="doc">
+<p>The end location of this span, exclusive.</p>
+<pre class="source">
+final Location end
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="file">
+<button class="show-code">Code</button>
+final <a href="../source_maps.span/SourceFile.html">SourceFile</a>         <strong>file</strong> <a class="anchor-link"
+            href="#file"
+            title="Permalink to FileSpan.file">#</a>
+        </h4>
+        <div class="doc">
+<p>The source file containing this span.</p>
+<pre class="source">
+final SourceFile file
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="formatLocation">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>formatLocation</strong> <a class="anchor-link"
+            href="#formatLocation"
+            title="Permalink to FileSpan.formatLocation">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../source_maps.span/Span.html">Span</a> </div><div class="doc">
+<p>Gets the location in standard printed form <code>filename:line:column</code>, where
+line and column are adjusted by 1 to match the convention in editors.</p>
+<pre class="source">
+String get formatLocation =&gt; start.formatString;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="hashCode">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>hashCode</strong> <a class="anchor-link"
+            href="#hashCode"
+            title="Permalink to FileSpan.hashCode">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../source_maps.span/Span.html">Span</a> </div><div class="doc">
+<div class="inherited">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <a class="crossref" href="../source_maps.span/Span.html#hashCode">hashCode</a> it should override the
+equality operator as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+int get hashCode =&gt; sourceUrl.hashCode + start.offset + (31 * length);
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="isIdentifier">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>isIdentifier</strong> <a class="anchor-link"
+            href="#isIdentifier"
+            title="Permalink to FileSpan.isIdentifier">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../source_maps.span/Span.html">Span</a> </div><div class="doc">
+<p>Whether <a class="crossref" href="../source_maps.span/Span.html#text">text</a> corresponds to an identifier symbol.</p>
+<pre class="source">
+final bool isIdentifier
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="length">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>length</strong> <a class="anchor-link"
+            href="#length"
+            title="Permalink to FileSpan.length">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../source_maps.span/Span.html">Span</a> </div><div class="doc">
+<p>The length of this span, in characters.</p>
+<pre class="source">
+int get length =&gt; end.offset - start.offset;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="sourceUrl">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>sourceUrl</strong> <a class="anchor-link"
+            href="#sourceUrl"
+            title="Permalink to FileSpan.sourceUrl">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../source_maps.span/Span.html">Span</a> </div><div class="doc">
+<p>Url of the source (typically a file) containing this span.</p>
+<pre class="source">
+String get sourceUrl =&gt; start.sourceUrl;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="start">
+<button class="show-code">Code</button>
+final <a href="../source_maps.span/Location.html">Location</a>         <strong>start</strong> <a class="anchor-link"
+            href="#start"
+            title="Permalink to FileSpan.start">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../source_maps.span/Span.html">Span</a> </div><div class="doc">
+<p>The start location of this span.</p>
+<pre class="source">
+final Location start
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="text">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>text</strong> <a class="anchor-link"
+            href="#text"
+            title="Permalink to FileSpan.text">#</a>
+        </h4>
+        <div class="doc">
+<p>The source text for this span, if available.</p>
+<pre class="source">
+String get text =&gt; file.getText(start.offset, end.offset);
+</pre>
+</div>
+</div>
+</div>
+<div class="inherited">
+<h3>Operators</h3>
+<div class="method inherited"><h4 id="==">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>operator ==</strong>(<a href="../source_maps.span/Span.html">Span</a> other) <a class="anchor-link" href="#=="
+              title="Permalink to FileSpan.operator ==">#</a></h4>
+<div class="inherited-from">inherited from <a href="../source_maps.span/Span.html">Span</a> </div><div class="doc">
+<div class="inherited">
+<p>The equality operator.</p>
+<p>The default behavior for all <a class="crossref" href="../dart_core/Object.html">Object</a>s is to return true if and
+only if <code>this</code> and 
+<span class="param">other</span> are the same object.</p>
+<p>Override this method to specify a different equality relation on
+a class. The overriding method must still be an equivalence relation.
+That is, it must be:</p><ul><li>
+<p>Total: It must return a boolean for all arguments. It should never throw
+   or return <code>null</code>.</p></li><li>
+<p>Reflexive: For all objects <code>o</code>, <code>o == o</code> must be true.</p></li><li>
+<p>Symmetric: For all objects <code>o1</code> and <code>o2</code>, <code>o1 == o2</code> and <code>o2 == o1</code> must
+   either both be true, or both be false.</p></li><li>
+<p>Transitive: For all objects <code>o1</code>, <code>o2</code>, and <code>o3</code>, if <code>o1 == o2</code> and
+   <code>o2 == o3</code> are true, then <code>o1 == o3</code> must be true.</p></li></ul>
+<p>The method should also be consistent over time, so equality of two objects
+should not change over time, or at least only change if one of the objects
+was modified.</p>
+<p>If a subclass overrides the equality operator it should override
+the <a class="crossref" href="../source_maps.span/Span.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+bool operator ==(Span other) =&gt;
+ sourceUrl == other.sourceUrl &amp;&amp; start == other.start &amp;&amp; end == other.end;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method inherited"><h4 id="compareTo">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>compareTo</strong>(<a href="../source_maps.span/Span.html">Span</a> other) <a class="anchor-link" href="#compareTo"
+              title="Permalink to FileSpan.compareTo">#</a></h4>
+<div class="inherited-from">inherited from <a href="../source_maps.span/Span.html">Span</a> </div><div class="doc">
+<p>Compares two spans. If the spans are not in the same source, this method
+generates an error.</p>
+<pre class="source">
+int compareTo(Span other) {
+ int d = start.compareTo(other.start);
+ return d == 0 ? end.compareTo(other.end) : d;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getLocationMessage">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>getLocationMessage</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> useColors: false, <a href="http://api.dartlang.org/dart_core/String.html">String</a> color}) <a class="anchor-link" href="#getLocationMessage"
+              title="Permalink to FileSpan.getLocationMessage">#</a></h4>
+<div class="doc">
+<pre class="source">
+String getLocationMessage(String message,
+   {bool useColors: false, String color}) {
+ return file.getLocationMessage(message, start.offset, end.offset,
+     useColors: useColors, color: color);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to FileSpan.toString">#</a></h4>
+<div class="inherited-from">inherited from <a href="../source_maps.span/Span.html">Span</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+String toString() =&gt; '&lt;$runtimeType: $start $end $formatLocation $text&gt;';
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        
