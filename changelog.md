@@ -1,5 +1,10 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.25.1 2013-09-25 (SDK 0.7.5+3 r27776)
+
+* Tiny updates to `lib/src/hop_tasks/copy_js.dart`
+* I'm guessing noone is using this directly yet, so not flagging a breaking change.
+
 ## 0.25.0 2013-09-23 (SDK 0.7.5+3 r27776)
 
 * Lastest SDK
