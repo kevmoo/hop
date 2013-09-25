@@ -9,7 +9,8 @@ import 'package:path/path.dart' as pathos;
 
 final _logger = new log.Logger('hop.hop_tasks.copy_js');
 
-Task createCopyJSTask(String targetDir, {bool unittestTestController: false,
+Task createCopyJSTask(String targetDir, {bool includePackagePath: false,
+  bool unittestTestController: false,
   bool browserDart: false,
   bool browserInterop: false,
   bool jsDartInterop: false,
@@ -26,8 +27,8 @@ Task createCopyJSTask(String targetDir, {bool unittestTestController: false,
    .then((_) => true));
 }
 
-Future copyJs(String targetDir,
-  {bool unittestTestController: false, bool browserDart: false,
+Future copyJs(String targetDir, {bool includePackagePath: false,
+   bool unittestTestController: false, bool browserDart: false,
    bool browserInterop: false, bool jsDartInterop: false,
    bool shadowDomDebug: false, bool shadowDomMin: false}) {
 
@@ -50,7 +51,7 @@ Future copyJs(String targetDir,
         }
 
         return Future.forEach(sources, (String source) {
-          return _copyDependency(targetDir, source);
+          return _copyDependency(targetDir, source, includePackagePath);
         });
       });
 }
@@ -67,9 +68,10 @@ const SHADOW_DOM_DEBUG = 'shadow_dom/shadow_dom.debug.js';
 
 const SHADOW_DOM_MIN = 'shadow_dom/shadow_dom.min.js';
 
-Future _copyDependency(String targetDir, String source) {
+Future _copyDependency(String targetDir, String source, bool includePackagePath) {
   var sourcePath = pathos.join('packages', source);
-  var fileName = pathos.basename(source);
+  assert(pathos.isRelative(sourcePath));
+  var fileName = includePackagePath ? sourcePath : pathos.basename(source);
   assert(source.endsWith('.js'));
   var destPath = pathos.join(targetDir, fileName);
 
@@ -82,7 +84,7 @@ Future _copyDependency(String targetDir, String source) {
 
         _logger.config('Checking $destPath with $sourcePath');
 
-        return _copyFile(sourcePath, destPath)
+        return _copyFile(sourcePath, destPath, includePackagePath)
             .then((bool success) {
               if(success) {
                 _logger.info('$destPath updated with content from $sourcePath');
@@ -93,9 +95,9 @@ Future _copyDependency(String targetDir, String source) {
       });
 }
 
-Future<bool> _copyFile(String sourcePath, String destinationPath) {
+Future<bool> _copyFile(String sourcePath, String destinationPath, bool ensureDir) {
   return hop_ex.transformFile(destinationPath, (String original) {
     var source = new File(sourcePath);
     return source.readAsString();
-  });
+  }, ensureDirectory: ensureDir);
 }
