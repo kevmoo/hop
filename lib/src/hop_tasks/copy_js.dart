@@ -9,15 +9,23 @@ import 'package:path/path.dart' as pathos;
 Task createCopyJSTask(String targetDir, {bool unittestTestController: false,
   bool browserDart: false,
   bool browserInterop: false,
-  bool jsDartInterop: false}) {
+  bool jsDartInterop: false,
+  bool shadowDomDebug: false,
+  bool shadowDomMin: false}) {
 
-  return new Task.async((ctx) => copyJs(ctx, targetDir, unittestTestController,
-      browserDart, browserInterop, jsDartInterop));
+  return new Task.async((ctx) => copyJs(ctx, targetDir,
+   unittestTestController: unittestTestController,
+   browserDart: browserDart,
+   browserInterop: browserInterop,
+   jsDartInterop: jsDartInterop,
+   shadowDomDebug: shadowDomDebug,
+   shadowDomMin: shadowDomMin));
 }
 
 Future<bool> copyJs(TaskContext ctx, String targetDir,
-    bool unittestTestController, bool browserDart, bool browserInterop,
-    bool jsDartInterop) {
+  {bool unittestTestController: false, bool browserDart: false,
+   bool browserInterop: false, bool jsDartInterop: false,
+   bool shadowDomDebug: false, bool shadowDomMin: false}) {
 
   assert(ctx != null);
   return FileSystemEntity.isDirectory(targetDir)
@@ -31,6 +39,8 @@ Future<bool> copyJs(TaskContext ctx, String targetDir,
         if(browserDart) sources.add(BROWSER_DART);
         if(browserInterop) sources.add(BROWSER_INTEROP);
         if(jsDartInterop) sources.add(JS_DART_INTEROP);
+        if(shadowDomDebug) sources.add(SHADOW_DOM_DEBUG);
+        if(shadowDomMin) sources.add(SHADOW_DOM_MIN);
 
         if(sources.isEmpty) {
           ctx.fail('No source files were provided. NOOP.');
@@ -49,6 +59,10 @@ const BROWSER_DART = 'browser/dart.js';
 const BROWSER_INTEROP = 'browser/interop.js';
 
 const JS_DART_INTEROP = 'js/dart_interop.js';
+
+const SHADOW_DOM_DEBUG = 'shadow_dom/shadow_dom.debug.js';
+
+const SHADOW_DOM_MIN = 'shadow_dom/shadow_dom.min.js';
 
 Future<bool> _copyDependency(TaskContext ctx, String targetDir, String source) {
   var sourcePath = pathos.join('packages', source);
