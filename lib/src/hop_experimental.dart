@@ -19,10 +19,16 @@ Future<bool> transformHtml(String filePath,
   });
 }
 
+// TODO: use SHA or something. Handle non-text files.
+
+/**
+ * Assumes the source/target are both Strings
+ */
 Future<bool> transformFile(String filePath,
-    Future<String> transformer(String input)) {
+    Future<String> transformer(String input), {bool ensureDirectory: false}) {
 
   String oldContent;
+  String newContent;
 
   final file = new File(filePath);
   return FileSystemEntity.type(filePath)
@@ -40,7 +46,13 @@ Future<bool> transformFile(String filePath,
         oldContent = value;
         return transformer(oldContent);
       })
-      .then((String newContent) {
+      .then((String value) {
+        newContent = value;
+        if(ensureDirectory) {
+          return file.directory.create(recursive: true);
+        }
+      })
+      .then((_) {
         // we're assuming file hasn't changed since we started
         if(newContent == oldContent) {
           // nothing changed
