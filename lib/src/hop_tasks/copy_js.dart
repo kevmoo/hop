@@ -4,7 +4,10 @@ import 'dart:async';
 import 'dart:io';
 import 'package:hop/hop.dart';
 import 'package:hop/src/hop_experimental.dart' as hop_ex;
+import 'package:logging/logging.dart' as log;
 import 'package:path/path.dart' as pathos;
+
+final _logger = new log.Logger('hop.hop_tasks.copy_js');
 
 Task createCopyJSTask(String targetDir, {bool unittestTestController: false,
   bool browserDart: false,
@@ -13,25 +16,25 @@ Task createCopyJSTask(String targetDir, {bool unittestTestController: false,
   bool shadowDomDebug: false,
   bool shadowDomMin: false}) {
 
-  return new Task.async((ctx) => copyJs(ctx, targetDir,
+  return new Task.async((ctx) => copyJs(targetDir,
    unittestTestController: unittestTestController,
    browserDart: browserDart,
    browserInterop: browserInterop,
    jsDartInterop: jsDartInterop,
    shadowDomDebug: shadowDomDebug,
-   shadowDomMin: shadowDomMin));
+   shadowDomMin: shadowDomMin)
+   .then((_) => true));
 }
 
-Future<bool> copyJs(TaskContext ctx, String targetDir,
+Future copyJs(String targetDir,
   {bool unittestTestController: false, bool browserDart: false,
    bool browserInterop: false, bool jsDartInterop: false,
    bool shadowDomDebug: false, bool shadowDomMin: false}) {
 
-  assert(ctx != null);
   return FileSystemEntity.isDirectory(targetDir)
       .then((bool isDir) {
         if(!isDir) {
-          ctx.fail('"targetPath" does not exist or is not a directory: $targetDir');
+          throw new ArgumentError('"targetPath" does not exist or is not a directory: $targetDir');
         }
 
         var sources = [];
@@ -43,12 +46,12 @@ Future<bool> copyJs(TaskContext ctx, String targetDir,
         if(shadowDomMin) sources.add(SHADOW_DOM_MIN);
 
         if(sources.isEmpty) {
-          ctx.fail('No source files were provided. NOOP.');
+          throw new ArgumentError('No source files were provided. NOOP.');
         }
 
         return Future.forEach(sources, (String source) {
-          return _copyDependency(ctx, targetDir, source);
-        }).then((_) => true);
+          return _copyDependency(targetDir, source);
+        });
       });
 }
 
@@ -64,7 +67,7 @@ const SHADOW_DOM_DEBUG = 'shadow_dom/shadow_dom.debug.js';
 
 const SHADOW_DOM_MIN = 'shadow_dom/shadow_dom.min.js';
 
-Future<bool> _copyDependency(TaskContext ctx, String targetDir, String source) {
+Future _copyDependency(String targetDir, String source) {
   var sourcePath = pathos.join('packages', source);
   var fileName = pathos.basename(source);
   assert(source.endsWith('.js'));
@@ -73,18 +76,18 @@ Future<bool> _copyDependency(TaskContext ctx, String targetDir, String source) {
   return FileSystemEntity.isFile(sourcePath)
       .then((bool sourceExists) {
         if(!sourceExists) {
-          ctx.fail('Source does not exist. Are you missing an import?'
+          throw new ArgumentError('Source does not exist. Are you missing an import?'
               ' Forgot `pub install`?  $sourcePath');
         }
 
-        ctx.config('Checking $destPath with $sourcePath');
+        _logger.config('Checking $destPath with $sourcePath');
 
         return _copyFile(sourcePath, destPath)
             .then((bool success) {
               if(success) {
-                ctx.info('$destPath updated with content from $sourcePath');
+                _logger.info('$destPath updated with content from $sourcePath');
               } else {
-                ctx.info('$destPath is the same as $sourcePath');
+                _logger.info('$destPath is the same as $sourcePath');
               }
             });
       });
