@@ -86,7 +86,7 @@ Set<String> _getOutputFiles(List<String> inputFiles, CompilerTargetType type,
         outputFiles.add(newName);
         outputFiles.add(newName + '.deps');
         outputFiles.add(newName + '.map');
-        outputFiles.add(pathos.join(inFileDir, 'precompiled.js'));
+        outputFiles.add(pathos.join(inFileDir, '$inFile.precompiled.js'));
       } else {
         assert(type == CompilerTargetType.DART);
         assert(inFile.endsWith('.dart'));
