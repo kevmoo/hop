@@ -5,8 +5,8 @@ part of test_hop;
 class SyncTests {
   static void run() {
     test('true result is cool', _testTrueIsCool);
-    test('false result fails', _testFalseIsFail);
-    test('null result is sad', _testNullIsSad);
+    test('false result cool', _testFalseIsFail);
+    test('null result is cool', _testNullIsSad);
     test('exception is sad', _testExceptionIsSad);
     test('bad task name', _testBadParam);
     test('no task name', _testNoParam);
@@ -29,13 +29,13 @@ class SyncTests {
 
   static Future _testFalseIsFail() {
     return _testSimpleSyncTask((ctx) => false).then((value) {
-      expect(value, RunResult.FAIL);
+      expect(value, RunResult.SUCCESS);
     });
   }
 
   static Future _testNullIsSad() {
     return _testSimpleSyncTask((ctx) => null).then((value) {
-      expect(value, RunResult.ERROR);
+      expect(value, RunResult.SUCCESS);
     });
   }
 

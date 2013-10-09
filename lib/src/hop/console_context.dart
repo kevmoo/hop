@@ -14,12 +14,8 @@ class ConsoleContext extends TaskContext {
     }
   }
 
-  /**
-   * At the moment [getSubLogger] returns [this].
-   */
-  TaskLogger getSubLogger(String name) {
-    // TODO: should actualy support sub loggers
-    return this;
+  TaskContext getSubContext(String name) {
+    throw new UnimplementedError('sub contexts are not supported yet');
   }
 
   bool get isDisposed => _isDisposed;

@@ -16,16 +16,12 @@ Task _getHelpTask(_HelpArgs helpArgs) {
 
     if(args.command != null) {
       _printHelpForTask(helpArgs.printer, helpArgs.registry, args.command.name, helpArgs.parser);
-      return true;
     } else {
       _printHelp(helpArgs.printer, helpArgs.registry, helpArgs.parser);
 
       if(!args.rest.isEmpty) {
-        ctx.severe('Not sure how to give help for: ${args.rest}');
-        return false;
+        ctx.fail('Not sure how to give help for: ${args.rest}');
       }
-
-      return true;
     }
   },
   description: 'Print help information about available tasks',

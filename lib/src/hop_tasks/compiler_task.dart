@@ -32,8 +32,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
     throw new ArgumentError('Only one of "singleOutput" and "outputMapper" can be set.');
   }
 
-  return new Task.async((context) {
-    bool errors = false;
+  return new Task.async((TaskContext context) {
 
     return getDelayedResult(delayedRootList)
         .then((List<String> inputs) {
@@ -56,25 +55,13 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
           }
 
           return Future.forEach(inputs, (path) {
-            if(errors) {
-              context.warning('Compile errors. Skipping $path');
-              return new Future.value(null);
-            }
 
             String output = outputMapper(path);
 
             return _dart2js(context, path,
                 output, packageRoot, minify, liveTypeAnalysis,
-                throwOnError, verbose, suppressWarnings, outputType)
-                .then((bool success) {
-                  // should not have been run if we had pending errors
-                  assert(errors == false);
-                  errors = !success;
-                });
+                throwOnError, verbose, suppressWarnings, outputType);
           });
-        })
-        .then((_) {
-          return !errors;
         });
   }, description: 'Run Dart-to-${outputType.friendlyName} compiler');
 }
@@ -89,7 +76,7 @@ String _dart2DartOutputMapper(String input) {
   }
 }
 
-Future<bool> _dart2js(TaskContext ctx, String file,
+Future _dart2js(TaskContext ctx, String file,
     String output, String packageRoot, bool minify, bool liveTypeAnalysis,
     bool throwOnError, bool verbose, bool suppressWarnings,
     CompilerTargetType outputType) {

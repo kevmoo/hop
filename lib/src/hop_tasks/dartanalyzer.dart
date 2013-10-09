@@ -45,7 +45,7 @@ void _parserConfig(ArgParser parser) {
         help: 'Print errors in a format suitable for parsing');
 }
 
-Future<bool> _processDartAnalyzerFile(TaskContext context,
+Future _processDartAnalyzerFile(TaskContext context,
     List<String> analyzerFilePaths, bool verbose, bool formatMachine) {
 
   int errorsCount = 0;
@@ -53,9 +53,10 @@ Future<bool> _processDartAnalyzerFile(TaskContext context,
   int warningCount = 0;
 
   return Future.forEach(analyzerFilePaths, (String path) {
-    final logger = context.getSubLogger(path);
+    final logger = context.getSubContext(path);
     return _dartAnalyzer(logger, path, verbose, formatMachine)
         .then((int exitCode) {
+          logger.dispose();
 
           String prefix;
 
@@ -83,7 +84,8 @@ Future<bool> _processDartAnalyzerFile(TaskContext context,
     })
     .then((_) {
       context.info("PASSED: ${passedCount}, WARNING: ${warningCount}, ERROR: ${errorsCount}");
-      return errorsCount == 0;
+
+      if(errorsCount > 0) context.fail('$errorsCount errors found.');
     });
 }
 

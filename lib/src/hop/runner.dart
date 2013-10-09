@@ -46,32 +46,42 @@ class Runner {
     context.finest('Started at $start');
 
     return task.run(context)
-        .then((bool didComplete) {
-          if(didComplete == null) {
-            context.severe('${didComplete} returned from task');
-            context.severe('Return value from task must be true or false');
-            return RunResult.ERROR;
-          } else if(didComplete) {
-            return RunResult.SUCCESS;
-          } else {
-            return RunResult.FAIL;
+        .then((value) {
+          // TODO: remove these checks at some future version
+          if(value == true) {
+            context.severe('`true` was returned from the task.\n'
+                "It's possible that the task was trying to signal success using"
+                "an old behavior.\nThis is no longer nessesary.");
+          } else if(value == false) {
+            context.severe("`false` was returned from the task.\n"
+                "It's possible that the task was trying to signal failure using"
+                "an old behavior.\nTasks should signal failure using "
+                "`TaskContext.fail`.");
           }
+
+          return RunResult.SUCCESS;
         })
         .catchError((error) {
           if(error == Task._nullFutureResultEx) {
-            context.severe('The provided task returned null instead of a future');
+            context.severe('The task returned null instead of a future');
             return RunResult.ERROR;
           } else if(error is _TaskFailError) {
             final _TaskFailError e = error;
             context.severe(e.message);
             return RunResult.FAIL;
-          }
-          else {
+          } else {
             // has as exception, need to test this
             context.severe('Exception thrown by task');
             context.severe(error.toString());
 
-            final stack = getAttachedStackTrace(error);
+            var stack = null;
+            if(error is Error) {
+              stack = error.stackTrace;
+            }
+
+            if(error == null) {
+              stack = getAttachedStackTrace(error);
+            }
             if(stack != null) {
               context.severe(stack.toString());
             }

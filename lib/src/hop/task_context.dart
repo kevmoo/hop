@@ -3,7 +3,10 @@ part of hop;
 abstract class TaskContext extends TaskLogger implements Disposable {
   ArgResults get arguments;
 
-  TaskLogger getSubLogger(String name);
+  @deprecated
+  TaskLogger getSubLogger(String name) => getSubContext(name);
+
+  TaskContext getSubContext(String name);
 
   /**
    * Terminates the current [Task] with a failure, explained by [message].

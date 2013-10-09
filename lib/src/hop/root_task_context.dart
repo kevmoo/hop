@@ -122,13 +122,9 @@ class _TaskContext extends TaskContext implements _LoggerParent, _LoggerChild {
 
   _TaskContext(this._parent, this._name, this.arguments);
 
-  _TaskContext getSubContext(String name, Task task, List<String> args) {
-    final parser = new ArgParser();
-    task.configureArgParser(parser);
-
-    final arguments = parser.parse(args);
-
-    return new _TaskContext(this, name, arguments);
+  @override
+  _TaskContext getSubContext(String name) {
+    return new _TaskContext(this, name, null);
   }
 
   @override
@@ -138,12 +134,6 @@ class _TaskContext extends TaskContext implements _LoggerParent, _LoggerChild {
   void log(Level logLevel, String message) {
     _assertNotDisposed();
     _parent._childLog(this, logLevel, message);
-  }
-
-  @override
-  TaskLogger getSubLogger(String name) {
-    _assertNotDisposed();
-    return new _SubLogger(name, this);
   }
 
   @override
@@ -172,16 +162,4 @@ abstract class _LoggerChild {
 
 abstract class _LoggerParent {
   void _childLog(_LoggerChild child, Level level, String msg);
-}
-
-class _SubLogger extends TaskLogger implements _LoggerChild {
-  final String _name;
-  final _LoggerParent _parent;
-
-  _SubLogger(this._name, this._parent);
-
-  @override
-  void log(Level logLevel, String message) {
-    _parent._childLog(this, logLevel, message);
-  }
 }

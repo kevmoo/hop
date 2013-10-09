@@ -23,8 +23,7 @@ Task createCopyJSTask(String targetDir, {bool includePackagePath: false,
    browserInterop: browserInterop,
    jsDartInterop: jsDartInterop,
    shadowDomDebug: shadowDomDebug,
-   shadowDomMin: shadowDomMin)
-   .then((_) => true));
+   shadowDomMin: shadowDomMin));
 }
 
 Future copyJs(String targetDir, {bool includePackagePath: false,
@@ -95,7 +94,7 @@ Future _copyDependency(String targetDir, String source, bool includePackagePath)
       });
 }
 
-Future<bool> _copyFile(String sourcePath, String destinationPath, bool ensureDir) {
+Future _copyFile(String sourcePath, String destinationPath, bool ensureDir) {
   return hop_ex.transformFile(destinationPath, (String original) {
     var source = new File(sourcePath);
     return source.readAsString();

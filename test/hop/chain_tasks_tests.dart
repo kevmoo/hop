@@ -52,15 +52,15 @@ class ChainTasksTests {
 
       return runTaskInTestRunner(task)
           .then((RunResult result) {
-            expect(result.exitCode, RunResult.ERROR.exitCode);
+            expect(result.exitCode, RunResult.EXCEPTION.exitCode);
           });
     });
   }
 
   static Task _getTask(String str, [bool shouldSucceed = true]) {
-    return new Task.async((ctx) {
-      ctx.info(str);
-      return shouldSucceed;
+    return new Task.async((TaskContext ctx) {
+      if(shouldSucceed == null) throw 'foo!';
+      if(shouldSucceed == false) ctx.fail("fail!");
     });
   }
 }

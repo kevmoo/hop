@@ -36,7 +36,7 @@ Task createDartDocTask(dynamic delayedLibraryList, {
   config: (parser) => _dartDocParserConfig(parser, targetBranch));
 }
 
-Future<bool> _compileDocs(TaskContext ctx, String targetBranch,
+Future _compileDocs(TaskContext ctx, String targetBranch,
     dynamic delayedLibraryList, String packageDir,
     Iterable<String> excludeLibs, bool linkApi, Func2<TaskContext, String, Future> postBuild) {
 
@@ -85,8 +85,6 @@ Future<bool> _compileDocs(TaskContext ctx, String targetBranch,
           ctx.info('New commit created at branch $targetBranch');
           ctx.info('Message: ${value.message}');
         }
-
-        return true;
       });
 }
 
@@ -128,19 +126,14 @@ Future _doDocsPopulate(TaskContext ctx, TempDir dir, Iterable<String> libs,
   args.addAll(libs);
   ctx.fine("Generating docs into: $dir");
 
-  final sublogger = ctx.getSubLogger('dartdoc');
+  final sublogger = ctx.getSubContext('dartdoc');
 
   return startProcess(sublogger, _getPlatformBin('dartdoc'), args)
-      .then((bool dartDocSuccess) {
-        if(!dartDocSuccess) {
-          ctx.fail('The dartdoc process failed.');
-        }
-
-        // yeah, silly. ctx.fail should blow up. Should not get heer
-        assert(dartDocSuccess);
+      .then((_) {
+        sublogger.dispose();
 
         if(postBuild != null) {
-          return postBuild(ctx.getSubLogger('post-build'), dir.path);
+          return postBuild(ctx.getSubContext('post-build'), dir.path);
         }
       });
 }

@@ -10,7 +10,7 @@ abstract class Task {
   Task._impl(String description) :
     this.description = (description == null) ? '' : description;
 
-  factory Task.sync(Func1<TaskContext, bool> exec, {String description,
+  factory Task.sync(Func1<TaskContext, dynamic> exec, {String description,
     ArgParserConfigure config, List<TaskArgument> extendedArgs}) {
     final futureExec = (TaskContext ctx) => new Future.sync(() => exec(ctx));
 
@@ -25,7 +25,7 @@ abstract class Task {
         extendedArgs: extendedArgs);
   }
 
-  Future<bool> run(TaskContext ctx);
+  Future run(TaskContext ctx);
 
   ChainedTask chain(String name) {
     return new ChainedTask._internal(name, this);
@@ -83,12 +83,9 @@ class _SimpleTask extends Task {
   }
 
   @override
-  Future<bool> run(TaskContext ctx) {
+  Future run(TaskContext ctx) {
     requireArgumentNotNull(ctx, 'ctx');
 
-    // TODO: should be able to do new Future<bool>.sync here
-    // waiting for fix for
-    // https://code.google.com/p/dart/issues/detail?id=13368
     return new Future.sync(() => _exec(ctx));
   }
 
@@ -131,7 +128,7 @@ class ChainedTask extends Task {
   String getUsage() => '';
 
   @override
-  Future<bool> run(TaskContext ctx) {
+  Future run(TaskContext ctx) {
     requireArgumentNotNull(ctx, 'ctx');
 
     return _run(ctx);
@@ -148,25 +145,20 @@ class ChainedTask extends Task {
     return $(previous._tasks).concat([task]);
   }
 
-  Future<bool> _run(TaskContext ctx, [int index = 0]) {
+  Future _run(TaskContext ctx, [int index = 0]) {
     assert(index >= 0);
     assert(index <= _tasks.length);
 
     if(index == _tasks.length) {
-      return new Future.value(true);
+      return new Future.value();
     }
 
     final namedTask = _tasks[index];
 
     // TODO: passing in args?
-    var subCtx = (ctx as _TaskContext).getSubContext(namedTask.name, namedTask.task, []);
+    var subCtx = ctx.getSubContext(namedTask.name);
 
     return namedTask.task.run(subCtx)
-        .then((bool result) {
-          if(result == true) {
-            return _run(ctx, index+1);
-          }
-          return result;
-        });
+        .then((_) => _run(ctx, index + 1));
   }
 }

@@ -14,7 +14,7 @@ Task getBranchForDirTask(String sourceBranch, String sourceDir,
       description: description);
 }
 
-Future<bool> branchForDir(TaskContext ctx, String sourceBranch, String sourceDir,
+Future branchForDir(TaskContext ctx, String sourceBranch, String sourceDir,
     String targetBranch, {String workingDir}) {
 
   if(workingDir == null) {
@@ -57,6 +57,5 @@ Future<bool> branchForDir(TaskContext ctx, String sourceBranch, String sourceDir
         } else {
           ctx.info("Branch '$targetBranch' is now at commit $newCommitSha");
         }
-        return true;
       });
 }

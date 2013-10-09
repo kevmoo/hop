@@ -47,7 +47,7 @@ Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction,
 
       ctx.info(list.join('\n'));
 
-      return new Future.value(true);
+      return new Future.value();
     }
 
     unittest.runTests();
@@ -78,7 +78,7 @@ class _HopTestConfiguration extends unittest.Configuration {
   _HopTestConfiguration(this._context, this.failSummary, this.passSummary,
       this.errorSummary, this.timeout) : super.blank();
 
-  Future<bool> get future => _completer.future;
+  Future get future => _completer.future;
 
   bool get autoStart => false;
 
@@ -145,21 +145,21 @@ ${testCase.stackTrace}''');
 
 
     if(passSummary) {
-      final summaryCtx = _context.getSubLogger('PASS');
+      final summaryCtx = _context.getSubContext('PASS');
       results.where((tc) => tc.result == unittest.PASS).forEach((tc) {
         summaryCtx.info(tc.description);
       });
     }
 
     if(failSummary) {
-      final summaryCtx = _context.getSubLogger('FAIL');
+      final summaryCtx = _context.getSubContext('FAIL');
       results.where((tc) => tc.result == unittest.FAIL).forEach((tc) {
         summaryCtx.severe(tc.description);
       });
     }
 
     if(errorSummary) {
-      final summaryCtx = _context.getSubLogger('ERROR');
+      final summaryCtx = _context.getSubContext('ERROR');
       results.where((tc) => tc.result == unittest.ERROR).forEach((tc) {
         summaryCtx.severe(tc.description);
       });
@@ -174,7 +174,11 @@ ${testCase.stackTrace}''');
 
   @override
   void onDone(bool success) {
-    _completer.complete(success);
+    if(success) {
+      _completer.complete();
+    } else {
+      _completer.completeError('The unittest system did not complete with success.');
+    }
   }
 }
 

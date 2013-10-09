@@ -7,7 +7,7 @@ Task createProcessTask(String command, {List<String> args: null, String descript
 // TODO: document that start does an 'interactive' process
 //       stderr and stdout are piped to context, etc
 //       This aligns with io.Process.start
-Future<bool> startProcess(TaskLogger ctx, String command,
+Future startProcess(TaskContext ctx, String command,
     [List<String> args = null]) {
 
   requireArgumentNotNull(ctx, 'ctx');
@@ -25,7 +25,7 @@ Future<bool> startProcess(TaskLogger ctx, String command,
             stdErrWriter: ctx.severe);
       })
       .then((int exitCode) {
-        return exitCode == 0;
+        if(exitCode != 0) ctx.fail('Process exit code: $exitCode');
       });
 }
 
