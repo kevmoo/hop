@@ -32,44 +32,25 @@ Future<bool> startProcess(TaskLogger ctx, String command,
 Future<int> pipeProcess(Process process,
     {Action1<String> stdOutWriter, Action1<String> stdErrWriter}) {
 
-  bool finished = false;
+  var futures = [process.exitCode];
 
-  bool validateNotFinished(String message) {
-    if(finished) {
-      print('Error in hop_tasks - pipeProcess');
-      print("Received signal from $process after exit signal");
-      print(message);
-      print("Tracked at http://code.google.com/p/dart/issues/detail?id=8422");
-      return false;
-    }
-    return true;
-  }
+  futures.add(process.stdout.forEach((data)
+      => _stdListen(data, stdOutWriter)));
 
-  if(stdOutWriter != null) {
-    process.stdout.listen((List<int> data) {
-      final str = new String.fromCharCodes(data).trim();
+  futures.add(process.stderr.forEach((data)
+      => _stdListen(data, stdErrWriter)));
 
-      if(validateNotFinished('stdout - $str')) {
-        stdOutWriter(str);
-      }
-    });
-  }
-
-  if(stdErrWriter != null) {
-    process.stderr.listen((List<int> data) {
-      assert(data != null);
-      final str = new String.fromCharCodes(data).trim();
-
-      if(validateNotFinished('stderr - $str')) {
-        stdErrWriter(str);
-      }
-
-    });
-  }
-
-  return process.exitCode
-      .whenComplete(() {
-        validateNotFinished('onExit');
-        finished = true;
+  return Future.wait(futures)
+      .then((List values) {
+        assert(values.length == futures.length);
+        assert(values[0] != null);
+        return values[0] as int;
       });
+}
+
+void _stdListen(List<int> data, void writer(String input)) {
+  if(writer != null) {
+    final str = SYSTEM_ENCODING.decode(data).trim();
+    writer(str);
+  }
 }
