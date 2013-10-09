@@ -55,7 +55,7 @@ class ConsoleContext extends TaskContext {
 
   void _assertNotDisposed() {
     if(_isDisposed) {
-      throw 'already disposed';
+      throw new DisposedError();
     }
   }
 }

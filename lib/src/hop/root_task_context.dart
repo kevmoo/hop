@@ -160,7 +160,7 @@ class _TaskContext extends TaskContext implements _LoggerParent, _LoggerChild {
 
   void _assertNotDisposed() {
     if(_isDisposed) {
-      throw 'already disposed';
+      throw new DisposedError();
     }
   }
 }
