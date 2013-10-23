@@ -19,10 +19,8 @@ Future<bool> transformHtml(String filePath,
   });
 }
 
-// TODO: use SHA or something. Handle non-text files.
-
 /**
- * Assumes the source/target are both Strings
+ * Assumes the target file, if it exists, is a [String].
  */
 Future<bool> transformFile(String filePath,
     Future<String> transformer(String input), {bool ensureDirectory: false}) {
