@@ -8,7 +8,7 @@ import 'package:bot_io/bot_git.dart';
 import 'package:bot_io/bot_io.dart';
 import 'package:hop/hop.dart';
 import 'package:hop/hop_tasks.dart';
-import '../hop/_hop.dart';
+import '../test_util.dart';
 
 part 'process_tests.dart';
 part 'git_tests.dart';

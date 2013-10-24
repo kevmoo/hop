@@ -52,9 +52,7 @@ class SyncTests {
     final taskConfig = new TaskRegistry();
     taskConfig.addSync('good', (ctx) => true);
 
-    final hopConfig = new HopConfig(taskConfig, ['bad'], _testPrint);
-
-    return Runner.run(hopConfig)
+    return runRegistry(taskConfig, ['bad'])
         .then((value) {
           expect(value, RunResult.BAD_USAGE);
           // TODO: test that proper error message is printed
@@ -65,9 +63,7 @@ class SyncTests {
     final taskConfig = new TaskRegistry();
     taskConfig.addSync('good', (ctx) => true);
 
-    final hopConfig = new HopConfig(taskConfig, [], _testPrint);
-
-    return Runner.run(hopConfig)
+    return runRegistry(taskConfig, [])
         .then((value) {
           expect(value, RunResult.SUCCESS);
           // TODO: test that task list is printed
@@ -77,9 +73,7 @@ class SyncTests {
   static Future _testNoTasks() {
     final taskConfig = new TaskRegistry();
 
-    final hopConfig = new HopConfig(taskConfig, [], _testPrint);
-
-    return Runner.run(hopConfig)
+    return runRegistry(taskConfig, [])
         .then((value) {
           expect(value, RunResult.SUCCESS);
         });

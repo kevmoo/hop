@@ -30,7 +30,7 @@ class TaskListTests {
       final tasks = new TaskRegistry();
 
       expect(tasks.isFrozen, isFalse);
-      final hopConfig = new HopConfig(tasks, ['bad'], _testPrint);
+      final hopConfig = new HopConfig(tasks, ['bad'], loggedPrint);
       expect(tasks.isFrozen, isTrue);
 
       // cannot add task when frozen

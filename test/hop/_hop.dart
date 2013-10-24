@@ -4,8 +4,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:bot/bot.dart';
 import 'package:hop/hop.dart';
-import 'package:logging/logging.dart';
 import 'package:unittest/unittest.dart';
+import '../test_util.dart';
 
 part 'arg_tests.dart';
 part 'async_tests.dart';
@@ -77,30 +77,4 @@ void main() {
 
     });
   });
-}
-
-Future<RunResult> runTaskInTestRunner(Task task, {List<String> extraArgs}) {
-  const _testTaskName = 'test-task';
-
-  final taskRegistry = new TaskRegistry();
-  taskRegistry.addTask(_testTaskName, task);
-
-  final args = [_testTaskName];
-  if(extraArgs != null) {
-    args.addAll(extraArgs);
-  }
-
-  final hopConfig = new HopConfig(taskRegistry, args, _testPrint);
-
-  return Runner.run(hopConfig);
-}
-
-void _testPrint(Object value) {
-  String msg;
-  try {
-    msg = value.toString();
-  } catch (ex, stack) {
-    msg = Error.safeToString(value);
-  }
-  (new Logger('hop_test_context')).info(msg);
 }
