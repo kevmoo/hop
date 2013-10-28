@@ -63,7 +63,7 @@ class Runner {
 
           return RunResult.SUCCESS;
         })
-        .catchError((error) {
+        .catchError((Object error, StackTrace stack) {
           if(error == Task._nullFutureResultEx) {
             context.severe('The task returned null instead of a future');
             return RunResult.ERROR;
@@ -76,14 +76,11 @@ class Runner {
             context.severe('Exception thrown by task');
             context.severe(error.toString());
 
-            var stack = null;
-            if(error is Error) {
+            if(error is Error && stack == null) {
+              // TODO: should this ever be the case? Weird...
               stack = error.stackTrace;
             }
 
-            if(error == null) {
-              stack = getAttachedStackTrace(error);
-            }
             if(stack != null) {
               context.severe(stack.toString());
             }
