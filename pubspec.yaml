@@ -5,15 +5,14 @@ description: Dart Task Framework
 homepage: https://github.com/kevmoo/hop.dart
 documentation: http://kevmoo.github.io/hop.dart
 environment:
-  sdk: '>=0.8.6'
+  sdk: '>=0.8.7'
 dependencies:
-  args: '>=0.8.6'
+  args: '>=0.8.7'
   bot: '>=0.24.0'
   bot_io: '>=0.23.3'
-  html5lib: '>=0.8.6'
-  logging: '>=0.8.6'
-  meta: '>=0.8.6'
-  path: '>=0.8.6'
-  unittest: '>=0.8.6'
+  html5lib: '>=0.8.7'
+  logging: '>=0.8.7'
+  path: '>=0.8.7'
+  unittest: '>=0.8.7'
 dev_dependencies:
   bot_test: '>=0.1.2'

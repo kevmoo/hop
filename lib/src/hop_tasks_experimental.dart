@@ -1,8 +1,8 @@
 library hop_tasks_experimental;
 
 import 'dart:async';
+import 'dart:convert' show JSON;
 import 'dart:io';
-import 'dart:json' as json;
 import 'package:hop/hop.dart';
 import 'package:path/path.dart' as path;
 import 'package:html5lib/dom.dart';
@@ -59,7 +59,7 @@ Future _postBuild(TaskLogger logger, String tempDocDir, DocsConfig cfg) {
 
 Future<String> _fixApiDoc(String jsonInput) {
 
-  List navList = json.parse(jsonInput);
+  List navList = JSON.parse(jsonInput);
 
   var navMap = new Map<String, Map>();
 
@@ -74,7 +74,7 @@ Future<String> _fixApiDoc(String jsonInput) {
   navList = sorted.map((String name) => navMap[name])
       .toList();
 
-  jsonInput = json.stringify(navList);
+  jsonInput = JSON.stringify(navList);
 
   return new Future.value(jsonInput);
 }
