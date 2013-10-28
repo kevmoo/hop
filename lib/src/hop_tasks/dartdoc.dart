@@ -26,7 +26,7 @@ Task createDartDocTask(dynamic delayedLibraryList, {
   requireArgumentNotNull(targetBranch, 'targetBranch');
   requireArgumentNotNull(packageDir, 'packageDir');
 
-  return new Task.async((ctx) {
+  return new Task((ctx) {
     targetBranch = ctx.arguments[_targetBranchArg];
 
     return _compileDocs(ctx, targetBranch, delayedLibraryList, packageDir,

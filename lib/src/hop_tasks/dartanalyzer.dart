@@ -8,7 +8,7 @@ const _formatMachineArgName = 'format-machine';
  * combinations of [Future] or [Function] values that return a [List<String>].
  */
 Task createAnalyzerTask(dynamic delayedFileList) {
-  return new Task.async((context) {
+  return new Task((context) {
     final parseResult = context.arguments;
 
     final bool verbose = parseResult[_verboseArgName];

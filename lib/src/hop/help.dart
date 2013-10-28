@@ -11,7 +11,7 @@ class _HelpArgs {
 }
 
 Task _getHelpTask(_HelpArgs helpArgs) {
-  return new Task.sync((TaskContext ctx) {
+  return new Task((TaskContext ctx) {
     final args = ctx.arguments;
 
     if(args.command != null) {

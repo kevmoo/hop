@@ -10,7 +10,7 @@ const _DEFAULT_RUN_COUNT = 20;
 const String _RUN_COUNT_ARE_NAME = 'run-count';
 
 Task createBenchTask() {
-  return new Task.async((ctx) {
+  return new Task((ctx) {
     final parseResult = ctx.arguments;
 
     final count = int.parse(parseResult[_RUN_COUNT_ARE_NAME],

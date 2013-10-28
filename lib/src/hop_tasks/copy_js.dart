@@ -17,7 +17,7 @@ Task createCopyJSTask(String targetDir, {bool includePackagePath: false,
   bool shadowDomDebug: false,
   bool shadowDomMin: false}) {
 
-  return new Task.async((ctx) => copyJs(targetDir,
+  return new Task((ctx) => copyJs(targetDir,
    unittestTestController: unittestTestController,
    browserDart: browserDart,
    browserInterop: browserInterop,

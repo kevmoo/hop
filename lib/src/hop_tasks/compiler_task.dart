@@ -32,7 +32,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
     throw new ArgumentError('Only one of "singleOutput" and "outputMapper" can be set.');
   }
 
-  return new Task.async((TaskContext context) {
+  return new Task((TaskContext context) {
 
     return getDelayedResult(delayedRootList)
         .then((List<String> inputs) {

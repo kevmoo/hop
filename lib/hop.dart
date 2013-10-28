@@ -25,7 +25,10 @@ final _sharedConfig = new TaskRegistry();
 
 final _libLogger = new Logger('hop');
 
+@deprecated
 typedef Future TaskDefinition(TaskContext ctx);
+
+typedef dynamic _TaskDefinition(TaskContext ctx);
 
 /**
  * Designed to enable features in __Hop__. Should be the last method called in

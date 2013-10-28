@@ -10,20 +10,16 @@ abstract class Task {
   Task._impl(String description) :
     this.description = (description == null) ? '' : description;
 
+  @deprecated
   factory Task.sync(Func1<TaskContext, dynamic> exec, {String description,
-    ArgParserConfigure config, List<TaskArgument> extendedArgs}) {
-    final futureExec = (TaskContext ctx) => new Future.sync(() => exec(ctx));
+    ArgParserConfigure config, List<TaskArgument> extendedArgs}) = _SimpleTask;
 
-    return new Task.async(futureExec,
-        description: description, config: config, extendedArgs: extendedArgs);
-  }
-
+  @deprecated
   factory Task.async(TaskDefinition exec, {String description,
-    ArgParserConfigure config, List<TaskArgument> extendedArgs}) {
+    ArgParserConfigure config, List<TaskArgument> extendedArgs}) = _SimpleTask;
 
-    return new _SimpleTask(exec, description: description, config: config,
-        extendedArgs: extendedArgs);
-  }
+  factory Task(dynamic exec(TaskContext ctx), {String description,
+    ArgParserConfigure config, List<TaskArgument> extendedArgs}) = _SimpleTask;
 
   Future run(TaskContext ctx, {Level printAtLogLevel});
 
@@ -39,7 +35,7 @@ abstract class Task {
 }
 
 class _SimpleTask extends Task {
-  final TaskDefinition _exec;
+  final _TaskDefinition _exec;
   final ArgParserConfigure _argParserConfig;
   final ReadOnlyCollection<TaskArgument> _extendedArgs;
 

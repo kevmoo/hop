@@ -9,7 +9,7 @@ Task getBranchForDirTask(String sourceBranch, String sourceDir,
   final description = 'Commit the tree for dir "$sourceDir" in branch'
       ' "$sourceBranch" and create/update branch "$targetBranch" with the new commit';
 
-  return new Task.async((ctx) =>
+  return new Task((ctx) =>
       branchForDir(ctx, sourceBranch, sourceDir, targetBranch, workingDir: workingDir),
       description: description);
 }

@@ -9,7 +9,7 @@ const _summaryError = 'error';
 
 Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction,
                         {Duration timeout: const Duration(seconds: 20)}) {
-  return new Task.async((TaskContext ctx) {
+  return new Task((TaskContext ctx) {
 
     final summaryFlag = ctx.arguments[_summaryFlag];
 
