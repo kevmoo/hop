@@ -138,7 +138,13 @@ class ChainedTask extends Task {
   Future run(TaskContext ctx, {Level printAtLogLevel}) {
     requireArgumentNotNull(ctx, 'ctx');
 
-    return _run(ctx, printAtLogLevel);
+    return Future.forEach(_tasks, (_NamedTask namedTask) {
+      // TODO: passing in args?
+      var subCtx = ctx.getSubContext(namedTask.name);
+
+      return namedTask.task.run(subCtx, printAtLogLevel: printAtLogLevel)
+          .whenComplete(() => subCtx.dispose());
+    });
   }
 
   ChainedTask and(String name, Task task) {
@@ -150,22 +156,5 @@ class ChainedTask extends Task {
       return [task];
     }
     return $(previous._tasks).concat([task]);
-  }
-
-  Future _run(TaskContext ctx, Level printAtLogLevel, [int index = 0]) {
-    assert(index >= 0);
-    assert(index <= _tasks.length);
-
-    if(index == _tasks.length) {
-      return new Future.value();
-    }
-
-    final namedTask = _tasks[index];
-
-    // TODO: passing in args?
-    var subCtx = ctx.getSubContext(namedTask.name);
-
-    return namedTask.task.run(subCtx, printAtLogLevel: printAtLogLevel)
-        .then((_) => _run(ctx, printAtLogLevel, index + 1));
   }
 }
