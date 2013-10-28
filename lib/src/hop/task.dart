@@ -25,7 +25,7 @@ abstract class Task {
         extendedArgs: extendedArgs);
   }
 
-  Future run(TaskContext ctx);
+  Future run(TaskContext ctx, {Level printAtLogLevel});
 
   ChainedTask chain(String name) {
     return new ChainedTask._internal(name, this);
@@ -83,14 +83,25 @@ class _SimpleTask extends Task {
   }
 
   @override
-  Future run(TaskContext ctx) {
+  Future run(TaskContext ctx, {Level printAtLogLevel}) {
     requireArgumentNotNull(ctx, 'ctx');
 
-    return new Future.sync(() => _exec(ctx));
+    return new Future.sync(() {
+      return runZoned(() => _exec(ctx),
+          zoneSpecification: _getZoneSpec(ctx, printAtLogLevel));
+    });
   }
 
   @override
   String toString() => "Task: $description";
+}
+
+ZoneSpecification _getZoneSpec(TaskContext ctx, Level printAtLevel) {
+  if(printAtLevel == null) return null;
+
+  return new ZoneSpecification(print: (a,b,c,String line) {
+    ctx.log(printAtLevel, line);
+  });
 }
 
 class _NamedTask {
@@ -128,10 +139,10 @@ class ChainedTask extends Task {
   String getUsage() => '';
 
   @override
-  Future run(TaskContext ctx) {
+  Future run(TaskContext ctx, {Level printAtLogLevel}) {
     requireArgumentNotNull(ctx, 'ctx');
 
-    return _run(ctx);
+    return _run(ctx, printAtLogLevel);
   }
 
   ChainedTask and(String name, Task task) {
@@ -145,7 +156,7 @@ class ChainedTask extends Task {
     return $(previous._tasks).concat([task]);
   }
 
-  Future _run(TaskContext ctx, [int index = 0]) {
+  Future _run(TaskContext ctx, Level printAtLogLevel, [int index = 0]) {
     assert(index >= 0);
     assert(index <= _tasks.length);
 
@@ -158,7 +169,7 @@ class ChainedTask extends Task {
     // TODO: passing in args?
     var subCtx = ctx.getSubContext(namedTask.name);
 
-    return namedTask.task.run(subCtx)
-        .then((_) => _run(ctx, index + 1));
+    return namedTask.task.run(subCtx, printAtLogLevel: printAtLogLevel)
+        .then((_) => _run(ctx, printAtLogLevel, index + 1));
   }
 }

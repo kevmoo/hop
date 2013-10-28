@@ -37,7 +37,9 @@ class Runner {
    * [runTask] handles a number of error cases, logs appropriate messages
    * to [context] and returns a corresponding [RunResult] when completed.
    */
-  static Future<RunResult> runTask(TaskContext context, Task task) {
+  static Future<RunResult> runTask(TaskContext context, Task task,
+      {Level printAtLogLevel}) {
+
     requireArgumentNotNull(context, 'context');
     requireArgumentNotNull(task, 'task');
     requireArgument(!context.isDisposed, 'context', 'cannot be disposed');
@@ -45,7 +47,7 @@ class Runner {
     final start = new DateTime.now();
     context.finest('Started at $start');
 
-    return task.run(context)
+    return task.run(context, printAtLogLevel: printAtLogLevel)
         .then((value) {
           // TODO: remove these checks at some future version
           if(value == true) {
@@ -103,7 +105,7 @@ class Runner {
    *
    * If you want to run a specific [Task] in isolation, see [runTask].
    */
-  static Future<RunResult> run(HopConfig config) {
+  static Future<RunResult> run(HopConfig config, {Level printAtLogLevel}) {
     requireArgumentNotNull(config, 'config');
 
     final ctx = _getContext(config);
@@ -116,7 +118,7 @@ class Runner {
       var subCtx = ctx.getSubContext(taskName, subCommandArgResults);
 
       final task = config.taskRegistry._getTask(taskName);
-      return runTask(subCtx, task)
+      return runTask(subCtx, task, printAtLogLevel: printAtLogLevel)
           .then((RunResult result) => _logExitCode(ctx, result))
           .whenComplete(() {
             subCtx.dispose();
@@ -143,7 +145,8 @@ class Runner {
         prefixEnabled: preFixEnabled, minLogLevel: logLevel);
   }
 
-  static void _runShell(TaskRegistry registry, String helpTaskName) {
+  static void _runShell(TaskRegistry registry, String helpTaskName,
+                        Level printAtLogLevel) {
 
     // a bit ugly
     // the help task needs the parser and a print method
@@ -180,12 +183,12 @@ class Runner {
     }
 
     final bool useColor = args[_colorFlag];
-    final Printer printer = useColor ? _colorPrinter : print;
+    final Printer printer = _colorPrinter(Zone.current.print, useColor);
 
     final config = new HopConfig._internal(registry, parser, args, printer);
     helpArgs.printer = config.doPrint;
 
-    final future = Runner.run(config);
+    final future = Runner.run(config, printAtLogLevel: printAtLogLevel);
 
     future.then((RunResult rr) {
       _libLogger.info('Exit with $rr');
@@ -193,11 +196,17 @@ class Runner {
     });
   }
 
-  static void _colorPrinter(Object value) {
-    if(value is ShellString) {
-      value = (value as ShellString).format(true);
-    }
-    print(value);
+  static Function _colorPrinter(void corePrint(String line), bool useColor) {
+    return (Object value) {
+
+      if(value is ShellString && useColor) {
+        value = (value as ShellString).format(true);
+      }
+
+      value = value.toString();
+
+      corePrint(value);
+    };
   }
 
   static RunResult _logExitCode(RootTaskContext ctx, RunResult result) {

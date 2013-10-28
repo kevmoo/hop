@@ -31,7 +31,7 @@ void loggedPrint(Object value) {
   } catch (ex, stack) {
     msg = Error.safeToString(value);
   }
-  _logger.info(msg);
+  testLogger.info(msg);
 }
 
-final _logger = new Logger('hop_test_context');
+final testLogger = new Logger('hop_test_context');

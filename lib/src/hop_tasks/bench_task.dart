@@ -27,7 +27,7 @@ Task createBenchTask() {
         .then((list) {
           final values = list.map((brr) => brr.executionDuration.inMilliseconds);
           final stats = new _Stats(values);
-          ctx.info(stats.toString());
+          print(stats.toString());
         });
 
   },

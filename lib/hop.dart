@@ -42,13 +42,14 @@ typedef Future TaskDefinition(TaskContext ctx);
  * task, an exception is thrown.
  */
 void runHop({
-  bool paranoid: true,
-  String helpTaskName: 'help'
+    bool paranoid: true,
+    String helpTaskName: 'help',
+    Level printAtLogLevel: Level.INFO
   }) {
   if(paranoid) {
     _paranoidHopCheck();
   }
-  Runner._runShell(_sharedConfig, helpTaskName);
+  Runner._runShell(_sharedConfig, helpTaskName, printAtLogLevel);
 }
 
 Task addTask(String name, Task task) {
