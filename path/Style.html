@@ -64,8 +64,8 @@ abstract class Style {
  static Style _getPlatformStyle() {
    if (_io == null) return Style.url;
 
-   if (_io.classes[const Symbol('Platform')]
-       .getField(const Symbol('operatingSystem')).reflectee == 'windows') {
+   if (_io.classes[#Platform].getField(#operatingSystem)
+       .reflectee == 'windows') {
      return Style.windows;
    }
 

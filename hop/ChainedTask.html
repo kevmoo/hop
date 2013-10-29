@@ -59,10 +59,16 @@ class ChainedTask extends Task {
  String getUsage() =&gt; '';
 
  @override
- Future&lt;bool&gt; run(TaskContext ctx) {
+ Future run(TaskContext ctx, {Level printAtLogLevel}) {
    requireArgumentNotNull(ctx, 'ctx');
 
-   return _run(ctx);
+   return Future.forEach(_tasks, (_NamedTask namedTask) {
+     // TODO: passing in args?
+     var subCtx = ctx.getSubContext(namedTask.name);
+
+     return namedTask.task.run(subCtx, printAtLogLevel: printAtLogLevel)
+         .whenComplete(() =&gt; subCtx.dispose());
+   });
  }
 
  ChainedTask and(String name, Task task) {
@@ -74,28 +80,6 @@ class ChainedTask extends Task {
      return [task];
    }
    return $(previous._tasks).concat([task]);
- }
-
- Future&lt;bool&gt; _run(TaskContext ctx, [int index = 0]) {
-   assert(index &gt;= 0);
-   assert(index &lt;= _tasks.length);
-
-   if(index == _tasks.length) {
-     return new Future.value(true);
-   }
-
-   final namedTask = _tasks[index];
-
-   // TODO: passing in args?
-   var subCtx = (ctx as _TaskContext).getSubContext(namedTask.name, namedTask.task, []);
-
-   return namedTask.task.run(subCtx)
-       .then((bool result) {
-         if(result == true) {
-           return _run(ctx, index+1);
-         }
-         return result;
-       });
  }
 }
 </pre>
@@ -181,15 +165,21 @@ String getUsage() =&gt; '';
 </div>
 <div class="method"><h4 id="run">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>run</strong>(<a href="../hop/TaskContext.html">TaskContext</a> ctx) <a class="anchor-link" href="#run"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a> <strong>run</strong>(<a href="../hop/TaskContext.html">TaskContext</a> ctx, {<a href="../logging/Level.html">Level</a> printAtLogLevel}) <a class="anchor-link" href="#run"
               title="Permalink to ChainedTask.run">#</a></h4>
 <div class="doc">
 <pre class="source">
 @override
-Future&lt;bool&gt; run(TaskContext ctx) {
+Future run(TaskContext ctx, {Level printAtLogLevel}) {
  requireArgumentNotNull(ctx, 'ctx');
 
- return _run(ctx);
+ return Future.forEach(_tasks, (_NamedTask namedTask) {
+   // TODO: passing in args?
+   var subCtx = ctx.getSubContext(namedTask.name);
+
+   return namedTask.task.run(subCtx, printAtLogLevel: printAtLogLevel)
+       .whenComplete(() =&gt; subCtx.dispose());
+ });
 }
 </pre>
 </div>

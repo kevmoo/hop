@@ -72,65 +72,69 @@ class Utf8EncoderTransformer extends _StringEncoder {
 </div>
 <h3>Extends</h3>
 <p>
-<span class="type-box"><span class="icon-class"></span><a href="../dart_async/StreamEventTransformer.html">StreamEventTransformer&lt;String, List&lt;int&gt;&gt;</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../utf/_StringEncoder.html">_StringEncoder</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>Utf8EncoderTransformer</strong></span></p>
+<span class="type-box"><span class="icon-class"></span><a href="../utf/_StringEncoder.html">_StringEncoder</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>Utf8EncoderTransformer</strong></span></p>
 <div class="inherited">
 <h3>Methods</h3>
-<div class="method inherited"><h4 id="bind">
+<div class="method inherited"><h4 id="add">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="../utf/Utf8EncoderTransformer.html">T</a>&gt; <strong>bind</strong>(<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="../utf/Utf8EncoderTransformer.html">S</a>&gt; source) <a class="anchor-link" href="#bind"
-              title="Permalink to Utf8EncoderTransformer.bind">#</a></h4>
-<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_async/StreamEventTransformer.html">StreamEventTransformer</a> </div><div class="doc">
-<pre class="source">
-Stream&lt;T&gt; bind(Stream&lt;S&gt; source) {
- return new EventTransformStream&lt;S, T&gt;(source, this);
-}
-</pre>
-</div>
-</div>
-<div class="method inherited"><h4 id="handleData">
-<button class="show-code">Code</button>
-void <strong>handleData</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> data, <a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt;&gt; sink) <a class="anchor-link" href="#handleData"
-              title="Permalink to Utf8EncoderTransformer.handleData">#</a></h4>
+void <strong>add</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> data) <a class="anchor-link" href="#add"
+              title="Permalink to Utf8EncoderTransformer.add">#</a></h4>
 <div class="inherited-from">inherited from <a href="../utf/_StringEncoder.html">_StringEncoder</a> </div><div class="doc">
 <div class="inherited">
-<p>Act on incoming data event.</p>
-<p>The method may generate any number of events on the sink, but should
-not throw.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/StreamEventTransformer.html">StreamEventTransformer</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt;&gt; </div></div>
+<p>Create a data event </p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; </div></div>
 <pre class="source">
-void handleData(String data, EventSink&lt;List&lt;int&gt;&gt; sink) {
- sink.add(_processString(data));
+void add(String data) {
+ _outSink.add(_processString(data));
 }
 </pre>
 </div>
 </div>
-<div class="method inherited"><h4 id="handleDone">
+<div class="method inherited"><h4 id="addError">
 <button class="show-code">Code</button>
-void <strong>handleDone</strong>(<a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&lt;<a href="../utf/Utf8EncoderTransformer.html">T</a>&gt; sink) <a class="anchor-link" href="#handleDone"
-              title="Permalink to Utf8EncoderTransformer.handleDone">#</a></h4>
-<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_async/StreamEventTransformer.html">StreamEventTransformer</a> </div><div class="doc">
-<p>Act on incoming done event.</p>
-<p>The method may generate any number of events on the sink, but should
-not throw.</p>
+void <strong>addError</strong>(<a href="http://api.dartlang.org/dart_core/Object.html">Object</a> error, [<a href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a> stackTrace]) <a class="anchor-link" href="#addError"
+              title="Permalink to Utf8EncoderTransformer.addError">#</a></h4>
+<div class="inherited-from">inherited from <a href="../utf/_StringEncoder.html">_StringEncoder</a> </div><div class="doc">
+<div class="inherited">
+<p>Create an async error. </p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; </div></div>
 <pre class="source">
-void handleDone(EventSink&lt;T&gt; sink){
- sink.close();
+void addError(Object error, [StackTrace stackTrace]) {
+ _outSink.addError(error, stackTrace);
 }
 </pre>
 </div>
 </div>
-<div class="method inherited"><h4 id="handleError">
+<div class="method inherited"><h4 id="bind">
 <button class="show-code">Code</button>
-void <strong>handleError</strong>(error, <a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&lt;<a href="../utf/Utf8EncoderTransformer.html">T</a>&gt; sink) <a class="anchor-link" href="#handleError"
-              title="Permalink to Utf8EncoderTransformer.handleError">#</a></h4>
-<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_async/StreamEventTransformer.html">StreamEventTransformer</a> </div><div class="doc">
-<p>Act on incoming error event.</p>
-<p>The method may generate any number of events on the sink, but should
-not throw.</p>
+<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt;&gt; <strong>bind</strong>(<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; stream) <a class="anchor-link" href="#bind"
+              title="Permalink to Utf8EncoderTransformer.bind">#</a></h4>
+<div class="inherited-from">inherited from <a href="../utf/_StringEncoder.html">_StringEncoder</a> </div><div class="doc">
 <pre class="source">
-void handleError(error, EventSink&lt;T&gt; sink) {
- sink.addError(error);
+Stream&lt;List&lt;int&gt;&gt; bind(Stream&lt;String&gt; stream) {
+ return new Stream.eventTransformed(
+     stream,
+     (EventSink&lt;List&lt;int&gt;&gt; sink) {
+       if (_outSink != null) {
+         throw new StateError("String encoder already used");
+       }
+       _outSink = sink;
+       return this;
+     });
 }
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="close">
+<button class="show-code">Code</button>
+void <strong>close</strong>() <a class="anchor-link" href="#close"
+              title="Permalink to Utf8EncoderTransformer.close">#</a></h4>
+<div class="inherited-from">inherited from <a href="../utf/_StringEncoder.html">_StringEncoder</a> </div><div class="doc">
+<div class="inherited">
+<p>Request a stream to close. </p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; </div></div>
+<pre class="source">
+void close() { _outSink.close(); }
 </pre>
 </div>
 </div>

@@ -45,10 +45,12 @@ class Option {
  final bool isFlag;
  final bool negatable;
  final bool allowMultiple;
+ final bool hide;
 
  Option(this.name, this.abbreviation, this.help, List&lt;String&gt; allowed,
      Map&lt;String, String&gt; allowedHelp, this.defaultValue, this.callback,
-     {this.isFlag, this.negatable, this.allowMultiple: false}) :
+     {this.isFlag, this.negatable, this.allowMultiple: false,
+     this.hide: false}) :
        this.allowed = allowed == null ?
            null : new UnmodifiableListView(allowed),
        this.allowedHelp = allowedHelp == null ?
@@ -86,7 +88,7 @@ class Option {
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>Option</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="http://api.dartlang.org/dart_core/String.html">String</a> abbreviation, <a href="http://api.dartlang.org/dart_core/String.html">String</a> help, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; allowed, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, <a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; allowedHelp, defaultValue, <a href="http://api.dartlang.org/dart_core/Function.html">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> isFlag, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> negatable, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> allowMultiple: false}) <a class="anchor-link" href="#"
+new <strong>Option</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="http://api.dartlang.org/dart_core/String.html">String</a> abbreviation, <a href="http://api.dartlang.org/dart_core/String.html">String</a> help, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; allowed, <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, <a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; allowedHelp, defaultValue, <a href="http://api.dartlang.org/dart_core/Function.html">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> isFlag, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> negatable, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> allowMultiple: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> hide: false}) <a class="anchor-link" href="#"
               title="Permalink to Option.Option">#</a></h4>
 <div class="doc">
 <div class="inherited">
@@ -98,7 +100,8 @@ only.</p>
 <pre class="source">
 Option(this.name, this.abbreviation, this.help, List&lt;String&gt; allowed,
    Map&lt;String, String&gt; allowedHelp, this.defaultValue, this.callback,
-   {this.isFlag, this.negatable, this.allowMultiple: false}) :
+   {this.isFlag, this.negatable, this.allowMultiple: false,
+   this.hide: false}) :
      this.allowed = allowed == null ?
          null : new UnmodifiableListView(allowed),
      this.allowedHelp = allowedHelp == null ?
@@ -214,6 +217,18 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
         <div class="doc">
 <pre class="source">
 final String help
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="hide">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>hide</strong> <a class="anchor-link"
+            href="#hide"
+            title="Permalink to Option.hide">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final bool hide
 </pre>
 </div>
 </div>

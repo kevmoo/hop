@@ -33,7 +33,7 @@
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
 <p>An unmodifiable map.</p>
-<p>An UnmodifiableMapView contains a <a class="crossref" href="../dart_core/Map.html">Map</a> object and ensures 
+<p>An UnmodifiableMapView contains a <a class="crossref" href="../dart_core/Map.html">Map</a> object and ensures
 that it does not change.
 Methods that would change the map,
 such as <a class="crossref" href="../unmodifiable_collection/UnmodifiableMapView.html#addAll">addAll</a> and <a class="crossref" href="../unmodifiable_collection/UnmodifiableMapView.html#remove">remove</a>, throw an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>.
@@ -127,7 +127,7 @@ final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <st
         </h4>
         <div class="doc">
 <div class="inherited">
-<p>Returns true if there is no {key, value} pair in the map.</p>
+<p>Returns true if there is no key-value pair in the map.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
 <pre class="source">
 bool get isEmpty =&gt; _source.isEmpty;
@@ -142,7 +142,7 @@ final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <st
         </h4>
         <div class="doc">
 <div class="inherited">
-<p>Returns true if there is at least one {key, value} pair in the map.</p>
+<p>Returns true if there is at least one key-value pair in the map.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
 <pre class="source">
 bool get isNotEmpty =&gt; _source.isNotEmpty;
@@ -158,6 +158,8 @@ final <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;
         <div class="doc">
 <div class="inherited">
 <p>The keys of <code>this</code>.</p>
+<p>The returned iterable has efficient <code>length</code> and <code>contains</code> operations,
+based on <a class="crossref" href="../unmodifiable_collection/UnmodifiableMapView.html#length">length</a> and <a class="crossref" href="../unmodifiable_collection/UnmodifiableMapView.html#containsKey">containsKey</a> of the map.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
 <pre class="source">
 Iterable&lt;K&gt; get keys =&gt; _source.keys;
@@ -172,7 +174,7 @@ final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <stro
         </h4>
         <div class="doc">
 <div class="inherited">
-<p>The number of {key, value} pairs in the map.</p>
+<p>The number of key-value pairs in the map.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
 <pre class="source">
 int get length =&gt; _source.length;
@@ -188,6 +190,8 @@ final <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;
         <div class="doc">
 <div class="inherited">
 <p>The values of <code>this</code>.</p>
+<p>The returned iterable has an efficient <code>length</code> method based on the
+<a class="crossref" href="../unmodifiable_collection/UnmodifiableMapView.html#length">length</a> of the map.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Map.html">Map</a>&lt;<a href="../unmodifiable_collection/UnmodifiableMapView.html">K</a>, <a href="../unmodifiable_collection/UnmodifiableMapView.html">V</a>&gt; </div></div>
 <pre class="source">
 Iterable&lt;V&gt; get values =&gt; _source.values;

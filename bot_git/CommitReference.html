@@ -35,7 +35,7 @@
 <p>Represents the output from <code>git show-ref</code></p>
 <pre class="source">
 class CommitReference {
- static final RegExp _lsRemoteRegExp = new RegExp('^(${Git._shaRegexPattern}) (.+)\$');
+ static final RegExp _lsRemoteRegExp = new RegExp('^(${Git._SHA_REGEX_PATTERN}) (.+)\$');
 
  final String sha;
  final String reference;

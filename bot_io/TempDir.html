@@ -63,9 +63,9 @@ class TempDir {
        });
  }
 
+ // TODO: ponder added optional 'template' param here
  static Future&lt;TempDir&gt; create() {
-   final startDir = new Directory('');
-   return startDir.createTemp()
+   return Directory.systemTemp.createTemp()
        .then((newDir) =&gt; new TempDir._internal(newDir));
  }
 
@@ -152,8 +152,7 @@ static Future then(Future func(Directory dir)) {
 <div class="doc">
 <pre class="source">
 static Future&lt;TempDir&gt; create() {
- final startDir = new Directory('');
- return startDir.createTemp()
+ return Directory.systemTemp.createTemp()
      .then((newDir) =&gt; new TempDir._internal(newDir));
 }
 </pre>

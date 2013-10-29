@@ -81,7 +81,7 @@ Task addTask(String name, Task task) {
 </div>
 <div class="method"><h4 id="runHop">
 <button class="show-code">Code</button>
-void <strong>runHop</strong>({<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> paranoid: true, <a href="http://api.dartlang.org/dart_core/String.html">String</a> helpTaskName: 'help'}) <a class="anchor-link" href="#runHop"
+void <strong>runHop</strong>({<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> paranoid: true, <a href="http://api.dartlang.org/dart_core/String.html">String</a> helpTaskName: 'help', <a href="logging/Level.html">Level</a> printAtLogLevel: Level.INFO}) <a class="anchor-link" href="#runHop"
               title="Permalink to runHop">#</a></h4>
 <div class="doc">
 <p>Designed to enable features in <strong>Hop</strong>. Should be the last method called in
@@ -98,13 +98,14 @@ no help task is added. If
 task, an exception is thrown.</p>
 <pre class="source">
 void runHop({
- bool paranoid: true,
- String helpTaskName: 'help'
+   bool paranoid: true,
+   String helpTaskName: 'help',
+   Level printAtLogLevel: Level.INFO
  }) {
  if(paranoid) {
    _paranoidHopCheck();
  }
- Runner._runShell(_sharedConfig, helpTaskName);
+ Runner._runShell(_sharedConfig, helpTaskName, printAtLogLevel);
 }
 </pre>
 </div>

@@ -35,7 +35,7 @@
 <pre class="source">
 class TreeEntry {
  static final _lsTreeLine = r'^([0-9]{6}) (blob|tree) ('
-     + Git._shaRegexPattern
+     + Git._SHA_REGEX_PATTERN
      + ')\t(\\S.*\\S)\$';
 
  static final _lsTreeRegEx = new RegExp(_lsTreeLine);
@@ -53,7 +53,7 @@ class TreeEntry {
  String name;
 
  TreeEntry(this.mode, this.type, this.sha, this.name) {
-   // TODO:
+   // TODO: enum or whitelist here
    requireArgumentContainsPattern(new RegExp(r'^[0-9]{6}$'), mode, 'mode');
 
    // TODO: enum or whitelist here
@@ -123,7 +123,7 @@ only.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
 TreeEntry(this.mode, this.type, this.sha, this.name) {
- // TODO:
+ // TODO: enum or whitelist here
  requireArgumentContainsPattern(new RegExp(r'^[0-9]{6}$'), mode, 'mode');
 
  // TODO: enum or whitelist here

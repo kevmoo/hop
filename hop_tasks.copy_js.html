@@ -65,6 +65,30 @@ const JS_DART_INTEROP = 'js/dart_interop.js'
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="SHADOW_DOM_DEBUG">
+<button class="show-code">Code</button>
+const         <strong>SHADOW_DOM_DEBUG</strong> <a class="anchor-link"
+            href="#SHADOW_DOM_DEBUG"
+            title="Permalink to SHADOW_DOM_DEBUG">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+const SHADOW_DOM_DEBUG = 'shadow_dom/shadow_dom.debug.js'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="SHADOW_DOM_MIN">
+<button class="show-code">Code</button>
+const         <strong>SHADOW_DOM_MIN</strong> <a class="anchor-link"
+            href="#SHADOW_DOM_MIN"
+            title="Permalink to SHADOW_DOM_MIN">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+const SHADOW_DOM_MIN = 'shadow_dom/shadow_dom.min.js'
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="UNITTEST_TEST_CONTROLLER">
 <button class="show-code">Code</button>
 const         <strong>UNITTEST_TEST_CONTROLLER</strong> <a class="anchor-link"
@@ -82,19 +106,19 @@ const UNITTEST_TEST_CONTROLLER = 'unittest/test_controller.js'
 <h3>Functions</h3>
 <div class="method"><h4 id="copyJs">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>copyJs</strong>(<a href="hop/TaskContext.html">TaskContext</a> ctx, <a href="http://api.dartlang.org/dart_core/String.html">String</a> targetDir, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> unittestTestController, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> browserDart, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> browserInterop, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> jsDartInterop) <a class="anchor-link" href="#copyJs"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a> <strong>copyJs</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> targetDir, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> includePackagePath: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> unittestTestController: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> browserDart: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> browserInterop: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> jsDartInterop: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> shadowDomDebug: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> shadowDomMin: false}) <a class="anchor-link" href="#copyJs"
               title="Permalink to copyJs">#</a></h4>
 <div class="doc">
 <pre class="source">
-Future&lt;bool&gt; copyJs(TaskContext ctx, String targetDir,
-   bool unittestTestController, bool browserDart, bool browserInterop,
-   bool jsDartInterop) {
+Future copyJs(String targetDir, {bool includePackagePath: false,
+  bool unittestTestController: false, bool browserDart: false,
+  bool browserInterop: false, bool jsDartInterop: false,
+  bool shadowDomDebug: false, bool shadowDomMin: false}) {
 
- assert(ctx != null);
  return FileSystemEntity.isDirectory(targetDir)
      .then((bool isDir) {
        if(!isDir) {
-         ctx.fail('"targetPath" does not exist or is not a directory: $targetDir');
+         throw new ArgumentError('"targetPath" does not exist or is not a directory: $targetDir');
        }
 
        var sources = [];
@@ -102,14 +126,16 @@ Future&lt;bool&gt; copyJs(TaskContext ctx, String targetDir,
        if(browserDart) sources.add(BROWSER_DART);
        if(browserInterop) sources.add(BROWSER_INTEROP);
        if(jsDartInterop) sources.add(JS_DART_INTEROP);
+       if(shadowDomDebug) sources.add(SHADOW_DOM_DEBUG);
+       if(shadowDomMin) sources.add(SHADOW_DOM_MIN);
 
        if(sources.isEmpty) {
-         ctx.fail('No source files were provided. NOOP.');
+         throw new ArgumentError('No source files were provided. NOOP.');
        }
 
        return Future.forEach(sources, (String source) {
-         return _copyDependency(ctx, targetDir, source);
-       }).then((_) =&gt; true);
+         return _copyDependency(targetDir, source, includePackagePath);
+       });
      });
 }
 </pre>
@@ -117,17 +143,25 @@ Future&lt;bool&gt; copyJs(TaskContext ctx, String targetDir,
 </div>
 <div class="method"><h4 id="createCopyJSTask">
 <button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>createCopyJSTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> targetDir, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> unittestTestController: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> browserDart: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> browserInterop: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> jsDartInterop: false}) <a class="anchor-link" href="#createCopyJSTask"
+<a href="hop/Task.html">Task</a> <strong>createCopyJSTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> targetDir, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> includePackagePath: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> unittestTestController: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> browserDart: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> browserInterop: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> jsDartInterop: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> shadowDomDebug: false, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> shadowDomMin: false}) <a class="anchor-link" href="#createCopyJSTask"
               title="Permalink to createCopyJSTask">#</a></h4>
 <div class="doc">
 <pre class="source">
-Task createCopyJSTask(String targetDir, {bool unittestTestController: false,
+Task createCopyJSTask(String targetDir, {bool includePackagePath: false,
+ bool unittestTestController: false,
  bool browserDart: false,
  bool browserInterop: false,
- bool jsDartInterop: false}) {
+ bool jsDartInterop: false,
+ bool shadowDomDebug: false,
+ bool shadowDomMin: false}) {
 
- return new Task.async((ctx) =&gt; copyJs(ctx, targetDir, unittestTestController,
-     browserDart, browserInterop, jsDartInterop));
+ return new Task((ctx) =&gt; copyJs(targetDir,
+  unittestTestController: unittestTestController,
+  browserDart: browserDart,
+  browserInterop: browserInterop,
+  jsDartInterop: jsDartInterop,
+  shadowDomDebug: shadowDomDebug,
+  shadowDomMin: shadowDomMin));
 }
 </pre>
 </div>

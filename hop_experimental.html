@@ -31,14 +31,16 @@
 <h3>Functions</h3>
 <div class="method"><h4 id="transformFile">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>transformFile</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> filePath, <a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; transformer(<a href="http://api.dartlang.org/dart_core/String.html">String</a> input)) <a class="anchor-link" href="#transformFile"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>transformFile</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> filePath, <a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; transformer(<a href="http://api.dartlang.org/dart_core/String.html">String</a> input), {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> ensureDirectory: false}) <a class="anchor-link" href="#transformFile"
               title="Permalink to transformFile">#</a></h4>
 <div class="doc">
+<p>Assumes the target file, if it exists, is a <a class="crossref" href="dart_core/String.html">String</a>.</p>
 <pre class="source">
 Future&lt;bool&gt; transformFile(String filePath,
-   Future&lt;String&gt; transformer(String input)) {
+   Future&lt;String&gt; transformer(String input), {bool ensureDirectory: false}) {
 
  String oldContent;
+ String newContent;
 
  final file = new File(filePath);
  return FileSystemEntity.type(filePath)
@@ -56,7 +58,13 @@ Future&lt;bool&gt; transformFile(String filePath,
        oldContent = value;
        return transformer(oldContent);
      })
-     .then((String newContent) {
+     .then((String value) {
+       newContent = value;
+       if(ensureDirectory) {
+         return file.directory.create(recursive: true);
+       }
+     })
+     .then((_) {
        // we're assuming file hasn't changed since we started
        if(newContent == oldContent) {
          // nothing changed

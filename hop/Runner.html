@@ -40,7 +40,9 @@ class Runner {
   * [runTask] handles a number of error cases, logs appropriate messages
   * to [context] and returns a corresponding [RunResult] when completed.
   */
- static Future&lt;RunResult&gt; runTask(TaskContext context, Task task) {
+ static Future&lt;RunResult&gt; runTask(TaskContext context, Task task,
+     {Level printAtLogLevel}) {
+
    requireArgumentNotNull(context, 'context');
    requireArgumentNotNull(task, 'task');
    requireArgument(!context.isDisposed, 'context', 'cannot be disposed');
@@ -48,33 +50,40 @@ class Runner {
    final start = new DateTime.now();
    context.finest('Started at $start');
 
-   return task.run(context)
-       .then((bool didComplete) {
-         if(didComplete == null) {
-           context.severe('${didComplete} returned from task');
-           context.severe('Return value from task must be true or false');
-           return RunResult.ERROR;
-         } else if(didComplete) {
-           return RunResult.SUCCESS;
-         } else {
-           return RunResult.FAIL;
+   return task.run(context, printAtLogLevel: printAtLogLevel)
+       .then((value) {
+         // TODO: remove these checks at some future version
+         if(value == true) {
+           context.severe('`true` was returned from the task.\n'
+               "It's possible that the task was trying to signal success using"
+               "an old behavior.\nThis is no longer nessesary.");
+         } else if(value == false) {
+           context.severe("`false` was returned from the task.\n"
+               "It's possible that the task was trying to signal failure using"
+               "an old behavior.\nTasks should signal failure using "
+               "`TaskContext.fail`.");
          }
+
+         return RunResult.SUCCESS;
        })
-       .catchError((error) {
+       .catchError((Object error, StackTrace stack) {
          if(error == Task._nullFutureResultEx) {
-           context.severe('The provided task returned null instead of a future');
+           context.severe('The task returned null instead of a future');
            return RunResult.ERROR;
          } else if(error is _TaskFailError) {
            final _TaskFailError e = error;
            context.severe(e.message);
            return RunResult.FAIL;
-         }
-         else {
+         } else {
            // has as exception, need to test this
            context.severe('Exception thrown by task');
            context.severe(error.toString());
 
-           final stack = getAttachedStackTrace(error);
+           if(error is Error &amp;&amp; stack == null) {
+             // TODO: should this ever be the case? Weird...
+             stack = error.stackTrace;
+           }
+
            if(stack != null) {
              context.severe(stack.toString());
            }
@@ -96,7 +105,7 @@ class Runner {
   *
   * If you want to run a specific [Task] in isolation, see [runTask].
   */
- static Future&lt;RunResult&gt; run(HopConfig config) {
+ static Future&lt;RunResult&gt; run(HopConfig config, {Level printAtLogLevel}) {
    requireArgumentNotNull(config, 'config');
 
    final ctx = _getContext(config);
@@ -109,7 +118,7 @@ class Runner {
      var subCtx = ctx.getSubContext(taskName, subCommandArgResults);
 
      final task = config.taskRegistry._getTask(taskName);
-     return runTask(subCtx, task)
+     return runTask(subCtx, task, printAtLogLevel: printAtLogLevel)
          .then((RunResult result) =&gt; _logExitCode(ctx, result))
          .whenComplete(() {
            subCtx.dispose();
@@ -136,7 +145,8 @@ class Runner {
        prefixEnabled: preFixEnabled, minLogLevel: logLevel);
  }
 
- static void _runShell(TaskRegistry registry, String helpTaskName) {
+ static void _runShell(TaskRegistry registry, String helpTaskName,
+                       Level printAtLogLevel) {
 
    // a bit ugly
    // the help task needs the parser and a print method
@@ -173,12 +183,12 @@ class Runner {
    }
 
    final bool useColor = args[_colorFlag];
-   final Printer printer = useColor ? _colorPrinter : print;
+   final Printer printer = _colorPrinter(Zone.current.print, useColor);
 
    final config = new HopConfig._internal(registry, parser, args, printer);
    helpArgs.printer = config.doPrint;
 
-   final future = Runner.run(config);
+   final future = Runner.run(config, printAtLogLevel: printAtLogLevel);
 
    future.then((RunResult rr) {
      _libLogger.info('Exit with $rr');
@@ -186,11 +196,17 @@ class Runner {
    });
  }
 
- static void _colorPrinter(Object value) {
-   if(value is ShellString) {
-     value = (value as ShellString).format(true);
-   }
-   print(value);
+ static Function _colorPrinter(void corePrint(String line), bool useColor) {
+   return (Object value) {
+
+     if(value is ShellString &amp;&amp; useColor) {
+       value = (value as ShellString).format(true);
+     }
+
+     value = value.toString();
+
+     corePrint(value);
+   };
  }
 
  static RunResult _logExitCode(RootTaskContext ctx, RunResult result) {
@@ -207,7 +223,7 @@ class Runner {
 <h3>Static Methods</h3>
 <div class="method"><h4 id="runTask">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../hop/RunResult.html">RunResult</a>&gt; <strong>runTask</strong>(<a href="../hop/TaskContext.html">TaskContext</a> context, <a href="../hop/Task.html">Task</a> task) <a class="anchor-link" href="#runTask"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../hop/RunResult.html">RunResult</a>&gt; <strong>runTask</strong>(<a href="../hop/TaskContext.html">TaskContext</a> context, <a href="../hop/Task.html">Task</a> task, {<a href="../logging/Level.html">Level</a> printAtLogLevel}) <a class="anchor-link" href="#runTask"
               title="Permalink to Runner.runTask">#</a></h4>
 <div class="doc">
 <p>Runs a <a class="crossref" href="../hop/Task.html">Task</a> with the specificed <a class="crossref" href="../hop/TaskContext.html">TaskContext</a>.</p>
@@ -215,7 +231,9 @@ class Runner {
 to 
 <span class="param">context</span> and returns a corresponding <a class="crossref" href="../hop/RunResult.html">RunResult</a> when completed.</p>
 <pre class="source">
-static Future&lt;RunResult&gt; runTask(TaskContext context, Task task) {
+static Future&lt;RunResult&gt; runTask(TaskContext context, Task task,
+   {Level printAtLogLevel}) {
+
  requireArgumentNotNull(context, 'context');
  requireArgumentNotNull(task, 'task');
  requireArgument(!context.isDisposed, 'context', 'cannot be disposed');
@@ -223,33 +241,40 @@ static Future&lt;RunResult&gt; runTask(TaskContext context, Task task) {
  final start = new DateTime.now();
  context.finest('Started at $start');
 
- return task.run(context)
-     .then((bool didComplete) {
-       if(didComplete == null) {
-         context.severe('${didComplete} returned from task');
-         context.severe('Return value from task must be true or false');
-         return RunResult.ERROR;
-       } else if(didComplete) {
-         return RunResult.SUCCESS;
-       } else {
-         return RunResult.FAIL;
+ return task.run(context, printAtLogLevel: printAtLogLevel)
+     .then((value) {
+       // TODO: remove these checks at some future version
+       if(value == true) {
+         context.severe('`true` was returned from the task.\n'
+             "It's possible that the task was trying to signal success using"
+             "an old behavior.\nThis is no longer nessesary.");
+       } else if(value == false) {
+         context.severe("`false` was returned from the task.\n"
+             "It's possible that the task was trying to signal failure using"
+             "an old behavior.\nTasks should signal failure using "
+             "`TaskContext.fail`.");
        }
+
+       return RunResult.SUCCESS;
      })
-     .catchError((error) {
+     .catchError((Object error, StackTrace stack) {
        if(error == Task._nullFutureResultEx) {
-         context.severe('The provided task returned null instead of a future');
+         context.severe('The task returned null instead of a future');
          return RunResult.ERROR;
        } else if(error is _TaskFailError) {
          final _TaskFailError e = error;
          context.severe(e.message);
          return RunResult.FAIL;
-       }
-       else {
+       } else {
          // has as exception, need to test this
          context.severe('Exception thrown by task');
          context.severe(error.toString());
 
-         final stack = getAttachedStackTrace(error);
+         if(error is Error &amp;&amp; stack == null) {
+           // TODO: should this ever be the case? Weird...
+           stack = error.stackTrace;
+         }
+
          if(stack != null) {
            context.severe(stack.toString());
          }
@@ -268,14 +293,14 @@ static Future&lt;RunResult&gt; runTask(TaskContext context, Task task) {
 </div>
 <div class="method"><h4 id="run">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../hop/RunResult.html">RunResult</a>&gt; <strong>run</strong>(<a href="../hop/HopConfig.html">HopConfig</a> config) <a class="anchor-link" href="#run"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="../hop/RunResult.html">RunResult</a>&gt; <strong>run</strong>(<a href="../hop/HopConfig.html">HopConfig</a> config, {<a href="../logging/Level.html">Level</a> printAtLogLevel}) <a class="anchor-link" href="#run"
               title="Permalink to Runner.run">#</a></h4>
 <div class="doc">
 <p><a class="crossref" href="../hop/Runner.html#run">run</a> exists primarily for testing <a class="crossref" href="../hop/Task.html">Task</a> implementations.</p>
 <p>If you want to use Hop in an app, see <a class="crossref" href="../hop.html#runHop">runHop</a>.</p>
 <p>If you want to run a specific <a class="crossref" href="../hop/Task.html">Task</a> in isolation, see <a class="crossref" href="../hop/Runner.html#runTask">runTask</a>.</p>
 <pre class="source">
-static Future&lt;RunResult&gt; run(HopConfig config) {
+static Future&lt;RunResult&gt; run(HopConfig config, {Level printAtLogLevel}) {
  requireArgumentNotNull(config, 'config');
 
  final ctx = _getContext(config);
@@ -288,7 +313,7 @@ static Future&lt;RunResult&gt; run(HopConfig config) {
    var subCtx = ctx.getSubContext(taskName, subCommandArgResults);
 
    final task = config.taskRegistry._getTask(taskName);
-   return runTask(subCtx, task)
+   return runTask(subCtx, task, printAtLogLevel: printAtLogLevel)
        .then((RunResult result) =&gt; _logExitCode(ctx, result))
        .whenComplete(() {
          subCtx.dispose();

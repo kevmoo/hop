@@ -79,7 +79,8 @@ class Frame {
 
  /// A human-friendly description of the code location.
  String get location {
-   if (line == null || column == null) return library;
+   if (line == null) return library;
+   if (column == null) return '$library $line';
    return '$library $line:$column';
  }
 
@@ -110,9 +111,17 @@ class Frame {
      throw new FormatException("Couldn't parse VM stack trace line '$frame'.");
    }
 
-   var uri = Uri.parse(match[2]);
+   // Get the pieces out of the regexp match. Function, URI and line should
+   // always be found. The column is optional.
    var member = match[1].replaceAll("&lt;anonymous closure&gt;", "&lt;fn&gt;");
-   return new Frame(uri, int.parse(match[3]), int.parse(match[4]), member);
+   var uri = Uri.parse(match[2]);
+   var line = int.parse(match[3]);
+   var column = null;
+   var columnMatch = match[4];
+   if (columnMatch != null) {
+     column = int.parse(columnMatch);
+   }
+   return new Frame(uri, line, column, member);
  }
 
  /// Parses a string representation of a Chrome/V8 stack frame.
@@ -152,11 +161,9 @@ class Frame {
 
    var uri = Uri.parse(match[3]);
    var member = match[1];
-   if (member == "") {
-     member = "&lt;fn&gt;";
-   } else if (match[2] != null) {
-     member = "$member.&lt;fn&gt;";
-   }
+   member += new List.filled('/'.allMatches(match[2]).length, ".&lt;fn&gt;").join();
+   if (member == '') member = '&lt;fn&gt;';
+
    // Some Firefox members have initial dots. We remove them for consistency
    // with other platforms.
    member = member.replaceFirst(_initialDot, '');
@@ -252,11 +259,9 @@ factory Frame.parseFirefox(String frame) {
 
  var uri = Uri.parse(match[3]);
  var member = match[1];
- if (member == "") {
-   member = "&lt;fn&gt;";
- } else if (match[2] != null) {
-   member = "$member.&lt;fn&gt;";
- }
+ member += new List.filled('/'.allMatches(match[2]).length, ".&lt;fn&gt;").join();
+ if (member == '') member = '&lt;fn&gt;';
+
  // Some Firefox members have initial dots. We remove them for consistency
  // with other platforms.
  member = member.replaceFirst(_initialDot, '');
@@ -367,9 +372,17 @@ factory Frame.parseVM(String frame) {
    throw new FormatException("Couldn't parse VM stack trace line '$frame'.");
  }
 
- var uri = Uri.parse(match[2]);
+ // Get the pieces out of the regexp match. Function, URI and line should
+ // always be found. The column is optional.
  var member = match[1].replaceAll("&lt;anonymous closure&gt;", "&lt;fn&gt;");
- return new Frame(uri, int.parse(match[3]), int.parse(match[4]), member);
+ var uri = Uri.parse(match[2]);
+ var line = int.parse(match[3]);
+ var column = null;
+ var columnMatch = match[4];
+ if (columnMatch != null) {
+   column = int.parse(columnMatch);
+ }
+ return new Frame(uri, line, column, member);
 }
 </pre>
 </div>
@@ -449,7 +462,8 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
 <p>A human-friendly description of the code location.</p>
 <pre class="source">
 String get location {
- if (line == null || column == null) return library;
+ if (line == null) return library;
+ if (column == null) return '$library $line';
  return '$library $line:$column';
 }
 </pre>

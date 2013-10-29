@@ -67,6 +67,9 @@ class TestCase {
   */
  String get result =&gt; _result;
 
+ /** Returns whether this test case passed. */
+ bool get passed =&gt; _result == PASS;
+
  StackTrace _stackTrace;
  /** Stack trace associated with this test, or [null] if it succeeded. */
  StackTrace get stackTrace =&gt; _stackTrace;
@@ -213,6 +216,8 @@ class TestCase {
      pass();
    }
  }
+
+ String toString() =&gt; _result != null ? "$description: $result" : description;
 }
 </pre>
 </div>
@@ -291,6 +296,19 @@ final <a href="http://api.dartlang.org/dart_core/String.html">String</a>        
 <p>Error or failure message. </p>
 <pre class="source">
 String get message =&gt; _message;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="passed">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>passed</strong> <a class="anchor-link"
+            href="#passed"
+            title="Permalink to TestCase.passed">#</a>
+        </h4>
+        <div class="doc">
+<p>Returns whether this test case passed. </p>
+<pre class="source">
+bool get passed =&gt; _result == PASS;
 </pre>
 </div>
 </div>
@@ -427,6 +445,19 @@ void <strong>pass</strong>() <a class="anchor-link" href="#pass"
 void pass() {
  _complete(PASS);
 }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to TestCase.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<pre class="source">
+String toString() =&gt; _result != null ? "$description: $result" : description;
 </pre>
 </div>
 </div>

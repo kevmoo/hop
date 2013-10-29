@@ -47,12 +47,8 @@ class ConsoleContext extends TaskContext {
    }
  }
 
- /**
-  * At the moment [getSubLogger] returns [this].
-  */
- TaskLogger getSubLogger(String name) {
-   // TODO: should actualy support sub loggers
-   return this;
+ TaskContext getSubContext(String name) {
+   throw new UnimplementedError('sub contexts are not supported yet');
  }
 
  bool get isDisposed =&gt; _isDisposed;
@@ -88,7 +84,7 @@ class ConsoleContext extends TaskContext {
 
  void _assertNotDisposed() {
    if(_isDisposed) {
-     throw 'already disposed';
+     throw new DisposedError();
    }
  }
 }
@@ -261,17 +257,26 @@ void finest(String message) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="getSubLogger">
+<div class="method"><h4 id="getSubContext">
+<button class="show-code">Code</button>
+<a href="../hop/TaskContext.html">TaskContext</a> <strong>getSubContext</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#getSubContext"
+              title="Permalink to ConsoleContext.getSubContext">#</a></h4>
+<div class="doc">
+<pre class="source">
+TaskContext getSubContext(String name) {
+ throw new UnimplementedError('sub contexts are not supported yet');
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="getSubLogger">
 <button class="show-code">Code</button>
 <a href="../hop/TaskLogger.html">TaskLogger</a> <strong>getSubLogger</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#getSubLogger"
               title="Permalink to ConsoleContext.getSubLogger">#</a></h4>
-<div class="doc">
-<p>At the moment <a class="crossref" href="../hop/ConsoleContext.html#getSubLogger">getSubLogger</a> returns <code>this</code>.</p>
+<div class="inherited-from">inherited from <a href="../hop/TaskContext.html">TaskContext</a> </div><div class="doc">
 <pre class="source">
-TaskLogger getSubLogger(String name) {
- // TODO: should actualy support sub loggers
- return this;
-}
+@deprecated
+TaskLogger getSubLogger(String name) =&gt; getSubContext(name);
 </pre>
 </div>
 </div>

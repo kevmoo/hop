@@ -37,7 +37,7 @@
 <pre class="source">
 Task createUnitTestTask(Action1&lt;unittest.Configuration&gt; unitTestAction,
                        {Duration timeout: const Duration(seconds: 20)}) {
- return new Task.async((TaskContext ctx) {
+ return new Task((TaskContext ctx) {
 
    final summaryFlag = ctx.arguments[_summaryFlag];
 
@@ -75,7 +75,7 @@ Task createUnitTestTask(Action1&lt;unittest.Configuration&gt; unitTestAction,
 
      ctx.info(list.join('\n'));
 
-     return new Future.value(true);
+     return new Future.value();
    }
 
    unittest.runTests();
@@ -97,45 +97,19 @@ Task createUnitTestTask(Action1&lt;unittest.Configuration&gt; unitTestAction,
 Future&lt;int&gt; pipeProcess(Process process,
    {Action1&lt;String&gt; stdOutWriter, Action1&lt;String&gt; stdErrWriter}) {
 
- bool finished = false;
+ var futures = [process.exitCode];
 
- bool validateNotFinished(String message) {
-   if(finished) {
-     print('Error in hop_tasks - pipeProcess');
-     print("Received signal from $process after exit signal");
-     print(message);
-     print("Tracked at http://code.google.com/p/dart/issues/detail?id=8422");
-     return false;
-   }
-   return true;
- }
+ futures.add(process.stdout.forEach((data)
+     =&gt; _stdListen(data, stdOutWriter)));
 
- if(stdOutWriter != null) {
-   process.stdout.listen((List&lt;int&gt; data) {
-     final str = new String.fromCharCodes(data).trim();
+ futures.add(process.stderr.forEach((data)
+     =&gt; _stdListen(data, stdErrWriter)));
 
-     if(validateNotFinished('stdout - $str')) {
-       stdOutWriter(str);
-     }
-   });
- }
-
- if(stdErrWriter != null) {
-   process.stderr.listen((List&lt;int&gt; data) {
-     assert(data != null);
-     final str = new String.fromCharCodes(data).trim();
-
-     if(validateNotFinished('stderr - $str')) {
-       stdErrWriter(str);
-     }
-
-   });
- }
-
- return process.exitCode
-     .whenComplete(() {
-       validateNotFinished('onExit');
-       finished = true;
+ return Future.wait(futures)
+     .then((List values) {
+       assert(values.length == futures.length);
+       assert(values[0] != null);
+       return values[0] as int;
      });
 }
 </pre>
@@ -143,11 +117,11 @@ Future&lt;int&gt; pipeProcess(Process process,
 </div>
 <div class="method"><h4 id="startProcess">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>startProcess</strong>(<a href="hop/TaskLogger.html">TaskLogger</a> ctx, <a href="http://api.dartlang.org/dart_core/String.html">String</a> command, [<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; args = null]) <a class="anchor-link" href="#startProcess"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a> <strong>startProcess</strong>(<a href="hop/TaskContext.html">TaskContext</a> ctx, <a href="http://api.dartlang.org/dart_core/String.html">String</a> command, [<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; args = null]) <a class="anchor-link" href="#startProcess"
               title="Permalink to startProcess">#</a></h4>
 <div class="doc">
 <pre class="source">
-Future&lt;bool&gt; startProcess(TaskLogger ctx, String command,
+Future startProcess(TaskContext ctx, String command,
    [List&lt;String&gt; args = null]) {
 
  requireArgumentNotNull(ctx, 'ctx');
@@ -165,7 +139,7 @@ Future&lt;bool&gt; startProcess(TaskLogger ctx, String command,
            stdErrWriter: ctx.severe);
      })
      .then((int exitCode) {
-       return exitCode == 0;
+       if(exitCode != 0) ctx.fail('Process exit code: $exitCode');
      });
 }
 </pre>
@@ -178,18 +152,18 @@ Future&lt;bool&gt; startProcess(TaskLogger ctx, String command,
 <div class="doc">
 <pre class="source">
 Task createProcessTask(String command, {List&lt;String&gt; args: null, String description}) {
- return new Task.async((ctx) =&gt; startProcess(ctx, command, args), description: description);
+ return new Task((ctx) =&gt; startProcess(ctx, command, args), description: description);
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="branchForDir">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>&gt; <strong>branchForDir</strong>(<a href="hop/TaskContext.html">TaskContext</a> ctx, <a href="http://api.dartlang.org/dart_core/String.html">String</a> sourceBranch, <a href="http://api.dartlang.org/dart_core/String.html">String</a> sourceDir, <a href="http://api.dartlang.org/dart_core/String.html">String</a> targetBranch, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> workingDir}) <a class="anchor-link" href="#branchForDir"
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a> <strong>branchForDir</strong>(<a href="hop/TaskContext.html">TaskContext</a> ctx, <a href="http://api.dartlang.org/dart_core/String.html">String</a> sourceBranch, <a href="http://api.dartlang.org/dart_core/String.html">String</a> sourceDir, <a href="http://api.dartlang.org/dart_core/String.html">String</a> targetBranch, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> workingDir}) <a class="anchor-link" href="#branchForDir"
               title="Permalink to branchForDir">#</a></h4>
 <div class="doc">
 <pre class="source">
-Future&lt;bool&gt; branchForDir(TaskContext ctx, String sourceBranch, String sourceDir,
+Future branchForDir(TaskContext ctx, String sourceBranch, String sourceDir,
    String targetBranch, {String workingDir}) {
 
  if(workingDir == null) {
@@ -232,7 +206,6 @@ Future&lt;bool&gt; branchForDir(TaskContext ctx, String sourceBranch, String sou
        } else {
          ctx.info("Branch '$targetBranch' is now at commit $newCommitSha");
        }
-       return true;
      });
 }
 </pre>
@@ -253,7 +226,7 @@ Task getBranchForDirTask(String sourceBranch, String sourceDir,
  final description = 'Commit the tree for dir "$sourceDir" in branch'
      ' "$sourceBranch" and create/update branch "$targetBranch" with the new commit';
 
- return new Task.async((ctx) =&gt;
+ return new Task((ctx) =&gt;
      branchForDir(ctx, sourceBranch, sourceDir, targetBranch, workingDir: workingDir),
      description: description);
 }
@@ -288,7 +261,7 @@ Task createDartDocTask(dynamic delayedLibraryList, {
  requireArgumentNotNull(targetBranch, 'targetBranch');
  requireArgumentNotNull(packageDir, 'packageDir');
 
- return new Task.async((ctx) {
+ return new Task((ctx) {
    targetBranch = ctx.arguments[_targetBranchArg];
 
    return _compileDocs(ctx, targetBranch, delayedLibraryList, packageDir,
@@ -323,8 +296,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
    throw new ArgumentError('Only one of "singleOutput" and "outputMapper" can be set.');
  }
 
- return new Task.async((context) {
-   bool errors = false;
+ return new Task((TaskContext context) {
 
    return getDelayedResult(delayedRootList)
        .then((List&lt;String&gt; inputs) {
@@ -347,25 +319,13 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
          }
 
          return Future.forEach(inputs, (path) {
-           if(errors) {
-             context.warning('Compile errors. Skipping $path');
-             return new Future.value(null);
-           }
 
            String output = outputMapper(path);
 
            return _dart2js(context, path,
                output, packageRoot, minify, liveTypeAnalysis,
-               throwOnError, verbose, suppressWarnings, outputType)
-               .then((bool success) {
-                 // should not have been run if we had pending errors
-                 assert(errors == false);
-                 errors = !success;
-               });
+               throwOnError, verbose, suppressWarnings, outputType);
          });
-       })
-       .then((_) {
-         return !errors;
        });
  }, description: 'Run Dart-to-${outputType.friendlyName} compiler');
 }
@@ -382,7 +342,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
 combinations of <a class="crossref" href="dart_async/Future.html">Future</a> or <a class="crossref" href="dart_core/Function.html">Function</a> values that return a [List<String>].</p>
 <pre class="source">
 Task createAnalyzerTask(dynamic delayedFileList) {
- return new Task.async((context) {
+ return new Task((context) {
    final parseResult = context.arguments;
 
    final bool verbose = parseResult[_verboseArgName];
@@ -420,7 +380,7 @@ Task createAnalyzerTask(dynamic delayedFileList) {
 <div class="doc">
 <pre class="source">
 Task createBenchTask() {
- return new Task.async((ctx) {
+ return new Task((ctx) {
    final parseResult = ctx.arguments;
 
    final count = int.parse(parseResult[_RUN_COUNT_ARE_NAME],
@@ -437,8 +397,7 @@ Task createBenchTask() {
        .then((list) {
          final values = list.map((brr) =&gt; brr.executionDuration.inMilliseconds);
          final stats = new _Stats(values);
-         ctx.info(stats.toString());
-         return true;
+         print(stats.toString());
        });
 
  },

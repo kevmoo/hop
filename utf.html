@@ -27,7 +27,7 @@
 </div>
 <div class="content">
 <h2><strong>utf</strong> library</h2>
-<div class="doc"><p>Support for encoding and decoding Unicode characters in UTF-8, UTF-16, and 
+<div class="doc"><p>Support for encoding and decoding Unicode characters in UTF-8, UTF-16, and
 UTF-32.</p></div>
 <div>
 <h3>Properties</h3>
@@ -373,7 +373,7 @@ ArgumentError rather than replace the bad value.</p>
 String decodeUtf32be(
    List&lt;int&gt; bytes, [int offset = 0, int length, bool stripBom = true,
    int replacementCodepoint = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT]) =&gt;
- new String.fromCharCodes((new Utf32beBytesDecoder(bytes, offset, length, 
+ new String.fromCharCodes((new Utf32beBytesDecoder(bytes, offset, length,
    stripBom, replacementCodepoint)).decodeRest());
 </pre>
 </div>

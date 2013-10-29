@@ -34,8 +34,8 @@
 <div class="doc">
 <pre class="source">
 class Git {
- static const _shaRegexPattern = '[a-f0-9]{40}';
- static final _shaRegEx = new RegExp(r'^' + _shaRegexPattern + r'$');
+ static const _SHA_REGEX_PATTERN = '[a-f0-9]{40}';
+ static final _shaRegEx = new RegExp(r'^' + _SHA_REGEX_PATTERN + r'$');
 
  static bool isValidSha(String value) {
    return _shaRegEx.hasMatch(value);

@@ -233,6 +233,7 @@ therefore be slow.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/NumberEnumerable.html">E</a>&gt; </div></div>
 <pre class="source">
 int get length {
+ assert(this is! EfficientLength);
  int count = 0;
  Iterator it = iterator;
  while (it.moveNext()) {
@@ -632,7 +633,7 @@ E singleWhere(bool test(E value)) {
 <p>Returns an Iterable that skips the first 
 <span class="param">n</span> elements.</p>
 <p>If <code>this</code> has fewer than 
-<span class="param">n</span> elements, then the resulting Iterable is 
+<span class="param">n</span> elements, then the resulting Iterable is
 empty.</p>
 <p>It is an error if 
 <span class="param">n</span> is negative.</p>
@@ -760,6 +761,26 @@ List&lt;E&gt; toList({ bool growable: true }) =&gt;
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../bot/NumberEnumerable.html">E</a>&gt; </div></div>
 <pre class="source">
 Set&lt;E&gt; toSet() =&gt; new Set&lt;E&gt;.from(this);
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to NumberEnumerable&lt;T&gt;.toString">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_collection/IterableBase.html">IterableBase</a> </div><div class="doc">
+<p>Returns a string representation of (some of) the elements of <code>this</code>.</p>
+<p>Elements are represented by their own <code>toString</code> results.</p>
+<p>The representation always contains the first three elements.
+If there are less than a hundred elements in the iterable, it also
+contains the last two elements.</p>
+<p>If the resulting string isn't above 80 characters, more elements are
+included from the start of the iterable.</p>
+<p>The conversion may omit calling <code>toString</code> on some elements if they
+are known to now occur in the output, and it may stop iterating after
+a hundred elements.</p>
+<pre class="source">
+String toString() =&gt; _iterableToString(this);
 </pre>
 </div>
 </div>

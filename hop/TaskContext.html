@@ -36,7 +36,10 @@
 abstract class TaskContext extends TaskLogger implements Disposable {
  ArgResults get arguments;
 
- TaskLogger getSubLogger(String name);
+ @deprecated
+ TaskLogger getSubLogger(String name) =&gt; getSubContext(name);
+
+ TaskContext getSubContext(String name);
 
  /**
   * Terminates the current [Task] with a failure, explained by [message].
@@ -153,10 +156,21 @@ void finest(String message) {
 </pre>
 </div>
 </div>
+<div class="method"><h4 id="getSubContext">
+abstract <a href="../hop/TaskContext.html">TaskContext</a> <strong>getSubContext</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#getSubContext"
+              title="Permalink to TaskContext.getSubContext">#</a></h4>
+<div class="doc">
+</div>
+</div>
 <div class="method"><h4 id="getSubLogger">
-abstract <a href="../hop/TaskLogger.html">TaskLogger</a> <strong>getSubLogger</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#getSubLogger"
+<button class="show-code">Code</button>
+<a href="../hop/TaskLogger.html">TaskLogger</a> <strong>getSubLogger</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name) <a class="anchor-link" href="#getSubLogger"
               title="Permalink to TaskContext.getSubLogger">#</a></h4>
 <div class="doc">
+<pre class="source">
+@deprecated
+TaskLogger getSubLogger(String name) =&gt; getSubContext(name);
+</pre>
 </div>
 </div>
 <div class="method inherited"><h4 id="info">

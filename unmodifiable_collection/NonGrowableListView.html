@@ -68,10 +68,11 @@ class NonGrowableListView&lt;E&gt; extends _IterableView&lt;E&gt;
 
  Map&lt;int, E&gt; asMap() =&gt; _source.asMap();
 
-
  void operator []=(int index, E value) { _source[index] = value; }
 
  void sort([int compare(E a, E b)]) { _source.sort(compare); }
+
+ void shuffle([Random random]) { _source.shuffle(random); }
 
  void setRange(int start, int end, Iterable&lt;E&gt; iterable, [int skipCount = 0]) {
    _source.setRange(start, end, iterable, skipCount);
@@ -96,7 +97,9 @@ class NonGrowableListView&lt;E&gt; extends _IterableView&lt;E&gt;
   * Throws an [UnsupportedError];
   * operations that change the length of the list are disallowed.
   */
- void add(E value) =&gt; _throw();
+ bool add(E value) {
+   _throw();
+ }
 
  /**
   * Throws an [UnsupportedError];
@@ -180,10 +183,18 @@ new <strong>NonGrowableListView</strong>(<a href="http://api.dartlang.org/dart_c
               title="Permalink to NonGrowableListView&lt;E&gt;.NonGrowableListView">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Creates a list of the given <em>length</em>.</p>
-<p>The created list is fixed-length if <em>length</em> is provided.
-The list has length 0 and is growable if <em>length</em> is omitted.</p>
-<p>An error occurs if <em>length</em> is negative.</p>
+<p>Creates a list of the given length.</p>
+<p>The created list is fixed-length if <a class="crossref" href="../unmodifiable_collection/NonGrowableListView.html#length">length</a> is provided.</p>
+<pre><code>List fixedLengthList = new List(3);
+fixedLengthList.length;     // 3
+fixedLengthList.length = 1; // Error
+</code></pre>
+<p>The list has length 0 and is growable if <a class="crossref" href="../unmodifiable_collection/NonGrowableListView.html#length">length</a> is omitted.</p>
+<pre><code>List growableList = new List();
+growableList.length; // 0;
+growableList.length = 3;
+</code></pre>
+<p>An error occurs if <a class="crossref" href="../unmodifiable_collection/NonGrowableListView.html#length">length</a> is negative.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
 <pre class="source">
 NonGrowableListView(List&lt;E&gt; source) : _source = source;
@@ -347,13 +358,15 @@ void operator []=(int index, E value) { _source[index] = value; }
 <h3>Methods</h3>
 <div class="method"><h4 id="add">
 <button class="show-code">Code</button>
-void <strong>add</strong>(<a href="../unmodifiable_collection/NonGrowableListView.html">E</a> value) <a class="anchor-link" href="#add"
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>add</strong>(<a href="../unmodifiable_collection/NonGrowableListView.html">E</a> value) <a class="anchor-link" href="#add"
               title="Permalink to NonGrowableListView&lt;E&gt;.add">#</a></h4>
 <div class="doc">
 <p>Throws an <a class="crossref" href="../dart_core/UnsupportedError.html">UnsupportedError</a>;
 operations that change the length of the list are disallowed.</p>
 <pre class="source">
-void add(E value) =&gt; _throw();
+bool add(E value) {
+ _throw();
+}
 </pre>
 </div>
 </div>
@@ -389,6 +402,11 @@ bool any(bool test(E element)) =&gt; _source.any(test);
 <p>The map uses the indices of this list as keys and the corresponding objects
 as values. The <code>Map.keys</code> <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> iterates the indices of this list
 in numerical order.</p>
+<pre><code>List&lt;String&gt; words = ['fee', 'fi', 'fo', 'fum'];
+Map&lt;int, String&gt; map = words.asMap();
+map[0] + map[1];   // 'feefi';
+map.keys.toList(); // [0, 1, 2, 3]
+</code></pre>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
 <pre class="source">
 Map&lt;int, E&gt; asMap() =&gt; _source.asMap();
@@ -521,12 +539,11 @@ void forEach(void f(E element)) =&gt; _source.forEach(f);
 of the call to this method. The returned <a class="crossref" href="../dart_core/Iterable.html">Iterable</a> behaves like
 <code>skip(start).take(end - start)</code>. That is, it does not throw exceptions
 if <code>this</code> changes size.</p>
-<p>Example:</p>
-<pre><code>var list = [1, 2, 3, 4, 5];
-var range = list.getRange(1, 4);
-print(range.join(', '));  // =&gt; 2, 3, 4
-list.length = 3;
-print(range.join(', '));  // =&gt; 2, 3
+<pre><code>List&lt;String&gt; colors = ['red', 'green', 'blue', 'orange', 'pink'];
+Iterable&lt;String&gt; range = colors.getRange(1, 4);
+range.join(', ');  // 'green, blue, orange'
+colors.length = 3;
+range.join(', ');  // 'green, blue'
 </code></pre>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
 <pre class="source">
@@ -543,11 +560,17 @@ Iterable&lt;E&gt; getRange(int start, int end) =&gt; _source.getRange(start, end
 <p>Returns the first index of 
 <span class="param">element</span> in this list.</p>
 <p>Searches the list from index 
-<span class="param">start</span> to the length of the list.
+<span class="param">start</span> to the end of the list.
 The first time an object <code>o</code> is encountered so that <code>o == element</code>,
-the index of <code>o</code> is returned.
-Returns -1 if 
+the index of <code>o</code> is returned.</p>
+<pre><code>List&lt;String&gt; notes = ['do', 're', 'mi', 're'];
+notes.indexOf('re');    // 1
+notes.indexOf('re', 2); // 3
+</code></pre>
+<p>Returns -1 if 
 <span class="param">element</span> is not found.</p>
+<pre><code>notes.indexOf('fa');    // -1
+</code></pre>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
 <pre class="source">
 int indexOf(E element, [int start = 0]) =&gt; _source.indexOf(element, start);
@@ -600,10 +623,18 @@ String join([String separator = ""]) =&gt; _source.join(separator);
 <span class="param">start</span> to 0.</p>
 <p>The first time an object <code>o</code> is encountered so that <code>o == element</code>,
 the index of <code>o</code> is returned.</p>
+<pre><code>List&lt;String&gt; notes = ['do', 're', 'mi', 're'];
+notes.lastIndexOf('re', 2); // 1
+</code></pre>
 <p>If 
-<span class="param">start</span> is not provided, it defaults to <code>this.length - 1</code>.</p>
+<span class="param">start</span> is not provided, this method searches from the end of the
+list./Returns</p>
+<pre><code>notes.lastIndexOf('re');  // 3
+</code></pre>
 <p>Returns -1 if 
 <span class="param">element</span> is not found.</p>
+<pre><code>notes.lastIndexOf('fa');  // -1
+</code></pre>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
 <pre class="source">
 int lastIndexOf(E element, [int start])
@@ -736,6 +767,10 @@ void <strong>setAll</strong>(<a href="http://api.dartlang.org/dart_core/int.html
 <span class="param">iterable</span>, starting
 at position 
 <span class="param">index</span> in this list.</p>
+<pre><code>List&lt;String&gt; list = ['a', 'b', 'c'];
+list.setAll(1, ['bee', 'sea']);
+list.join(', '); // 'a, bee, sea'
+</code></pre>
 <p>This operation does not increase the length of <code>this</code>.</p>
 <p>An error occurs if the 
 <span class="param">index</span> is less than 0 or greater than length.
@@ -762,6 +797,13 @@ void <strong>setRange</strong>(<a href="http://api.dartlang.org/dart_core/int.ht
 into the range 
 <span class="param">start</span> inclusive to 
 <span class="param">end</span> exclusive of <code>this</code>.</p>
+<pre><code>List&lt;int&gt; list1 = [1, 2, 3, 4];
+List&lt;int&gt; list2 = [5, 6, 7, 8, 9];
+// Copies the 4th and 5th items in list2 as the 2nd and 3rd items
+// of list1.
+list1.setRange(1, 3, list2, 3);
+list1.join(', '); // '1, 8, 9, 4'
+</code></pre>
 <p>If 
 <span class="param">start</span> equals 
 <span class="param">end</span> and 
@@ -775,17 +817,24 @@ An error occurs if the
 <span class="param">iterable</span> does not have enough objects after
 skipping 
 <span class="param">skipCount</span> objects.</p>
-<p>Example:</p>
-<pre><code>var list = [1, 2, 3, 4];
-var list2 = [5, 6, 7, 8, 9];
-list.setRange(1, 3, list2, 3);
-print(list);  // =&gt; [1, 8, 9, 4]
-</code></pre>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
 <pre class="source">
 void setRange(int start, int end, Iterable&lt;E&gt; iterable, [int skipCount = 0]) {
  _source.setRange(start, end, iterable, skipCount);
 }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="shuffle">
+<button class="show-code">Code</button>
+void <strong>shuffle</strong>([<a href="http://api.dartlang.org/dart_math/Random.html">Random</a> random]) <a class="anchor-link" href="#shuffle"
+              title="Permalink to NonGrowableListView&lt;E&gt;.shuffle">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Shuffles the elements of this list randomly.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
+<pre class="source">
+void shuffle([Random random]) { _source.shuffle(random); }
 </pre>
 </div>
 </div>
@@ -829,9 +878,18 @@ void <strong>sort</strong>([<a href="http://api.dartlang.org/dart_core/int.html"
 <span class="param">compare</span> function.</p>
 <p>The 
 <span class="param">compare</span> function must act as a <a class="crossref" href="../dart_core/Comparator.html">Comparator</a>.</p>
+<pre><code>List&lt;String&gt; numbers = ['one', 'two', 'three', 'four'];
+// Sort from shortest to longest.
+numbers.sort((x, y) =&gt; x.length.compareTo(y.length));
+numbers.join(', '); // 'one, two, four, three'
+</code></pre>
 <p>The default List implementations use <a class="crossref" href="../dart_core/Comparable.html#compare">Comparable.compare</a> if
 
 <span class="param">compare</span> is omitted.</p>
+<pre><code>List&lt;int&gt; nums = [13, 2, -11];
+nums.sort();
+     nums.join(', '); // '-11, 2, 13'
+</code></pre>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
 <pre class="source">
 void sort([int compare(E a, E b)]) { _source.sort(compare); }
@@ -844,12 +902,17 @@ void sort([int compare(E a, E b)]) { _source.sort(compare); }
               title="Permalink to NonGrowableListView&lt;E&gt;.sublist">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Returns a new list containing the objects
-from 
+<p>Returns a new list containing the objects from 
 <span class="param">start</span> inclusive to 
-<span class="param">end</span> exclusive.</p>
+<span class="param">end</span>
+exclusive.</p>
+<pre><code>List&lt;String&gt; colors = ['red', 'green', 'blue', 'orange', 'pink'];
+colors.sublist(1, 3); // ['green', 'blue']
+</code></pre>
 <p>If 
 <span class="param">end</span> is omitted, the <a class="crossref" href="../unmodifiable_collection/NonGrowableListView.html#length">length</a> of <code>this</code> is used.</p>
+<pre><code>colors.sublist(1);  // ['green', 'blue', 'orange', 'pink']
+</code></pre>
 <p>An error occurs if 
 <span class="param">start</span> is outside the range <code>0</code> .. <code>length</code> or if
 

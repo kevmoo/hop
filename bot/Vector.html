@@ -2,19 +2,19 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>Vector class / bot Library / Hop Documentation</title>
+        <title>Vector&lt;T&gt; class / bot Library / Hop Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="../favicon.ico">
         
         </head>
-        <body data-library="bot" data-type="Vector">
+        <body data-library="bot" data-type="Vector&amp;lt;T&amp;gt;">
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
           <a href="../index.html">Hop Documentation</a>
-         &rsaquo; <a href="../bot.html">bot</a> &rsaquo; <a href="../bot/Vector.html">Vector</a>        <div id="search-box">
+         &rsaquo; <a href="../bot.html">bot</a> &rsaquo; <a href="../bot/Vector.html">Vector&lt;T&gt;</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
         </div>
@@ -26,7 +26,7 @@
         
 </div>
 <div class="content">
-        <h2><strong>Vector</strong>
+        <h2><strong>Vector&lt;T extends num&gt;</strong>
           class
         </h2>
         
@@ -34,37 +34,45 @@
 <div class="doc">
 <p>Class reperesenting a 2d vector.</p>
 <pre class="source">
-class Vector extends Coordinate {
- const Vector([num x = 0, num y = 0]) : super(x,y);
+class Vector&lt;T extends num&gt; extends Coordinate&lt;T&gt; {
+ const Vector([T x = 0, T y = 0]) : super(x,y);
 
  /**
   * Computes the length of this [Vector].
+  *
+  * Use [magnitude] instead.
   **/
- num get length =&gt; math.sqrt(x * x + y * y);
+ @deprecated
+ double get length =&gt; this.magnitude;
 
- Vector get normal =&gt; this.scale(1 / this.length);
+ Vector get normal =&gt; this.scale(1 / this.magnitude);
 
  /**
   * Returns the angle between the positive x-axis and the [Vector].
   * Angle zero points in the +X direction, 90 degrees points in the +Y
   * direction (down) and from there we grow clockwise.
   **/
- num get angle =&gt; math.atan2(y, x);
+ double get angle =&gt; math.atan2(y, x);
 
  /**
   * Adds a [Coordinate] and returns the result as new [Vector].
   **/
- Vector operator +(Coordinate other) =&gt; new Vector(x + other.x, y + other.y);
+ @override
+ Vector&lt;T&gt; operator +(math.Point&lt;T&gt; other) =&gt;
+     new Vector&lt;T&gt;(x + other.x, y + other.y);
 
  /**
   * Multiplies each dimensions by the provided magnitude and returns a new [Vector].
   **/
- Vector operator *(num magnitude) =&gt; this.scale(magnitude);
+ @override
+ Vector&lt;T&gt; operator *(num magnitude) =&gt;
+     this.scale(magnitude);
 
  /**
   * Multiplies each dimensions by the provided magnitude and returns a new [Vector].
   **/
- Vector scale(num magnitude) =&gt; new Vector(x * magnitude, y * magnitude);
+ Vector&lt;T&gt; scale(num magnitude) =&gt;
+     new Vector&lt;T&gt;(x * magnitude, y * magnitude);
 
  /**
   * Computes the dot product with the given [Vector].
@@ -99,13 +107,13 @@ class Vector extends Coordinate {
 </div>
 <h3>Extends</h3>
 <p>
-<span class="type-box"><span class="icon-class"></span><a href="../bot/Coordinate.html">Coordinate</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>Vector</strong></span></p>
+<span class="type-box"><span class="icon-class"></span><a href="../dart_math/Point.html">Point&lt;T&gt;</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><a href="../bot/Coordinate.html">Coordinate&lt;T&gt;</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>Vector&lt;T&gt;</strong></span></p>
 <div>
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-const <strong>Vector</strong>([<a href="http://api.dartlang.org/dart_core/num.html">num</a> x = 0, <a href="http://api.dartlang.org/dart_core/num.html">num</a> y = 0]) <a class="anchor-link" href="#"
-              title="Permalink to Vector.Vector">#</a></h4>
+const <strong>Vector</strong>([<a href="../bot/Vector.html">T</a> x = 0, <a href="../bot/Vector.html">T</a> y = 0]) <a class="anchor-link" href="#"
+              title="Permalink to Vector&lt;T&gt;.Vector">#</a></h4>
 <div class="doc">
 <div class="inherited">
 <p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
@@ -114,7 +122,7 @@ through their identity. An <a class="crossref" href="../dart_core/Object.html">O
 only.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
-const Vector([num x = 0, num y = 0]) : super(x,y);
+const Vector([T x = 0, T y = 0]) : super(x,y);
 </pre>
 </div>
 </div>
@@ -123,16 +131,16 @@ const Vector([num x = 0, num y = 0]) : super(x,y);
 <h3>Properties</h3>
 <div class="field"><h4 id="angle">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/num.html">num</a>         <strong>angle</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/double.html">double</a>         <strong>angle</strong> <a class="anchor-link"
             href="#angle"
-            title="Permalink to Vector.angle">#</a>
+            title="Permalink to Vector&lt;T&gt;.angle">#</a>
         </h4>
         <div class="doc">
 <p>Returns the angle between the positive x-axis and the <a class="crossref" href="../bot/Vector.html">Vector</a>.
 Angle zero points in the +X direction, 90 degrees points in the +Y
 direction (down) and from there we grow clockwise.</p>
 <pre class="source">
-num get angle =&gt; math.atan2(y, x);
+double get angle =&gt; math.atan2(y, x);
 </pre>
 </div>
 </div>
@@ -140,9 +148,9 @@ num get angle =&gt; math.atan2(y, x);
 <button class="show-code">Code</button>
 final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>hashCode</strong> <a class="anchor-link"
             href="#hashCode"
-            title="Permalink to Vector.hashCode">#</a>
+            title="Permalink to Vector&lt;T&gt;.hashCode">#</a>
         </h4>
-        <div class="inherited-from">inherited from <a href="../bot/Coordinate.html">Coordinate</a> </div><div class="doc">
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_math/Point.html">Point</a> </div><div class="doc">
 <div class="inherited">
 <p>Get a hash code for this object.</p>
 <p>All objects have hash codes. Hash codes are guaranteed to be the
@@ -150,11 +158,11 @@ same for objects that are equal when compared using the equality
 operator <code>==</code>. Other than that there are no guarantees about
 the hash codes. They will not be consistent between runs and
 there are no distribution guarantees.</p>
-<p>If a subclass overrides <a class="crossref" href="../bot/Coordinate.html#hashCode">hashCode</a> it should override the
+<p>If a subclass overrides <a class="crossref" href="../dart_math/Point.html#hashCode">hashCode</a> it should override the
 equality operator as well to maintain consistency.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
-int get hashCode =&gt; Util.getHashCode([x, y]);
+int get hashCode =&gt; _JenkinsSmiHash.hash2(x.hashCode, y.hashCode);
 </pre>
 </div>
 </div>
@@ -162,7 +170,7 @@ int get hashCode =&gt; Util.getHashCode([x, y]);
 <button class="show-code">Code</button>
 final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>isValid</strong> <a class="anchor-link"
             href="#isValid"
-            title="Permalink to Vector.isValid">#</a>
+            title="Permalink to Vector&lt;T&gt;.isValid">#</a>
         </h4>
         <div class="inherited-from">inherited from <a href="../bot/Coordinate.html">Coordinate</a> </div><div class="doc">
 <pre class="source">
@@ -172,14 +180,30 @@ bool get isValid =&gt; isValidNumber(x) &amp;&amp; isValidNumber(y);
 </div>
 <div class="field"><h4 id="length">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/num.html">num</a>         <strong>length</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/double.html">double</a>         <strong>length</strong> <a class="anchor-link"
             href="#length"
-            title="Permalink to Vector.length">#</a>
+            title="Permalink to Vector&lt;T&gt;.length">#</a>
         </h4>
         <div class="doc">
 <p>Computes the length of this <a class="crossref" href="../bot/Vector.html">Vector</a>.</p>
+<p>Use <a class="crossref" href="../dart_math/Point.html#magnitude">magnitude</a> instead.</p>
 <pre class="source">
-num get length =&gt; math.sqrt(x * x + y * y);
+@deprecated
+double get length =&gt; this.magnitude;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="magnitude">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/double.html">double</a>         <strong>magnitude</strong> <a class="anchor-link"
+            href="#magnitude"
+            title="Permalink to Vector&lt;T&gt;.magnitude">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_math/Point.html">Point</a> </div><div class="doc">
+<p>Get the straight line (Euclidean) distance between the origin (0, 0) and
+this point.</p>
+<pre class="source">
+double get magnitude =&gt; sqrt(x * x + y * y);
 </pre>
 </div>
 </div>
@@ -187,35 +211,35 @@ num get length =&gt; math.sqrt(x * x + y * y);
 <button class="show-code">Code</button>
 final <a href="../bot/Vector.html">Vector</a>         <strong>normal</strong> <a class="anchor-link"
             href="#normal"
-            title="Permalink to Vector.normal">#</a>
+            title="Permalink to Vector&lt;T&gt;.normal">#</a>
         </h4>
         <div class="doc">
 <pre class="source">
-Vector get normal =&gt; this.scale(1 / this.length);
+Vector get normal =&gt; this.scale(1 / this.magnitude);
 </pre>
 </div>
 </div>
 <div class="field inherited"><h4 id="x">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/num.html">num</a>         <strong>x</strong> <a class="anchor-link"
+final <a href="../bot/Vector.html">T</a>         <strong>x</strong> <a class="anchor-link"
             href="#x"
-            title="Permalink to Vector.x">#</a>
+            title="Permalink to Vector&lt;T&gt;.x">#</a>
         </h4>
-        <div class="inherited-from">inherited from <a href="../bot/Coordinate.html">Coordinate</a> </div><div class="doc">
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_math/Point.html">Point</a> </div><div class="doc">
 <pre class="source">
-final num x
+final T x
 </pre>
 </div>
 </div>
 <div class="field inherited"><h4 id="y">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/num.html">num</a>         <strong>y</strong> <a class="anchor-link"
+final <a href="../bot/Vector.html">T</a>         <strong>y</strong> <a class="anchor-link"
             href="#y"
-            title="Permalink to Vector.y">#</a>
+            title="Permalink to Vector&lt;T&gt;.y">#</a>
         </h4>
-        <div class="inherited-from">inherited from <a href="../bot/Coordinate.html">Coordinate</a> </div><div class="doc">
+        <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_math/Point.html">Point</a> </div><div class="doc">
 <pre class="source">
-final num x, y
+final T y
 </pre>
 </div>
 </div>
@@ -224,42 +248,47 @@ final num x, y
 <h3>Operators</h3>
 <div class="method"><h4 id="+">
 <button class="show-code">Code</button>
-<a href="../bot/Vector.html">Vector</a> <strong>operator +</strong>(<a href="../bot/Coordinate.html">Coordinate</a> other) <a class="anchor-link" href="#+"
-              title="Permalink to Vector.operator +">#</a></h4>
+<a href="../bot/Vector.html">Vector</a>&lt;<a href="../bot/Vector.html">T</a>&gt; <strong>operator +</strong>(<a href="http://api.dartlang.org/dart_math/Point.html">Point</a>&lt;<a href="../bot/Vector.html">T</a>&gt; other) <a class="anchor-link" href="#+"
+              title="Permalink to Vector&lt;T&gt;.operator +">#</a></h4>
 <div class="doc">
 <p>Adds a <a class="crossref" href="../bot/Coordinate.html">Coordinate</a> and returns the result as new <a class="crossref" href="../bot/Vector.html">Vector</a>.</p>
 <pre class="source">
-Vector operator +(Coordinate other) =&gt; new Vector(x + other.x, y + other.y);
+@override
+Vector&lt;T&gt; operator +(math.Point&lt;T&gt; other) =&gt;
+   new Vector&lt;T&gt;(x + other.x, y + other.y);
 </pre>
 </div>
 </div>
 <div class="method inherited"><h4 id="-">
 <button class="show-code">Code</button>
-<a href="../bot/Vector.html">Vector</a> <strong>operator -</strong>(<a href="../bot/Coordinate.html">Coordinate</a> other) <a class="anchor-link" href="#-"
-              title="Permalink to Vector.operator -">#</a></h4>
+<a href="../bot/Vector.html">Vector</a>&lt;<a href="../bot/Vector.html">T</a>&gt; <strong>operator -</strong>(<a href="http://api.dartlang.org/dart_math/Point.html">Point</a>&lt;<a href="../bot/Vector.html">T</a>&gt; other) <a class="anchor-link" href="#-"
+              title="Permalink to Vector&lt;T&gt;.operator -">#</a></h4>
 <div class="inherited-from">inherited from <a href="../bot/Coordinate.html">Coordinate</a> </div><div class="doc">
 <p>Subtract a <a class="crossref" href="../bot/Coordinate.html">Coordinate</a> and returns the result as new <a class="crossref" href="../bot/Vector.html">Vector</a>.</p>
 <pre class="source">
-Vector operator -(Coordinate other) =&gt; difference(this, other);
+@override
+Vector&lt;T&gt; operator -(math.Point&lt;T&gt; other) =&gt; difference(this, other);
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="*">
 <button class="show-code">Code</button>
-<a href="../bot/Vector.html">Vector</a> <strong>operator *</strong>(<a href="http://api.dartlang.org/dart_core/num.html">num</a> magnitude) <a class="anchor-link" href="#*"
-              title="Permalink to Vector.operator *">#</a></h4>
+<a href="../bot/Vector.html">Vector</a>&lt;<a href="../bot/Vector.html">T</a>&gt; <strong>operator *</strong>(<a href="http://api.dartlang.org/dart_core/num.html">num</a> magnitude) <a class="anchor-link" href="#*"
+              title="Permalink to Vector&lt;T&gt;.operator *">#</a></h4>
 <div class="doc">
 <p>Multiplies each dimensions by the provided magnitude and returns a new <a class="crossref" href="../bot/Vector.html">Vector</a>.</p>
 <pre class="source">
-Vector operator *(num magnitude) =&gt; this.scale(magnitude);
+@override
+Vector&lt;T&gt; operator *(num magnitude) =&gt;
+   this.scale(magnitude);
 </pre>
 </div>
 </div>
 <div class="method inherited"><h4 id="==">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>operator ==</strong>(<a href="../bot/Coordinate.html">Coordinate</a> other) <a class="anchor-link" href="#=="
-              title="Permalink to Vector.operator ==">#</a></h4>
-<div class="inherited-from">inherited from <a href="../bot/Coordinate.html">Coordinate</a> </div><div class="doc">
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>operator ==</strong>(other) <a class="anchor-link" href="#=="
+              title="Permalink to Vector&lt;T&gt;.operator ==">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_math/Point.html">Point</a> </div><div class="doc">
 <div class="inherited">
 <p>The equality operator.</p>
 <p>The default behavior for all <a class="crossref" href="../dart_core/Object.html">Object</a>s is to return true if and
@@ -279,12 +308,12 @@ That is, it must be:</p><ul><li>
 should not change over time, or at least only change if one of the objects
 was modified.</p>
 <p>If a subclass overrides the equality operator it should override
-the <a class="crossref" href="../bot/Coordinate.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
+the <a class="crossref" href="../dart_math/Point.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
-@override
-bool operator ==(Coordinate other) {
- return other != null &amp;&amp; x == other.x &amp;&amp; y == other.y;
+bool operator ==(other) {
+ if (other is !Point) return false;
+ return x == other.x &amp;&amp; y == other.y;
 }
 </pre>
 </div>
@@ -295,7 +324,7 @@ bool operator ==(Coordinate other) {
 <div class="method"><h4 id="cross">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/num.html">num</a> <strong>cross</strong>(<a href="../bot/Vector.html">Vector</a> other) <a class="anchor-link" href="#cross"
-              title="Permalink to Vector.cross">#</a></h4>
+              title="Permalink to Vector&lt;T&gt;.cross">#</a></h4>
 <div class="doc">
 <p>Computes the cross product with the given <a class="crossref" href="../bot/Vector.html">Vector</a>.</p>
 <pre class="source">
@@ -303,10 +332,26 @@ num cross(Vector other) =&gt; x * other.y - y * other.x;
 </pre>
 </div>
 </div>
+<div class="method inherited"><h4 id="distanceTo">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/double.html">double</a> <strong>distanceTo</strong>(<a href="http://api.dartlang.org/dart_math/Point.html">Point</a>&lt;<a href="../bot/Vector.html">T</a>&gt; other) <a class="anchor-link" href="#distanceTo"
+              title="Permalink to Vector&lt;T&gt;.distanceTo">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_math/Point.html">Point</a> </div><div class="doc">
+<p>Returns the distance between <code>this</code> and 
+<span class="param">other</span>.</p>
+<pre class="source">
+double distanceTo(Point&lt;T&gt; other) {
+ var dx = x - other.x;
+ var dy = y - other.y;
+ return sqrt(dx * dx + dy * dy);
+}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="dot">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/num.html">num</a> <strong>dot</strong>(<a href="../bot/Vector.html">Vector</a> other) <a class="anchor-link" href="#dot"
-              title="Permalink to Vector.dot">#</a></h4>
+              title="Permalink to Vector&lt;T&gt;.dot">#</a></h4>
 <div class="doc">
 <p>Computes the dot product with the given <a class="crossref" href="../bot/Vector.html">Vector</a>.</p>
 <pre class="source">
@@ -317,7 +362,7 @@ num dot(Vector other) =&gt; x * other.x + y * other.y;
 <div class="method"><h4 id="getAngle">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/num.html">num</a> <strong>getAngle</strong>(<a href="../bot/Vector.html">Vector</a> other) <a class="anchor-link" href="#getAngle"
-              title="Permalink to Vector.getAngle">#</a></h4>
+              title="Permalink to Vector&lt;T&gt;.getAngle">#</a></h4>
 <div class="doc">
 <p>Computes the angle between this and another <a class="crossref" href="../bot/Vector.html">Vector</a>.
 Angle zero points in the +X direction, 90 degrees points in the +Y
@@ -329,19 +374,21 @@ num getAngle (Vector other) =&gt; other.angle - angle;
 </div>
 <div class="method inherited"><h4 id="getDistance">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/num.html">num</a> <strong>getDistance</strong>(<a href="../bot/Coordinate.html">Coordinate</a> other) <a class="anchor-link" href="#getDistance"
-              title="Permalink to Vector.getDistance">#</a></h4>
+<a href="http://api.dartlang.org/dart_core/double.html">double</a> <strong>getDistance</strong>(<a href="http://api.dartlang.org/dart_math/Point.html">Point</a> other) <a class="anchor-link" href="#getDistance"
+              title="Permalink to Vector&lt;T&gt;.getDistance">#</a></h4>
 <div class="inherited-from">inherited from <a href="../bot/Coordinate.html">Coordinate</a> </div><div class="doc">
 <p>Computes the distance to another <a class="crossref" href="../bot/Coordinate.html">Coordinate</a>.</p>
+<p>Use <a class="crossref" href="../dart_math/Point.html#distanceTo">distanceTo</a> instead.</p>
 <pre class="source">
-num getDistance (Coordinate other) =&gt; (this - other).length;
+@deprecated
+double getDistance (math.Point other) =&gt; distanceTo(other);
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="rotate">
 <button class="show-code">Code</button>
 <a href="../bot/Vector.html">Vector</a> <strong>rotate</strong>(<a href="http://api.dartlang.org/dart_core/num.html">num</a> angle) <a class="anchor-link" href="#rotate"
-              title="Permalink to Vector.rotate">#</a></h4>
+              title="Permalink to Vector&lt;T&gt;.rotate">#</a></h4>
 <div class="doc">
 <pre class="source">
 Vector rotate(num angle) {
@@ -357,7 +404,7 @@ Vector rotate(num angle) {
 <div class="method"><h4 id="rotateAroundPoint">
 <button class="show-code">Code</button>
 <a href="../bot/Vector.html">Vector</a> <strong>rotateAroundPoint</strong>(<a href="../bot/Coordinate.html">Coordinate</a> axisPoint, <a href="http://api.dartlang.org/dart_core/num.html">num</a> angle) <a class="anchor-link" href="#rotateAroundPoint"
-              title="Permalink to Vector.rotateAroundPoint">#</a></h4>
+              title="Permalink to Vector&lt;T&gt;.rotateAroundPoint">#</a></h4>
 <div class="doc">
 <pre class="source">
 Vector rotateAroundPoint(Coordinate axisPoint, num angle) {
@@ -368,19 +415,38 @@ Vector rotateAroundPoint(Coordinate axisPoint, num angle) {
 </div>
 <div class="method"><h4 id="scale">
 <button class="show-code">Code</button>
-<a href="../bot/Vector.html">Vector</a> <strong>scale</strong>(<a href="http://api.dartlang.org/dart_core/num.html">num</a> magnitude) <a class="anchor-link" href="#scale"
-              title="Permalink to Vector.scale">#</a></h4>
+<a href="../bot/Vector.html">Vector</a>&lt;<a href="../bot/Vector.html">T</a>&gt; <strong>scale</strong>(<a href="http://api.dartlang.org/dart_core/num.html">num</a> magnitude) <a class="anchor-link" href="#scale"
+              title="Permalink to Vector&lt;T&gt;.scale">#</a></h4>
 <div class="doc">
 <p>Multiplies each dimensions by the provided magnitude and returns a new <a class="crossref" href="../bot/Vector.html">Vector</a>.</p>
 <pre class="source">
-Vector scale(num magnitude) =&gt; new Vector(x * magnitude, y * magnitude);
+Vector&lt;T&gt; scale(num magnitude) =&gt;
+   new Vector&lt;T&gt;(x * magnitude, y * magnitude);
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="squaredDistanceTo">
+<button class="show-code">Code</button>
+<a href="../bot/Vector.html">T</a> <strong>squaredDistanceTo</strong>(<a href="http://api.dartlang.org/dart_math/Point.html">Point</a>&lt;<a href="../bot/Vector.html">T</a>&gt; other) <a class="anchor-link" href="#squaredDistanceTo"
+              title="Permalink to Vector&lt;T&gt;.squaredDistanceTo">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_math/Point.html">Point</a> </div><div class="doc">
+<p>Returns the squared distance between <code>this</code> and 
+<span class="param">other</span>.</p>
+<p>Squared distances can be used for comparisons when the actual value is not
+required.</p>
+<pre class="source">
+T squaredDistanceTo(Point&lt;T&gt; other) {
+ var dx = x - other.x;
+ var dy = y - other.y;
+ return dx * dx + dy * dy;
+}
 </pre>
 </div>
 </div>
 <div class="method inherited"><h4 id="toJson">
 <button class="show-code">Code</button>
 dynamic <strong>toJson</strong>() <a class="anchor-link" href="#toJson"
-              title="Permalink to Vector.toJson">#</a></h4>
+              title="Permalink to Vector&lt;T&gt;.toJson">#</a></h4>
 <div class="inherited-from">inherited from <a href="../bot/Coordinate.html">Coordinate</a> </div><div class="doc">
 <pre class="source">
 @deprecated
@@ -391,7 +457,7 @@ dynamic toJson() =&gt; { 'x' : x, 'y' : y };
 <div class="method inherited"><h4 id="toSize">
 <button class="show-code">Code</button>
 <a href="../bot/Size.html">Size</a> <strong>toSize</strong>() <a class="anchor-link" href="#toSize"
-              title="Permalink to Vector.toSize">#</a></h4>
+              title="Permalink to Vector&lt;T&gt;.toSize">#</a></h4>
 <div class="inherited-from">inherited from <a href="../bot/Coordinate.html">Coordinate</a> </div><div class="doc">
 <pre class="source">
 Size toSize() =&gt; new Size(x, y);
@@ -401,21 +467,20 @@ Size toSize() =&gt; new Size(x, y);
 <div class="method inherited"><h4 id="toString">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
-              title="Permalink to Vector.toString">#</a></h4>
-<div class="inherited-from">inherited from <a href="../bot/Coordinate.html">Coordinate</a> </div><div class="doc">
+              title="Permalink to Vector&lt;T&gt;.toString">#</a></h4>
+<div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_math/Point.html">Point</a> </div><div class="doc">
 <div class="inherited">
 <p>Returns a string representation of this object.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
 <pre class="source">
-@override
-String toString() =&gt; '{x:${x}, y:${y}}';
+String toString() =&gt; 'Point($x, $y)';
 </pre>
 </div>
 </div>
 <div class="method inherited"><h4 id="toVector">
 <button class="show-code">Code</button>
 <a href="../bot/Vector.html">Vector</a> <strong>toVector</strong>() <a class="anchor-link" href="#toVector"
-              title="Permalink to Vector.toVector">#</a></h4>
+              title="Permalink to Vector&lt;T&gt;.toVector">#</a></h4>
 <div class="inherited-from">inherited from <a href="../bot/Coordinate.html">Coordinate</a> </div><div class="doc">
 <pre class="source">
 Vector toVector() =&gt; new Vector(x, y);
