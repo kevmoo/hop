@@ -1,5 +1,15 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.26.0 2013-10-29 (SDK 0.8.7 r29341)
+
+* Updates for latest SDK.
+* **BEHAVIOR CHANGE** You no longer need to return `true`/`false` to flag success/failure.
+    * Return normaling is success.
+    * Otherwise, throw an error or call `TaskContext.fail`.
+* **DEPRECATED** `TaskDefinition` You probably weren't using it.
+* **NEW!** Print within tasks is now logged as `INFO`. You can change this behavior by setting `printAtLogLevel` to `null` in `runHop`
+* **DEPRECATED** `Task.async` and `Task.sync` constructors. Just use `new Task` for both cases.
+
 ## 0.25.1 2013-09-25 (SDK 0.7.5+3 r27776)
 
 * Tiny updates to `lib/src/hop_tasks/copy_js.dart`
