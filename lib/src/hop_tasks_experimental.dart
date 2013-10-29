@@ -59,7 +59,7 @@ Future _postBuild(TaskLogger logger, String tempDocDir, DocsConfig cfg) {
 
 Future<String> _fixApiDoc(String jsonInput) {
 
-  List navList = JSON.parse(jsonInput);
+  List navList = JSON.decode(jsonInput);
 
   var navMap = new Map<String, Map>();
 
@@ -74,7 +74,7 @@ Future<String> _fixApiDoc(String jsonInput) {
   navList = sorted.map((String name) => navMap[name])
       .toList();
 
-  jsonInput = JSON.stringify(navList);
+  jsonInput = JSON.encode(navList);
 
   return new Future.value(jsonInput);
 }
