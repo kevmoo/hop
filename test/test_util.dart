@@ -21,7 +21,7 @@ Future<RunResult> runTaskInTestRunner(Task task, {List<String> extraArgs}) {
 
 Future<RunResult> runRegistry(TaskRegistry taskRegistry, List<String> args) {
   var config = new HopConfig(taskRegistry, args, loggedPrint);
-  return Runner.run(config);
+  return Runner.run(config, printAtLogLevel: Level.INFO);
 }
 
 void loggedPrint(Object value) {

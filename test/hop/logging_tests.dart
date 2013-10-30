@@ -30,7 +30,7 @@ void main() {
 
   test('foo', () {
 
-    var task = new Task.async((ctx) {
+    var task = new Task((ctx) {
       ctx.info('info');
       print('print');
     });

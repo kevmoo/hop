@@ -8,6 +8,7 @@ import 'package:unittest/unittest.dart';
 import '../test_util.dart';
 
 import 'simple_add_task_tests.dart' as add_task;
+import 'logging_tests.dart' as logging;
 
 part 'arg_tests.dart';
 part 'async_tests.dart';
@@ -24,6 +25,8 @@ void main() {
     group('task list', TaskListTests.run);
     group('integration', IntegrationTests.run);
     group('chain tasks', ChainTasksTests.register);
+    group('logging', logging.main);
+
     registerArgTests();
 
     group('TaskArgument', () {
