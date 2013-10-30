@@ -21,8 +21,7 @@ class AsyncTests {
       });
   }
 
-  static Future<RunResult> _testSimpleAsyncTask(Func1<TaskContext,
-                                     Future> taskFuture) {
-    return runTaskInTestRunner(new Task.async(taskFuture));
+  static Future<RunResult> _testSimpleAsyncTask(Future taskFuture(TaskContext ctx)) {
+    return runTaskInTestRunner(new Task(taskFuture));
   }
 }

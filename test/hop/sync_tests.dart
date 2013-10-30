@@ -79,7 +79,7 @@ class SyncTests {
         });
   }
 
-  static Future _testSimpleSyncTask(Func1<TaskContext, bool> taskFunc) {
-    return runTaskInTestRunner(new Task.sync(taskFunc));
+  static Future<RunResult> _testSimpleSyncTask(dynamic taskFunc(TaskContext ctx)) {
+    return runTaskInTestRunner(new Task(taskFunc));
   }
 }
