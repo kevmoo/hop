@@ -64,7 +64,7 @@ class Runner {
           return RunResult.SUCCESS;
         })
         .catchError((Object error, StackTrace stack) {
-          if(error == Task._nullFutureResultEx) {
+          if(error == Task._NULL_FUTURE_RESULT_EX) {
             context.severe('The task returned null instead of a future');
             return RunResult.ERROR;
           } else if(error is _TaskFailError) {
@@ -132,8 +132,8 @@ class Runner {
   }
 
   static RootTaskContext _getContext(HopConfig config) {
-    final bool preFixEnabled = config.args[_prefixFlag];
-    final String logLevelOption = config.args[_logLevelOption];
+    final bool preFixEnabled = config.args[_PREFIX_FLAG];
+    final String logLevelOption = config.args[_LOG_LEVEL_OPTION];
 
     final Level logLevel = _getLogLevels()
         .singleWhere((Level l) => l.name.toLowerCase() == logLevelOption);
@@ -179,7 +179,7 @@ class Runner {
       io.exit(RunResult.BAD_USAGE.exitCode);
     }
 
-    final bool useColor = args[_colorFlag];
+    final bool useColor = args[_COLOR_FLAG];
     final Printer printer = _colorPrinter(Zone.current.print, useColor);
 
     final config = new HopConfig._internal(registry, parser, args, printer);

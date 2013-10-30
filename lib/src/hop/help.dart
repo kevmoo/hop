@@ -1,6 +1,6 @@
 part of hop;
 
-const String _hopCmdName = 'hop';
+const String _HOP_CMD_NAME = 'hop';
 
 class _HelpArgs {
   final TaskRegistry registry;
@@ -71,7 +71,7 @@ void _printHelp(Printer printer, TaskRegistry registry, ArgParser parser) {
 
   final helpName = registry._helpTaskName;
   if(helpName != null) {
-    printer("See '$_hopCmdName $helpName <task>' for more information on a specific command.");
+    printer("See '$_HOP_CMD_NAME $helpName <task>' for more information on a specific command.");
   }
 }
 
@@ -80,7 +80,7 @@ String _getUsage({bool showOptions: true, String taskName: '<task>', String exte
 
   final taskOptions = showOptions ? '[<$optionsString-options>] ' : '';
 
-  return 'usage: $_hopCmdName [<hop-options>] $taskName $taskOptions$extendedArgsUsage'.trim();
+  return 'usage: $_HOP_CMD_NAME [<hop-options>] $taskName $taskOptions$extendedArgsUsage'.trim();
 }
 
 void _printHopArgsHelp(Printer printer, ArgParser hopArgParser) {

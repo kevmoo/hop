@@ -2,7 +2,7 @@ part of hop;
 
 class TaskRegistry {
   static final RegExp _validNameRegExp = new RegExp(r'^[a-z]([a-z0-9_\-]*[a-z0-9])?$');
-  static const _reservedTasks = const[COMPLETION_COMMAND_NAME];
+  static const _RESERVED_TASKS = const[COMPLETION_COMMAND_NAME];
   final Map<String, Task> _tasks = new Map<String, Task>();
 
   String _helpTaskName;
@@ -82,7 +82,7 @@ class TaskRegistry {
   static void _validateTaskName(String name) {
     requireArgumentNotNullOrEmpty(name, 'name');
     requireArgumentContainsPattern(_validNameRegExp, name, 'name');
-    requireArgument(!_reservedTasks.contains(name), 'task',
+    requireArgument(!_RESERVED_TASKS.contains(name), 'task',
         'The provided task has a reserved name');
   }
 }

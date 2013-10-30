@@ -83,9 +83,9 @@ void _paranoidHopCheck() {
       'Running script should be at "$expectedPath" but was at "$runningScript"');
 }
 
-const String _colorFlag = 'color';
-const String _prefixFlag = 'prefix';
-const String _logLevelOption = 'log-level';
+const String _COLOR_FLAG = 'color';
+const String _PREFIX_FLAG = 'prefix';
+const String _LOG_LEVEL_OPTION = 'log-level';
 
 ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
   assert(config.isFrozen);
@@ -96,10 +96,10 @@ ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
     _initParserForTask(parser, taskName, config._getTask(taskName));
   }
 
-  parser.addFlag(_colorFlag, defaultsTo: Console.supportsColor,
+  parser.addFlag(_COLOR_FLAG, defaultsTo: Console.supportsColor,
       help: 'Specifies if shell output can have color.');
 
-  parser.addFlag(_prefixFlag, defaultsTo: true,
+  parser.addFlag(_PREFIX_FLAG, defaultsTo: true,
       help: 'Specifies if shell output is prefixed by the task name.');
 
   final logLevelAllowed = _getLogLevels()
@@ -108,7 +108,7 @@ ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
 
   assert(logLevelAllowed.contains(defaultLogLevel.name.toLowerCase()));
 
-  parser.addOption(_logLevelOption, allowed: logLevelAllowed,
+  parser.addOption(_LOG_LEVEL_OPTION, allowed: logLevelAllowed,
       defaultsTo: defaultLogLevel.name.toLowerCase(),
       help: 'The log level at which task output is printed to the shell');
 
