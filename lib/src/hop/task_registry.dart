@@ -22,21 +22,37 @@ class TaskRegistry {
     return _tasks.containsKey(taskName);
   }
 
-  Task addSync(String name, Func1<TaskContext, bool> func, {String description}) {
-    return addTask(name, new Task.sync(func, description: description));
+  @deprecated
+  Task addSync(String name, dynamic func(TaskContext ctx), {String description}) {
+    return addTask(name, new Task(func, description: description));
   }
 
-  Task addAsync(String name, TaskDefinition execFuture, {String description}) {
-    return addTask(name, new Task.async(execFuture, description: description));
+  @deprecated
+  Task addAsync(String name, Future execFuture(TaskContext ctx), {String description}) {
+    return addTask(name, new Task(execFuture, description: description));
   }
 
-  Task addTask(String name, Task task) {
+  /**
+   * [task] can be either an instance of [Task] or a [Function].
+   *
+   * If [task] is a [Function], it must take one argument: [TaskContext].
+   *
+   * If a [Future] is returned from the [task] [Function], the runner will wait
+   * for the [Future] to complete.
+   */
+  Task addTask(String name, dynamic task) {
     require(!isFrozen, "Cannot add a task. Frozen.");
     _validateTaskName(name);
     requireArgument(!_tasks.containsKey(name), 'task',
         'A task with name ${name} already exists');
 
     requireArgumentNotNull(task, 'task');
+
+    if(task is! Task) {
+      // wrap it?
+      task = new Task(task);
+    }
+
     _tasks[name] = task;
     return task;
   }
