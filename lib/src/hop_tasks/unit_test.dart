@@ -1,26 +1,32 @@
-part of hop_tasks;
+library hop_tasks.unit_test;
 
-const _listFlag = 'list';
-const _summaryFlag = 'summary';
-const _summaryAll = 'all';
-const _summaryFail = 'fail';
-const _summaryPass = 'pass';
-const _summaryError = 'error';
+import 'dart:async';
+import 'package:args/args.dart';
+import 'package:bot/bot.dart';
+import 'package:hop/hop.dart';
+import 'package:unittest/unittest.dart' as unittest;
+
+const _LIST_FLAG = 'list';
+const _SUMMARY_FLAG = 'summary';
+const _SUMMARY_ALL = 'all';
+const _SUMARY_FAIL = 'fail';
+const _SUMMARY_PASS = 'pass';
+const _SUMMARY_ERROR = 'error';
 
 Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction,
                         {Duration timeout: const Duration(seconds: 20)}) {
   return new Task((TaskContext ctx) {
 
-    final summaryFlag = ctx.arguments[_summaryFlag];
+    final summaryFlag = ctx.arguments[_SUMMARY_FLAG];
 
     final passSummary =
-        (summaryFlag == _summaryAll || summaryFlag == _summaryPass);
+        (summaryFlag == _SUMMARY_ALL || summaryFlag == _SUMMARY_PASS);
 
     final failSummary =
-        (summaryFlag == _summaryAll || summaryFlag == _summaryFail);
+        (summaryFlag == _SUMMARY_ALL || summaryFlag == _SUMARY_FAIL);
 
     final errorSummary =
-        (summaryFlag == _summaryAll || summaryFlag == _summaryError);
+        (summaryFlag == _SUMMARY_ALL || summaryFlag == _SUMMARY_ERROR);
 
     final config = new _HopTestConfiguration(ctx, failSummary, passSummary,
         errorSummary, timeout);
@@ -36,7 +42,7 @@ Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction,
       });
     }
 
-    if(ctx.arguments[_listFlag]) {
+    if(ctx.arguments[_LIST_FLAG]) {
       final list = unittest.testCases
           .map((tc) => tc.description)
           .toList();
@@ -59,11 +65,11 @@ Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction,
 }
 
 void _unittestParserConfig(ArgParser parser) {
-  parser.addFlag(_listFlag, abbr: 'l', defaultsTo: false,
+  parser.addFlag(_LIST_FLAG, abbr: 'l', defaultsTo: false,
       help: "Just list the test case names. Don't run them. Any filter is still applied.");
-  parser.addOption(_summaryFlag, abbr: 's',
+  parser.addOption(_SUMMARY_FLAG, abbr: 's',
       help: 'Summarize the results of individual tests.',
-      allowed: [_summaryAll, _summaryFail, _summaryPass, _summaryError],
+      allowed: [_SUMMARY_ALL, _SUMARY_FAIL, _SUMMARY_PASS, _SUMMARY_ERROR],
       allowMultiple: false);
 }
 
