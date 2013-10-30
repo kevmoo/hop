@@ -1,19 +1,23 @@
-part of test_hop;
+library test.hop.async;
 
-class AsyncTests {
-  static void run() {
+import 'dart:async';
+import 'package:hop/hop.dart';
+import 'package:unittest/unittest.dart';
+import '../test_util.dart';
+
+void main() {
     test('null result is fine' , _testNullResult);
     test('exception outside future' , _testException);
-  }
+}
 
-  static Future _testNullResult() {
+Future _testNullResult() {
     return _testSimpleAsyncTask((ctx) => null)
         .then((value) {
           expect(value, RunResult.SUCCESS);
         });
   }
 
-  static Future _testException() {
+Future _testException() {
     return _testSimpleAsyncTask((ctx) {
         throw 'not impld';
       }).then((value) {
@@ -21,7 +25,6 @@ class AsyncTests {
       });
   }
 
-  static Future<RunResult> _testSimpleAsyncTask(Future taskFuture(TaskContext ctx)) {
+Future<RunResult> _testSimpleAsyncTask(Future taskFuture(TaskContext ctx)) {
     return runTaskInTestRunner(new Task(taskFuture));
   }
-}

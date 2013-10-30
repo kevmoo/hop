@@ -1,33 +1,28 @@
 library test_hop;
 
-import 'dart:async';
-import 'dart:io';
-import 'package:bot/bot.dart';
 import 'package:hop/hop.dart';
 import 'package:unittest/unittest.dart';
-import '../test_util.dart';
 
-import 'simple_add_task_tests.dart' as add_task;
+import 'async_tests.dart' as async;
+import 'arg_tests.dart' as args;
 import 'logging_tests.dart' as logging;
+import 'simple_add_task_tests.dart' as add_task;
 
-part 'arg_tests.dart';
-part 'async_tests.dart';
-part 'chain_tasks_tests.dart';
-part 'integration_tests.dart';
-part 'sync_tests.dart';
-part 'task_list_tests.dart';
+import 'chain_tasks_tests.dart' as chain;
+import 'integration_tests.dart' as integration;
+import 'sync_tests.dart' as sync;
+import 'task_list_tests.dart' as list;
 
 void main() {
   group('hop', () {
     group('add task', add_task.main);
-    group('async tasks', AsyncTests.run);
-    group('sync tasks', SyncTests.run);
-    group('task list', TaskListTests.run);
-    group('integration', IntegrationTests.run);
-    group('chain tasks', ChainTasksTests.register);
+    group('async tasks', async.main);
+    group('sync tasks', sync.main);
+    group('task list', list.main);
+    group('integration', integration.main);
+    group('chain tasks', chain.main);
     group('logging', logging.main);
-
-    registerArgTests();
+    group('args', args.main);
 
     group('TaskArgument', () {
 

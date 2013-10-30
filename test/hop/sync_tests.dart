@@ -1,85 +1,88 @@
-part of test_hop;
+library test.hop.sync;
+
+import 'dart:async';
+import 'package:hop/hop.dart';
+import 'package:unittest/unittest.dart';
+import '../test_util.dart';
 
 // TODO: test output using new TestRunner
 
-class SyncTests {
-  static void run() {
-    test('true result is cool', _testTrueIsCool);
-    test('false result cool', _testFalseIsFail);
-    test('null result is cool', _testNullIsSad);
-    test('exception is sad', _testExceptionIsSad);
-    test('bad task name', _testBadParam);
-    test('no task name', _testNoParam);
-    test('no tasks defined', _testNoTasks);
-    test('ctx.fail', _testCtxFail);
-  }
+void main() {
+  test('true result is cool', _testTrueIsCool);
+  test('false result cool', _testFalseIsFail);
+  test('null result is cool', _testNullIsSad);
+  test('exception is sad', _testExceptionIsSad);
+  test('bad task name', _testBadParam);
+  test('no task name', _testNoParam);
+  test('no tasks defined', _testNoTasks);
+  test('ctx.fail', _testCtxFail);
+}
 
-  static Future _testCtxFail() {
-    return _testSimpleSyncTask((ctx) => ctx.fail('fail!'))
+Future _testCtxFail() {
+  return _testSimpleSyncTask((ctx) => ctx.fail('fail!'))
+    .then((value) {
+      expect(value, RunResult.FAIL);
+    });
+}
+
+Future _testTrueIsCool() {
+  return _testSimpleSyncTask((ctx) => true).then((value) {
+    expect(value, RunResult.SUCCESS);
+  });
+}
+
+Future _testFalseIsFail() {
+  return _testSimpleSyncTask((ctx) => false).then((value) {
+    expect(value, RunResult.SUCCESS);
+  });
+}
+
+Future _testNullIsSad() {
+  return _testSimpleSyncTask((ctx) => null).then((value) {
+    expect(value, RunResult.SUCCESS);
+  });
+}
+
+Future _testExceptionIsSad() {
+  return _testSimpleSyncTask((ctx) {
+      throw 'sorry';
+    })
+    .then((value) {
+      expect(value, RunResult.EXCEPTION);
+    });
+}
+
+Future _testBadParam() {
+  final taskConfig = new TaskRegistry();
+  taskConfig.addSync('good', (ctx) => true);
+
+  return runRegistry(taskConfig, ['bad'])
       .then((value) {
-        expect(value, RunResult.FAIL);
+        expect(value, RunResult.BAD_USAGE);
+        // TODO: test that proper error message is printed
       });
-  }
+}
 
-  static Future _testTrueIsCool() {
-    return _testSimpleSyncTask((ctx) => true).then((value) {
-      expect(value, RunResult.SUCCESS);
-    });
-  }
+Future _testNoParam() {
+  final taskConfig = new TaskRegistry();
+  taskConfig.addSync('good', (ctx) => true);
 
-  static Future _testFalseIsFail() {
-    return _testSimpleSyncTask((ctx) => false).then((value) {
-      expect(value, RunResult.SUCCESS);
-    });
-  }
-
-  static Future _testNullIsSad() {
-    return _testSimpleSyncTask((ctx) => null).then((value) {
-      expect(value, RunResult.SUCCESS);
-    });
-  }
-
-  static Future _testExceptionIsSad() {
-    return _testSimpleSyncTask((ctx) {
-        throw 'sorry';
-      })
+  return runRegistry(taskConfig, [])
       .then((value) {
-        expect(value, RunResult.EXCEPTION);
+        expect(value, RunResult.SUCCESS);
+        // TODO: test that task list is printed
       });
-  }
+}
 
-  static Future _testBadParam() {
-    final taskConfig = new TaskRegistry();
-    taskConfig.addSync('good', (ctx) => true);
+Future _testNoTasks() {
+  final taskConfig = new TaskRegistry();
 
-    return runRegistry(taskConfig, ['bad'])
-        .then((value) {
-          expect(value, RunResult.BAD_USAGE);
-          // TODO: test that proper error message is printed
-        });
-  }
+  return runRegistry(taskConfig, [])
+      .then((value) {
+        expect(value, RunResult.SUCCESS);
+      });
+}
 
-  static Future _testNoParam() {
-    final taskConfig = new TaskRegistry();
-    taskConfig.addSync('good', (ctx) => true);
-
-    return runRegistry(taskConfig, [])
-        .then((value) {
-          expect(value, RunResult.SUCCESS);
-          // TODO: test that task list is printed
-        });
-  }
-
-  static Future _testNoTasks() {
-    final taskConfig = new TaskRegistry();
-
-    return runRegistry(taskConfig, [])
-        .then((value) {
-          expect(value, RunResult.SUCCESS);
-        });
-  }
-
-  static Future<RunResult> _testSimpleSyncTask(dynamic taskFunc(TaskContext ctx)) {
-    return runTaskInTestRunner(new Task(taskFunc));
-  }
+Future<RunResult> _testSimpleSyncTask(dynamic taskFunc(TaskContext ctx)) {
+  return runTaskInTestRunner(new Task(taskFunc));
 }
