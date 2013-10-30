@@ -9,7 +9,8 @@ import 'package:bot_io/completion.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
 
-part 'src/hop/console_context.dart';
+export 'src/hop/console_context.dart';
+
 part 'src/hop/help.dart';
 part 'src/hop/task_registry.dart';
 part 'src/hop/root_task_context.dart';

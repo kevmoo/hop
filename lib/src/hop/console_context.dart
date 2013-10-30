@@ -1,4 +1,12 @@
-part of hop;
+library hop.console_context;
+
+import 'dart:async';
+import 'dart:io' as io;
+import 'package:args/args.dart';
+import 'package:bot/bot.dart';
+import 'package:bot_io/completion.dart';
+import 'package:logging/logging.dart';
+import 'package:hop/hop.dart';
 
 class ConsoleContext extends TaskContext {
   final Task task;
@@ -7,6 +15,7 @@ class ConsoleContext extends TaskContext {
 
   ConsoleContext.raw(this.arguments, this.task);
 
+  @override
   void log(Level logLevel, String message) {
     _assertNotDisposed();
     if(logLevel >= Level.FINE) {
@@ -14,6 +23,7 @@ class ConsoleContext extends TaskContext {
     }
   }
 
+  @override
   TaskContext getSubContext(String name) {
     throw new UnimplementedError('sub contexts are not supported yet');
   }
