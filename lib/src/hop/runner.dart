@@ -142,8 +142,8 @@ class Runner {
         prefixEnabled: preFixEnabled, minLogLevel: logLevel);
   }
 
-  static void _runShell(TaskRegistry registry, String helpTaskName,
-                        Level printAtLogLevel) {
+  static void _runShell(List<String> mainArgs, TaskRegistry registry,
+                        String helpTaskName, Level printAtLogLevel) {
 
     // a bit ugly
     // the help task needs the parser and a print method
@@ -167,7 +167,7 @@ class Runner {
 
     ArgResults args;
     try {
-      args = tryArgsCompletion(parser);
+      args = tryArgsCompletion(mainArgs, parser);
     } on FormatException catch(ex, stack) {
       // TODO: try to guess if --no-color was passed in here?
       print("There was an error parsing the provided arguments");

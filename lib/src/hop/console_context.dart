@@ -35,7 +35,7 @@ class ConsoleContext extends TaskContext {
     _isDisposed = true;
   }
 
-  static void runTaskAsProcess(Task task) {
+  static void runTaskAsProcess(List<String> mainArgs, Task task) {
     assert(task != null);
 
     final parser = new ArgParser();
@@ -43,7 +43,7 @@ class ConsoleContext extends TaskContext {
 
     ArgResults args;
     try {
-      args = tryArgsCompletion(parser);
+      args = tryArgsCompletion(mainArgs, parser);
     } on FormatException catch (ex, stack) {
       print('There was a problem parsing the provided arguments.');
       print(ex.message);

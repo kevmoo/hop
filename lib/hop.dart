@@ -47,7 +47,7 @@ typedef dynamic _TaskDefinition(TaskContext ctx);
  * no help task is added. If [helpTaskName] conflicts with an already defined
  * task, an exception is thrown.
  */
-void runHop({
+void runHop(List<String> args, {
     bool paranoid: true,
     String helpTaskName: 'help',
     Level printAtLogLevel: Level.INFO
@@ -55,7 +55,7 @@ void runHop({
   if(paranoid) {
     _paranoidHopCheck();
   }
-  Runner._runShell(_sharedConfig, helpTaskName, printAtLogLevel);
+  Runner._runShell(args, _sharedConfig, helpTaskName, printAtLogLevel);
 }
 
 Task addTask(String name, Task task) {
@@ -77,7 +77,7 @@ ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames,
 }
 
 void _paranoidHopCheck() {
-  var runningScript = io.Platform.script;
+  var runningScript = io.Platform.script.toFilePath();
   runningScript = path.absolute(runningScript);
   runningScript = path.normalize(runningScript);
 

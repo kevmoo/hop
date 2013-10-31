@@ -1,5 +1,16 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.27.0 2013-10-31 (SDK 0.8.9 r29656)
+
+* Updates for latest SDK.
+* **BREAKING** `runHop` now takes in `List<String> args` to align with changes to `dart:io`.
+* **BREAKING** `ConsoleContext` has a similar breaking change.
+* `TaskRegistry`
+    * **NEW!** `tasks` property exposes a `Map<String, Task>` - this replaces a number of things
+    * **NEW!** `addTask` now supports adding tasks by function, replacing `addSync` and `addAsync`.
+    * **DEPRECATED** `hasTask`, `addSync`, `addAsync`, `tasks`, `taskNames`
+* A bunch of the individual tasks were thrown into their own libraries. Can make use and testing easier.
+
 ## 0.26.0 2013-10-29 (SDK 0.8.7 r29341)
 
 * Updates for latest SDK.

@@ -47,7 +47,7 @@ Future<bool> transformFile(String filePath,
       .then((String value) {
         newContent = value;
         if(ensureDirectory) {
-          return file.directory.create(recursive: true);
+          return file.parent.create(recursive: true);
         }
       })
       .then((_) {
