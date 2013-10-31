@@ -32,7 +32,7 @@ Task _getHelpTask(_HelpArgs helpArgs) {
 void _helpParserConfig(TaskRegistry config, ArgParser parser) {
   config._requireFrozen();
 
-  for(final taskName in config.taskNames) {
+  for(final taskName in config.tasks.keys) {
     parser.addCommand(taskName);
   }
 }

@@ -95,7 +95,7 @@ ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
 
   final parser = new ArgParser();
 
-  for(final taskName in config.taskNames) {
+  for(final taskName in config.tasks.keys) {
     _initParserForTask(parser, taskName, config._getTask(taskName));
   }
 

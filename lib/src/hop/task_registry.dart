@@ -4,30 +4,29 @@ class TaskRegistry {
   static final RegExp _validNameRegExp = new RegExp(r'^[a-z]([a-z0-9_\-]*[a-z0-9])?$');
   static const _RESERVED_TASKS = const[COMPLETION_COMMAND_NAME];
 
-  final Map<String, Task> _tasks;
+  final SplayTreeMap<String, Task> _tasks;
   final Map<String, Task> tasks;
 
   factory TaskRegistry() =>
-      new TaskRegistry._(new Map<String, Task>());
+      new TaskRegistry._(new SplayTreeMap<String, Task>());
 
-  TaskRegistry._(Map<String, Task> map) :
+  TaskRegistry._(SplayTreeMap<String, Task> map) :
     this._tasks = map,
     this.tasks = new UnmodifiableMapView(map);
 
   String _helpTaskName;
-  UnmodifiableListView<String> _sortedTaskNames;
+  bool _frozen = false;
 
   /**
-   * Can only be accessed when frozen
-   * Always sorted
+   * **DEPRECATED** Use [tasks.keys] instead.
    */
   List<String> get taskNames {
     _requireFrozen();
-    return _sortedTaskNames;
+    return _tasks.keys.toList();
   }
 
   /**
-   * Use [tasks.containsKey] instead.
+   * **DEPRECATED** Use [tasks.containsKey] instead.
    */
   @deprecated
   bool hasTask(String taskName) {
@@ -95,15 +94,11 @@ class TaskRegistry {
 
   void _freeze() {
     if(!isFrozen) {
-      final list = _tasks.keys
-          .toList()
-          ..sort();
-
-      _sortedTaskNames = new UnmodifiableListView<String>(list);
+      _frozen = true;
     }
   }
 
-  bool get isFrozen => _sortedTaskNames != null;
+  bool get isFrozen => _frozen;
 
   Task _getTask(String taskName) {
     return _tasks[taskName];
