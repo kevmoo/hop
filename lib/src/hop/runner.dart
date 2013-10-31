@@ -114,7 +114,7 @@ class Runner {
 
       var subCtx = ctx.getSubContext(taskName, subCommandArgResults);
 
-      final task = config.taskRegistry._getTask(taskName);
+      final task = config.taskRegistry..tasks[taskName];
       return runTask(subCtx, task, printAtLogLevel: printAtLogLevel)
           .then((RunResult result) => _logExitCode(ctx, result))
           .whenComplete(() {

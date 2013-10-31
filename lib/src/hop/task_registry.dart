@@ -100,10 +100,6 @@ class TaskRegistry {
 
   bool get isFrozen => _frozen;
 
-  Task _getTask(String taskName) {
-    return _tasks[taskName];
-  }
-
   static void _validateTaskName(String name) {
     requireArgumentNotNullOrEmpty(name, 'name');
     requireArgumentContainsPattern(_validNameRegExp, name, 'name');

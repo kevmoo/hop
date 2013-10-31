@@ -38,7 +38,7 @@ void _helpParserConfig(TaskRegistry config, ArgParser parser) {
 }
 
 void _printHelpForTask(Printer printer, TaskRegistry config, String taskName, ArgParser hopArgParser) {
-  final task = config._getTask(taskName);
+  final task = config.tasks[taskName];
   assert(task != null);
 
   final usage = task.getUsage();
@@ -107,7 +107,7 @@ void _printTaskTable(Printer printer, TaskRegistry config) {
   final columns = [
                    new ColumnDefinition('name', (name) => '  ' + name),
                    new ColumnDefinition('description', (name) {
-                     final task = config._getTask(name);
+                     final task = config.tasks[name];
                      return task.description;
                    })
                    ];

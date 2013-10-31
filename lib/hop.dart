@@ -96,7 +96,7 @@ ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
   final parser = new ArgParser();
 
   for(final taskName in config.tasks.keys) {
-    _initParserForTask(parser, taskName, config._getTask(taskName));
+    _initParserForTask(parser, taskName, config.tasks[taskName]);
   }
 
   parser.addFlag(_COLOR_FLAG, defaultsTo: Console.supportsColor,
