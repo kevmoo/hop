@@ -15,7 +15,7 @@ abstract class Task {
     ArgParserConfigure config, List<TaskArgument> extendedArgs}) = _SimpleTask;
 
   @deprecated
-  factory Task.async(TaskDefinition exec, {String description,
+  factory Task.async(Future exec(TaskContext ctx), {String description,
     ArgParserConfigure config, List<TaskArgument> extendedArgs}) = _SimpleTask;
 
   factory Task(dynamic exec(TaskContext ctx), {String description,

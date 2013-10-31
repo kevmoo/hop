@@ -66,7 +66,7 @@ Task addSyncTask(String name, Func1<TaskContext, bool> execFunc, {String descrip
   return _sharedConfig.addSync(name, execFunc, description: description);
 }
 
-Task addAsyncTask(String name, TaskDefinition execFuture, {String description}) {
+Task addAsyncTask(String name, Future execFuture(TaskContext ctx), {String description}) {
   return _sharedConfig.addAsync(name, execFuture, description: description);
 }
 
