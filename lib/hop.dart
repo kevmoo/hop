@@ -9,6 +9,7 @@ import 'package:bot_io/bot_io.dart';
 import 'package:bot_io/completion.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
+import 'package:unmodifiable_collection/unmodifiable_collection.dart';
 
 export 'src/hop/console_context.dart';
 

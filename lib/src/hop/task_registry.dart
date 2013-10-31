@@ -3,7 +3,16 @@ part of hop;
 class TaskRegistry {
   static final RegExp _validNameRegExp = new RegExp(r'^[a-z]([a-z0-9_\-]*[a-z0-9])?$');
   static const _RESERVED_TASKS = const[COMPLETION_COMMAND_NAME];
-  final Map<String, Task> _tasks = new Map<String, Task>();
+
+  final Map<String, Task> _tasks;
+  final Map<String, Task> tasks;
+
+  factory TaskRegistry() =>
+      new TaskRegistry._(new Map<String, Task>());
+
+  TaskRegistry._(Map<String, Task> map) :
+    this._tasks = map,
+    this.tasks = new UnmodifiableMapView(map);
 
   String _helpTaskName;
   UnmodifiableListView<String> _sortedTaskNames;
@@ -17,6 +26,10 @@ class TaskRegistry {
     return _sortedTaskNames;
   }
 
+  /**
+   * Use [tasks.containsKey] instead.
+   */
+  @deprecated
   bool hasTask(String taskName) {
     _requireFrozen();
     return _tasks.containsKey(taskName);
