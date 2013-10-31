@@ -44,7 +44,9 @@ void main() {
 
     bool ran = false;
 
-    reg.addTask('foo', new Task((ctx) => ran = true));
+    reg.addTask('foo', new Task((ctx) => ran = true, description: 'task desc'));
+
+    expect(reg.tasks['foo'].description, 'task desc');
 
     return runRegistry(reg, ['foo'])
         .then((RunResult rr) {
