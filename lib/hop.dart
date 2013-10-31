@@ -77,7 +77,7 @@ ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames,
 }
 
 void _paranoidHopCheck() {
-  var runningScript = new io.Options().script;
+  var runningScript = io.Platform.script;
   runningScript = path.absolute(runningScript);
   runningScript = path.normalize(runningScript);
 
