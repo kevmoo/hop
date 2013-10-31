@@ -1,6 +1,7 @@
 library hop;
 
 import 'dart:async';
+import 'dart:collection';
 import 'dart:io' as io;
 import 'package:args/args.dart';
 import 'package:bot/bot.dart';

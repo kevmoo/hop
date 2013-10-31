@@ -6,13 +6,13 @@ class TaskRegistry {
   final Map<String, Task> _tasks = new Map<String, Task>();
 
   String _helpTaskName;
-  ReadOnlyCollection<String> _sortedTaskNames;
+  UnmodifiableListView<String> _sortedTaskNames;
 
   /**
    * Can only be accessed when frozen
    * Always sorted
    */
-  Sequence<String> get taskNames {
+  List<String> get taskNames {
     _requireFrozen();
     return _sortedTaskNames;
   }
@@ -76,7 +76,7 @@ class TaskRegistry {
 
   void _requireFrozen() {
     if(!isFrozen) {
-      throw "not frozen!";
+      throw new StateError("Operation not allowed unless frozen.");
     }
   }
 
@@ -85,7 +85,8 @@ class TaskRegistry {
       final list = _tasks.keys
           .toList()
           ..sort();
-      _sortedTaskNames = new ReadOnlyCollection<String>.wrap(list);
+
+      _sortedTaskNames = new UnmodifiableListView<String>(list);
     }
   }
 
