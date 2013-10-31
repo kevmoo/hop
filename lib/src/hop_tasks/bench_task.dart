@@ -34,7 +34,7 @@ Task createBenchTask() {
 
     return _runMany(ctx, count, processName, args)
         .then((list) {
-          final values = list.map((brr) => brr.executionDuration.inMilliseconds);
+          final values = list.map((brr) => brr.executionDurationMilliseconds);
           final stats = new _Stats(values);
           print(stats.toString());
         });
@@ -74,36 +74,37 @@ Future<List<_BenchRunResult>> _runMany(TaskLogger logger, int count,
 }
 
 Future<_BenchRunResult> _runOnce(int runNumber, String processName, List<String> args) {
-  final preStart = new DateTime.now();
-  DateTime postStart;
+  var watch = new Stopwatch()
+    ..start();
+
+  int postStartMicros;
 
   return Process.start(processName, args)
       .then((process) {
-        postStart = new DateTime.now();
+        postStartMicros = watch.elapsedMicroseconds;
         return pipeProcess(process);
       })
       .then((int exitCode) {
-        return new _BenchRunResult(runNumber, exitCode == 0, preStart, postStart, new DateTime.now());
+        return new _BenchRunResult(runNumber, exitCode == 0, postStartMicros, watch.elapsedMicroseconds);
       });
 }
 
 class _BenchRunResult {
   final int runNumber;
-  final DateTime preStart;
-  final DateTime postStart;
-  final DateTime postEnd;
+  final int postStartMicroseconds;
+  final int postEndMicroseconds;
   final bool completed;
 
-  _BenchRunResult(this.runNumber, this.completed, this.preStart, this.postStart, this.postEnd);
+  _BenchRunResult(this.runNumber, this.completed, this.postStartMicroseconds, this.postEndMicroseconds);
 
-  Duration get startupDelta => postStart.difference(preStart);
+  int get executionDurationMilliseconds => postEndMicroseconds - postStartMicroseconds;
 
-  Duration get executionDuration => postEnd.difference(postStart);
+  Duration get executionDuration => new Duration(microseconds: executionDurationMilliseconds);
 
+  @override
   String toString() => '''
 $runNumber
-${startupDelta.inMilliseconds}
-${executionDuration.inMilliseconds}
+$executionDurationMilliseconds
 $completed''';
 }
 
@@ -121,7 +122,7 @@ class _Stats {
     this.standardDeviation = standardDeviation,
     standardError = standardDeviation / math.sqrt(count);
 
-  factory _Stats(Iterable<num> source) {
+  factory _Stats(Iterable<int> source) {
     assert(source != null);
 
     final list = source.toList()
@@ -129,12 +130,12 @@ class _Stats {
 
     assert(!list.isEmpty);
 
-    final count = list.length;
+    final int count = list.length;
 
     final max = list.last;
     final min = list.first;
 
-    num sum = 0;
+    int sum = 0;
 
     list.forEach((num value) {
       sum += value;
@@ -184,7 +185,7 @@ class _Stats {
                   new ColumnDefinition('Name', (a) => a[0]),
                   new ColumnDefinition('Value', (a) {
                     final num val = a[1];
-                    return new Duration(milliseconds: val.toInt()).toString();
+                    return new Duration(microseconds: val.toInt()).toString();
                   })
                   ];
 
