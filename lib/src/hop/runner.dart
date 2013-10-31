@@ -155,6 +155,8 @@ class Runner {
 
     // wire up help task
     if(helpTaskName != null) {
+      assert(registry._helpTaskName == null);
+      registry._helpTaskName = helpTaskName;
       registry.addTask(helpTaskName, _getHelpTask(helpArgs));
     }
 
