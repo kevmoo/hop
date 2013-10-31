@@ -105,7 +105,7 @@ ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
   parser.addFlag(_PREFIX_FLAG, defaultsTo: true,
       help: 'Specifies if shell output is prefixed by the task name.');
 
-  final logLevelAllowed = _getLogLevels()
+  final logLevelAllowed = _sortedLogLevels
       .map((Level l) => l.name.toLowerCase())
       .toList();
 
@@ -118,11 +118,10 @@ ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
   return parser;
 }
 
-List<Level> _getLogLevels() {
-  return [Level.ALL, Level.CONFIG, Level.FINE, Level.FINER, Level.FINEST,
+final List<Level> _sortedLogLevels =
+  [Level.ALL, Level.CONFIG, Level.FINE, Level.FINER, Level.FINEST,
           Level.INFO, Level.OFF, Level.SEVERE, Level.SHOUT]
-    ..sort((a, b) => a.value.compareTo(b.value));
-}
+    ..sort();
 
 void _initParserForTask(ArgParser parser, String taskName, Task task) {
   final subParser = parser.addCommand(taskName);

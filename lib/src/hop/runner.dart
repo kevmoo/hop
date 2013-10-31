@@ -135,7 +135,7 @@ class Runner {
     final bool preFixEnabled = config.args[_PREFIX_FLAG];
     final String logLevelOption = config.args[_LOG_LEVEL_OPTION];
 
-    final Level logLevel = _getLogLevels()
+    final Level logLevel = _sortedLogLevels
         .singleWhere((Level l) => l.name.toLowerCase() == logLevelOption);
 
     return new RootTaskContext(config.doPrint,
