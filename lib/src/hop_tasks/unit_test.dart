@@ -2,7 +2,6 @@ library hop_tasks.unit_test;
 
 import 'dart:async';
 import 'package:args/args.dart';
-import 'package:bot/bot.dart';
 import 'package:hop/hop.dart';
 import 'package:unittest/unittest.dart' as unittest;
 
@@ -13,7 +12,7 @@ const _SUMARY_FAIL = 'fail';
 const _SUMMARY_PASS = 'pass';
 const _SUMMARY_ERROR = 'error';
 
-Task createUnitTestTask(Action1<unittest.Configuration> unitTestAction,
+Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
                         {Duration timeout: const Duration(seconds: 20)}) {
   return new Task((TaskContext ctx) {
 
