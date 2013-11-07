@@ -178,14 +178,20 @@ class _Stats {
                   ['Media', median],
                   ['Mean', mean],
                   ['StdDev', standardDeviation],
+                  ['StdDev%', (standardDeviation / mean * 100).toStringAsFixed(5) + '%'],
                   ['StdErr', standardError],
+                  ['StdDev%', (standardError / mean * 100).toStringAsFixed(5) + '%'],
                   ];
 
     final cols = [
                   new ColumnDefinition('Name', (a) => a[0]),
                   new ColumnDefinition('Value', (a) {
-                    final num val = a[1];
-                    return new Duration(microseconds: val.toInt()).toString();
+                    var val = a[1];
+                    if(val is num) {
+                      return new Duration(microseconds: val.toInt()).toString();
+                    } else {
+                      return val.toString();
+                    }
                   })
                   ];
 
