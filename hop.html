@@ -45,12 +45,14 @@ ChainedTask addChainedTask(String name, Iterable&lt;String&gt; existingTaskNames
 </div>
 <div class="method"><h4 id="addAsyncTask">
 <button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>addAsyncTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="hop/TaskDefinition.html">TaskDefinition</a> execFuture, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#addAsyncTask"
+<a href="hop/Task.html">Task</a> <strong>addAsyncTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="http://api.dartlang.org/dart_async/Future.html">Future</a> execFuture(<a href="hop/TaskContext.html">TaskContext</a> ctx), {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#addAsyncTask"
               title="Permalink to addAsyncTask">#</a></h4>
 <div class="doc">
+<p><strong>DEPRECATED</strong> Use <a class="crossref" href="hop.html#addTask">addTask</a> instead.</p>
 <pre class="source">
-Task addAsyncTask(String name, TaskDefinition execFuture, {String description}) {
- return _sharedConfig.addAsync(name, execFuture, description: description);
+@deprecated
+Task addAsyncTask(String name, Future execFuture(TaskContext ctx), {String description}) {
+ return _sharedConfig.addTask(name, execFuture, description: description);
 }
 </pre>
 </div>
@@ -60,28 +62,42 @@ Task addAsyncTask(String name, TaskDefinition execFuture, {String description}) 
 <a href="hop/Task.html">Task</a> <strong>addSyncTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="bot/Func1.html">Func1</a> execFunc, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#addSyncTask"
               title="Permalink to addSyncTask">#</a></h4>
 <div class="doc">
+<p><strong>DEPRECATED</strong> Use <a class="crossref" href="hop.html#addTask">addTask</a> instead.</p>
 <pre class="source">
+@deprecated
 Task addSyncTask(String name, Func1&lt;TaskContext, bool&gt; execFunc, {String description}) {
- return _sharedConfig.addSync(name, execFunc, description: description);
+ return _sharedConfig.addTask(name, execFunc, description: description);
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="addTask">
 <button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>addTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="hop/Task.html">Task</a> task) <a class="anchor-link" href="#addTask"
+<a href="hop/Task.html">Task</a> <strong>addTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, task, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#addTask"
               title="Permalink to addTask">#</a></h4>
 <div class="doc">
+<p>
+<span class="param">task</span> can be either an instance of <a class="crossref" href="hop/Task.html">Task</a> or a <a class="crossref" href="dart_core/Function.html">Function</a>.</p>
+<p>If 
+<span class="param">task</span> is a <a class="crossref" href="dart_core/Function.html">Function</a>, it must take one argument: <a class="crossref" href="hop/TaskContext.html">TaskContext</a>.</p>
+<p>If a <a class="crossref" href="dart_async/Future.html">Future</a> is returned from the [task] [Function], the runner will wait
+for the <a class="crossref" href="dart_async/Future.html">Future</a> to complete.</p>
+<p>If 
+<span class="param">description</span> is provided and 
+<span class="param">task</span> is an instance of <a class="crossref" href="hop/Task.html">Task</a>, then 
+<span class="param">task</span>
+will be cloned and given the provided 
+<span class="param">description</span>.</p>
 <pre class="source">
-Task addTask(String name, Task task) {
- return _sharedConfig.addTask(name, task);
+Task addTask(String name, dynamic task, {String description}) {
+ return _sharedConfig.addTask(name, task, description: description);
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="runHop">
 <button class="show-code">Code</button>
-void <strong>runHop</strong>({<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> paranoid: true, <a href="http://api.dartlang.org/dart_core/String.html">String</a> helpTaskName: 'help', <a href="logging/Level.html">Level</a> printAtLogLevel: Level.INFO}) <a class="anchor-link" href="#runHop"
+void <strong>runHop</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; args, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> paranoid: true, <a href="http://api.dartlang.org/dart_core/String.html">String</a> helpTaskName: 'help', <a href="logging/Level.html">Level</a> printAtLogLevel: Level.INFO}) <a class="anchor-link" href="#runHop"
               title="Permalink to runHop">#</a></h4>
 <div class="doc">
 <p>Designed to enable features in <strong>Hop</strong>. Should be the last method called in
@@ -97,7 +113,7 @@ no help task is added. If
 <span class="param">helpTaskName</span> conflicts with an already defined
 task, an exception is thrown.</p>
 <pre class="source">
-void runHop({
+void runHop(List&lt;String&gt; args, {
    bool paranoid: true,
    String helpTaskName: 'help',
    Level printAtLogLevel: Level.INFO
@@ -105,7 +121,7 @@ void runHop({
  if(paranoid) {
    _paranoidHopCheck();
  }
- Runner._runShell(_sharedConfig, helpTaskName, printAtLogLevel);
+ Runner._runShell(args, _sharedConfig, helpTaskName, printAtLogLevel);
 }
 </pre>
 </div>
@@ -137,12 +153,6 @@ void runHop({
           <div class="type">
           <h4>
             <a href="hop/ChainedTask.html"><strong>ChainedTask</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="hop/ConsoleContext.html"><strong>ConsoleContext</strong></a>
           </h4>
           </div>
           

@@ -91,8 +91,8 @@ passed the default value, or <code>null</code> if no default value is set.</p>
 use it by calling <a class="crossref" href="args/ArgParser.html#parse">ArgParser.parse()</a> with a set of arguments:</p>
 <pre><code>var results = parser.parse(['some', 'command', 'line', 'args']);
 </code></pre>
-<p>These arguments usually come from dart:io's Options class
-(<code>new Options().arguments</code>), but you can pass in any list of strings.
+<p>These arguments usually come from the arguments to main
+(<code>main(List&lt;String&gt; arguments</code>), but you can pass in any list of strings.
 The parse() method returns an instance of <a class="crossref" href="args/ArgResults.html">ArgResults</a>, a map-like
 object that contains the values of the parsed options.</p>
 <pre><code>var parser = new ArgParser();

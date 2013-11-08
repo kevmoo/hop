@@ -84,9 +84,15 @@ class Trace implements StackTrace {
    try {
      if (trace.isEmpty) return new Trace(&lt;Frame&gt;[]);
      if (trace.contains(_v8Trace)) return new Trace.parseV8(trace);
-     // Valid Safari traces are a superset of valid Firefox traces.
-     if (trace.contains(_firefoxTrace)) return new Trace.parseSafari(trace);
-     if (trace.contains(_friendlyTrace)) return new Trace.parseFriendly(trace);
+     // Safari 6.1+ traces could be misinterpreted as Firefox traces, so we
+     // check for them first.
+     if (trace.contains(_safariTrace)) return new Trace.parseSafari6_1(trace);
+     // Safari 6.0 traces are a superset of Firefox traces, so we parse those
+     // two together.
+     if (trace.contains(_firefoxTrace)) return new Trace.parseSafari6_0(trace);
+     if (trace.contains(_friendlyTrace)) {
+       return new Trace.parseFriendly(trace);
+     }
 
      // Default to parsing the stack trace as a VM trace. This is also hit on
      // IE and Safari, where the stack trace is just an empty string (issue
@@ -124,11 +130,25 @@ class Trace implements StackTrace {
 
  /// Parses a string representation of a Safari stack trace.
  ///
- /// Safari 6+ stack traces look just like Firefox traces, except that they
+ /// This will automatically decide between [parseSafari6_0] and
+ /// [parseSafari6_1] based on the contents of [trace].
+ factory Trace.parseSafari(String trace) {
+   if (trace.contains(_safariTrace)) return new Trace.parseSafari6_1(trace);
+   return new Trace.parseSafari6_0(trace);
+ }
+
+ /// Parses a string representation of a Safari 6.1+ stack trace.
+ Trace.parseSafari6_1(String trace)
+     : this(trace.trim().split("\n")
+         .map((line) =&gt; new Frame.parseSafari6_1(line)));
+
+ /// Parses a string representation of a Safari 6.0 stack trace.
+ ///
+ /// Safari 6.0 stack traces look just like Firefox traces, except that they
  /// sometimes (e.g. in isolates) have a "[native code]" frame. We just ignore
  /// this frame to make the stack format more consistent between browsers.
- /// Prior to Safari 6, stack traces can't be retrieved.
- Trace.parseSafari(String trace)
+ /// Prior to Safari 6.0, stack traces can't be retrieved.
+ Trace.parseSafari6_0(String trace)
      : this(trace.trim().split("\n")
          .where((line) =&gt; line != '[native code]')
          .map((line) =&gt; new Frame.parseFirefox(line)));
@@ -300,9 +320,15 @@ factory Trace.parse(String trace) {
  try {
    if (trace.isEmpty) return new Trace(&lt;Frame&gt;[]);
    if (trace.contains(_v8Trace)) return new Trace.parseV8(trace);
-   // Valid Safari traces are a superset of valid Firefox traces.
-   if (trace.contains(_firefoxTrace)) return new Trace.parseSafari(trace);
-   if (trace.contains(_friendlyTrace)) return new Trace.parseFriendly(trace);
+   // Safari 6.1+ traces could be misinterpreted as Firefox traces, so we
+   // check for them first.
+   if (trace.contains(_safariTrace)) return new Trace.parseSafari6_1(trace);
+   // Safari 6.0 traces are a superset of Firefox traces, so we parse those
+   // two together.
+   if (trace.contains(_firefoxTrace)) return new Trace.parseSafari6_0(trace);
+   if (trace.contains(_friendlyTrace)) {
+     return new Trace.parseFriendly(trace);
+   }
 
    // Default to parsing the stack trace as a VM trace. This is also hit on
    // IE and Safari, where the stack trace is just an empty string (issue
@@ -357,19 +383,49 @@ Trace.parseIE(String trace)
 </div>
 <div class="method"><h4 id="parseSafari">
 <button class="show-code">Code</button>
-new <strong>Trace.parseSafari</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseSafari"
+factory <strong>Trace.parseSafari</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseSafari"
               title="Permalink to Trace.Trace.parseSafari">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a Safari stack trace.</p>
-<p>Safari 6+ stack traces look just like Firefox traces, except that they
+<p>This will automatically decide between <a class="crossref" href="../trace/Trace.html#parseSafari6_0">parseSafari6_0</a> and
+<a class="crossref" href="../trace/Trace.html#parseSafari6_1">parseSafari6_1</a> based on the contents of 
+<span class="param">trace</span>.</p>
+<pre class="source">
+factory Trace.parseSafari(String trace) {
+ if (trace.contains(_safariTrace)) return new Trace.parseSafari6_1(trace);
+ return new Trace.parseSafari6_0(trace);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="parseSafari6_0">
+<button class="show-code">Code</button>
+new <strong>Trace.parseSafari6_0</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseSafari6_0"
+              title="Permalink to Trace.Trace.parseSafari6_0">#</a></h4>
+<div class="doc">
+<p>Parses a string representation of a Safari 6.0 stack trace.</p>
+<p>Safari 6.0 stack traces look just like Firefox traces, except that they
 sometimes (e.g. in isolates) have a "<code>native code</code>" frame. We just ignore
 this frame to make the stack format more consistent between browsers.
-Prior to Safari 6, stack traces can't be retrieved.</p>
+Prior to Safari 6.0, stack traces can't be retrieved.</p>
 <pre class="source">
-Trace.parseSafari(String trace)
+Trace.parseSafari6_0(String trace)
    : this(trace.trim().split("\n")
        .where((line) =&gt; line != '[native code]')
        .map((line) =&gt; new Frame.parseFirefox(line)));
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="parseSafari6_1">
+<button class="show-code">Code</button>
+new <strong>Trace.parseSafari6_1</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseSafari6_1"
+              title="Permalink to Trace.Trace.parseSafari6_1">#</a></h4>
+<div class="doc">
+<p>Parses a string representation of a Safari 6.1+ stack trace.</p>
+<pre class="source">
+Trace.parseSafari6_1(String trace)
+   : this(trace.trim().split("\n")
+       .map((line) =&gt; new Frame.parseSafari6_1(line)));
 </pre>
 </div>
 </div>

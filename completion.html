@@ -269,33 +269,31 @@ List&lt;String&gt; getArgsCompletions(ArgParser parser, List&lt;String&gt; provi
 </div>
 <div class="method"><h4 id="tryArgsCompletion">
 <button class="show-code">Code</button>
-<a href="args/ArgResults.html">ArgResults</a> <strong>tryArgsCompletion</strong>(<a href="args/ArgParser.html">ArgParser</a> parser) <a class="anchor-link" href="#tryArgsCompletion"
+<a href="args/ArgResults.html">ArgResults</a> <strong>tryArgsCompletion</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; mainArgs, <a href="args/ArgParser.html">ArgParser</a> parser) <a class="anchor-link" href="#tryArgsCompletion"
               title="Permalink to tryArgsCompletion">#</a></h4>
 <div class="doc">
 <pre class="source">
-ArgResults tryArgsCompletion(ArgParser parser) {
- final options = tryCompletion((List&lt;String&gt; args, String compLine, int compPoint) {
+ArgResults tryArgsCompletion(List&lt;String&gt; mainArgs, ArgParser parser) {
+ tryCompletion(mainArgs, (List&lt;String&gt; args, String compLine, int compPoint) {
    return getArgsCompletions(parser, args, compLine, compPoint);
  });
- return parser.parse(options.arguments);
+ return parser.parse(mainArgs);
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="tryCompletion">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_io/Options.html">Options</a> <strong>tryCompletion</strong>(<a href="completion/ArgCompleter.html">ArgCompleter</a> completer) <a class="anchor-link" href="#tryCompletion"
+void <strong>tryCompletion</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; args, <a href="completion/ArgCompleter.html">ArgCompleter</a> completer) <a class="anchor-link" href="#tryCompletion"
               title="Permalink to tryCompletion">#</a></h4>
 <div class="doc">
 <pre class="source">
-Options tryCompletion(ArgCompleter completer) {
- final options = new Options();
- final args = options.arguments;
+void tryCompletion(List&lt;String&gt; args, ArgCompleter completer) {
 
- final scriptName = pathos.basename(options.script);
+ final scriptName = pathos.basename(Platform.script.toFilePath());
  if(scriptName.isEmpty) {
    // should have a script name...weird...
-   return options;
+   return;
  }
 
  _log('Checking for completion on script:\t$scriptName');
@@ -343,8 +341,6 @@ Options tryCompletion(ArgCompleter completer) {
  }
 
  _log('Completion params not found');
-
- return options;
 }
 </pre>
 </div>

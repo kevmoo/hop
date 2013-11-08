@@ -170,7 +170,7 @@ class AffineTransform implements Cloneable&lt;AffineTransform&gt; {
    return this;
  }
 
- Coordinate transformCoordinate([Coordinate point = const Coordinate()]){
+ Coordinate transformCoordinate([math.Point point = const Coordinate()]){
    num x = point.x * _scX + point.y * _shX + _tX;
    num y = point.x * _shY + point.y * _scY + _tY;
 
@@ -653,11 +653,11 @@ String toString() =&gt;
 </div>
 <div class="method"><h4 id="transformCoordinate">
 <button class="show-code">Code</button>
-<a href="../bot/Coordinate.html">Coordinate</a> <strong>transformCoordinate</strong>([<a href="../bot/Coordinate.html">Coordinate</a> point = const Coordinate()]) <a class="anchor-link" href="#transformCoordinate"
+<a href="../bot/Coordinate.html">Coordinate</a> <strong>transformCoordinate</strong>([<a href="http://api.dartlang.org/dart_math/Point.html">Point</a> point = const Coordinate()]) <a class="anchor-link" href="#transformCoordinate"
               title="Permalink to AffineTransform.transformCoordinate">#</a></h4>
 <div class="doc">
 <pre class="source">
-Coordinate transformCoordinate([Coordinate point = const Coordinate()]){
+Coordinate transformCoordinate([math.Point point = const Coordinate()]){
  num x = point.x * _scX + point.y * _shX + _tX;
  num y = point.x * _shY + point.y * _scY + _tY;
 

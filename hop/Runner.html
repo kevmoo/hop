@@ -67,7 +67,7 @@ class Runner {
          return RunResult.SUCCESS;
        })
        .catchError((Object error, StackTrace stack) {
-         if(error == Task._nullFutureResultEx) {
+         if(error == Task._NULL_FUTURE_RESULT_EX) {
            context.severe('The task returned null instead of a future');
            return RunResult.ERROR;
          } else if(error is _TaskFailError) {
@@ -117,7 +117,7 @@ class Runner {
 
      var subCtx = ctx.getSubContext(taskName, subCommandArgResults);
 
-     final task = config.taskRegistry._getTask(taskName);
+     final task = config.taskRegistry.tasks[taskName];
      return runTask(subCtx, task, printAtLogLevel: printAtLogLevel)
          .then((RunResult result) =&gt; _logExitCode(ctx, result))
          .whenComplete(() {
@@ -135,18 +135,18 @@ class Runner {
  }
 
  static RootTaskContext _getContext(HopConfig config) {
-   final bool preFixEnabled = config.args[_prefixFlag];
-   final String logLevelOption = config.args[_logLevelOption];
+   final bool preFixEnabled = config.args[_PREFIX_FLAG];
+   final String logLevelOption = config.args[_LOG_LEVEL_OPTION];
 
-   final Level logLevel = _getLogLevels()
+   final Level logLevel = _sortedLogLevels
        .singleWhere((Level l) =&gt; l.name.toLowerCase() == logLevelOption);
 
    return new RootTaskContext(config.doPrint,
        prefixEnabled: preFixEnabled, minLogLevel: logLevel);
  }
 
- static void _runShell(TaskRegistry registry, String helpTaskName,
-                       Level printAtLogLevel) {
+ static void _runShell(List&lt;String&gt; mainArgs, TaskRegistry registry,
+                       String helpTaskName, Level printAtLogLevel) {
 
    // a bit ugly
    // the help task needs the parser and a print method
@@ -158,6 +158,8 @@ class Runner {
 
    // wire up help task
    if(helpTaskName != null) {
+     assert(registry._helpTaskName == null);
+     registry._helpTaskName = helpTaskName;
      registry.addTask(helpTaskName, _getHelpTask(helpArgs));
    }
 
@@ -168,7 +170,7 @@ class Runner {
 
    ArgResults args;
    try {
-     args = tryArgsCompletion(parser);
+     args = tryArgsCompletion(mainArgs, parser);
    } on FormatException catch(ex, stack) {
      // TODO: try to guess if --no-color was passed in here?
      print("There was an error parsing the provided arguments");
@@ -182,7 +184,7 @@ class Runner {
      io.exit(RunResult.BAD_USAGE.exitCode);
    }
 
-   final bool useColor = args[_colorFlag];
+   final bool useColor = args[_COLOR_FLAG];
    final Printer printer = _colorPrinter(Zone.current.print, useColor);
 
    final config = new HopConfig._internal(registry, parser, args, printer);
@@ -258,7 +260,7 @@ static Future&lt;RunResult&gt; runTask(TaskContext context, Task task,
        return RunResult.SUCCESS;
      })
      .catchError((Object error, StackTrace stack) {
-       if(error == Task._nullFutureResultEx) {
+       if(error == Task._NULL_FUTURE_RESULT_EX) {
          context.severe('The task returned null instead of a future');
          return RunResult.ERROR;
        } else if(error is _TaskFailError) {
@@ -312,7 +314,7 @@ static Future&lt;RunResult&gt; run(HopConfig config, {Level printAtLogLevel}) {
 
    var subCtx = ctx.getSubContext(taskName, subCommandArgResults);
 
-   final task = config.taskRegistry._getTask(taskName);
+   final task = config.taskRegistry.tasks[taskName];
    return runTask(subCtx, task, printAtLogLevel: printAtLogLevel)
        .then((RunResult result) =&gt; _logExitCode(ctx, result))
        .whenComplete(() {

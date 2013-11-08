@@ -71,6 +71,10 @@ class ChainedTask extends Task {
    });
  }
 
+ @override
+ ChainedTask clone({String description}) =&gt;
+     new ChainedTask._impl(_tasks, description: description);
+
  ChainedTask and(String name, Task task) {
    return new ChainedTask._internal(name, task, this);
  }
@@ -125,6 +129,18 @@ ChainedTask and(String name, Task task) {
 ChainedTask chain(String name) {
  return new ChainedTask._internal(name, this);
 }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="clone">
+<button class="show-code">Code</button>
+<a href="../hop/ChainedTask.html">ChainedTask</a> <strong>clone</strong>({<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#clone"
+              title="Permalink to ChainedTask.clone">#</a></h4>
+<div class="doc">
+<pre class="source">
+@override
+ChainedTask clone({String description}) =&gt;
+   new ChainedTask._impl(_tasks, description: description);
 </pre>
 </div>
 </div>

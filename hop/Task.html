@@ -34,7 +34,7 @@
 <div class="doc">
 <pre class="source">
 abstract class Task {
- static const _nullFutureResultEx = 'null-future-result-silly';
+ static const _NULL_FUTURE_RESULT_EX = 'null-future-result-silly';
 
  final String description;
 
@@ -46,7 +46,7 @@ abstract class Task {
    ArgParserConfigure config, List&lt;TaskArgument&gt; extendedArgs}) = _SimpleTask;
 
  @deprecated
- factory Task.async(TaskDefinition exec, {String description,
+ factory Task.async(Future exec(TaskContext ctx), {String description,
    ArgParserConfigure config, List&lt;TaskArgument&gt; extendedArgs}) = _SimpleTask;
 
  factory Task(dynamic exec(TaskContext ctx), {String description,
@@ -57,6 +57,8 @@ abstract class Task {
  ChainedTask chain(String name) {
    return new ChainedTask._internal(name, this);
  }
+
+ Task clone({String description});
 
  void configureArgParser(ArgParser parser);
 
@@ -90,12 +92,12 @@ factory Task(dynamic exec(TaskContext ctx), {String description,
 </div>
 <div class="method"><h4 id="async">
 <button class="show-code">Code</button>
-factory <strong>Task.async</strong>(<a href="../hop/TaskDefinition.html">TaskDefinition</a> exec, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description, <a href="../hop/ArgParserConfigure.html">ArgParserConfigure</a> config, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../hop/TaskArgument.html">TaskArgument</a>&gt; extendedArgs}) <a class="anchor-link" href="#async"
+factory <strong>Task.async</strong>(<a href="http://api.dartlang.org/dart_async/Future.html">Future</a> exec(<a href="../hop/TaskContext.html">TaskContext</a> ctx), {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description, <a href="../hop/ArgParserConfigure.html">ArgParserConfigure</a> config, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../hop/TaskArgument.html">TaskArgument</a>&gt; extendedArgs}) <a class="anchor-link" href="#async"
               title="Permalink to Task.Task.async">#</a></h4>
 <div class="doc">
 <pre class="source">
 @deprecated
-factory Task.async(TaskDefinition exec, {String description,
+factory Task.async(Future exec(TaskContext ctx), {String description,
  ArgParserConfigure config, List&lt;TaskArgument&gt; extendedArgs}) = _SimpleTask;
 </pre>
 </div>
@@ -140,6 +142,12 @@ ChainedTask chain(String name) {
  return new ChainedTask._internal(name, this);
 }
 </pre>
+</div>
+</div>
+<div class="method"><h4 id="clone">
+abstract <a href="../hop/Task.html">Task</a> <strong>clone</strong>({<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#clone"
+              title="Permalink to Task.clone">#</a></h4>
+<div class="doc">
 </div>
 </div>
 <div class="method"><h4 id="configureArgParser">

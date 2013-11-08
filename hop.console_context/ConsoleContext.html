@@ -2,19 +2,19 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>ConsoleContext class / hop Library / Hop Documentation</title>
+        <title>ConsoleContext class / hop.console_context Library / Hop Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
         <link rel="shortcut icon" href="../favicon.ico">
         
         </head>
-        <body data-library="hop" data-type="ConsoleContext">
+        <body data-library="hop.console_context" data-type="ConsoleContext">
         <div class="page">
         <div class="header">
           <a href="../index.html"><div class="logo"></div></a>
           <a href="../index.html">Hop Documentation</a>
-         &rsaquo; <a href="../hop.html">hop</a> &rsaquo; <a href="../hop/ConsoleContext.html">ConsoleContext</a>        <div id="search-box">
+         &rsaquo; <a href="../hop.console_context.html">hop.console_context</a> &rsaquo; <a href="../hop.console_context/ConsoleContext.html">ConsoleContext</a>        <div id="search-box">
           <input type="search" name="q" id="q" autocomplete="off"
               class="search-input" placeholder="Search API">
         </div>
@@ -40,6 +40,7 @@ class ConsoleContext extends TaskContext {
 
  ConsoleContext.raw(this.arguments, this.task);
 
+ @override
  void log(Level logLevel, String message) {
    _assertNotDisposed();
    if(logLevel &gt;= Level.FINE) {
@@ -47,6 +48,7 @@ class ConsoleContext extends TaskContext {
    }
  }
 
+ @override
  TaskContext getSubContext(String name) {
    throw new UnimplementedError('sub contexts are not supported yet');
  }
@@ -58,7 +60,7 @@ class ConsoleContext extends TaskContext {
    _isDisposed = true;
  }
 
- static void runTaskAsProcess(Task task) {
+ static void runTaskAsProcess(List&lt;String&gt; mainArgs, Task task) {
    assert(task != null);
 
    final parser = new ArgParser();
@@ -66,7 +68,7 @@ class ConsoleContext extends TaskContext {
 
    ArgResults args;
    try {
-     args = tryArgsCompletion(parser);
+     args = tryArgsCompletion(mainArgs, parser);
    } on FormatException catch (ex, stack) {
      print('There was a problem parsing the provided arguments.');
      print(ex.message);
@@ -97,11 +99,11 @@ class ConsoleContext extends TaskContext {
 <h3>Static Methods</h3>
 <div class="method"><h4 id="runTaskAsProcess">
 <button class="show-code">Code</button>
-void <strong>runTaskAsProcess</strong>(<a href="../hop/Task.html">Task</a> task) <a class="anchor-link" href="#runTaskAsProcess"
+void <strong>runTaskAsProcess</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; mainArgs, <a href="../hop/Task.html">Task</a> task) <a class="anchor-link" href="#runTaskAsProcess"
               title="Permalink to ConsoleContext.runTaskAsProcess">#</a></h4>
 <div class="doc">
 <pre class="source">
-static void runTaskAsProcess(Task task) {
+static void runTaskAsProcess(List&lt;String&gt; mainArgs, Task task) {
  assert(task != null);
 
  final parser = new ArgParser();
@@ -109,7 +111,7 @@ static void runTaskAsProcess(Task task) {
 
  ArgResults args;
  try {
-   args = tryArgsCompletion(parser);
+   args = tryArgsCompletion(mainArgs, parser);
  } on FormatException catch (ex, stack) {
    print('There was a problem parsing the provided arguments.');
    print(ex.message);
@@ -263,6 +265,7 @@ void finest(String message) {
               title="Permalink to ConsoleContext.getSubContext">#</a></h4>
 <div class="doc">
 <pre class="source">
+@override
 TaskContext getSubContext(String name) {
  throw new UnimplementedError('sub contexts are not supported yet');
 }
@@ -298,6 +301,7 @@ void <strong>log</strong>(<a href="../logging/Level.html">Level</a> logLevel, <a
               title="Permalink to ConsoleContext.log">#</a></h4>
 <div class="doc">
 <pre class="source">
+@override
 void log(Level logLevel, String message) {
  _assertNotDisposed();
  if(logLevel &gt;= Level.FINE) {

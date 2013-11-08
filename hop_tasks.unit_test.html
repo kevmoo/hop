@@ -1,0 +1,100 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>hop_tasks.unit_test Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="hop_tasks.unit_test">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Hop Documentation</a>
+         &rsaquo; <a href="hop_tasks.unit_test.html">hop_tasks.unit_test</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>hop_tasks.unit_test</strong> library</h2>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="createUnitTestTask">
+<button class="show-code">Code</button>
+<a href="hop/Task.html">Task</a> <strong>createUnitTestTask</strong>(void unitTestAction(<a href="unittest/Configuration.html">Configuration</a> config), {<a href="http://api.dartlang.org/dart_core/Duration.html">Duration</a> timeout: const Duration(seconds:20)}) <a class="anchor-link" href="#createUnitTestTask"
+              title="Permalink to createUnitTestTask">#</a></h4>
+<div class="doc">
+<pre class="source">
+Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
+                       {Duration timeout: const Duration(seconds: 20)}) {
+ return new Task((TaskContext ctx) {
+
+   final summaryFlag = ctx.arguments[_SUMMARY_FLAG];
+
+   final passSummary =
+       (summaryFlag == _SUMMARY_ALL || summaryFlag == _SUMMARY_PASS);
+
+   final failSummary =
+       (summaryFlag == _SUMMARY_ALL || summaryFlag == _SUMARY_FAIL);
+
+   final errorSummary =
+       (summaryFlag == _SUMMARY_ALL || summaryFlag == _SUMMARY_ERROR);
+
+   final config = new _HopTestConfiguration(ctx, failSummary, passSummary,
+       errorSummary, timeout);
+
+   // TODO: wrap this in a try/catch
+   unitTestAction(config);
+
+   if(!ctx.arguments.rest.isEmpty) {
+     ctx.info('Filtering tests by: ${ctx.arguments.rest}');
+
+     unittest.filterTests((unittest.TestCase tc) {
+       return ctx.arguments.rest.every((arg) =&gt; tc.description.contains(arg));
+     });
+   }
+
+   if(ctx.arguments[_LIST_FLAG]) {
+     final list = unittest.testCases
+         .map((tc) =&gt; tc.description)
+         .toList();
+
+     list.sort();
+
+     list.insert(0, 'Test cases:');
+
+     ctx.info(list.join('\n'));
+
+     return new Future.value();
+   }
+
+   unittest.runTests();
+   return config.future;
+ },
+ config: _unittestParserConfig,
+ description: 'Run unit tests in the console',
+ extendedArgs: [new TaskArgument('filter', multiple: true)]);
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

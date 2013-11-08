@@ -64,6 +64,9 @@ class Coordinate&lt;T extends num&gt; extends math.Point&lt;T&gt; {
  static Vector difference(math.Point a, math.Point b) =&gt;
    new Vector(a.x - b.x, a.y - b.y);
 
+ static bool valid(math.Point point) =&gt;
+     isValidNumber(point.x) &amp;&amp; isValidNumber(point.y);
+
  @deprecated
  dynamic toJson() =&gt; { 'x' : x, 'y' : y };
 }
@@ -85,6 +88,17 @@ class Coordinate&lt;T extends num&gt; extends math.Point&lt;T&gt; {
 <pre class="source">
 static Vector difference(math.Point a, math.Point b) =&gt;
  new Vector(a.x - b.x, a.y - b.y);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="valid">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>valid</strong>(<a href="http://api.dartlang.org/dart_math/Point.html">Point</a> point) <a class="anchor-link" href="#valid"
+              title="Permalink to Coordinate&lt;T&gt;.valid">#</a></h4>
+<div class="doc">
+<pre class="source">
+static bool valid(math.Point point) =&gt;
+   isValidNumber(point.x) &amp;&amp; isValidNumber(point.y);
 </pre>
 </div>
 </div>

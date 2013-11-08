@@ -112,9 +112,8 @@ appended to a log file named "<code>new Options().script</code>.log".</p>
 <pre class="source">
 void enableScriptLogListener() {
  if(_scriptLogListenerPath == null) {
-   final options = new Options();
 
-   final script = options.script;
+   final script = Platform.script.toFilePath();
    _scriptLogListenerPath = pathos.absolute(script) + '.log';
 
    final rootLogger = logging.Logger.root;
@@ -133,12 +132,6 @@ void enableScriptLogListener() {
 </div>
 <div>
 <h3>Abstract Classes</h3>
-          <div class="type">
-          <h4>
-            <a href="bot_io/DirectoryPopulater.html"><strong>DirectoryPopulater</strong></a>
-          </h4>
-          </div>
-          
           <div class="type">
           <h4>
             <a href="bot_io/EntityPopulater.html"><strong>EntityPopulater</strong></a>
@@ -187,12 +180,6 @@ void enableScriptLogListener() {
           <div class="type">
           <h4>
             <a href="bot_io/IoHelpers.html"><strong>IoHelpers</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="bot_io/MapDirectoryPopulater.html"><strong>MapDirectoryPopulater</strong></a>
           </h4>
           </div>
           

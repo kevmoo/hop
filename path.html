@@ -72,7 +72,8 @@ return the current URL.</p>
 <pre class="source">
 String get current {
  if (_io != null) {
-   return _io.classes[#Directory].getField(#current).reflectee.path;
+   return (_io.declarations[#Directory] as ClassMirror)
+       .getField(#current).reflectee.path;
  } else if (_html != null) {
    return _html.getField(#window).reflectee.location.href;
  } else {

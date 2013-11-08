@@ -170,11 +170,27 @@ class Frame {
    return new Frame(uri, int.parse(match[4]), null, member);
  }
 
- /// Parses a string representation of a Safari stack frame.
+ /// Parses a string representation of a Safari 6.0 stack frame.
  ///
- /// Safari 6+ frames look just like Firefox frames. Prior to Safari 6, stack
- /// traces can't be retrieved.
- factory Frame.parseSafari(String frame) =&gt; new Frame.parseFirefox(frame);
+ /// Safari 6.0 frames look just like Firefox frames. Prior to Safari 6.0,
+ /// stack traces can't be retrieved.
+ factory Frame.parseSafari6_0(String frame) =&gt; new Frame.parseFirefox(frame);
+
+ /// Parses a string representation of a Safari 6.1+ stack frame.
+ factory Frame.parseSafari6_1(String frame) {
+   var match = _safariFrame.firstMatch(frame);
+   if (match == null) {
+     throw new FormatException(
+         "Couldn't parse Safari stack trace line '$frame'.");
+   }
+
+   var uri = Uri.parse(match[2]);
+   var member = match[1];
+   if (member == null) member = '&lt;fn&gt;';
+   var line = match[3] == '' ? null : int.parse(match[3]);
+   var column = match[4] == '' ? null : int.parse(match[4]);
+   return new Frame(uri, line, column, member);
+ }
 
  /// Parses this package's string representation of a stack frame.
  factory Frame.parseFriendly(String frame) {
@@ -311,16 +327,40 @@ factory Frame.parseIE(String frame) =&gt; new Frame.parseV8(frame);
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="parseSafari">
+<div class="method"><h4 id="parseSafari6_0">
 <button class="show-code">Code</button>
-factory <strong>Frame.parseSafari</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseSafari"
-              title="Permalink to Frame.Frame.parseSafari">#</a></h4>
+factory <strong>Frame.parseSafari6_0</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseSafari6_0"
+              title="Permalink to Frame.Frame.parseSafari6_0">#</a></h4>
 <div class="doc">
-<p>Parses a string representation of a Safari stack frame.</p>
-<p>Safari 6+ frames look just like Firefox frames. Prior to Safari 6, stack
-traces can't be retrieved.</p>
+<p>Parses a string representation of a Safari 6.0 stack frame.</p>
+<p>Safari 6.0 frames look just like Firefox frames. Prior to Safari 6.0,
+stack traces can't be retrieved.</p>
 <pre class="source">
-factory Frame.parseSafari(String frame) =&gt; new Frame.parseFirefox(frame);
+factory Frame.parseSafari6_0(String frame) =&gt; new Frame.parseFirefox(frame);
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="parseSafari6_1">
+<button class="show-code">Code</button>
+factory <strong>Frame.parseSafari6_1</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseSafari6_1"
+              title="Permalink to Frame.Frame.parseSafari6_1">#</a></h4>
+<div class="doc">
+<p>Parses a string representation of a Safari 6.1+ stack frame.</p>
+<pre class="source">
+factory Frame.parseSafari6_1(String frame) {
+ var match = _safariFrame.firstMatch(frame);
+ if (match == null) {
+   throw new FormatException(
+       "Couldn't parse Safari stack trace line '$frame'.");
+ }
+
+ var uri = Uri.parse(match[2]);
+ var member = match[1];
+ if (member == null) member = '&lt;fn&gt;';
+ var line = match[3] == '' ? null : int.parse(match[3]);
+ var column = match[4] == '' ? null : int.parse(match[4]);
+ return new Frame(uri, line, column, member);
+}
 </pre>
 </div>
 </div>

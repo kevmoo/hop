@@ -64,7 +64,7 @@ abstract class Style {
  static Style _getPlatformStyle() {
    if (_io == null) return Style.url;
 
-   if (_io.classes[#Platform].getField(#operatingSystem)
+   if ((_io.declarations[#Platform] as ClassMirror).getField(#operatingSystem)
        .reflectee == 'windows') {
      return Style.windows;
    }

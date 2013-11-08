@@ -1,0 +1,110 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>hop_tasks.process Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="hop_tasks.process">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Hop Documentation</a>
+         &rsaquo; <a href="hop_tasks.process.html">hop_tasks.process</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>hop_tasks.process</strong> library</h2>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="pipeProcess">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; <strong>pipeProcess</strong>(<a href="http://api.dartlang.org/dart_io/Process.html">Process</a> process, {<a href="bot/Action1.html">Action1</a> stdOutWriter, <a href="bot/Action1.html">Action1</a> stdErrWriter}) <a class="anchor-link" href="#pipeProcess"
+              title="Permalink to pipeProcess">#</a></h4>
+<div class="doc">
+<pre class="source">
+Future&lt;int&gt; pipeProcess(Process process,
+   {Action1&lt;String&gt; stdOutWriter, Action1&lt;String&gt; stdErrWriter}) {
+
+ var futures = [process.exitCode];
+
+ futures.add(process.stdout.forEach((data)
+     =&gt; _stdListen(data, stdOutWriter)));
+
+ futures.add(process.stderr.forEach((data)
+     =&gt; _stdListen(data, stdErrWriter)));
+
+ return Future.wait(futures)
+     .then((List values) {
+       assert(values.length == futures.length);
+       assert(values[0] != null);
+       return values[0] as int;
+     });
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="startProcess">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html">Future</a> <strong>startProcess</strong>(<a href="hop/TaskContext.html">TaskContext</a> ctx, <a href="http://api.dartlang.org/dart_core/String.html">String</a> command, [<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; args = null]) <a class="anchor-link" href="#startProcess"
+              title="Permalink to startProcess">#</a></h4>
+<div class="doc">
+<pre class="source">
+Future startProcess(TaskContext ctx, String command,
+   [List&lt;String&gt; args = null]) {
+
+ requireArgumentNotNull(ctx, 'ctx');
+ requireArgumentNotNull(command, 'command');
+ if(args == null) {
+   args = [];
+ }
+
+ ctx.fine("Starting process:");
+ ctx.fine("$command ${args.join(' ')}");
+ return Process.start(command, args)
+     .then((process) {
+       return pipeProcess(process,
+           stdOutWriter: ctx.info,
+           stdErrWriter: ctx.severe);
+     })
+     .then((int exitCode) {
+       if(exitCode != 0) ctx.fail('Process exit code: $exitCode');
+     });
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="createProcessTask">
+<button class="show-code">Code</button>
+<a href="hop/Task.html">Task</a> <strong>createProcessTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> command, {<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; args: null, <a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#createProcessTask"
+              title="Permalink to createProcessTask">#</a></h4>
+<div class="doc">
+<pre class="source">
+Task createProcessTask(String command, {List&lt;String&gt; args: null, String description}) {
+ return new Task((ctx) =&gt; startProcess(ctx, command, args), description: description);
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

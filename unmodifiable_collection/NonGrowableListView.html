@@ -194,7 +194,7 @@ fixedLengthList.length = 1; // Error
 growableList.length; // 0;
 growableList.length = 3;
 </code></pre>
-<p>An error occurs if <a class="crossref" href="../unmodifiable_collection/NonGrowableListView.html#length">length</a> is negative.</p>
+<p>The <a class="crossref" href="../unmodifiable_collection/NonGrowableListView.html#length">length</a> must not be negative or null, if it is provided.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../unmodifiable_collection/NonGrowableListView.html">E</a>&gt; </div></div>
 <pre class="source">
 NonGrowableListView(List&lt;E&gt; source) : _source = source;
