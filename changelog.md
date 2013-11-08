@@ -1,5 +1,20 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.27.1 2013-11-08 (SDK 0.8.10+10 r30107)
+
+* Lastest SDK
+* Aligned with [Dart V1 Pubspec Recommendations](https://plus.google.com/+SethLadd/posts/9JQJVz78R97).
+
+### hop
+
+* **DEPRECATED** top-level `addSyncTask` and `addAsyncTask`
+* Top-level `addTask` now accepts instances of `Task` or `Function`, like `TaskRegistry.addTask`
+* Both `addTask` methods support an named `String description` argument.
+
+### hop_tasks
+
+* Added some % output to `bench` task
+
 ## 0.27.0 2013-10-31 (SDK 0.8.9 r29656)
 
 * Updates for latest SDK.
