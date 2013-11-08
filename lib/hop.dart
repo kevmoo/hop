@@ -73,10 +73,18 @@ Task addTask(String name, dynamic task, {String description}) {
   return _sharedConfig.addTask(name, task, description: description);
 }
 
+/**
+ * **DEPRECATED** Use [addTask] instead.
+ */
+@deprecated
 Task addSyncTask(String name, Func1<TaskContext, bool> execFunc, {String description}) {
   return _sharedConfig.addTask(name, execFunc, description: description);
 }
 
+/**
+ * **DEPRECATED** Use [addTask] instead.
+ */
+@deprecated
 Task addAsyncTask(String name, Future execFuture(TaskContext ctx), {String description}) {
   return _sharedConfig.addTask(name, execFuture, description: description);
 }

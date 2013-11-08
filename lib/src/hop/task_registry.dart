@@ -34,11 +34,17 @@ class TaskRegistry {
     return _tasks.containsKey(taskName);
   }
 
+  /**
+   * **DEPRECATED** Use [addTask] instead.
+   */
   @deprecated
   Task addSync(String name, dynamic func(TaskContext ctx), {String description}) {
     return addTask(name, new Task(func, description: description));
   }
 
+  /**
+   * **DEPRECATED** Use [addTask] instead.
+   */
   @deprecated
   Task addAsync(String name, Future execFuture(TaskContext ctx), {String description}) {
     return addTask(name, new Task(execFuture, description: description));
