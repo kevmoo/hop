@@ -27,6 +27,8 @@ abstract class Task {
     return new ChainedTask._internal(name, this);
   }
 
+  Task clone({String description});
+
   void configureArgParser(ArgParser parser);
 
   String getExtendedArgsUsage();
@@ -89,6 +91,12 @@ class _SimpleTask extends Task {
   }
 
   @override
+  _SimpleTask clone({String description}) =>
+      new _SimpleTask(_exec, description: description,
+          config: _argParserConfig,
+          extendedArgs: _extendedArgs.asList());
+
+  @override
   String toString() => "Task: $description";
 }
 
@@ -146,6 +154,10 @@ class ChainedTask extends Task {
           .whenComplete(() => subCtx.dispose());
     });
   }
+
+  @override
+  ChainedTask clone({String description}) =>
+      new ChainedTask._impl(_tasks, description: description);
 
   ChainedTask and(String name, Task task) {
     return new ChainedTask._internal(name, task, this);

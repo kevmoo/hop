@@ -58,16 +58,27 @@ void runHop(List<String> args, {
   Runner._runShell(args, _sharedConfig, helpTaskName, printAtLogLevel);
 }
 
-Task addTask(String name, Task task) {
-  return _sharedConfig.addTask(name, task);
+/**
+ * [task] can be either an instance of [Task] or a [Function].
+*
+ * If [task] is a [Function], it must take one argument: [TaskContext].
+*
+ * If a [Future] is returned from the [task] [Function], the runner will wait
+ * for the [Future] to complete.
+ *
+ * If [description] is provided and [task] is an instance of [Task], then [task]
+ * will be cloned and given the provided [description].
+ */
+Task addTask(String name, dynamic task, {String description}) {
+  return _sharedConfig.addTask(name, task, description: description);
 }
 
 Task addSyncTask(String name, Func1<TaskContext, bool> execFunc, {String description}) {
-  return _sharedConfig.addSync(name, execFunc, description: description);
+  return _sharedConfig.addTask(name, execFunc, description: description);
 }
 
 Task addAsyncTask(String name, Future execFuture(TaskContext ctx), {String description}) {
-  return _sharedConfig.addAsync(name, execFuture, description: description);
+  return _sharedConfig.addTask(name, execFuture, description: description);
 }
 
 ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames,
