@@ -11,6 +11,8 @@ import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
 import 'package:unmodifiable_collection/unmodifiable_collection.dart';
 
+import 'package:hop/src/hop/util.dart';
+
 export 'src/hop/console_context.dart';
 
 part 'src/hop/help.dart';

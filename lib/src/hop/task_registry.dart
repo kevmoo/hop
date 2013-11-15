@@ -1,8 +1,16 @@
 part of hop;
 
 class TaskRegistry {
-  static final RegExp _validNameRegExp = new RegExp(r'^[a-z]([a-z0-9_\-]*[a-z0-9])?$');
   static const _RESERVED_TASKS = const[COMPLETION_COMMAND_NAME];
+  static final RegExp _validNameRegExp = new RegExp(r'^[a-z]([a-z0-9_\-]*[a-z0-9])?$');
+
+  // There could be cases (testing, perhaps?) where a single task is added to
+  // many registries. So we're keeping the expando per-instance, instead of
+  // static
+  final Expando<LinkedHashSet<Task>> _dependencies =
+      new Expando<LinkedHashSet<Task>>('dependencies');
+
+  final Expando<String> _taskNames = new Expando<String>('task names');
 
   final SplayTreeMap<String, Task> _tasks;
   final Map<String, Task> tasks;
@@ -61,7 +69,9 @@ class TaskRegistry {
    * If [description] is provided and [task] is an instance of [Task], then
    * [task] will be cloned and given the provided [description].
    */
-  Task addTask(String name, dynamic task, {String description} ) {
+  Task addTask(String name, dynamic task, {String description,
+    List<String> dependencies} ) {
+
     require(!isFrozen, "Cannot add a task. Frozen.");
     _validateTaskName(name);
     requireArgument(!_tasks.containsKey(name), 'task',
@@ -69,15 +79,81 @@ class TaskRegistry {
 
     requireArgumentNotNull(task, 'task');
 
+    if(dependencies == null) dependencies = [];
+
+    var list = $(dependencies)
+        .map((String subName) {
+          var task = _tasks[subName];
+          require(task != null, 'The task "$subName" has not be registered');
+          return task;
+        });
+
+    var set = new LinkedHashSet<Task>.identity()
+        ..addAll(list);
+
     if(task is Task) {
-      task = task.clone(description: description);
+      task = task._clone(description: description);
     } else {
       // wrap it?
       task = new Task(task, description: description);
     }
 
+    assert(_taskNames[task] == null);
+    _taskNames[task] = name;
+
+    assert(_dependencies[task] == null);
+    _dependencies[task] = set;
+
     _tasks[name] = task;
     return task;
+  }
+
+  /**
+   * The keys in the returned [Map] are in dependency order, with the [Task] for
+   * the provided [taskName] occurring last.
+   */
+  Map<String, Task> getTaskWithDependencies(String taskName) {
+    requireArgument(tasks.containsKey(taskName), 'taskName',
+        'No task with name: $taskName');
+
+    var depMap = _getDependencyMap(taskName);
+
+    var sorted = topoSort(depMap);
+
+    var deps = new LinkedHashMap();
+
+    for(var t in sorted) {
+      var name = _taskNames[t];
+      assert(!deps.containsKey(name));
+      deps[name] = t;
+    }
+
+    assert(deps.keys.last == taskName);
+
+    return deps;
+  }
+
+  HashMap<Task, List<Task>> _getDependencyMap(String taskName) {
+    assert(tasks.containsKey(taskName));
+
+    var visited = new Set<Task>.identity();
+    var remaining = new Set<Task>.identity();
+
+    var depMap = new HashMap.identity();
+
+    remaining.add(tasks[taskName]);
+
+    while(remaining.isNotEmpty) {
+      var task = remaining.first;
+      var added = visited.add(task);
+      assert(added); // should never visit the same task twice
+      remaining.remove(task);
+
+      Set<Task> deps = depMap[task] = _dependencies[task];
+      remaining.addAll(deps.where((t) => !visited.contains(t)));
+    }
+
+    return depMap;
   }
 
   ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames,

@@ -8,22 +8,26 @@ import 'package:unittest/unittest.dart';
 import 'async_tests.dart' as async;
 import 'arg_tests.dart' as args;
 import 'chain_tasks_tests.dart' as chain;
+import 'dependency_tests.dart' as dependency;
 import 'integration_tests.dart' as integration;
 import 'logging_tests.dart' as logging;
 import 'simple_add_task_tests.dart' as simple_add_task;
 import 'sync_tests.dart' as sync;
 import 'task_list_tests.dart' as task_list;
+import 'util_tests.dart' as util;
 
 void main() {
   group('hop', () {
     group('args', args.main);
     group('async tasks', async.main);
     group('chain tasks', chain.main);
+    group('dependency', dependency.main);
     group('integration', integration.main);
     group('logging', logging.main);
     group('add task', simple_add_task.main);
     group('sync tasks', sync.main);
     group('task list', task_list.main);
+    group('util', util.main);
 
     group('TaskArgument', () {
 

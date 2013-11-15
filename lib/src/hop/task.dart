@@ -3,10 +3,11 @@ part of hop;
 typedef void ArgParserConfigure(ArgParser);
 
 abstract class Task {
+
   final String description;
 
   Task._impl(String description) :
-    this.description = (description == null) ? '' : description;
+      this.description = (description == null) ? '' : description;
 
   @deprecated
   factory Task.sync(Func1<TaskContext, dynamic> exec, {String description,
@@ -31,7 +32,7 @@ abstract class Task {
     return new ChainedTask._internal(name, this);
   }
 
-  Task clone({String description});
+  Task _clone({String description});
 
   void configureArgParser(ArgParser parser);
 
@@ -95,12 +96,11 @@ class _SimpleTask extends Task {
   }
 
   @override
-  _SimpleTask clone({String description}) {
+  _SimpleTask _clone({String description}) {
     if(description == null) description = this.description;
 
     return new _SimpleTask(_exec, description: description,
-        config: _argParserConfig,
-        extendedArgs: _extendedArgs.asList());
+        config: _argParserConfig);
   }
 
   @override
@@ -141,7 +141,8 @@ class ChainedTask extends Task {
     return new ChainedTask._impl(roc);
   }
 
-  ChainedTask._impl(this._tasks, {String description: 'Chained Task'}) : super._impl(description);
+  ChainedTask._impl(this._tasks, {String description: 'Chained Task'}) :
+    super._impl(description);
 
   @override
   void configureArgParser(ArgParser parser) {
@@ -170,8 +171,9 @@ class ChainedTask extends Task {
   }
 
   @override
-  ChainedTask clone({String description}) {
+  ChainedTask _clone({String description}) {
     if(description == null) description = this.description;
+
     return new ChainedTask._impl(_tasks, description: description);
   }
 

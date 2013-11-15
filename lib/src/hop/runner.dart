@@ -114,14 +114,35 @@ class Runner {
       final subCommandArgResults = config.args.command;
       final taskName = subCommandArgResults.name;
 
-      var subCtx = ctx.getSubContext(taskName, subCommandArgResults);
+      var tasks = config.taskRegistry.getTaskWithDependencies(taskName);
+      assert(tasks.isNotEmpty);
 
-      final task = config.taskRegistry.tasks[taskName];
-      return runTask(subCtx, task, printAtLogLevel: printAtLogLevel)
-          .then((RunResult result) => _logExitCode(ctx, result))
-          .whenComplete(() {
-            subCtx.dispose();
-          });
+      RunResult finalResult;
+
+      return Future.forEach(tasks.keys, (String subTaskName) {
+        var task = tasks[subTaskName];
+
+        ArgResults args;
+        if(subTaskName == taskName) {
+          args = subCommandArgResults;
+        } else {
+          var parser = new ArgParser();
+          var subParser = parser.addCommand(subTaskName);
+          task.configureArgParser(subParser);
+          args = subParser.parse([]);
+        }
+
+        return _runNamedTask(subTaskName, task, args, printAtLogLevel, ctx)
+            .then((RunResult rr) {
+              if(subTaskName == taskName) {
+                finalResult = rr;
+              }
+            });
+      })
+      .then((_) {
+        assert(finalResult != null);
+        return finalResult;
+      });
 
     } else if(config.args.rest.length == 0) {
       _printHelp(config.doPrint, config.taskRegistry, config.parser);
@@ -131,6 +152,18 @@ class Runner {
       ctx.log('No task named "$taskName".');
       return new Future.value(RunResult.BAD_USAGE);
     }
+  }
+
+  static Future<RunResult> _runNamedTask(String name, Task task,
+      ArgResults argResults, Level printAtLogLevel, RootTaskContext ctx) {
+
+    var subCtx = ctx.getSubContext(name, argResults);
+
+    return runTask(subCtx, task, printAtLogLevel: printAtLogLevel)
+        .then((RunResult result) => _logExitCode(ctx, result))
+          .whenComplete(() {
+            subCtx.dispose();
+          });
   }
 
   static RootTaskContext _getContext(HopConfig config) {
