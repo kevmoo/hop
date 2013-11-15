@@ -21,6 +21,12 @@ abstract class Task {
 
   Future run(TaskContext ctx, {Level printAtLogLevel});
 
+  /**
+   * **DEPRECATED**
+   *
+   * Use task dependencies instead.
+   */
+  @deprecated
   ChainedTask chain(String name) {
     return new ChainedTask._internal(name, this);
   }
@@ -118,6 +124,13 @@ class _NamedTask {
   }
 }
 
+/**
+ * **DEPRECATED**.
+ *
+ * Use the top-level [addTalk] method with dependencies instead of using
+ * [ChainedTask].
+ */
+@deprecated
 class ChainedTask extends Task {
   final ReadOnlyCollection<_NamedTask> _tasks;
 
@@ -162,6 +175,10 @@ class ChainedTask extends Task {
     return new ChainedTask._impl(_tasks, description: description);
   }
 
+  /**
+   * **DEPRECATED**.
+   */
+  @deprecated
   ChainedTask and(String name, Task task) {
     return new ChainedTask._internal(name, task, this);
   }
