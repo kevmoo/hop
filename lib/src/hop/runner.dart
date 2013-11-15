@@ -64,10 +64,7 @@ class Runner {
           return RunResult.SUCCESS;
         })
         .catchError((Object error, StackTrace stack) {
-          if(error == Task._NULL_FUTURE_RESULT_EX) {
-            context.severe('The task returned null instead of a future');
-            return RunResult.ERROR;
-          } else if(error is _TaskFailError) {
+          if(error is _TaskFailError) {
             final _TaskFailError e = error;
             context.severe(e.message);
             return RunResult.FAIL;

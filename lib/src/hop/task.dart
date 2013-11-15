@@ -3,8 +3,6 @@ part of hop;
 typedef void ArgParserConfigure(ArgParser);
 
 abstract class Task {
-  static const _NULL_FUTURE_RESULT_EX = 'null-future-result-silly';
-
   final String description;
 
   Task._impl(String description) :
