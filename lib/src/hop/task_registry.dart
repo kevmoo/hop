@@ -70,9 +70,7 @@ class TaskRegistry {
     requireArgumentNotNull(task, 'task');
 
     if(task is Task) {
-      if(description != null) {
-        task = task.clone(description: description);
-      }
+      task = task.clone(description: description);
     } else {
       // wrap it?
       task = new Task(task, description: description);

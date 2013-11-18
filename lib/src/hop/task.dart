@@ -89,10 +89,13 @@ class _SimpleTask extends Task {
   }
 
   @override
-  _SimpleTask clone({String description}) =>
-      new _SimpleTask(_exec, description: description,
-          config: _argParserConfig,
-          extendedArgs: _extendedArgs.asList());
+  _SimpleTask clone({String description}) {
+    if(description == null) description = this.description;
+
+    return new _SimpleTask(_exec, description: description,
+        config: _argParserConfig,
+        extendedArgs: _extendedArgs.asList());
+  }
 
   @override
   String toString() => "Task: $description";
@@ -154,8 +157,10 @@ class ChainedTask extends Task {
   }
 
   @override
-  ChainedTask clone({String description}) =>
-      new ChainedTask._impl(_tasks, description: description);
+  ChainedTask clone({String description}) {
+    if(description == null) description = this.description;
+    return new ChainedTask._impl(_tasks, description: description);
+  }
 
   ChainedTask and(String name, Task task) {
     return new ChainedTask._internal(name, task, this);
