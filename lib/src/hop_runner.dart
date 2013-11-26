@@ -10,12 +10,12 @@ import 'package:bot_io/completion.dart';
 import 'package:logging/logging.dart';
 import 'package:unmodifiable_collection/unmodifiable_collection.dart';
 
-import 'hop_core.dart';
-import 'src/hop_core/util.dart';
+import '../hop_core.dart';
+import 'util.dart';
 
-part 'src/hop_core/help.dart';
-part 'src/hop_core/task_registry.dart';
-part 'src/hop_core/runner.dart';
+part 'hop_runner/help.dart';
+part 'hop_runner/task_registry.dart';
+part 'hop_runner/runner.dart';
 
 final _libLogger = new Logger('hop.runner');
 
@@ -52,10 +52,10 @@ void _initParserForTask(ArgParser parser, String taskName, Task task) {
   task.configureArgParser(subParser);
 }
 
-final List<Level> _sortedLogLevels =
-[Level.ALL, Level.CONFIG, Level.FINE, Level.FINER, Level.FINEST,
- Level.INFO, Level.OFF, Level.SEVERE, Level.SHOUT]
-..sort();
+final List<Level> _sortedLogLevels = [Level.ALL, Level.CONFIG, Level.FINE,
+                                      Level.FINER, Level.FINEST, Level.INFO,
+                                      Level.OFF, Level.SEVERE, Level.SHOUT]
+                                      ..sort();
 
 const String _COLOR_FLAG = 'color';
 const String _PREFIX_FLAG = 'prefix';

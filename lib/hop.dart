@@ -10,7 +10,7 @@ import 'package:path/path.dart' as path;
 import 'hop_core.dart';
 export 'hop_core.dart' show Task, RunResult, TaskContext, TaskArgument, TaskLogger;
 
-import 'hop_runner.dart';
+import 'src/hop_runner.dart';
 
 // TODO: remove this export at some point...and warn folks
 export 'src/console_context.dart';
