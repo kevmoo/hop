@@ -28,7 +28,7 @@ void main() {
     records = null;
   });
 
-  test('foo', () {
+  test('basic logging test', () {
 
     var task = new Task((ctx) {
       ctx.info('info');
