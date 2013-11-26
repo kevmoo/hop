@@ -14,8 +14,9 @@ import '../hop_core.dart';
 import 'util.dart';
 
 part 'hop_runner/help.dart';
-part 'hop_runner/task_registry.dart';
+part 'hop_runner/hop_config.dart';
 part 'hop_runner/runner.dart';
+part 'hop_runner/task_registry.dart';
 
 final _libLogger = new Logger('hop.runner');
 
