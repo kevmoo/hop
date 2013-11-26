@@ -13,10 +13,13 @@ class HopConfig {
    *
    * If you're using it in another context, you might be doing something wrong.
    */
-  factory HopConfig(TaskRegistry registry, List<String> args, Printer printer) {
+  factory HopConfig(TaskRegistry registry, List<String> args, Printer printer,
+      {Level defaultLogLevel: Level.INFO} ) {
     registry._freeze();
 
-    final parser = _getParser(registry, Level.INFO);
+    if(defaultLogLevel == null) defaultLogLevel = Level.INFO;
+
+    final parser = _getParser(registry, defaultLogLevel);
     final argResults = parser.parse(args);
 
     return new HopConfig._internal(registry, parser, argResults, printer);

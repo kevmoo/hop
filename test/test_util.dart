@@ -19,8 +19,14 @@ Future<RunResult> runTaskInTestRunner(Task task, {List<String> extraArgs}) {
   return runRegistry(taskRegistry, args);
 }
 
-Future<RunResult> runRegistry(TaskRegistry taskRegistry, List<String> args) {
-  var config = new HopConfig(taskRegistry, args, loggedPrint);
+Future<RunResult> runRegistry(TaskRegistry taskRegistry, List<String> args,
+    {void printer(Object obj), Level defalutLogLevel: Level.INFO}) {
+
+  if(printer == null) printer = loggedPrint;
+
+  var config = new HopConfig(taskRegistry, args, printer,
+      defaultLogLevel: defalutLogLevel);
+
   return Runner.run(config, printAtLogLevel: Level.INFO);
 }
 
