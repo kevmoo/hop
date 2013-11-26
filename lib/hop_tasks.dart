@@ -10,7 +10,7 @@ import 'package:bot/bot.dart';
 import 'package:bot/bot_async.dart';
 import 'package:bot_io/bot_git.dart';
 import 'package:bot_io/bot_io.dart';
-import 'package:hop/hop.dart';
+import 'package:hop/hop_core.dart';
 import 'src/hop_tasks/process.dart';
 
 export 'src/hop_tasks/copy_js.dart' show createCopyJSTask;

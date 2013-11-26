@@ -6,7 +6,7 @@ import 'dart:math' as math;
 import 'package:args/args.dart';
 import 'package:bot/bot.dart';
 import 'package:bot_io/bot_io.dart';
-import 'package:hop/hop.dart';
+import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_tasks/process.dart';
 
 const _DEFAULT_RUN_COUNT = 20;

@@ -2,7 +2,7 @@ library hop_tasks.copy_js;
 
 import 'dart:async';
 import 'dart:io';
-import 'package:hop/hop.dart';
+import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_experimental.dart' as hop_ex;
 import 'package:logging/logging.dart' as log;
 import 'package:path/path.dart' as pathos;

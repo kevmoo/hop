@@ -1,4 +1,4 @@
-part of hop;
+part of hop.core;
 
 // TODO: move this to its own file?
 
@@ -177,7 +177,7 @@ class Runner {
         prefixEnabled: preFixEnabled, minLogLevel: logLevel);
   }
 
-  static void _runShell(List<String> mainArgs, TaskRegistry registry,
+  static void runShell(List<String> mainArgs, TaskRegistry registry,
                         String helpTaskName, Level printAtLogLevel) {
 
     // a bit ugly

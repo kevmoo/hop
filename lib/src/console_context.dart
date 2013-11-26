@@ -1,12 +1,11 @@
 library hop.console_context;
 
-import 'dart:async';
 import 'dart:io' as io;
 import 'package:args/args.dart';
 import 'package:bot/bot.dart';
 import 'package:bot_io/completion.dart';
 import 'package:logging/logging.dart';
-import 'package:hop/hop.dart';
+import 'package:hop/hop_core.dart';
 
 class ConsoleContext extends TaskContext {
   final Task task;

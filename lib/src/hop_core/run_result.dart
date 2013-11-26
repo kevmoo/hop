@@ -1,4 +1,4 @@
-part of hop;
+part of hop.core;
 
 /**
  * For explanations of exit codes see <http://tldp.org/LDP/abs/html/exitcodes.html>

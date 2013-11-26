@@ -1,4 +1,4 @@
-part of hop;
+part of hop.core;
 
 class TaskRegistry {
   static const _RESERVED_TASKS = const[COMPLETION_COMMAND_NAME];

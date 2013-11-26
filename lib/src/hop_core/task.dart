@@ -1,4 +1,4 @@
-part of hop;
+part of hop.core;
 
 typedef void ArgParserConfigure(ArgParser);
 

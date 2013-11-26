@@ -1,4 +1,4 @@
-part of hop;
+part of hop.core;
 
 class _TaskFailError extends Error {
   final String message;

@@ -1,4 +1,4 @@
-part of hop;
+part of hop.core;
 
 class TaskArgument {
   static final nameRegex = new RegExp(r'^[a-z](([a-z]|-)*[a-z])?$');

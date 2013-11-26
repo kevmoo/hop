@@ -3,7 +3,7 @@ library hop_tasks_experimental;
 import 'dart:async';
 import 'dart:convert' show JSON;
 import 'dart:io';
-import 'package:hop/hop.dart';
+import 'package:hop/hop_core.dart';
 import 'package:path/path.dart' as path;
 import 'package:html5lib/dom.dart';
 

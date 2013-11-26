@@ -2,7 +2,7 @@ library hop_tasks.unit_test;
 
 import 'dart:async';
 import 'package:args/args.dart';
-import 'package:hop/hop.dart';
+import 'package:hop/hop_core.dart';
 import 'package:unittest/unittest.dart' as unittest;
 
 const _LIST_FLAG = 'list';

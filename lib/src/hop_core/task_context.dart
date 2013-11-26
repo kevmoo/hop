@@ -1,4 +1,4 @@
-part of hop;
+part of hop.core;
 
 abstract class TaskContext extends TaskLogger implements Disposable {
   ArgResults get arguments;

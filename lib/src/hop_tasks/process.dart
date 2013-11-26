@@ -3,7 +3,7 @@ library hop_tasks.process;
 import 'dart:async';
 import 'dart:io';
 import 'package:bot/bot.dart';
-import 'package:hop/hop.dart';
+import 'package:hop/hop_core.dart';
 
 Task createProcessTask(String command, {List<String> args: null, String description}) {
   return new Task((ctx) => startProcess(ctx, command, args), description: description);

@@ -2,7 +2,7 @@ library test_hop;
 
 // TODO: test extended args
 
-import 'package:hop/hop.dart';
+import 'package:hop/hop_core.dart';
 import 'package:unittest/unittest.dart';
 
 import 'async_tests.dart' as async;

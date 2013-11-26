@@ -3,7 +3,7 @@ library test.hop.integration;
 import 'dart:async';
 import 'dart:io';
 import 'package:bot/bot.dart';
-import 'package:hop/hop.dart';
+import 'package:hop/hop_core.dart';
 import 'package:unittest/unittest.dart';
 
 void main() {
