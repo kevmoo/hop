@@ -1,5 +1,7 @@
 part of hop;
 
+// TODO: move this to its own file?
+
 class HopConfig {
   final TaskRegistry taskRegistry;
   final ArgParser parser;
