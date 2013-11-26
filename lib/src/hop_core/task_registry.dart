@@ -156,6 +156,7 @@ class TaskRegistry {
     return depMap;
   }
 
+  @deprecated
   ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames,
                              {String description}) {
     final list = $(existingTaskNames)
