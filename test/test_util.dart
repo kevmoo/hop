@@ -3,7 +3,7 @@ library test.hop.shared;
 import 'dart:async';
 import 'package:logging/logging.dart';
 import 'package:hop/hop_core.dart';
-
+import 'package:hop/hop_runner.dart';
 
 Future<RunResult> runTaskInTestRunner(Task task, {List<String> extraArgs}) {
   const _testTaskName = 'test-task';

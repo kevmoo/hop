@@ -1,4 +1,4 @@
-part of hop.core;
+part of hop.runner;
 
 // TODO: move this to its own file?
 
@@ -69,8 +69,8 @@ class Runner {
           return RunResult.SUCCESS;
         })
         .catchError((Object error, StackTrace stack) {
-          if(error is _TaskFailError) {
-            final _TaskFailError e = error;
+          if(error is TaskFailError) {
+            final TaskFailError e = error;
             context.severe(e.message);
             return RunResult.FAIL;
           } else {

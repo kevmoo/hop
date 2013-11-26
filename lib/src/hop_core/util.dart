@@ -2,6 +2,25 @@ library hop.util;
 
 import 'dart:collection';
 import 'package:bot/bot.dart';
+import 'package:bot_io/completion.dart';
+
+const _RESERVED_TASKS = const[COMPLETION_COMMAND_NAME];
+final RegExp _validNameRegExp = new RegExp(r'^[a-z]([a-z0-9_\-]*[a-z0-9])?$');
+
+class TaskFailError extends Error {
+  final String message;
+
+  TaskFailError(this.message);
+
+  String toString() => "TaskFailError: $message";
+}
+
+void validateTaskName(String name) {
+  requireArgumentNotNullOrEmpty(name, 'name');
+  requireArgumentContainsPattern(_validNameRegExp, name, 'name');
+  requireArgument(!_RESERVED_TASKS.contains(name), 'task',
+  'The provided task has a reserved name');
+}
 
 List topoSort(Map<dynamic, Iterable<dynamic>> dependencies) {
   requireArgumentNotNull(dependencies, 'dependencies');

@@ -6,6 +6,7 @@ import 'package:bot/bot.dart';
 import 'package:bot_io/completion.dart';
 import 'package:logging/logging.dart';
 import 'package:hop/hop_core.dart';
+import 'package:hop/hop_runner.dart';
 
 class ConsoleContext extends TaskContext {
   final Task task;

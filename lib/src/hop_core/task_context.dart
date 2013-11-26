@@ -12,6 +12,6 @@ abstract class TaskContext extends TaskLogger implements Disposable {
    * Terminates the current [Task] with a failure, explained by [message].
    */
   void fail(String message) {
-    throw new _TaskFailError(message);
+    throw new TaskFailError(message);
   }
 }

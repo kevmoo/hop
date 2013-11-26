@@ -32,7 +32,7 @@ abstract class Task {
     return new ChainedTask._internal(name, this);
   }
 
-  Task _clone({String description});
+  Task clone({String description});
 
   void configureArgParser(ArgParser parser);
 
@@ -96,7 +96,7 @@ class _SimpleTask extends Task {
   }
 
   @override
-  _SimpleTask _clone({String description}) {
+  _SimpleTask clone({String description}) {
     if(description == null) description = this.description;
 
     return new _SimpleTask(_exec, description: description,
@@ -120,7 +120,7 @@ class _NamedTask {
   final String name;
   _NamedTask(this.name, this.task) {
     assert(task != null);
-    TaskRegistry._validateTaskName(name);
+    validateTaskName(name);
   }
 }
 
@@ -139,6 +139,22 @@ class ChainedTask extends Task {
 
     var roc = $(_expand(previous, nt)).toReadOnlyCollection();
     return new ChainedTask._impl(roc);
+  }
+
+  factory ChainedTask.core(LinkedHashMap<String, Task> tasks,
+      String description) {
+
+    var taskList = new List<_NamedTask>();
+    tasks.forEach((String name, Task t) {
+      taskList.add(new _NamedTask(name, t));
+    });
+
+    if(description == null) {
+      description = 'Chained Task: ' + taskList.map((nt) => nt.name).join(', ');
+    }
+
+    return new ChainedTask._impl(new ReadOnlyCollection.wrap(taskList),
+        description: description);
   }
 
   ChainedTask._impl(this._tasks, {String description: 'Chained Task'}) :
@@ -171,7 +187,7 @@ class ChainedTask extends Task {
   }
 
   @override
-  ChainedTask _clone({String description}) {
+  ChainedTask clone({String description}) {
     if(description == null) description = this.description;
 
     return new ChainedTask._impl(_tasks, description: description);

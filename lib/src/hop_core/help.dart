@@ -1,4 +1,4 @@
-part of hop.core;
+part of hop.runner;
 
 const String _HOP_CMD_NAME = 'hop';
 

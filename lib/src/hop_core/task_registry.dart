@@ -1,8 +1,6 @@
-part of hop.core;
+part of hop.runner;
 
 class TaskRegistry {
-  static const _RESERVED_TASKS = const[COMPLETION_COMMAND_NAME];
-  static final RegExp _validNameRegExp = new RegExp(r'^[a-z]([a-z0-9_\-]*[a-z0-9])?$');
 
   // There could be cases (testing, perhaps?) where a single task is added to
   // many registries. So we're keeping the expando per-instance, instead of
@@ -73,7 +71,7 @@ class TaskRegistry {
     List<String> dependencies} ) {
 
     require(!isFrozen, "Cannot add a task. Frozen.");
-    _validateTaskName(name);
+    validateTaskName(name);
     requireArgument(!_tasks.containsKey(name), 'task',
         'A task with name ${name} already exists');
 
@@ -92,7 +90,7 @@ class TaskRegistry {
         ..addAll(list);
 
     if(task is Task) {
-      task = task._clone(description: description);
+      task = task.clone(description: description);
     } else {
       // wrap it?
       task = new Task(task, description: description);
@@ -159,19 +157,15 @@ class TaskRegistry {
   @deprecated
   ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames,
                              {String description}) {
-    final list = $(existingTaskNames)
-        .map((String subName) {
+
+    var tasks = new LinkedHashMap.fromIterable(existingTaskNames,
+        value: (String subName) {
           var task = _tasks[subName];
           require(task != null, 'The task "$subName" has not be registered');
-          return new _NamedTask(subName, task);
-        })
-        .toReadOnlyCollection();
+          return task;
+        });
 
-    if(description == null) {
-      description = 'Chained Task: ' + list.map((t) => t.name).join(', ');
-    }
-
-    return addTask(name, new ChainedTask._impl(list, description: description));
+    return addTask(name, new ChainedTask.core(tasks, description));
   }
 
   void _requireFrozen() {
@@ -187,11 +181,4 @@ class TaskRegistry {
   }
 
   bool get isFrozen => _frozen;
-
-  static void _validateTaskName(String name) {
-    requireArgumentNotNullOrEmpty(name, 'name');
-    requireArgumentContainsPattern(_validNameRegExp, name, 'name');
-    requireArgument(!_RESERVED_TASKS.contains(name), 'task',
-        'The provided task has a reserved name');
-  }
 }

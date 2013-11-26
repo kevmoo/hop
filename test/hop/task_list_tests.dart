@@ -1,6 +1,6 @@
 library test.hop.task_list;
 
-import 'package:hop/hop_core.dart';
+import 'package:hop/hop_runner.dart';
 import 'package:unittest/unittest.dart';
 import '../test_util.dart';
 
