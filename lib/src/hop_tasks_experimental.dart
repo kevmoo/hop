@@ -27,30 +27,30 @@ class DocsConfig {
 }
 
 Function createPostBuild(DocsConfig cfg) {
-  return (TaskLogger logger, String tempDocDir) {
-    return _postBuild(logger, tempDocDir, cfg);
+  return (TaskContext ctx, String tempDocDir) {
+    return _postBuild(ctx, tempDocDir, cfg);
   };
 }
 
-Future _postBuild(TaskLogger logger, String tempDocDir, DocsConfig cfg) {
+Future _postBuild(TaskContext ctx, String tempDocDir, DocsConfig cfg) {
 
   final indexPath = path.join(tempDocDir, 'index.html');
 
-  logger.info('Updating main page');
+  ctx.info('Updating main page');
   return transformHtml(indexPath, (doc) => _updateIndex(doc, cfg))
       .then((_) {
-        logger.info('Fixing titles');
+        ctx.info('Fixing titles');
         return _updateTitles(tempDocDir, cfg.outputTitle);
       })
       .then((_) {
-        logger.info('Copying resources');
+        ctx.info('Copying resources');
         // TODO: make this non-bash specific
         return Process.run('bash', ['-c', 'cp resource/* $tempDocDir']);
       })
       .then((ProcessResult pr) {
         assert(pr.exitCode == 0);
 
-        logger.info('Fixing apidoc.json');
+        ctx.info('Fixing apidoc.json');
         final apiDocJsonPath = path.join(tempDocDir, 'nav.json');
         assert(FileSystemEntity.isFileSync(apiDocJsonPath));
         return transformFile(apiDocJsonPath, _fixApiDoc);

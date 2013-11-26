@@ -89,7 +89,7 @@ Future _processDartAnalyzerFile(TaskContext context,
     });
 }
 
-Future<int> _dartAnalyzer(TaskLogger logger, String filePath, bool verbose,
+Future<int> _dartAnalyzer(TaskContext ctx, String filePath, bool verbose,
     bool formatMachine) {
 
   return _getPackagesDir(filePath)
@@ -112,8 +112,8 @@ Future<int> _dartAnalyzer(TaskLogger logger, String filePath, bool verbose,
       .then((process) {
         if(verbose) {
           return pipeProcess(process,
-              stdOutWriter: logger.info,
-              stdErrWriter: logger.severe);
+              stdOutWriter: ctx.info,
+              stdErrWriter: ctx.severe);
         } else {
           return pipeProcess(process);
         }

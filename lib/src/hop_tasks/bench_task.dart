@@ -51,7 +51,7 @@ void _benchParserConfig(ArgParser parser) {
       help: 'Specify the number times the specified command should be run');
 }
 
-Future<List<_BenchRunResult>> _runMany(TaskLogger logger, int count,
+Future<List<_BenchRunResult>> _runMany(TaskContext ctx, int count,
     String processName, List<String> args) {
 
   assert(count > 1);
@@ -64,7 +64,7 @@ Future<List<_BenchRunResult>> _runMany(TaskLogger logger, int count,
     return _runOnce(i+1, processName, args)
         .then((result) {
           final paddedNumber = Util.padLeft(result.runNumber.toString(), countStrLength);
-          logger.fine("Test $paddedNumber of $count - ${result.executionDuration}");
+          ctx.fine("Test $paddedNumber of $count - ${result.executionDuration}");
           results.add(result);
         });
     })

@@ -1,5 +1,9 @@
 part of hop.core;
 
+/**
+ * **DEPRECATED** Use [TaskContext] instead.
+ */
+@deprecated
 abstract class TaskLogger {
 
   // level 300
