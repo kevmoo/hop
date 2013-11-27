@@ -113,6 +113,7 @@ class RootTaskContext implements _LoggerParent{
   }
 }
 
+// TODO: test dispose case - should bubble up an RunResult.ERROR
 class _TaskContext extends TaskContext implements _LoggerParent, _LoggerChild {
   final String _name;
   final _LoggerParent _parent;

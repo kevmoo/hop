@@ -35,6 +35,8 @@ class RunResult {
    */
   static final RunResult EXCEPTION = const RunResult._internal(81, 'EXCEPTION');
 
+  // NOTE: this is not used...yet. Should bubble up when context is used after
+  // a task has finished...see TODO on _TaskContext
   /**
    * Task misbehaved. Returned null, used [TaskContext] incorrectly, etc.
    *
