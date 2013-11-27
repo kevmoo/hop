@@ -76,8 +76,7 @@ Task addAsyncTask(String name, Future execFuture(TaskContext ctx), {String descr
   return _sharedConfig.addTask(name, execFuture, description: description);
 }
 
-@deprecated
-ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames,
+Task addChainedTask(String name, Iterable<String> existingTaskNames,
                            {String description}) {
   return _sharedConfig.addChainedTask(name, existingTaskNames,
       description: description);

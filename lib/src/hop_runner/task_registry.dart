@@ -137,7 +137,7 @@ class TaskRegistry {
     var visited = new Set<Task>.identity();
     var remaining = new Set<Task>.identity();
 
-    var depMap = new HashMap.identity();
+    var depMap = new LinkedHashMap.identity();
 
     remaining.add(tasks[taskName]);
 
@@ -154,18 +154,15 @@ class TaskRegistry {
     return depMap;
   }
 
-  @deprecated
-  ChainedTask addChainedTask(String name, Iterable<String> existingTaskNames,
+  Task addChainedTask(String name, Iterable<String> existingTaskNames,
                              {String description}) {
 
-    var tasks = new LinkedHashMap.fromIterable(existingTaskNames,
-        value: (String subName) {
-          var task = _tasks[subName];
-          require(task != null, 'The task "$subName" has not be registered');
-          return task;
-        });
+    if(description == null) {
+      description = 'Chained Task: ' + existingTaskNames.join(', ');
+    }
 
-    return addTask(name, new ChainedTask.core(tasks, description));
+    return addTask(name, _noopTask, description: description,
+        dependencies: existingTaskNames);
   }
 
   void _requireFrozen() {
@@ -182,3 +179,5 @@ class TaskRegistry {
 
   bool get isFrozen => _frozen;
 }
+
+void _noopTask(TaskContext ctx) {}

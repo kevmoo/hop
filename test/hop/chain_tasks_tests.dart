@@ -10,17 +10,19 @@ void main() {
 
     var log = [];
 
-    var t1 = _getTask('t1', log);
-    var t2 = _getTask('t2', log);
-    var t3 = _getTask('t3', log);
+    var reg = new TaskRegistry();
 
-    var task = t1.chain("t1").
-        and("t2", t2).
-        and("t3", t3);
+    reg.addTask('t1', _getTask('t1', log));
+    reg.addTask('t2', _getTask('t2', log));
+    reg.addTask('t3', _getTask('t3', log));
+
+    var task = reg.addChainedTask('chained', ['t1', 't2', 't3']);
+
+    expect(task.description, 'Chained Task: t1, t2, t3');
 
     expect(task is Task, isTrue);
 
-    return runTaskInTestRunner(task)
+    return runRegistry(reg, ['chained'])
         .then((RunResult result) {
           expect(result.success, isTrue);
           expect(log, ['t1', 't2', 't3']);
@@ -52,17 +54,19 @@ void main() {
 
     var log = [];
 
-    var t1 = _getTask('t1', log, false);
-    var t2 = _getTask('t2', log);
-    var t3 = _getTask('t3', log);
+    var reg = new TaskRegistry();
 
-    var task = t1.chain("t1").
-        and("t2", t2).
-        and("t3", t3);
+    reg.addTask('t1', _getTask('t1', log, false));
+    reg.addTask('t2', _getTask('t2', log));
+    reg.addTask('t3', _getTask('t3', log));
+
+    var task = reg.addChainedTask('chained', ['t1', 't2', 't3']);
+
+    expect(task.description, 'Chained Task: t1, t2, t3');
 
     expect(task is Task, isTrue);
 
-    return runTaskInTestRunner(task)
+    return runRegistry(reg, ['chained'])
         .then((RunResult result) {
           expect(result.exitCode, RunResult.FAIL.exitCode);
           expect(log, []);
@@ -73,19 +77,19 @@ void main() {
 
     var log = [];
 
-    var t1 = _getTask('t1', log);
-    var t2 = _getTask('t2', log, null);
-    var t3 = _getTask('t3', log);
+    var reg = new TaskRegistry();
 
-    var task = t1.chain("t1").
-        and("t2", t2).
-        and("t3", t3);
+    reg.addTask('t1', _getTask('t1', log));
+    reg.addTask('t2', _getTask('t2', log, null));
+    reg.addTask('t3', _getTask('t3', log));
 
-    expect(task.description, 'Chained Task');
+    var task = reg.addChainedTask('chained', ['t1', 't2', 't3']);
+
+    expect(task.description, 'Chained Task: t1, t2, t3');
 
     expect(task is Task, isTrue);
 
-    return runTaskInTestRunner(task)
+    return runRegistry(reg, ['chained'])
         .then((RunResult result) {
           expect(result.exitCode, RunResult.EXCEPTION.exitCode);
           expect(log, ['t1']);

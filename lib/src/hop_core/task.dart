@@ -22,16 +22,6 @@ abstract class Task {
 
   Future run(TaskContext ctx, {Level printAtLogLevel});
 
-  /**
-   * **DEPRECATED**
-   *
-   * Use task dependencies instead.
-   */
-  @deprecated
-  ChainedTask chain(String name) {
-    return new ChainedTask._internal(name, this);
-  }
-
   Task clone({String description});
 
   void configureArgParser(ArgParser parser);
@@ -121,90 +111,5 @@ class _NamedTask {
   _NamedTask(this.name, this.task) {
     assert(task != null);
     validateTaskName(name);
-  }
-}
-
-/**
- * **DEPRECATED**.
- *
- * Use the top-level [addTalk] method with dependencies instead of using
- * [ChainedTask].
- */
-@deprecated
-class ChainedTask extends Task {
-  final ReadOnlyCollection<_NamedTask> _tasks;
-
-  factory ChainedTask._internal(String name, Task task, [ChainedTask previous]) {
-    final nt = new _NamedTask(name, task);
-
-    var roc = $(_expand(previous, nt)).toReadOnlyCollection();
-    return new ChainedTask._impl(roc);
-  }
-
-  factory ChainedTask.core(LinkedHashMap<String, Task> tasks,
-      String description) {
-
-    var taskList = new List<_NamedTask>();
-    tasks.forEach((String name, Task t) {
-      taskList.add(new _NamedTask(name, t));
-    });
-
-    if(description == null) {
-      description = 'Chained Task: ' + taskList.map((nt) => nt.name).join(', ');
-    }
-
-    return new ChainedTask._impl(new ReadOnlyCollection.wrap(taskList),
-        description: description);
-  }
-
-  ChainedTask._impl(this._tasks, {String description: 'Chained Task'}) :
-    super._impl(description);
-
-  @override
-  void configureArgParser(ArgParser parser) {
-    // for now, nothing
-  }
-
-  // TODO: how to approach this...
-  @override
-  String getExtendedArgsUsage() => '';
-
-  // TODO: how to approach this...
-  @override
-  String getUsage() => '';
-
-  @override
-  Future run(TaskContext ctx, {Level printAtLogLevel}) {
-    requireArgumentNotNull(ctx, 'ctx');
-
-    return Future.forEach(_tasks, (_NamedTask namedTask) {
-      // TODO: passing in args?
-      var subCtx = ctx.getSubContext(namedTask.name);
-
-      return namedTask.task.run(subCtx, printAtLogLevel: printAtLogLevel)
-          .whenComplete(() => subCtx.dispose());
-    });
-  }
-
-  @override
-  ChainedTask clone({String description}) {
-    if(description == null) description = this.description;
-
-    return new ChainedTask._impl(_tasks, description: description);
-  }
-
-  /**
-   * **DEPRECATED**.
-   */
-  @deprecated
-  ChainedTask and(String name, Task task) {
-    return new ChainedTask._internal(name, task, this);
-  }
-
-  static Iterable<_NamedTask> _expand(ChainedTask previous, _NamedTask task) {
-    if(previous == null) {
-      return [task];
-    }
-    return $(previous._tasks).concat([task]);
   }
 }

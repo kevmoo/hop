@@ -85,6 +85,11 @@ class Runner {
       RunResult finalResult;
 
       return Future.forEach(tasks.keys, (String subTaskName) {
+        if(finalResult != null && finalResult != RunResult.SUCCESS) {
+          ctx.log('Skipping $subTaskName');
+          return null;
+        }
+
         var task = tasks[subTaskName];
 
         ArgResults args;
@@ -99,9 +104,7 @@ class Runner {
 
         return _runNamedTask(subTaskName, task, args, printAtLogLevel, ctx)
             .then((RunResult rr) {
-              if(subTaskName == taskName) {
-                finalResult = rr;
-              }
+              finalResult = rr;
             });
       })
       .then((_) {
