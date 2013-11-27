@@ -28,6 +28,8 @@ class RunResult {
    */
   static final RunResult FAIL = const RunResult._internal(80, 'FAIL');
 
+  // TODO: for V1!! Check with naming on Error/Exception -- I think they need
+  // to be flipped?
   /**
    * Task was was started, but threw an exception
    *
