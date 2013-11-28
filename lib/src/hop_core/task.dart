@@ -9,10 +9,16 @@ abstract class Task {
   Task._impl(String description) :
       this.description = (description == null) ? '' : description;
 
+  /**
+   * **DEPRECATED** Use `new Task` instead.
+   */
   @deprecated
   factory Task.sync(Func1<TaskContext, dynamic> exec, {String description,
     ArgParserConfigure config, List<TaskArgument> extendedArgs}) = _SimpleTask;
 
+  /**
+   * **DEPRECATED** Use `new Task` instead.
+   */
   @deprecated
   factory Task.async(Future exec(TaskContext ctx), {String description,
     ArgParserConfigure config, List<TaskArgument> extendedArgs}) = _SimpleTask;
@@ -103,13 +109,4 @@ ZoneSpecification _getZoneSpec(TaskContext ctx, Level printAtLevel) {
   return new ZoneSpecification(print: (a,b,c,String line) {
     ctx.log(printAtLevel, line);
   });
-}
-
-class _NamedTask {
-  final Task task;
-  final String name;
-  _NamedTask(this.name, this.task) {
-    assert(task != null);
-    validateTaskName(name);
-  }
 }
