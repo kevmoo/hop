@@ -12,41 +12,24 @@ void main() {
 
     var reg = new TaskRegistry();
 
-    reg.addTask('t1', _getTask('t1', log));
+    reg.addTask('t5', _getTask('t5', log));
     reg.addTask('t2', _getTask('t2', log));
+    reg.addTask('t1', _getTask('t1', log));
     reg.addTask('t3', _getTask('t3', log));
+    reg.addTask('t4', _getTask('t4', log));
 
-    var task = reg.addChainedTask('chained', ['t1', 't2', 't3']);
+    var runOrder = const ['t1', 't2', 't3', 't4', 't5'];
 
-    expect(task.description, 'Chained Task: t1, t2, t3');
+    var task = reg.addChainedTask('chained', runOrder);
+
+    expect(task.description, 'Chained Task: ${runOrder.join(', ')}');
 
     expect(task is Task, isTrue);
 
     return runRegistry(reg, ['chained'])
         .then((RunResult result) {
           expect(result.success, isTrue);
-          expect(log, ['t1', 't2', 't3']);
-        });
-  });
-
-  test('chain tasks, via registry', () {
-
-    var reg = new TaskRegistry();
-
-    var log = [];
-
-    reg.addTask('t1', _getTask('t1', log));
-    reg.addTask('t2', _getTask('t2', log));
-    reg.addTask('t3', _getTask('t3', log));
-
-    var chained = reg.addChainedTask('chained', ['t1', 't2', 't3']);
-
-    expect(chained is Task, isTrue);
-
-    return runRegistry(reg, ['chained'])
-        .then((RunResult result) {
-          expect(result.success, isTrue);
-          expect(log, ['t1', 't2', 't3']);
+          expect(log, runOrder);
         });
   });
 
@@ -79,8 +62,8 @@ void main() {
 
     var reg = new TaskRegistry();
 
-    reg.addTask('t1', _getTask('t1', log));
     reg.addTask('t2', _getTask('t2', log, null));
+    reg.addTask('t1', _getTask('t1', log));
     reg.addTask('t3', _getTask('t3', log));
 
     var task = reg.addChainedTask('chained', ['t1', 't2', 't3']);
