@@ -21,38 +21,40 @@ void main() {
   });
 
   test('validate arg list', () {
-    final validate = (List<TaskArgument> args, bool isGood) {
-      final matcher = isGood ? returnsNormally : throwsArgumentError;
-      expect(() => TaskArgument.validateArgs(args), matcher);
-    };
 
     // empty is fine
-    validate([], true);
+    _validateExtendedArgs([], true);
 
-    validate(null, false);
+    _validateExtendedArgs(null, false);
 
     // null arg is bad
-    validate([null], false);
+    _validateExtendedArgs([null], false);
 
     // first required is fine
-    validate([new TaskArgument('a', required: true)], true);
+    _validateExtendedArgs([new TaskArgument('a', required: true)], true);
 
     // first required and mult is fine
-    validate([new TaskArgument('a', required: true, multiple: true)], true);
+    _validateExtendedArgs([new TaskArgument('a', required: true, multiple: true)], true);
 
     // first required, second not required is fine
-    validate([new TaskArgument('a', required: true), new TaskArgument('b', required: false)], true);
+    _validateExtendedArgs([new TaskArgument('a', required: true), new TaskArgument('b', required: false)], true);
 
     // first not required, second required is bad
-    validate([new TaskArgument('a', required: false), new TaskArgument('b', required: true)], false);
+    _validateExtendedArgs([new TaskArgument('a', required: false), new TaskArgument('b', required: true)], false);
 
     // last multiple is fine
-    validate([new TaskArgument('a', multiple: false), new TaskArgument('b', multiple: true)], true);
+    _validateExtendedArgs([new TaskArgument('a', multiple: false), new TaskArgument('b', multiple: true)], true);
 
     // 'N' multiple, 'N+1' non-multiple is not fine
-    validate([new TaskArgument('a', multiple: true), new TaskArgument('b', multiple: false)], false);
+    _validateExtendedArgs([new TaskArgument('a', multiple: true), new TaskArgument('b', multiple: false)], false);
 
     // dupe names is not fine
-    validate([new TaskArgument('a'), new TaskArgument('a')], false);
+    _validateExtendedArgs([new TaskArgument('a'), new TaskArgument('a')], false);
   });
 }
+
+void _validateExtendedArgs(List<TaskArgument> args, bool isGood) {
+  var matcher = isGood ? returnsNormally : throwsArgumentError;
+  expect(() => TaskArgument.validateArgs(args), matcher);
+}
+
