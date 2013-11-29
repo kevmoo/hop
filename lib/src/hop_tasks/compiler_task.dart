@@ -24,7 +24,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
   String packageRoot, bool minify: false, bool liveTypeAnalysis: true,
   bool throwOnError: false, bool verbose: true, bool suppressWarnings: false,
   CompilerTargetType outputType: CompilerTargetType.JS,
-  String outputMapper(String source)}) {
+  String outputMapper(String source), bool checked: false}) {
 
   requireArgument(outputType == CompilerTargetType.JS || outputType == CompilerTargetType.DART, 'outputType');
 
@@ -60,7 +60,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
 
             return _dart2js(context, path,
                 output, packageRoot, minify, liveTypeAnalysis,
-                throwOnError, verbose, suppressWarnings, outputType);
+                throwOnError, verbose, suppressWarnings, outputType, checked);
           });
         });
   }, description: 'Run Dart-to-${outputType.friendlyName} compiler');
@@ -79,7 +79,7 @@ String _dart2DartOutputMapper(String input) {
 Future _dart2js(TaskContext ctx, String file,
     String output, String packageRoot, bool minify, bool liveTypeAnalysis,
     bool throwOnError, bool verbose, bool suppressWarnings,
-    CompilerTargetType outputType) {
+    CompilerTargetType outputType, bool checked) {
 
   requireArgumentNotNullOrEmpty(output, 'output');
 
@@ -118,6 +118,10 @@ Future _dart2js(TaskContext ctx, String file,
 
   if(packageRoot != null) {
     args.add('--package-root=$packageRoot');
+  }
+
+  if(checked == true) {
+    args.add('--enable-checked-mode');
   }
 
   return startProcess(ctx, _getPlatformBin('dart2js'), args);
