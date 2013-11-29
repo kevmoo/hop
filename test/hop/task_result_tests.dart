@@ -6,8 +6,6 @@ import 'package:hop/src/hop_runner.dart';
 import 'package:unittest/unittest.dart';
 import '../test_util.dart';
 
-// TODO: test output using new TestRunner
-
 void main() {
   test('true result is cool', _testTrueIsCool);
   test('false result cool', _testFalseIsFail);
@@ -17,6 +15,18 @@ void main() {
   test('no task name', _testNoParam);
   test('no tasks defined', _testNoTasks);
   test('ctx.fail', _testCtxFail);
+
+  test('using context after task completes', () {
+    TaskContext ctx;
+
+    return runTaskInTestRunner((val) {
+      ctx = val;
+    })
+    .then((RunResult rr) {
+      expect(rr, RunResult.SUCCESS);
+      expect(() => ctx.config('this should not work'), throwsStateError);
+    });
+  });
 }
 
 Future _testCtxFail() =>
