@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/kevmoo/hop.dart.png?label=ready)](https://waffle.io/kevmoo/hop.dart)  
 ![Hop!](https://raw.github.com/kevmoo/hop.dart/master/resource/logo.png)
 ## A Dart framework for reusable tasks
 
