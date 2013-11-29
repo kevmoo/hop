@@ -1,7 +1,7 @@
 ![Hop!](https://raw.github.com/kevmoo/hop.dart/master/resource/logo.png)
 ## A Dart framework for reusable tasks
 
-[![Build Status](https://drone.io/github.com/kevmoo/hop.dart/status.png)](https://drone.io/github.com/kevmoo/hop.dart/latest)
+[![Build Status](https://drone.io/github.com/kevmoo/hop.dart/status.png)](https://drone.io/github.com/kevmoo/hop.dart/latest) [![Stories in Ready](https://badge.waffle.io/kevmoo/hop.dart.png?label=ready)](http://waffle.io/kevmoo/hop.dart)
 
 # Projects using Hop
 
