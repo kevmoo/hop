@@ -47,6 +47,7 @@ void main() {
     validate([new TaskArgument('a', required: false), new TaskArgument('b', required: true)], false);
 
     // last multiple is fine
+    validate([new TaskArgument('a', multiple: false), new TaskArgument('b', multiple: true)], true);
 
     // 'N' multiple, 'N+1' non-multiple is not fine
     validate([new TaskArgument('a', multiple: true), new TaskArgument('b', multiple: false)], false);
