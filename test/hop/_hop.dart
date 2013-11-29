@@ -5,7 +5,6 @@ library test_hop;
 import 'package:hop/hop_core.dart';
 import 'package:unittest/unittest.dart';
 
-import 'async_tests.dart' as async;
 import 'arg_tests.dart' as args;
 import 'chain_tasks_tests.dart' as chain;
 import 'dependency_tests.dart' as dependency;
@@ -19,7 +18,6 @@ import 'util_tests.dart' as util;
 void main() {
   group('hop', () {
     group('args', args.main);
-    group('async tasks', async.main);
     group('chain tasks', chain.main);
     group('dependency', dependency.main);
     group('integration', integration.main);

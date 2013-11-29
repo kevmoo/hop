@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_runner.dart';
 
-Future<RunResult> runTaskInTestRunner(Task task, {List<String> extraArgs}) {
+Future<RunResult> runTaskInTestRunner(dynamic task, {List<String> extraArgs}) {
   const _testTaskName = 'test-task';
 
   final taskRegistry = new TaskRegistry();
