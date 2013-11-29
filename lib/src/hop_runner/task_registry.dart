@@ -5,10 +5,8 @@ class TaskRegistry {
   // There could be cases (testing, perhaps?) where a single task is added to
   // many registries. So we're keeping the expando per-instance, instead of
   // static
-  final Expando<LinkedHashSet<Task>> _dependencies =
-      new Expando<LinkedHashSet<Task>>('dependencies');
-
-  final Expando<String> _taskNames = new Expando<String>('task names');
+  final Expando<_TaskMetadata> _metadata =
+      new Expando<_TaskMetadata>('metadata');
 
   final SplayTreeMap<String, Task> _tasks;
   final Map<String, Task> tasks;
@@ -98,11 +96,8 @@ class TaskRegistry {
       task = new Task(task, description: description);
     }
 
-    assert(_taskNames[task] == null);
-    _taskNames[task] = name;
-
-    assert(_dependencies[task] == null);
-    _dependencies[task] = set;
+    assert(_metadata[task] == null);
+    _metadata[task] = new _TaskMetadata(name, set);
 
     _tasks[name] = task;
     return task;
@@ -123,7 +118,7 @@ class TaskRegistry {
     var deps = new LinkedHashMap();
 
     for(var t in sorted) {
-      var name = _taskNames[t];
+      var name = _metadata[t].name;
       assert(!deps.containsKey(name));
       deps[name] = t;
     }
@@ -160,7 +155,7 @@ class TaskRegistry {
       assert(added); // should never visit the same task twice
       remaining.remove(task);
 
-      Set<Task> deps = depMap[task] = _dependencies[task];
+      Set<Task> deps = depMap[task] = _metadata[task].dependencies;
       remaining.addAll(deps.where((t) => !visited.contains(t)));
     }
 
@@ -181,3 +176,10 @@ class TaskRegistry {
 }
 
 void _noopTask(TaskContext ctx) {}
+
+class _TaskMetadata {
+  final LinkedHashSet<Task> dependencies;
+  final String name;
+
+  _TaskMetadata(this.name, this.dependencies);
+}
