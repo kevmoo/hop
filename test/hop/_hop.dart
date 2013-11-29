@@ -11,8 +11,8 @@ import 'dependency_tests.dart' as dependency;
 import 'integration_tests.dart' as integration;
 import 'logging_tests.dart' as logging;
 import 'simple_add_task_tests.dart' as simple_add_task;
-import 'sync_tests.dart' as sync;
 import 'task_list_tests.dart' as task_list;
+import 'task_result_tests.dart' as task_result;
 import 'util_tests.dart' as util;
 
 void main() {
@@ -23,8 +23,8 @@ void main() {
     group('integration', integration.main);
     group('logging', logging.main);
     group('add task', simple_add_task.main);
-    group('sync tasks', sync.main);
     group('task list', task_list.main);
+    group('task result', task_result.main);
     group('util', util.main);
 
     group('TaskArgument', () {
