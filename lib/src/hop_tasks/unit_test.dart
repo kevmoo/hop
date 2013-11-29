@@ -52,7 +52,7 @@ Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
 
       ctx.info(list.join('\n'));
 
-      return new Future.value();
+      return null;
     }
 
     unittest.runTests();
