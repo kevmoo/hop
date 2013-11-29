@@ -13,6 +13,10 @@ class HopConfig {
    */
   factory HopConfig(TaskRegistry registry, List<String> args, Printer printer,
       {Level defaultLogLevel: Level.INFO} ) {
+
+    requireArgumentNotNull(registry, 'registry');
+    requireArgumentNotNull(args, 'args');
+
     registry._freeze();
 
     if(defaultLogLevel == null) defaultLogLevel = Level.INFO;
