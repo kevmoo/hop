@@ -13,6 +13,9 @@ class TaskRegistry {
   final SplayTreeMap<String, Task> _tasks;
   final Map<String, Task> tasks;
 
+  String _helpTaskName;
+  bool _frozen = false;
+
   factory TaskRegistry() =>
       new TaskRegistry._(new SplayTreeMap<String, Task>());
 
@@ -20,8 +23,7 @@ class TaskRegistry {
     this._tasks = map,
     this.tasks = new UnmodifiableMapView(map);
 
-  String _helpTaskName;
-  bool _frozen = false;
+  bool get isFrozen => _frozen;
 
   /**
    * **DEPRECATED** Use [tasks.keys] instead.
@@ -131,6 +133,17 @@ class TaskRegistry {
     return deps;
   }
 
+  Task addChainedTask(String name, Iterable<String> existingTaskNames,
+                             {String description}) {
+
+    if(description == null) {
+      description = 'Chained Task: ' + existingTaskNames.join(', ');
+    }
+
+    return addTask(name, _noopTask, description: description,
+        dependencies: existingTaskNames);
+  }
+
   HashMap<Task, List<Task>> _getDependencyMap(String taskName) {
     assert(tasks.containsKey(taskName));
 
@@ -154,17 +167,6 @@ class TaskRegistry {
     return depMap;
   }
 
-  Task addChainedTask(String name, Iterable<String> existingTaskNames,
-                             {String description}) {
-
-    if(description == null) {
-      description = 'Chained Task: ' + existingTaskNames.join(', ');
-    }
-
-    return addTask(name, _noopTask, description: description,
-        dependencies: existingTaskNames);
-  }
-
   void _requireFrozen() {
     if(!isFrozen) {
       throw new StateError("Operation not allowed unless frozen.");
@@ -176,8 +178,6 @@ class TaskRegistry {
       _frozen = true;
     }
   }
-
-  bool get isFrozen => _frozen;
 }
 
 void _noopTask(TaskContext ctx) {}
