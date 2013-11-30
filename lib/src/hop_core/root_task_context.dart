@@ -21,8 +21,15 @@ class RootTaskContext implements _LoggerParent{
       requireArgumentNotNull(minLogLevel, 'minLogLevel');
     }
 
+  /**
+   * Use [getTaskContext] instead.
+   */
+  @deprecated
   TaskContext getSubContext(String name, ArgResults arguments) =>
-    new _TaskContext(this, name, arguments);
+      getTaskContext(name, arguments);
+
+  TaskContext getTaskContext(String name, ArgResults arguments) =>
+      new _TaskContext(this, name, arguments);
 
   void log(Object message) {
     _printer(message);
