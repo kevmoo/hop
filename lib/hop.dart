@@ -8,7 +8,7 @@ import 'package:logging/logging.dart';
 import 'package:path/path.dart' as path;
 
 import 'hop_core.dart';
-export 'hop_core.dart' show Task, RunResult, TaskContext, TaskArgument, TaskLogger;
+export 'hop_core.dart';
 
 import 'src/hop_runner.dart';
 
