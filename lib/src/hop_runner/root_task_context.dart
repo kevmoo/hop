@@ -1,4 +1,4 @@
-part of hop.core;
+part of hop.runner;
 
 typedef void Printer(Object value);
 
@@ -140,7 +140,7 @@ class _LoggerChild extends TaskLogger implements _LoggerParent {
   }
 
   @override
-  bool get isDisposed => _isDisposed || _parent.isDisposed;
+  bool get isDisposed => super.isDisposed || _parent.isDisposed;
 
   @override
   void log(Level logLevel, String message) {
