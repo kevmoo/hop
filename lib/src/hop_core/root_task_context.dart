@@ -28,6 +28,9 @@ class RootTaskContext implements _LoggerParent{
     _printer(message);
   }
 
+  // NOTE: just a throw-away to implement _LoggerParent correctly
+  bool get isDisposed => false;
+
   @override
   void _childLog(_LoggerChild subTask, Level logLevel, String message) {
     List<String> names = _childNameChainExpando[subTask];
@@ -129,7 +132,7 @@ class _TaskContext extends TaskContext implements _LoggerParent, _LoggerChild {
   }
 
   @override
-  bool get isDisposed => _isDisposed;
+  bool get isDisposed => _isDisposed || _parent.isDisposed;
 
   @override
   void log(Level logLevel, String message) {
@@ -163,4 +166,5 @@ abstract class _LoggerChild {
 
 abstract class _LoggerParent {
   void _childLog(_LoggerChild child, Level level, String msg);
+  bool get isDisposed;
 }

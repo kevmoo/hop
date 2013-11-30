@@ -38,15 +38,81 @@ void main() {
     return runTaskInTestRunner(task)
         .then((RunResult result) {
           expect(result, same(RunResult.SUCCESS));
-
-          expect(records, hasLength(2));
-
-          expect(records[0].level, Level.INFO);
-          expect(records[0].message, 'test-task: info');
-
-          expect(records[1].level, Level.INFO);
-          expect(records[1].message, 'test-task: print');
+          expect(records, everyElement((e) => e.level == Level.INFO));
+          expect(records.map((e) => e.message),
+              ['test-task: info',
+               'test-task: print']);
         });
   });
+
+
+  void _testLogger(String name, TaskLogger getLogThing(String name, ctx)) {
+
+    test(name, () {
+
+      var task = new Task((TaskContext ctx) {
+        ctx.info('info');
+
+        var subLogger = getLogThing('sub', ctx);
+        subLogger.warning('sub warn');
+
+        var subsub = getLogThing('subsub', subLogger);
+        subsub.severe('subsub severe');
+
+        ctx.severe('info');
+      });
+
+      return runTaskInTestRunner(task)
+          .then((RunResult result) {
+            expect(result, same(RunResult.SUCCESS));
+
+            expect(records, everyElement((e) => e.level == Level.INFO));
+            expect(records.map((e) => e.message),
+                ['test-task: info',
+                 'test-task - sub: sub warn',
+                 'test-task - sub - subsub: subsub severe',
+                 'test-task: info']);
+          });
+    });
+
+    test('$name - parent disposes child', () {
+
+      TaskContext ctx;
+      TaskLogger subLogger;
+      TaskLogger subsub;
+
+      var task = new Task((TaskContext val) {
+        ctx = val;
+        ctx.info('info');
+
+        subLogger = getLogThing('sub', ctx);
+        subLogger.warning('sub warn');
+
+        subsub = getLogThing('subsub', subLogger);
+        subsub.severe('subsub severe');
+
+        ctx.severe('info');
+      });
+
+      return runTaskInTestRunner(task)
+          .then((RunResult result) {
+            expect(result, same(RunResult.SUCCESS));
+
+            expect(records, everyElement((e) => e.level == Level.INFO));
+            expect(records.map((e) => e.message),
+                ['test-task: info',
+                 'test-task - sub: sub warn',
+                 'test-task - sub - subsub: subsub severe',
+                 'test-task: info']);
+
+            expect(ctx.isDisposed, isTrue);
+            expect(subLogger.isDisposed, isTrue);
+            expect(subsub.isDisposed, isTrue);
+          });
+      });
+  }
+
+  _testLogger('sub-logging', (name, ctx) => ctx.getSubLogger(name));
+  _testLogger('sub-context', (name, ctx) => ctx.getSubContext(name));
 
 }
