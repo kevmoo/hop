@@ -2,38 +2,39 @@ library hop.console_context;
 
 import 'dart:io' as io;
 import 'package:args/args.dart';
-import 'package:bot/bot.dart';
 import 'package:bot_io/completion.dart';
 import 'package:logging/logging.dart';
 import 'package:hop/hop_core.dart';
 import 'hop_runner.dart';
 
-class ConsoleContext extends TaskContext {
+class ConsoleContext extends TaskLogger with TaskContext {
   final Task task;
   final ArgResults arguments;
-  bool _isDisposed = false;
 
   ConsoleContext.raw(this.arguments, this.task);
 
   @override
   void log(Level logLevel, String message) {
-    _assertNotDisposed();
+    requireNotDisposed();
     if(logLevel >= Level.FINE) {
       print(message);
     }
   }
 
+  /**
+   * **NOTE** Not implemented yet.
+   */
+  // TODO: Implement this? (BUG #???)
   @override
-  TaskContext getSubContext(String name) {
-    throw new UnimplementedError('sub contexts are not supported yet');
+  TaskLogger getSubLogger(String name) {
+    throw new UnimplementedError('A Hop to-do');
   }
 
-  bool get isDisposed => _isDisposed;
-
-  void dispose() {
-    _assertNotDisposed();
-    _isDisposed = true;
-  }
+  /**
+   * **DEPRECATED** Use [getSubLogger] instead.
+   */
+  @deprecated
+  TaskLogger getSubContext(String name) => getSubLogger(name);
 
   static void runTaskAsProcess(List<String> mainArgs, Task task) {
     assert(task != null);
@@ -57,11 +58,5 @@ class ConsoleContext extends TaskContext {
         ctx.dispose();
         io.exit(rr.exitCode);
       });
-  }
-
-  void _assertNotDisposed() {
-    if(_isDisposed) {
-      throw new DisposedError();
-    }
   }
 }

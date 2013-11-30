@@ -117,18 +117,19 @@ class RootTaskContext implements _LoggerParent{
 }
 
 // TODO: test dispose case - should bubble up an RunResult.ERROR
-class _TaskContext extends TaskContext implements _LoggerParent, _LoggerChild {
-  final String _name;
-  final _LoggerParent _parent;
+class _TaskContext extends _LoggerChild with TaskContext {
   final ArgResults arguments;
 
-  bool _isDisposed = false;
+  _TaskContext(_LoggerParent parent, String name, [this.arguments]) :
+    super(parent, name);
+}
 
-  _TaskContext(this._parent, this._name, this.arguments);
+class _LoggerChild extends TaskLogger implements _LoggerParent {
+  final _LoggerParent _parent;
+  final String _name;
 
-  @override
-  _TaskContext getSubContext(String name) {
-    return new _TaskContext(this, name, null);
+  _LoggerChild(this._parent, this._name) {
+    assert(_name != null);
   }
 
   @override
@@ -136,32 +137,33 @@ class _TaskContext extends TaskContext implements _LoggerParent, _LoggerChild {
 
   @override
   void log(Level logLevel, String message) {
-    _assertNotDisposed();
+    requireNotDisposed();
     _parent._childLog(this, logLevel, message);
   }
 
   @override
-  void dispose() {
-    _assertNotDisposed();
-    _isDisposed = true;
+  TaskLogger getSubLogger(String name) {
+    requireNotDisposed();
+    return new _LoggerChild(this, name);
   }
 
+  /**
+   * **DEPRECATED** Use [getSubLogger] instead.
+   */
+  @deprecated
+  TaskContext getSubContext(String name) =>
+      new _DeprecatedSubTaskContext(this, name);
+
   void _childLog(_LoggerChild logger, Level logLevel, String message) {
-    _assertNotDisposed();
+    requireNotDisposed();
     // logger should be a descendant
     _parent._childLog(logger, logLevel, message);
   }
-
-  void _assertNotDisposed() {
-    if(_isDisposed) {
-      throw new DisposedError();
-    }
-  }
 }
 
-abstract class _LoggerChild {
-  String get _name;
-  _LoggerParent get _parent;
+class _DeprecatedSubTaskContext extends _TaskContext {
+  _DeprecatedSubTaskContext(_LoggerParent parent, String name) :
+    super(parent, name);
 }
 
 abstract class _LoggerParent {

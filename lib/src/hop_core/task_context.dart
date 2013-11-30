@@ -1,11 +1,18 @@
 part of hop.core;
 
-abstract class TaskContext extends TaskLogger implements Disposable {
+/**
+ * The context of a [Task] invoked by the user.
+ *
+ * Contains the parsed [ArgResults] parsed from the user.
+ */
+abstract class TaskContext implements TaskLogger {
+
   ArgResults get arguments;
 
+  /**
+   * **DEPRECATED** Use [getSubLogger] instead.
+   */
   @deprecated
-  TaskLogger getSubLogger(String name) => getSubContext(name);
-
   TaskContext getSubContext(String name);
 
   /**
