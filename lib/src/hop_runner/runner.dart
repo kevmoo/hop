@@ -125,7 +125,7 @@ class Runner {
   static Future<RunResult> _runNamedTask(String name, Task task,
       ArgResults argResults, Level printAtLogLevel, RootTaskContext ctx) {
 
-    var subCtx = ctx.getSubContext(name, argResults);
+    var subCtx = ctx.getTaskContext(name, argResults);
 
     return runTask(subCtx, task, printAtLogLevel: printAtLogLevel)
         .then((RunResult result) => _logExitCode(ctx, result))

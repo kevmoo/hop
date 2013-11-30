@@ -53,7 +53,7 @@ Future _processDartAnalyzerFile(TaskContext context,
   int warningCount = 0;
 
   return Future.forEach(analyzerFilePaths, (String path) {
-    final logger = context.getSubContext(path);
+    var logger = context.getSubLogger(path);
     return _dartAnalyzer(logger, path, verbose, formatMachine)
         .then((int exitCode) {
           logger.dispose();
@@ -89,7 +89,7 @@ Future _processDartAnalyzerFile(TaskContext context,
     });
 }
 
-Future<int> _dartAnalyzer(TaskContext ctx, String filePath, bool verbose,
+Future<int> _dartAnalyzer(TaskLogger logger, String filePath, bool verbose,
     bool formatMachine) {
 
   return _getPackagesDir(filePath)
@@ -112,8 +112,8 @@ Future<int> _dartAnalyzer(TaskContext ctx, String filePath, bool verbose,
       .then((process) {
         if(verbose) {
           return pipeProcess(process,
-              stdOutWriter: ctx.info,
-              stdErrWriter: ctx.severe);
+              stdOutWriter: logger.info,
+              stdErrWriter: logger.severe);
         } else {
           return pipeProcess(process);
         }

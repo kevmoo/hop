@@ -150,21 +150,21 @@ ${testCase.stackTrace}''');
 
 
     if(passSummary) {
-      final summaryCtx = _context.getSubContext('PASS');
+      final summaryCtx = _context.getSubLogger('PASS');
       results.where((tc) => tc.result == unittest.PASS).forEach((tc) {
         summaryCtx.info(tc.description);
       });
     }
 
     if(failSummary) {
-      final summaryCtx = _context.getSubContext('FAIL');
+      final summaryCtx = _context.getSubLogger('FAIL');
       results.where((tc) => tc.result == unittest.FAIL).forEach((tc) {
         summaryCtx.severe(tc.description);
       });
     }
 
     if(errorSummary) {
-      final summaryCtx = _context.getSubContext('ERROR');
+      final summaryCtx = _context.getSubLogger('ERROR');
       results.where((tc) => tc.result == unittest.ERROR).forEach((tc) {
         summaryCtx.severe(tc.description);
       });
