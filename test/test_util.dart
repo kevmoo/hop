@@ -5,39 +5,33 @@ import 'package:logging/logging.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_runner.dart';
 
-Future<RunResult> runTaskInTestRunner(dynamic task, {List<String> extraArgs}) {
-  const _testTaskName = 'test-task';
+const String TEST_TASK_NAME = 'test-task-name';
+
+Future<RunResult> runTaskInTestRunner(dynamic task, {List<String> extraArgs,
+  List<HopEvent> eventLog, Level printAtLogLevel: Level.INFO}) {
 
   final taskRegistry = new TaskRegistry();
-  taskRegistry.addTask(_testTaskName, task);
+  taskRegistry.addTask(TEST_TASK_NAME, task);
 
-  final args = [_testTaskName];
+  final args = [TEST_TASK_NAME];
   if(extraArgs != null) {
     args.addAll(extraArgs);
   }
 
-  return runRegistry(taskRegistry, args);
+  return runRegistry(taskRegistry, args, eventLog: eventLog,
+      printAtLogLevel: printAtLogLevel);
 }
 
 Future<RunResult> runRegistry(TaskRegistry taskRegistry, List<String> args,
-    {void printer(Object obj), Level defalutLogLevel: Level.INFO}) {
+    {List<HopEvent> eventLog, Level printAtLogLevel: Level.INFO}) {
 
-  if(printer == null) printer = loggedPrint;
+  var config = new HopConfig(taskRegistry, args);
 
-  var config = new HopConfig(taskRegistry, args, printer,
-      defaultLogLevel: defalutLogLevel);
-
-  return Runner.run(config, printAtLogLevel: Level.INFO);
-}
-
-void loggedPrint(Object value) {
-  String msg;
-  try {
-    msg = value.toString();
-  } catch (ex, stack) {
-    msg = Error.safeToString(value);
+  if(eventLog != null) {
+    // should probably be empty here, right?
+    assert(eventLog.isEmpty);
+    config.onEvent.listen(eventLog.add);
   }
-  testLogger.info(msg);
-}
 
-final testLogger = new Logger('hop_test_context');
+  return Runner.run(config, printAtLogLevel: printAtLogLevel);
+}

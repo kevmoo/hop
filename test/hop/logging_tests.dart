@@ -2,46 +2,54 @@ library test.hop.logging;
 
 import 'dart:async';
 import 'package:hop/hop_core.dart';
+import 'package:hop/src/hop_runner.dart';
 import 'package:logging/logging.dart';
 import 'package:unittest/unittest.dart';
 import '../test_util.dart';
 
 void main() {
 
-  List<LogRecord> records;
-  StreamSubscription sub;
+  test('hop event equality', () {
+    var he1 = new HopEvent(Level.INFO, 'test', ['test', 'test']);
+    var he1a = new HopEvent(Level.INFO, 'test', ['test', 'test']);
 
-  setUp(() {
-    assert(records == null);
-    assert(sub == null);
+    expect(he1, equals(he1));
+    expect(he1, same(he1));
 
-    records = new List<LogRecord>();
-    sub = Logger.root.onRecord
-        .where((LogRecord lr) => lr.loggerName == testLogger.fullName)
-        .listen(records.add);
-  });
+    expect(he1a, equals(he1));
+    expect(he1a, isNot(same(he1)));
 
-  tearDown(() {
-    var cancelThing = sub.cancel();
-    expect(cancelThing, isNull);
-    sub = null;
-    records = null;
+    var he2 = new HopEvent(Level.INFO, 'test', ['test']);
+    var he2a = new HopEvent(Level.INFO, 'test2', ['test', 'test']);
+    var he2b = new HopEvent(Level.CONFIG, 'test', ['test', 'test']);
+    var he2c = new HopEvent(Level.CONFIG, 'test3', ['another']);
+
+    for(var he in [he2, he2a, he2b, he2c]) {
+      expect(he, equals(he));
+      expect(he, isNot(equals(he1)));
+      expect(he, isNot(equals(he1a)));
+    }
   });
 
   test('basic logging test', () {
 
+    var records = <HopEvent>[];
+
     var task = new Task((ctx) {
-      ctx.info('info');
+      ctx.severe('info');
       print('print');
     });
 
-    return runTaskInTestRunner(task)
+    return runTaskInTestRunner(task, eventLog: records,
+        printAtLogLevel: Level.SEVERE)
         .then((RunResult result) {
           expect(result, same(RunResult.SUCCESS));
-          expect(records, everyElement((e) => e.level == Level.INFO));
-          expect(records.map((e) => e.message),
-              ['test-task: info',
-               'test-task: print']);
+
+          records.removeWhere((e) => e.level <= Level.FINE);
+
+          expect(records, orderedEquals(
+              [new HopEvent(Level.SEVERE, 'info', [TEST_TASK_NAME]),
+               new HopEvent(Level.SEVERE, 'print', [TEST_TASK_NAME])]));
         });
   });
 
@@ -49,6 +57,8 @@ void main() {
   void _testLogger(String name, TaskLogger getLogThing(String name, ctx)) {
 
     test(name, () {
+
+      var records = <HopEvent>[];
 
       var task = new Task((TaskContext ctx) {
         ctx.info('info');
@@ -59,23 +69,26 @@ void main() {
         var subsub = getLogThing('subsub', subLogger);
         subsub.severe('subsub severe');
 
-        ctx.severe('info');
+        ctx.severe('severe');
       });
 
-      return runTaskInTestRunner(task)
+      return runTaskInTestRunner(task, eventLog: records)
           .then((RunResult result) {
             expect(result, same(RunResult.SUCCESS));
 
-            expect(records, everyElement((e) => e.level == Level.INFO));
-            expect(records.map((e) => e.message),
-                ['test-task: info',
-                 'test-task - sub: sub warn',
-                 'test-task - sub - subsub: subsub severe',
-                 'test-task: info']);
+            records.removeWhere((e) => e.level <= Level.FINE);
+
+            expect(records, orderedEquals(
+                [new HopEvent(Level.INFO, 'info', [TEST_TASK_NAME]),
+                 new HopEvent(Level.WARNING, 'sub warn', [TEST_TASK_NAME, 'sub']),
+                 new HopEvent(Level.SEVERE, 'subsub severe', [TEST_TASK_NAME, 'sub', 'subsub']),
+                 new HopEvent(Level.SEVERE, 'severe', [TEST_TASK_NAME])]));
           });
     });
 
     test('$name - parent disposes child', () {
+
+      var records = <HopEvent>[];
 
       TaskContext ctx;
       TaskLogger subLogger;
@@ -91,23 +104,21 @@ void main() {
         subsub = getLogThing('subsub', subLogger);
         subsub.severe('subsub severe');
 
-        ctx.severe('info');
+        ctx.severe('severe');
       });
 
-      return runTaskInTestRunner(task)
+      return runTaskInTestRunner(task, eventLog: records)
           .then((RunResult result) {
             expect(result, same(RunResult.SUCCESS));
 
-            expect(records, everyElement((e) => e.level == Level.INFO));
-            expect(records.map((e) => e.message),
-                ['test-task: info',
-                 'test-task - sub: sub warn',
-                 'test-task - sub - subsub: subsub severe',
-                 'test-task: info']);
-
             expect(ctx.isDisposed, isTrue);
+            expect(() => ctx.info('test'), throwsStateError);
+
             expect(subLogger.isDisposed, isTrue);
+            expect(() => subLogger.info('test'), throwsStateError);
+
             expect(subsub.isDisposed, isTrue);
+            expect(() => subsub.info('test'), throwsStateError);
           });
       });
   }

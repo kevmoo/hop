@@ -12,6 +12,7 @@ dependencies:
   args: '>=0.9.0 <0.10.0'
   bot: '>=0.24.0'
   bot_io: '>=0.24.0'
+  collection_helpers: any
   html5lib: '>=0.9.0 <0.10.0'
   logging: '>=0.9.0 <0.10.0'
   path: '>=0.9.0 <0.10.0'

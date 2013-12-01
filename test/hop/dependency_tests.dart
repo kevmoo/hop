@@ -39,8 +39,6 @@ void main() {
 
     var counts = new Map<String, int>();
 
-    var log = new List();
-
     reg.addTask('one', _createTaskWithArgs((TaskContext ctx) {
       expect(ctx.arguments['trueFlag'], true);
       expect(ctx.arguments['option'], 'c');
@@ -57,15 +55,11 @@ void main() {
       _increment(counts, 'two');
     }), dependencies: ['one']);
 
-    return runRegistry(reg, ['two'], printer: log.add)
+    return runRegistry(reg, ['two'])
       .then((RunResult rr) {
         expect(rr, RunResult.SUCCESS);
         expect(counts, {'one' : 1, 'two': 1 });
 
-      })
-      .catchError((_) {}, test: (error) {
-        print(log.join('\n'));
-        return false;
       });
   });
 

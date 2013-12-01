@@ -72,8 +72,6 @@ class Runner {
   static Future<RunResult> run(HopConfig config, {Level printAtLogLevel}) {
     requireArgumentNotNull(config, 'config');
 
-    final ctx = _getContext(config);
-
     if(config.args.command != null) {
       // we're executing a command
       final subCommandArgResults = config.args.command;
@@ -86,7 +84,7 @@ class Runner {
 
       return Future.forEach(tasks.keys, (String subTaskName) {
         if(finalResult != null && finalResult != RunResult.SUCCESS) {
-          ctx.log('Skipping $subTaskName');
+          config.contextPrint('Skipping $subTaskName');
           return null;
         }
 
@@ -102,7 +100,7 @@ class Runner {
           args = subParser.parse([]);
         }
 
-        return _runNamedTask(subTaskName, task, args, printAtLogLevel, ctx)
+        return _runNamedTask(subTaskName, task, args, printAtLogLevel, config)
             .then((RunResult rr) {
               finalResult = rr;
             });
@@ -113,36 +111,25 @@ class Runner {
       });
 
     } else if(config.args.rest.length == 0) {
-      _printHelp(config.doPrint, config.taskRegistry, config.parser);
+      _printHelp(config.contextPrint, config.taskRegistry, config.parser);
       return new Future.value(RunResult.SUCCESS);
     } else {
       final taskName = config.args.rest[0];
-      ctx.log('No task named "$taskName".');
+      config.contextPrint('No task named "$taskName".');
       return new Future.value(RunResult.BAD_USAGE);
     }
   }
 
   static Future<RunResult> _runNamedTask(String name, Task task,
-      ArgResults argResults, Level printAtLogLevel, RootTaskContext ctx) {
+      ArgResults argResults, Level printAtLogLevel, HopConfig ctx) {
 
-    var subCtx = ctx.getTaskContext(name, argResults);
+    var subCtx = ctx._getTaskContext(name, argResults);
 
     return runTask(subCtx, task, printAtLogLevel: printAtLogLevel)
         .then((RunResult result) => _logExitCode(ctx, result))
           .whenComplete(() {
             subCtx.dispose();
           });
-  }
-
-  static RootTaskContext _getContext(HopConfig config) {
-    final bool preFixEnabled = config.args[_PREFIX_FLAG];
-    final String logLevelOption = config.args[_LOG_LEVEL_OPTION];
-
-    final Level logLevel = _sortedLogLevels
-        .singleWhere((Level l) => l.name.toLowerCase() == logLevelOption);
-
-    return new RootTaskContext(config.doPrint,
-        prefixEnabled: preFixEnabled, minLogLevel: logLevel);
   }
 
   static void runShell(List<String> mainArgs, TaskRegistry registry,
@@ -178,44 +165,112 @@ class Runner {
       print('');
       _printHelp(print, registry, parser);
 
-      _libLogger.severe(ex.message);
-      _libLogger.severe(Error.safeToString(stack));
-
       io.exit(RunResult.BAD_USAGE.exitCode);
     }
 
     final bool useColor = args[_COLOR_FLAG];
-    final Printer printer = _colorPrinter(Zone.current.print, useColor);
+    var prefixEnabled = args[_PREFIX_FLAG];
+    var minLogLevel = _getLevel(args[_LOG_LEVEL_OPTION]);
+    final _ConsolePrinter printer = new _ConsolePrinter(Zone.current.print,
+        useColor, minLogLevel, prefixEnabled);
 
     final config = new HopConfig._internal(registry, parser, args, printer);
-    helpArgs.printer = config.doPrint;
+    helpArgs.printer = config.contextPrint;
 
     final future = Runner.run(config, printAtLogLevel: printAtLogLevel);
 
     future.then((RunResult rr) {
-      _libLogger.info('Exit with $rr');
       io.exit(rr.exitCode);
     });
   }
 
-  static Function _colorPrinter(void corePrint(String line), bool useColor) {
-    return (Object value) {
-
-      if(value is ShellString && useColor) {
-        value = (value as ShellString).format(true);
-      }
-
-      value = value.toString();
-
-      corePrint(value);
-    };
-  }
-
-  static RunResult _logExitCode(RootTaskContext ctx, RunResult result) {
+  static RunResult _logExitCode(HopConfig ctx, RunResult result) {
     if(!result.success) {
       final msg = 'Task did not complete - ${result.name} (${result.exitCode})';
-      ctx.log(new ShellString.withColor(msg, AnsiColor.RED));
+      ctx.contextPrint(new ShellString.withColor(msg, AnsiColor.RED));
     }
     return result;
+  }
+
+
+  static Level _getLevel(String logLevelOption) => _sortedLogLevels
+      .singleWhere((Level l) => l.name.toLowerCase() == logLevelOption);
+}
+
+class HopEvent {
+  final Level level;
+  final String message;
+  final List<String> logger;
+
+  bool get isPrint => logger.isEmpty;
+
+  const HopEvent.print(this.message) :
+    this.level = Level.INFO, this.logger = const [];
+
+  HopEvent(this.level, this.message, List<String> logger) :
+    this.logger = new UnmodifiableListView(logger.toList(growable: false)) {
+    requireArgumentNotNull(message, 'message');
+    assert(!logger.isEmpty);
+    assert(logger.every((s) => s != null && !s.isEmpty));
+  }
+
+  String toString() => isPrint ?
+      message : '$level\t${logger.join(':')}\t$message';
+
+  bool operator==(Object other) => other is HopEvent &&
+      level == other.level && message == other.message &&
+      const ListEquality<String>().equals(logger, other.logger);
+
+  // NOTE: intentionally omitted 'logger' -> too much cost, keep it simple
+  int get hashCode => Util.getHashCode([level, message]);
+}
+
+class _ConsolePrinter extends _ContextLogger {
+  final Action1<String> _linePrinter;
+  final bool _useColor;
+  final Level _minLogLevel;
+  final bool _prefixEnabled;
+
+  _ConsolePrinter(this._linePrinter, this._useColor, this._minLogLevel,
+      this._prefixEnabled);
+
+  void _print(dynamic value) {
+    String line = (value is ShellString) ?
+        value.format(_useColor) : value;
+
+    _linePrinter(line);
+  }
+
+  void contextPrint(/*String|ShellString*/dynamic value) => _print(value);
+
+  void hopEventListen(HopEvent event) {
+
+    final title = event.logger.join(' - ') + ': ';
+
+    if(event.level >= _minLogLevel) {
+      if(_prefixEnabled) {
+        final color = _getLogColor(event.level);
+        final coloredTitle = new ShellString.withColor(title, color);
+
+        var indent = '';
+
+        while(indent.length < title.length) {
+          indent =  indent + ' ';
+        }
+
+        final lines = Util.splitLines(event.message);
+        var first = true;
+        for(final line in lines) {
+          if(first) {
+            first = false;
+            _print(coloredTitle.concat(line));
+          } else {
+            _print(indent + line);
+          }
+        }
+      } else {
+        _print(event.message);
+      }
+    }
   }
 }

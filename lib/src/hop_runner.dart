@@ -9,6 +9,7 @@ import 'package:bot_io/bot_io.dart';
 import 'package:bot_io/completion.dart';
 import 'package:logging/logging.dart';
 import 'package:unmodifiable_collection/unmodifiable_collection.dart';
+import 'package:collection_helpers/equality.dart';
 
 import '../hop_core.dart';
 import 'util.dart';
@@ -18,8 +19,6 @@ part 'hop_runner/hop_config.dart';
 part 'hop_runner/root_task_context.dart';
 part 'hop_runner/runner.dart';
 part 'hop_runner/task_registry.dart';
-
-final _libLogger = new Logger('hop.runner');
 
 ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
   assert(config.isFrozen);

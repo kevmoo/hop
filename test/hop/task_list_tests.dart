@@ -2,7 +2,6 @@ library test.hop.task_list;
 
 import 'package:hop/src/hop_runner.dart';
 import 'package:unittest/unittest.dart';
-import '../test_util.dart';
 
 void main() {
   test('dupe names are bad', () {
@@ -33,7 +32,7 @@ void main() {
     final tasks = new TaskRegistry();
 
     expect(tasks.isFrozen, isFalse);
-    final hopConfig = new HopConfig(tasks, ['bad'], loggedPrint);
+    final hopConfig = new HopConfig(tasks, ['bad']);
     expect(tasks.isFrozen, isTrue);
 
     // cannot add task when frozen
