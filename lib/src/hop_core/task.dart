@@ -1,31 +1,33 @@
 part of hop.core;
 
-typedef void ArgParserConfigure(ArgParser);
+typedef void _ArgParserConfigure(ArgParser);
 
 typedef dynamic _TaskDefinition(TaskContext ctx);
 
 class Task {
   final String description;
   final _TaskDefinition _exec;
-  final ArgParserConfigure _argParserConfig;
+  final _ArgParserConfigure _argParserConfig;
   final ReadOnlyCollection<TaskArgument> _extendedArgs;
 
   /**
    * **DEPRECATED** Use `new Task` instead.
    */
   @deprecated
-  factory Task.sync(Func1<TaskContext, dynamic> exec, {String description,
-    ArgParserConfigure config, List<TaskArgument> extendedArgs}) = Task;
+  factory Task.sync(dynamic taskDefinition(TaskContext ctx),
+      {String description, void config(ArgParser),
+       List<TaskArgument> extendedArgs}) = Task;
 
   /**
    * **DEPRECATED** Use `new Task` instead.
    */
   @deprecated
-  factory Task.async(Future exec(TaskContext ctx), {String description,
-    ArgParserConfigure config, List<TaskArgument> extendedArgs}) = Task;
+  factory Task.async(Future taskDefinition(TaskContext ctx),
+      {String description, void config(ArgParser),
+       List<TaskArgument> extendedArgs}) = Task;
 
   Task(dynamic taskDefinition(TaskContext ctx), {String description,
-    ArgParserConfigure config, List<TaskArgument> extendedArgs}) :
+    void config(ArgParser), List<TaskArgument> extendedArgs}) :
       this._exec = taskDefinition,
       this.description = (description == null) ? '' : description,
       this._argParserConfig = config,
