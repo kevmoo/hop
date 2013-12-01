@@ -38,21 +38,18 @@ class Task {
   }
 
 
-  @override
   void configureArgParser(ArgParser parser) {
     if(_argParserConfig != null) {
       _argParserConfig(parser);
     }
   }
 
-  @override
   String getUsage() {
     final parser = new ArgParser();
     configureArgParser(parser);
     return parser.getUsage();
   }
 
-  @override
   String getExtendedArgsUsage() =>
     _extendedArgs.map((TaskArgument arg) {
       var value = '<${arg.name}>';
@@ -65,7 +62,6 @@ class Task {
       return value;
     }).join(' ');
 
-  @override
   Future run(TaskContext ctx, {Level printAtLogLevel}) {
     requireArgumentNotNull(ctx, 'ctx');
 
@@ -75,7 +71,6 @@ class Task {
     });
   }
 
-  @override
   Task clone({String description}) {
     if(description == null) description = this.description;
 
