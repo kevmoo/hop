@@ -7,11 +7,11 @@ import 'package:args/args.dart';
 import 'package:bot/bot.dart';
 import 'package:bot_io/bot_io.dart';
 import 'package:bot_io/completion.dart';
+import 'package:collection_helpers/equality.dart';
 import 'package:logging/logging.dart';
 import 'package:unmodifiable_collection/unmodifiable_collection.dart';
-import 'package:collection_helpers/equality.dart';
 
-import '../hop_core.dart';
+import 'package:hop/hop_core.dart';
 import 'util.dart';
 
 part 'hop_runner/help.dart';
@@ -54,6 +54,7 @@ void _initParserForTask(ArgParser parser, String taskName, Task task) {
 }
 
 // DARTBUG: https://code.google.com/p/dart/issues/detail?id=15321
+// Wating for this to land: https://code.google.com/p/dart/source/detail?r=30676
 // it'd be nice if this was in logging
 final List<Level> _sortedLogLevels = [Level.ALL, Level.CONFIG, Level.FINE,
                                       Level.FINER, Level.FINEST, Level.INFO,
