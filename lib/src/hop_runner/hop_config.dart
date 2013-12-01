@@ -1,7 +1,5 @@
 part of hop.runner;
 
-typedef _Printer(dynamic value);
-
 abstract class _ContextLogger {
   /**
    * [value] must be either [String] or [ShellString].

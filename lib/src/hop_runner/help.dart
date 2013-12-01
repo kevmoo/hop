@@ -10,6 +10,8 @@ class _HelpArgs {
   _HelpArgs(this.registry);
 }
 
+typedef _Printer(dynamic value);
+
 Task _getHelpTask(_HelpArgs helpArgs) {
   return new Task((TaskContext ctx) {
     final args = ctx.arguments;

@@ -197,34 +197,6 @@ class Runner {
       .singleWhere((Level l) => l.name.toLowerCase() == logLevelOption);
 }
 
-class HopEvent {
-  final Level level;
-  final String message;
-  final List<String> logger;
-
-  bool get isPrint => logger.isEmpty;
-
-  const HopEvent.print(this.message) :
-    this.level = Level.INFO, this.logger = const [];
-
-  HopEvent(this.level, this.message, List<String> logger) :
-    this.logger = new UnmodifiableListView(logger.toList(growable: false)) {
-    requireArgumentNotNull(message, 'message');
-    assert(!logger.isEmpty);
-    assert(logger.every((s) => s != null && !s.isEmpty));
-  }
-
-  String toString() => isPrint ?
-      message : '$level\t${logger.join(':')}\t$message';
-
-  bool operator==(Object other) => other is HopEvent &&
-      level == other.level && message == other.message &&
-      const ListEquality<String>().equals(logger, other.logger);
-
-  // NOTE: intentionally omitted 'logger' -> too much cost, keep it simple
-  int get hashCode => Util.getHashCode([level, message]);
-}
-
 class _ConsolePrinter extends _ContextLogger {
   final Action1<String> _linePrinter;
   final bool _useColor;

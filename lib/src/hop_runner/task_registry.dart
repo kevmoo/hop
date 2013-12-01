@@ -173,9 +173,9 @@ class TaskRegistry {
       _frozen = true;
     }
   }
-}
 
-void _noopTask(TaskContext ctx) {}
+  static void _noopTask(TaskContext ctx) { }
+}
 
 class _TaskMetadata {
   final LinkedHashSet<Task> dependencies;
