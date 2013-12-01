@@ -18,8 +18,7 @@ const _DEFAULT_RUN_COUNT = 20;
 
 const String _RUN_COUNT_ARE_NAME = 'run-count';
 
-Task createBenchTask() {
-  return new Task((ctx) {
+Task createBenchTask() => new Task((ctx) {
     final parseResult = ctx.arguments;
 
     final count = int.parse(parseResult[_RUN_COUNT_ARE_NAME],
@@ -43,7 +42,6 @@ Task createBenchTask() {
   config: _benchParserConfig,
   description: 'Run a benchmark against the provided task',
   extendedArgs: [new TaskArgument('command', required: true)]);
-}
 
 void _benchParserConfig(ArgParser parser) {
   parser.addOption(_RUN_COUNT_ARE_NAME, abbr: 'r',

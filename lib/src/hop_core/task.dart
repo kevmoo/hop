@@ -8,7 +8,7 @@ class Task {
   final String description;
   final _TaskDefinition _exec;
   final _ArgParserConfigure _argParserConfig;
-  final ReadOnlyCollection<TaskArgument> _extendedArgs;
+  final List<TaskArgument> _extendedArgs;
 
   /**
    * **DEPRECATED** Use `new Task` instead.
@@ -31,9 +31,8 @@ class Task {
       this._exec = taskDefinition,
       this.description = (description == null) ? '' : description,
       this._argParserConfig = config,
-      this._extendedArgs = extendedArgs == null ?
-        const ReadOnlyCollection<TaskArgument>.empty() :
-          new ReadOnlyCollection<TaskArgument>(extendedArgs) {
+      this._extendedArgs = (extendedArgs == null) ? const [] :
+        new UnmodifiableListView(extendedArgs.toList(growable: false)) {
     requireArgumentNotNull(_exec, '_exec');
     TaskArgument.validateArgs(_extendedArgs);
   }
@@ -54,8 +53,8 @@ class Task {
   }
 
   @override
-  String getExtendedArgsUsage() {
-    return _extendedArgs.map((TaskArgument arg) {
+  String getExtendedArgsUsage() =>
+    _extendedArgs.map((TaskArgument arg) {
       var value = '<${arg.name}>';
       if(arg.multiple) {
         value = value + '...';
@@ -65,7 +64,6 @@ class Task {
       }
       return value;
     }).join(' ');
-  }
 
   @override
   Future run(TaskContext ctx, {Level printAtLogLevel}) {
@@ -82,7 +80,7 @@ class Task {
     if(description == null) description = this.description;
 
     return new Task(_exec, description: description,
-        config: _argParserConfig);
+        config: _argParserConfig, extendedArgs: _extendedArgs);
   }
 
   @override
