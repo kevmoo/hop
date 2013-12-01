@@ -273,4 +273,17 @@ class _ConsolePrinter extends _ContextLogger {
       }
     }
   }
+
+  static AnsiColor _getLogColor(Level logLevel) {
+    requireArgumentNotNull(logLevel, 'logLevel');
+    if(logLevel.value > Level.WARNING.value) {
+      return AnsiColor.RED;
+    } else if(logLevel.value > Level.INFO.value) {
+      return AnsiColor.LIGHT_RED;
+    } else if(logLevel.value >= Level.INFO.value) {
+      return AnsiColor.BLUE;
+    } else {
+      return AnsiColor.GRAY;
+    }
+  }
 }

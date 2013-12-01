@@ -1,18 +1,5 @@
 part of hop.runner;
 
-AnsiColor _getLogColor(Level logLevel) {
-  requireArgumentNotNull(logLevel, 'logLevel');
-  if(logLevel.value > Level.WARNING.value) {
-    return AnsiColor.RED;
-  } else if(logLevel.value > Level.INFO.value) {
-    return AnsiColor.LIGHT_RED;
-  } else if(logLevel.value >= Level.INFO.value) {
-    return AnsiColor.BLUE;
-  } else {
-    return AnsiColor.GRAY;
-  }
-}
-
 // TODO: test dispose case - should bubble up an RunResult.ERROR
 class _TaskContext extends _LoggerChild with TaskContext {
   final ArgResults arguments;
