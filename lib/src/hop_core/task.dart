@@ -32,9 +32,8 @@ class Task {
       this.description = (description == null) ? '' : description,
       this._argParserConfig = config,
       this._extendedArgs = (extendedArgs == null) ? const [] :
-        new UnmodifiableListView(extendedArgs.toList(growable: false)) {
+        TaskArgument.validateArgs(extendedArgs) {
     requireArgumentNotNull(_exec, '_exec');
-    TaskArgument.validateArgs(_extendedArgs);
   }
 
 
@@ -76,6 +75,59 @@ class Task {
 
     return new Task(_exec, description: description,
         config: _argParserConfig, extendedArgs: _extendedArgs);
+  }
+
+  /**
+   * Returned map is in argument order.
+   *
+   * Returned map is unmodifiable.
+   */
+  Map<String, dynamic> parseExtendedArgs(List<String> argResultsRest) {
+    requireArgumentNotNull(argResultsRest, 'argResultRest');
+    requireArgument(argResultsRest.every((e) => e != null), 'argResultRest',
+        'Every item must be non-null.');
+
+    var actual = argResultsRest.length;
+
+    if(_extendedArgs.isNotEmpty) {
+      if (!_extendedArgs.last.multiple &&
+        argResultsRest.length > _extendedArgs.length) {
+        var expected = _extendedArgs.length;
+        throw new FormatException('Expected $expected argument(s); received $actual');
+      } else {
+        var lastRequiredIndex = lastIndexWhere(_extendedArgs, (arg) => arg.required);
+        if(argResultsRest.length <= lastRequiredIndex) {
+          var expected = lastRequiredIndex + 1;
+          throw new FormatException('Expected $expected argument(s); received $actual');
+        }
+      }
+    }
+
+    // Note: explicitly using LinkedHashMap so output key order corresponds
+    //       with extended arg order
+    var map = new LinkedHashMap<String, dynamic>();
+
+    for(var i = 0; i < _extendedArgs.length; i++) {
+      var arg = _extendedArgs[i];
+
+      var result = null;
+
+
+      if(arg.multiple) {
+        assert(i == _extendedArgs.length -1); // better be the last arg
+        result = argResultsRest.skip(i).toList(growable: false);
+      } else {
+        if(i >= argResultsRest.length) {
+          assert(!arg.required); // should have already been covered above
+          result = null;
+        } else {
+          result = argResultsRest[i];
+        }
+      }
+      map[arg.name] = result;
+    }
+
+    return new UnmodifiableMapView(map);
   }
 
   @override

@@ -22,6 +22,20 @@ void validateTaskName(String name) {
   'The provided task has a reserved name');
 }
 
+// TODO: move this to bot?
+int lastIndexWhere(Iterable source, bool predicate(dynamic element)) {
+
+  var foundIndex = -1;
+  var currentIndex = 0;
+  for(var e in source) {
+    if(predicate(e)) {
+      foundIndex = currentIndex;
+    }
+    currentIndex++;
+  }
+  return foundIndex;
+}
+
 List topoSort(Map<dynamic, Iterable<dynamic>> dependencies) {
   requireArgumentNotNull(dependencies, 'dependencies');
 

@@ -107,7 +107,7 @@ Future _testNoTasks() {
       });
 }
 
-Task _getGoodTask() => new Task((ctx) {}, description: 'Just a nice task',
+Task _getGoodTask() => new Task(noopTaskRunner, description: 'Just a nice task',
     config: (ArgParser parser) {
       parser.addFlag('foo', abbr: 'f', help: 'The foo flag', defaultsTo: true,
           negatable: true);

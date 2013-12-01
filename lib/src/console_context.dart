@@ -10,8 +10,9 @@ import 'hop_runner.dart';
 class ConsoleContext extends TaskLogger with TaskContext {
   final Task task;
   final ArgResults arguments;
+  final Map<String, dynamic> extendedArgs;
 
-  ConsoleContext.raw(this.arguments, this.task);
+  ConsoleContext.raw(this.arguments, this.task, this.extendedArgs);
 
   @override
   void log(Level logLevel, String message) {
@@ -43,15 +44,17 @@ class ConsoleContext extends TaskLogger with TaskContext {
     task.configureArgParser(parser);
 
     ArgResults args;
+    Map<String, dynamic> extendedArgs;
     try {
       args = tryArgsCompletion(mainArgs, parser);
+      extendedArgs = task.parseExtendedArgs(args.rest);
     } on FormatException catch (ex, stack) {
       print('There was a problem parsing the provided arguments.');
       print(ex.message);
       print(parser.getUsage());
       io.exit(RunResult.BAD_USAGE.exitCode);
     }
-    final ctx = new ConsoleContext.raw(args, task);
+    final ctx = new ConsoleContext.raw(args, task, extendedArgs);
 
     Runner.runTask(ctx, task)
       .then((RunResult rr) {

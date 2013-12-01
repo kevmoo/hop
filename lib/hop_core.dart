@@ -5,6 +5,7 @@ import 'dart:collection';
 import 'package:args/args.dart';
 import 'package:bot/bot.dart';
 import 'package:logging/logging.dart';
+import 'package:unmodifiable_collection/unmodifiable_collection.dart';
 
 import 'package:hop/src/util.dart';
 

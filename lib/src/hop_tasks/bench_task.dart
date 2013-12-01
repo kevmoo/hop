@@ -11,6 +11,7 @@ import 'package:hop/src/hop_tasks/process.dart';
 
 const _DEFAULT_RUN_COUNT = 20;
 
+// TODO: use extendedArgs in TaskContext
 // TODO: options for handling failed processes?
 // TODO: move some of the stat-related code to NumebrEnumerable?
 // TODO: print out all of the summary values

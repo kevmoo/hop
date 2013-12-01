@@ -130,13 +130,22 @@ class Runner {
       ArgResults argResults, Level printAtLogLevel, HopConfig ctx,
       bool throwExceptions) {
 
-    var subCtx = ctx._getTaskContext(name, argResults);
+    Map<String, dynamic> extendedArgs;
+    try {
+      extendedArgs = task.parseExtendedArgs(argResults.rest);
+    } catch (ex) {
+      if(throwExceptions) rethrow;
+      assert(ex is FormatException);
+      return new Future.value(RunResult.BAD_USAGE);
+    }
 
-    return runTask(subCtx, task, printAtLogLevel: printAtLogLevel,
+    var taskCtx = new _TaskContext(ctx, name, argResults, extendedArgs);
+
+    return runTask(taskCtx, task, printAtLogLevel: printAtLogLevel,
         throwExceptions: throwExceptions)
         .then((RunResult result) => _logExitCode(ctx, result))
           .whenComplete(() {
-            subCtx.dispose();
+            taskCtx.dispose();
           });
   }
 

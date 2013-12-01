@@ -3,8 +3,20 @@ part of hop.runner;
 // TODO: test dispose case - should bubble up an RunResult.ERROR
 class _TaskContext extends _LoggerChild with TaskContext {
   final ArgResults arguments;
+  final Map<String, dynamic> extendedArgs;
 
-  _TaskContext(_LoggerParent parent, String name, [this.arguments]) :
+  _TaskContext(_LoggerParent parent, String name, this.arguments,
+      this.extendedArgs) :
+    super(parent, name) {
+    assert(arguments != null);
+    assert(extendedArgs != null);
+  }
+
+  // NOTE: arguments and extendedArgs are only allowed null here to support
+  //       _DeprecatedSubTaskContext. Should be required when subclass is removed
+  _TaskContext.deprecatedSubTaskCtor(_LoggerParent parent, String name) :
+    this.arguments = null,
+    this.extendedArgs = const {},
     super(parent, name);
 }
 
@@ -47,7 +59,7 @@ class _LoggerChild extends TaskLogger implements _LoggerParent {
 
 class _DeprecatedSubTaskContext extends _TaskContext {
   _DeprecatedSubTaskContext(_LoggerParent parent, String name) :
-    super(parent, name);
+    super.deprecatedSubTaskCtor(parent, name);
 }
 
 abstract class _LoggerParent {

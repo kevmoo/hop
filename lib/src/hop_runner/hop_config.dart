@@ -66,10 +66,6 @@ class HopConfig implements _LoggerParent, _ContextLogger {
   static final _childNameChainExpando =
       new Expando<List<String>>('child names');
 
-
-  TaskContext _getTaskContext(String name, ArgResults arguments) =>
-      new _TaskContext(this, name, arguments);
-
   // NOTE: just a throw-away to implement _LoggerParent correctly
   bool get isDisposed => false;
 

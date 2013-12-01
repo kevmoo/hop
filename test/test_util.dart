@@ -63,3 +63,5 @@ class RunShellOutput {
     assert(printOutput != null);
   }
 }
+
+dynamic noopTaskRunner(TaskContext ctx) { }
