@@ -15,5 +15,3 @@ part 'src/hop_core/task_context.dart';
 part 'src/hop_core/task_logger.dart';
 
 final _libLogger = new Logger('hop.core');
-
-typedef dynamic _TaskDefinition(TaskContext ctx);

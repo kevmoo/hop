@@ -2,56 +2,40 @@ part of hop.core;
 
 typedef void ArgParserConfigure(ArgParser);
 
-abstract class Task {
+typedef dynamic _TaskDefinition(TaskContext ctx);
 
+class Task {
   final String description;
-
-  Task._impl(String description) :
-      this.description = (description == null) ? '' : description;
+  final _TaskDefinition _exec;
+  final ArgParserConfigure _argParserConfig;
+  final ReadOnlyCollection<TaskArgument> _extendedArgs;
 
   /**
    * **DEPRECATED** Use `new Task` instead.
    */
   @deprecated
   factory Task.sync(Func1<TaskContext, dynamic> exec, {String description,
-    ArgParserConfigure config, List<TaskArgument> extendedArgs}) = _SimpleTask;
+    ArgParserConfigure config, List<TaskArgument> extendedArgs}) = Task;
 
   /**
    * **DEPRECATED** Use `new Task` instead.
    */
   @deprecated
   factory Task.async(Future exec(TaskContext ctx), {String description,
-    ArgParserConfigure config, List<TaskArgument> extendedArgs}) = _SimpleTask;
+    ArgParserConfigure config, List<TaskArgument> extendedArgs}) = Task;
 
-  factory Task(dynamic exec(TaskContext ctx), {String description,
-    ArgParserConfigure config, List<TaskArgument> extendedArgs}) = _SimpleTask;
-
-  Future run(TaskContext ctx, {Level printAtLogLevel});
-
-  Task clone({String description});
-
-  void configureArgParser(ArgParser parser);
-
-  String getExtendedArgsUsage();
-
-  String getUsage();
-}
-
-class _SimpleTask extends Task {
-  final _TaskDefinition _exec;
-  final ArgParserConfigure _argParserConfig;
-  final ReadOnlyCollection<TaskArgument> _extendedArgs;
-
-  _SimpleTask(this._exec, {String description, ArgParserConfigure config,
-    List<TaskArgument> extendedArgs}) :
-    this._argParserConfig = config,
-    this._extendedArgs = extendedArgs == null ?
+  Task(dynamic taskDefinition(TaskContext ctx), {String description,
+    ArgParserConfigure config, List<TaskArgument> extendedArgs}) :
+      this._exec = taskDefinition,
+      this.description = (description == null) ? '' : description,
+      this._argParserConfig = config,
+      this._extendedArgs = extendedArgs == null ?
         const ReadOnlyCollection<TaskArgument>.empty() :
-          new ReadOnlyCollection<TaskArgument>(extendedArgs),
-    super._impl(description) {
+          new ReadOnlyCollection<TaskArgument>(extendedArgs) {
     requireArgumentNotNull(_exec, '_exec');
     TaskArgument.validateArgs(_extendedArgs);
   }
+
 
   @override
   void configureArgParser(ArgParser parser) {
@@ -92,10 +76,10 @@ class _SimpleTask extends Task {
   }
 
   @override
-  _SimpleTask clone({String description}) {
+  Task clone({String description}) {
     if(description == null) description = this.description;
 
-    return new _SimpleTask(_exec, description: description,
+    return new Task(_exec, description: description,
         config: _argParserConfig);
   }
 
