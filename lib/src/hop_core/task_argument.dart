@@ -1,7 +1,7 @@
 part of hop.core;
 
 class TaskArgument {
-  static final nameRegex = new RegExp(r'^[a-z](([a-z]|-)*[a-z])?$');
+  static final _nameRegex = new RegExp(r'^[a-z](([a-z0-9]|-)*[a-z0-9])?$');
 
   final String name;
   final bool required;
@@ -10,7 +10,7 @@ class TaskArgument {
   TaskArgument(this.name, {this.required: false, this.multiple: false}) {
     requireArgumentNotNull(required, 'required');
     requireArgumentNotNull(multiple, 'multiple');
-    requireArgumentContainsPattern(nameRegex, name, 'name');
+    requireArgumentContainsPattern(_nameRegex, name, 'name');
   }
 
   static void validateArgs(Iterable<TaskArgument> args) {

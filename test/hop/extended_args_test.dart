@@ -6,12 +6,12 @@ import 'package:hop/hop_core.dart';
 void main() {
 
   test('valid ctor args', () {
-    final valid = ['a', 'a-b', 'a-cool-name'];
+    final valid = ['a', 'a-b', 'a-cool-name', 'a7', 'b2b'];
     for(final v in valid) {
       expect(() => new TaskArgument(v), returnsNormally);
     }
 
-    final invalid = ['', null, ' ', '-', 'A', 'a-', 'a-B', 'a_b', 'a ', 'a b'];
+    final invalid = ['', null, ' ', '-', 'A', 'a-', 'a-B', 'a_b', 'a ', 'a b', '7', '7a'];
     for(final v in invalid) {
       expect(() => new TaskArgument(v), throwsArgumentError);
     }
