@@ -8,7 +8,7 @@ class Runner {
    * to [context] and returns a corresponding [RunResult] when completed.
    */
   static Future<RunResult> runTask(TaskContext context, Task task,
-      {Level printAtLogLevel}) {
+      {Level printAtLogLevel, bool throwExceptions: false}) {
 
     requireArgumentNotNull(context, 'context');
     requireArgumentNotNull(task, 'task');
@@ -53,6 +53,10 @@ class Runner {
             }
             return RunResult.EXCEPTION;
           }
+        }, test: (_) {
+          // if we're told to throw exceptions, then return false
+          // ...and skip the catch block
+          return !throwExceptions;
         })
         .whenComplete(() {
           final end = new DateTime.now();
@@ -69,7 +73,8 @@ class Runner {
    *
    * If you want to run a specific [Task] in isolation, see [runTask].
    */
-  static Future<RunResult> run(HopConfig config, {Level printAtLogLevel}) {
+  static Future<RunResult> run(HopConfig config, {Level printAtLogLevel,
+    bool throwTaskExceptions: false}) {
     requireArgumentNotNull(config, 'config');
 
     if(config.args.command != null) {
@@ -100,7 +105,8 @@ class Runner {
           args = subParser.parse([]);
         }
 
-        return _runNamedTask(subTaskName, task, args, printAtLogLevel, config)
+        return _runNamedTask(subTaskName, task, args, printAtLogLevel, config,
+            throwTaskExceptions)
             .then((RunResult rr) {
               finalResult = rr;
             });
@@ -121,11 +127,13 @@ class Runner {
   }
 
   static Future<RunResult> _runNamedTask(String name, Task task,
-      ArgResults argResults, Level printAtLogLevel, HopConfig ctx) {
+      ArgResults argResults, Level printAtLogLevel, HopConfig ctx,
+      bool throwExceptions) {
 
     var subCtx = ctx._getTaskContext(name, argResults);
 
-    return runTask(subCtx, task, printAtLogLevel: printAtLogLevel)
+    return runTask(subCtx, task, printAtLogLevel: printAtLogLevel,
+        throwExceptions: throwExceptions)
         .then((RunResult result) => _logExitCode(ctx, result))
           .whenComplete(() {
             subCtx.dispose();

@@ -8,7 +8,8 @@ import 'package:hop/src/hop_runner.dart';
 const String TEST_TASK_NAME = 'test-task-name';
 
 Future<RunResult> runTaskInTestRunner(dynamic task, {List<String> extraArgs,
-  List<HopEvent> eventLog, Level printAtLogLevel: Level.INFO}) {
+  List<HopEvent> eventLog, Level printAtLogLevel: Level.INFO,
+  bool throwTaskExceptions: false}) {
 
   final taskRegistry = new TaskRegistry();
   taskRegistry.addTask(TEST_TASK_NAME, task);
@@ -19,11 +20,13 @@ Future<RunResult> runTaskInTestRunner(dynamic task, {List<String> extraArgs,
   }
 
   return runRegistry(taskRegistry, args, eventLog: eventLog,
-      printAtLogLevel: printAtLogLevel);
+      printAtLogLevel: printAtLogLevel,
+      throwTaskExceptions: throwTaskExceptions);
 }
 
 Future<RunResult> runRegistry(TaskRegistry taskRegistry, List<String> args,
-    {List<HopEvent> eventLog, Level printAtLogLevel: Level.INFO}) {
+    {List<HopEvent> eventLog, Level printAtLogLevel: Level.INFO,
+     bool throwTaskExceptions: false}) {
 
   var config = new HopConfig(taskRegistry, args);
 
@@ -33,5 +36,6 @@ Future<RunResult> runRegistry(TaskRegistry taskRegistry, List<String> args,
     config.onEvent.listen(eventLog.add);
   }
 
-  return Runner.run(config, printAtLogLevel: printAtLogLevel);
+  return Runner.run(config, printAtLogLevel: printAtLogLevel,
+      throwTaskExceptions: throwTaskExceptions);
 }
