@@ -10,6 +10,9 @@ abstract class _ContextLogger {
 }
 
 class HopConfig implements _LoggerParent, _ContextLogger {
+  static final _childNameChainExpando =
+      new Expando<List<String>>('child names');
+
   final TaskRegistry taskRegistry;
   final ArgParser parser;
   final ArgResults args;
@@ -46,6 +49,9 @@ class HopConfig implements _LoggerParent, _ContextLogger {
     assert(parser != null);
   }
 
+  // NOTE: just a throw-away to implement _LoggerParent correctly
+  bool get isDisposed => false;
+
   Stream<HopEvent> get onEvent => _eventController.stream;
 
   void contextPrint(dynamic value) {
@@ -62,12 +68,6 @@ class HopConfig implements _LoggerParent, _ContextLogger {
 
     if(_eventController.hasListener) _eventController.add(event);
   }
-
-  static final _childNameChainExpando =
-      new Expando<List<String>>('child names');
-
-  // NOTE: just a throw-away to implement _LoggerParent correctly
-  bool get isDisposed => false;
 
   void _childLog(_LoggerChild subTask, Level logLevel, String message) {
     List<String> names = _childNameChainExpando[subTask];
