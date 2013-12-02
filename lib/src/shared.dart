@@ -2,9 +2,9 @@ library hop.shared;
 
 import 'dart:collection';
 import 'package:bot/bot.dart';
-import 'package:bot_io/completion.dart';
+import 'package:bot_io/completion.dart' as completion;
 
-const _RESERVED_TASKS = const[COMPLETION_COMMAND_NAME];
+const _RESERVED_TASKS = const[completion.COMPLETION_COMMAND_NAME];
 final RegExp _validNameRegExp = new RegExp(r'^[a-z]([a-z0-9_\-]*[a-z0-9])?$');
 
 class TaskFailError extends Error {
