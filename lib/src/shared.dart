@@ -1,4 +1,4 @@
-library hop.util;
+library hop.shared;
 
 import 'dart:collection';
 import 'package:bot/bot.dart';

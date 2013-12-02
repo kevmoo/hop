@@ -3,7 +3,7 @@ library test.hop.util;
 import 'package:bot_test/bot_test.dart';
 import 'package:unittest/unittest.dart';
 
-import 'package:hop/src/util.dart';
+import 'package:hop/src/shared.dart';
 
 void main() {
   group('topoSort', _topoSort);

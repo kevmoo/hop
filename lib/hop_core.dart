@@ -7,7 +7,7 @@ import 'package:bot/bot.dart';
 import 'package:logging/logging.dart';
 import 'package:unmodifiable_collection/unmodifiable_collection.dart';
 
-import 'package:hop/src/util.dart';
+import 'package:hop/src/shared.dart';
 
 part 'src/hop_core/run_result.dart';
 part 'src/hop_core/task.dart';

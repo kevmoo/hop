@@ -11,7 +11,7 @@ import 'package:logging/logging.dart';
 import 'package:unmodifiable_collection/unmodifiable_collection.dart';
 
 import 'package:hop/hop_core.dart';
-import 'util.dart';
+import 'shared.dart';
 
 part 'hop_runner/help.dart';
 part 'hop_runner/hop_config.dart';
