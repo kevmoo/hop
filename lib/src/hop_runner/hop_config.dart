@@ -9,13 +9,13 @@ abstract class _ContextLogger {
   void hopEventListen(HopEvent event);
 }
 
-class HopConfig implements _LoggerParent, _ContextLogger {
+class HopConfig implements _ContextLogger {
   static final _childNameChainExpando =
       new Expando<List<String>>('child names');
 
   final TaskRegistry taskRegistry;
   final ArgParser parser;
-  final ArgResults args;
+  final ArgResults argResults;
   final _ContextLogger _printer;
   final StreamController<HopEvent> _eventController =
       new StreamController<HopEvent>.broadcast(sync:true);
@@ -43,14 +43,11 @@ class HopConfig implements _LoggerParent, _ContextLogger {
 
   HopConfig._internal(this.taskRegistry, this.parser, ArgResults args,
       [this._printer]) :
-    this.args = args {
+    this.argResults = args {
     taskRegistry._freeze();
     assert(args != null);
     assert(parser != null);
   }
-
-  // NOTE: just a throw-away to implement _LoggerParent correctly
-  bool get isDisposed => false;
 
   Stream<HopEvent> get onEvent => _eventController.stream;
 
@@ -69,37 +66,7 @@ class HopConfig implements _LoggerParent, _ContextLogger {
     if(_eventController.hasListener) _eventController.add(event);
   }
 
-  void _childLog(_LoggerChild subTask, Level logLevel, String message) {
-    List<String> names = _childNameChainExpando[subTask];
-
-    if(names == null) {
-      final chain = _getParentChain(subTask);
-
-      _childNameChainExpando[subTask] = names =
-          chain.map((i) => i._name).toList();
-    }
-
-    hopEventListen(new HopEvent(logLevel, message, names));
-  }
-
-  List<_LoggerChild> _getParentChain(_LoggerChild child) {
-    final list = new List<_LoggerChild>();
-
-    _LoggerParent parent;
-
-    do {
-      list.insert(0, child);
-      parent = child._parent;
-      if(parent is _LoggerChild) {
-        child = parent as _LoggerChild;
-      } else {
-        // once we find something in the chain that's not a child
-        // it should be 'this' -- the root task context
-        assert(parent == this);
-        child = null;
-      }
-    } while(child != null);
-
-    return list;
+  void addLog(Level logLevel, String message, {List<String> source}) {
+    hopEventListen(new HopEvent(logLevel, message, source: source));
   }
 }

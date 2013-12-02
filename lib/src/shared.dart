@@ -1,8 +1,10 @@
 library hop.shared;
 
 import 'dart:collection';
+import 'package:args/args.dart';
 import 'package:bot/bot.dart';
 import 'package:bot_io/completion.dart' as completion;
+import 'package:logging/logging.dart';
 
 const _RESERVED_TASKS = const[completion.COMPLETION_COMMAND_NAME];
 final RegExp _validNameRegExp = new RegExp(r'^[a-z]([a-z0-9_\-]*[a-z0-9])?$');
@@ -13,6 +15,25 @@ class TaskFailError extends Error {
   TaskFailError(this.message);
 
   String toString() => "TaskFailError: $message";
+}
+
+class TaskUsageException implements Exception {
+  final String message;
+  final Object sourceError;
+  final StackTrace sourceStack;
+
+  TaskUsageException(this.message, [Object this.sourceError,
+                                    StackTrace this.sourceStack]) {
+    assert(message != null);
+  }
+
+  String toString() => 'TaskUsageException: $message';
+}
+
+abstract class TaskRuntime {
+  void addLog(Level level, String message, {List<String> source});
+  bool get isDisposed;
+  ArgResults get argResults;
 }
 
 void validateTaskName(String name) {

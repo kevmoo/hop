@@ -5,18 +5,8 @@ part of hop.core;
  * current [Task];
  */
 abstract class TaskLogger implements Disposable {
-  bool _isDisposed = false;
 
   TaskLogger getSubLogger(String name);
-
-  @override
-  bool get isDisposed => _isDisposed;
-
-  @override
-  void dispose() {
-    requireNotDisposed();
-    _isDisposed = true;
-  }
 
   // level 300
   void finest(String message) {
@@ -54,13 +44,4 @@ abstract class TaskLogger implements Disposable {
   }
 
   void log(Level logLevel, String message);
-
-  /**
-   * Throws [DisposedError] if the instance has already been disposed.
-   */
-  void requireNotDisposed() {
-    if(isDisposed) {
-      throw new DisposedError();
-    }
-  }
 }

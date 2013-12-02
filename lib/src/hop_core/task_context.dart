@@ -19,7 +19,5 @@ abstract class TaskContext implements TaskLogger {
   /**
    * Terminates the current [Task] with a failure, explained by [message].
    */
-  void fail(String message) {
-    throw new TaskFailError(message);
-  }
+  void fail(String message);
 }

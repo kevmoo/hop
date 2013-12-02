@@ -61,12 +61,21 @@ class Task {
       return value;
     }).join(' ');
 
-  Future run(TaskContext ctx, {Level printAtLogLevel}) {
-    requireArgumentNotNull(ctx, 'ctx');
+  Future run(TaskRuntime runtime, {Level printAtLogLevel}) {
+    requireArgumentNotNull(runtime, 'runtime');
+
+    Map<String, dynamic> extendedArgs;
+    try {
+      extendedArgs = this.parseExtendedArgs(runtime.argResults.rest);
+    } on FormatException catch(obj, stack) {
+      var usage = new TaskUsageException(obj.message, obj, stack);
+      return new Future.error(usage, stack);
+    }
+    var context = new _TaskContext(runtime, runtime.argResults, extendedArgs);
 
     return new Future.sync(() {
-      return runZoned(() => _exec(ctx),
-          zoneSpecification: _getZoneSpec(ctx, printAtLogLevel));
+      return runZoned(() => _exec(context),
+          zoneSpecification: _getZoneSpec(runtime, printAtLogLevel));
     });
   }
 
@@ -134,10 +143,10 @@ class Task {
   String toString() => "Task: $description";
 }
 
-ZoneSpecification _getZoneSpec(TaskContext ctx, Level printAtLevel) {
+ZoneSpecification _getZoneSpec(TaskRuntime runtime, Level printAtLevel) {
   if(printAtLevel == null) return null;
 
   return new ZoneSpecification(print: (a,b,c,String line) {
-    ctx.log(printAtLevel, line);
+    runtime.addLog(printAtLevel, line);
   });
 }

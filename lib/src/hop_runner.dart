@@ -18,7 +18,7 @@ part 'hop_runner/hop_config.dart';
 part 'hop_runner/hop_event.dart';
 part 'hop_runner/runner.dart';
 part 'hop_runner/task_registry.dart';
-part 'hop_runner/_task_context.dart';
+part 'hop_runner/_task_runtime.dart';
 
 ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
   assert(config.isFrozen);

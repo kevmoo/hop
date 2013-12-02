@@ -2,30 +2,29 @@ part of hop.runner;
 
 class Runner {
   /**
-   * Runs a [Task] with the specificed [TaskContext].
+   * Runs a [Task] with the specificed [TaskRuntime].
    *
    * [runTask] handles a number of error cases, logs appropriate messages
    * to [context] and returns a corresponding [RunResult] when completed.
    */
-  static Future<RunResult> runTask(TaskContext context, Task task,
+  static Future<RunResult> runTask(TaskRuntime runtime, Task task,
       {Level printAtLogLevel, bool throwExceptions: false}) {
 
-    requireArgumentNotNull(context, 'context');
+    requireArgumentNotNull(runtime, 'runtime');
     requireArgumentNotNull(task, 'task');
-    requireArgument(!context.isDisposed, 'context', 'cannot be disposed');
 
     final start = new DateTime.now();
-    context.finest('Started at $start');
+    runtime.addLog(Level.FINEST, 'Started at $start');
 
-    return task.run(context, printAtLogLevel: printAtLogLevel)
+    return task.run(runtime, printAtLogLevel: printAtLogLevel)
         .then((value) {
           // TODO: remove these checks at some future version
           if(value == true) {
-            context.severe('`true` was returned from the task.\n'
+            runtime.addLog(Level.SEVERE, '`true` was returned from the task.\n'
                 "It's possible that the task was trying to signal success using"
                 "an old behavior.\nThis is no longer nessesary.");
           } else if(value == false) {
-            context.severe("`false` was returned from the task.\n"
+            runtime.addLog(Level.SEVERE, "`false` was returned from the task.\n"
                 "It's possible that the task was trying to signal failure using"
                 "an old behavior.\nTasks should signal failure using "
                 "`TaskContext.fail`.");
@@ -34,14 +33,17 @@ class Runner {
           return RunResult.SUCCESS;
         })
         .catchError((Object error, StackTrace stack) {
-          if(error is TaskFailError) {
-            final TaskFailError e = error;
-            context.severe(e.message);
+          if(error is TaskUsageException) {
+            runtime.addLog(Level.SEVERE, error.message);
+            // TODO: print usage here? Hmm...
+            return RunResult.BAD_USAGE;
+          } else if(error is TaskFailError) {
+            runtime.addLog(Level.SEVERE, error.message);
             return RunResult.FAIL;
           } else {
             // has as exception, need to test this
-            context.severe('Exception thrown by task');
-            context.severe(error.toString());
+            runtime.addLog(Level.SEVERE, 'Exception thrown by task');
+            runtime.addLog(Level.SEVERE, error.toString());
 
             if(error is Error && stack == null) {
               // TODO: should this ever be the case? Weird...
@@ -49,7 +51,7 @@ class Runner {
             }
 
             if(stack != null) {
-              context.severe(stack.toString());
+              runtime.addLog(Level.SEVERE, stack.toString());
             }
             return RunResult.EXCEPTION;
           }
@@ -60,9 +62,9 @@ class Runner {
         })
         .whenComplete(() {
           final end = new DateTime.now();
-          context.finest('Finished at $end');
+          runtime.addLog(Level.FINEST, 'Finished at $end');
           final duration = end.difference(start);
-          context.finer('Run time: $duration');
+          runtime.addLog(Level.FINER, 'Run time: $duration');
         });
   }
 
@@ -77,9 +79,9 @@ class Runner {
     bool throwTaskExceptions: false}) {
     requireArgumentNotNull(config, 'config');
 
-    if(config.args.command != null) {
+    if(config.argResults.command != null) {
       // we're executing a command
-      final subCommandArgResults = config.args.command;
+      final subCommandArgResults = config.argResults.command;
       final taskName = subCommandArgResults.name;
 
       var tasks = config.taskRegistry.getTaskWithDependencies(taskName);
@@ -116,11 +118,11 @@ class Runner {
         return finalResult;
       });
 
-    } else if(config.args.rest.length == 0) {
+    } else if(config.argResults.rest.length == 0) {
       _printHelp(config.contextPrint, config.taskRegistry, config.parser);
       return new Future.value(RunResult.SUCCESS);
     } else {
-      final taskName = config.args.rest[0];
+      final taskName = config.argResults.rest[0];
       config.contextPrint('No task named "$taskName".');
       return new Future.value(RunResult.BAD_USAGE);
     }
@@ -130,22 +132,13 @@ class Runner {
       ArgResults argResults, Level printAtLogLevel, HopConfig config,
       bool throwExceptions) {
 
-    Map<String, dynamic> extendedArgs;
-    try {
-      extendedArgs = task.parseExtendedArgs(argResults.rest);
-    } catch (ex) {
-      if(throwExceptions) rethrow;
-      assert(ex is FormatException);
-      return new Future.value(RunResult.BAD_USAGE);
-    }
+    var runtime = new _TaskRuntime(name, argResults, config);
 
-    var taskCtx = new _TaskContext(config, name, argResults, extendedArgs);
-
-    return runTask(taskCtx, task, printAtLogLevel: printAtLogLevel,
+    return runTask(runtime, task, printAtLogLevel: printAtLogLevel,
         throwExceptions: throwExceptions)
         .then((RunResult result) => _logExitCode(config, result))
           .whenComplete(() {
-            taskCtx.dispose();
+            runtime.dispose();
           });
   }
 

@@ -14,5 +14,6 @@ part 'src/hop_core/task.dart';
 part 'src/hop_core/task_argument.dart';
 part 'src/hop_core/task_context.dart';
 part 'src/hop_core/task_logger.dart';
+part 'src/hop_core/_task_context.dart';
 
 final _libLogger = new Logger('hop.core');
