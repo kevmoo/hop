@@ -4,9 +4,12 @@ class _TaskRuntime extends TaskRuntime {
   final String name;
   final ArgResults argResults;
   final HopConfig _parent;
+  final Level printAtLevel;
+
   bool _disposed = false;
 
-  _TaskRuntime(this.name, this.argResults, this._parent);
+  _TaskRuntime(this.name, this.argResults, this._parent,
+      {this.printAtLevel: Level.INFO});
 
   bool get isDisposed => _disposed;
 

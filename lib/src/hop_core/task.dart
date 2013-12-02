@@ -61,7 +61,7 @@ class Task {
       return value;
     }).join(' ');
 
-  Future run(TaskRuntime runtime, {Level printAtLogLevel}) {
+  Future run(TaskRuntime runtime) {
     requireArgumentNotNull(runtime, 'runtime');
 
     Map<String, dynamic> extendedArgs;
@@ -75,7 +75,7 @@ class Task {
 
     return new Future.sync(() {
       return runZoned(() => _exec(context),
-          zoneSpecification: _getZoneSpec(runtime, printAtLogLevel));
+          zoneSpecification: _getZoneSpec(runtime));
     });
   }
 
@@ -143,10 +143,10 @@ class Task {
   String toString() => "Task: $description";
 }
 
-ZoneSpecification _getZoneSpec(TaskRuntime runtime, Level printAtLevel) {
-  if(printAtLevel == null) return null;
+ZoneSpecification _getZoneSpec(TaskRuntime runtime) {
+  if(runtime.printAtLevel == null) return null;
 
   return new ZoneSpecification(print: (a,b,c,String line) {
-    runtime.addLog(printAtLevel, line);
+    runtime.addLog(runtime.printAtLevel, line);
   });
 }

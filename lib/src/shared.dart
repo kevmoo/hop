@@ -34,6 +34,11 @@ abstract class TaskRuntime {
   void addLog(Level level, String message, {List<String> source});
   bool get isDisposed;
   ArgResults get argResults;
+
+  /**
+   * If `null`, calls to [print] will not be logged and will be behave normally.
+   */
+  Level get printAtLevel;
 }
 
 void validateTaskName(String name) {

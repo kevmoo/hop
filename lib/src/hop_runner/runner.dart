@@ -8,7 +8,7 @@ class Runner {
    * to [context] and returns a corresponding [RunResult] when completed.
    */
   static Future<RunResult> runTask(TaskRuntime runtime, Task task,
-      {Level printAtLogLevel, bool throwExceptions: false}) {
+      {bool throwExceptions: false}) {
 
     requireArgumentNotNull(runtime, 'runtime');
     requireArgumentNotNull(task, 'task');
@@ -16,7 +16,7 @@ class Runner {
     final start = new DateTime.now();
     runtime.addLog(Level.FINEST, 'Started at $start');
 
-    return task.run(runtime, printAtLogLevel: printAtLogLevel)
+    return task.run(runtime)
         .then((value) {
           // TODO: remove these checks at some future version
           if(value == true) {
@@ -132,10 +132,10 @@ class Runner {
       ArgResults argResults, Level printAtLogLevel, HopConfig config,
       bool throwExceptions) {
 
-    var runtime = new _TaskRuntime(name, argResults, config);
+    var runtime = new _TaskRuntime(name, argResults, config,
+        printAtLevel: printAtLogLevel);
 
-    return runTask(runtime, task, printAtLogLevel: printAtLogLevel,
-        throwExceptions: throwExceptions)
+    return runTask(runtime, task, throwExceptions: throwExceptions)
         .then((RunResult result) => _logExitCode(config, result))
           .whenComplete(() {
             runtime.dispose();

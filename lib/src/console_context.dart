@@ -22,6 +22,8 @@ class ConsoleContext extends TaskRuntime {
     }
   }
 
+  Level get printAtLevel => null;
+
   bool get isDisposed => false;
 
   static void runTaskAsProcess(List<String> mainArgs, Task task) {
