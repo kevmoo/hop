@@ -1,6 +1,7 @@
 library test.hop.sync;
 
 import 'dart:async';
+import 'package:args/args.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_runner.dart';
 import 'package:unittest/unittest.dart';
@@ -15,6 +16,19 @@ void main() {
   test('no task name', _testNoParam);
   test('no tasks defined', _testNoTasks);
   test('ctx.fail', _testCtxFail);
+
+  test('help for a task', () {
+    var task = _getGoodTask();
+
+    var taskReg = new TaskRegistry();
+    taskReg.addTask('good', task);
+
+    return runRegistryShell(taskReg, ['--no-color', 'help', 'good'])
+        .then((RunShellOutput value) {
+          expect(value.runResult, RunResult.SUCCESS);
+          expect(value.printOutput, _GOOD_HELP_OUTPUT);
+        });
+  });
 
   test('using context after task completes', () {
     TaskContext ctx;
@@ -63,7 +77,7 @@ Future _testExceptionIsSad() =>
 
 Future _testBadParam() {
   final taskReg = new TaskRegistry();
-  taskReg.addTask('good', (ctx) => true);
+  taskReg.addTask('good', _getGoodTask());
 
   return runRegistry(taskReg, ['bad'])
       .then((value) {
@@ -74,7 +88,7 @@ Future _testBadParam() {
 
 Future _testNoParam() {
   final taskReg = new TaskRegistry();
-  taskReg.addTask('good', (ctx) {}, description: 'Just a nice task');
+  taskReg.addTask('good', _getGoodTask());
 
   return runRegistryShell(taskReg, ['--no-color'])
       .then((RunShellOutput value) {
@@ -92,6 +106,41 @@ Future _testNoTasks() {
         expect(value.printOutput, _NO_TASK_NO_PARAMS_OUTPUT);
       });
 }
+
+Task _getGoodTask() => new Task((ctx) {}, description: 'Just a nice task',
+    config: (ArgParser parser) {
+      parser.addFlag('foo', abbr: 'f', help: 'The foo flag', defaultsTo: true,
+          negatable: true);
+      parser.addOption('bar', abbr: 'b', help: 'the bar flag',
+          allowed: ['a', 'b', 'c'], defaultsTo: 'b', allowMultiple: true);
+    },
+    extendedArgs: [
+                   new TaskArgument('ta-first', required: true),
+                   new TaskArgument('ta-second'),
+                   new TaskArgument('ta-third', multiple: true)]);
+
+const _GOOD_HELP_OUTPUT = '''usage: hop [<hop-options>] good [<good-options>] <ta-first> [<ta-second>] [<ta-third>...]
+
+  Just a nice task
+
+good options:
+  -f, --[no-]foo    The foo flag
+                    (defaults to on)
+
+  -b, --bar         the bar flag
+                    [a, b (default), c]
+
+Hop options:
+  --[no-]color     Specifies if shell output can have color.
+                   (defaults to on)
+
+  --[no-]prefix    Specifies if shell output is prefixed by the task name.
+                   (defaults to on)
+
+  --log-level      The log level at which task output is printed to the shell
+                   [all, finest, finer, fine, config, info (default), severe, shout, off]
+
+''';
 
 const _NO_TASK_NO_PARAMS_OUTPUT = '''usage: hop [<hop-options>] <task> [<task-options>] [--] [<task-args>]
 
