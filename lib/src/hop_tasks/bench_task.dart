@@ -9,28 +9,25 @@ import 'package:bot_io/bot_io.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_tasks/process.dart';
 
-const _DEFAULT_RUN_COUNT = 20;
-
-// TODO: use extendedArgs in TaskContext
 // TODO: options for handling failed processes?
 // TODO: move some of the stat-related code to NumebrEnumerable?
 // TODO: print out all of the summary values
 // TODO: tests?
 
+const _DEFAULT_RUN_COUNT = 20;
+const _COMMAND_ARG = 'command';
 const String _RUN_COUNT_ARE_NAME = 'run-count';
 
-Task createBenchTask() => new Task((ctx) {
+Task createBenchTask() => new Task((TaskContext ctx) {
     final parseResult = ctx.arguments;
 
     final count = int.parse(parseResult[_RUN_COUNT_ARE_NAME],
         onError: (s) => _DEFAULT_RUN_COUNT);
 
-    if(parseResult.rest.isEmpty) {
-      ctx.fail('No command provided.');
-    }
+    List<String> commandParams = ctx.extendedArgs[_COMMAND_ARG];
 
-    final processName = parseResult.rest.first;
-    final args = parseResult.rest.sublist(1);
+    String processName = commandParams.first;
+    final args = commandParams.sublist(1);
 
     return _runMany(ctx, count, processName, args)
         .then((list) {
@@ -42,7 +39,7 @@ Task createBenchTask() => new Task((ctx) {
   },
   config: _benchParserConfig,
   description: 'Run a benchmark against the provided task',
-  extendedArgs: [new TaskArgument('command', required: true)]);
+  extendedArgs: [new TaskArgument('command', required: true, multiple: true)]);
 
 void _benchParserConfig(ArgParser parser) {
   parser.addOption(_RUN_COUNT_ARE_NAME, abbr: 'r',

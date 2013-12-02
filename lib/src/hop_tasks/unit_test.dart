@@ -11,6 +11,7 @@ const _SUMMARY_ALL = 'all';
 const _SUMARY_FAIL = 'fail';
 const _SUMMARY_PASS = 'pass';
 const _SUMMARY_ERROR = 'error';
+const _FILTER_ARG = 'filter';
 
 Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
                         {Duration timeout: const Duration(seconds: 20)}) {
@@ -33,7 +34,7 @@ Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
     // TODO: wrap this in a try/catch
     unitTestAction(config);
 
-    if(!ctx.arguments.rest.isEmpty) {
+    if(ctx.extendedArgs[_FILTER_ARG].isNotEmpty) {
       ctx.info('Filtering tests by: ${ctx.arguments.rest}');
 
       unittest.filterTests((unittest.TestCase tc) {
@@ -60,7 +61,7 @@ Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
   },
   config: _unittestParserConfig,
   description: 'Run unit tests in the console',
-  extendedArgs: [new TaskArgument('filter', multiple: true)]);
+  extendedArgs: [new TaskArgument(_FILTER_ARG, multiple: true)]);
 }
 
 void _unittestParserConfig(ArgParser parser) {
