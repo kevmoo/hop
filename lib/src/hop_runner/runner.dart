@@ -140,8 +140,11 @@ class Runner {
           });
   }
 
-  static void runShell(List<String> mainArgs, TaskRegistry registry,
-                        String helpTaskName, Level printAtLogLevel) {
+  /**
+   * Designed to be run [runHop] command in the [hop] library.
+   */
+  static Future<RunResult> runShell(List<String> mainArgs,
+      TaskRegistry registry, String helpTaskName, Level printAtLogLevel) {
 
     // a bit ugly
     // the help task needs the parser and a print method
@@ -173,7 +176,7 @@ class Runner {
       print('');
       _printHelp(print, registry, parser);
 
-      io.exit(RunResult.BAD_USAGE.exitCode);
+      return new Future.value(RunResult.BAD_USAGE);
     }
 
     final bool useColor = args[_COLOR_FLAG];
@@ -185,11 +188,7 @@ class Runner {
     final config = new HopConfig._internal(registry, parser, args, printer);
     helpArgs.printer = config.contextPrint;
 
-    final future = Runner.run(config, printAtLogLevel: printAtLogLevel);
-
-    future.then((RunResult rr) {
-      io.exit(rr.exitCode);
-    });
+    return Runner.run(config, printAtLogLevel: printAtLogLevel);
   }
 
   static RunResult _logExitCode(HopConfig ctx, RunResult result) {

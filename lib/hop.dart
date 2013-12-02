@@ -42,7 +42,10 @@ void runHop(List<String> args, {
   if(paranoid) {
     _paranoidHopCheck();
   }
-  Runner.runShell(args, _sharedConfig, helpTaskName, printAtLogLevel);
+  Runner.runShell(args, _sharedConfig, helpTaskName, printAtLogLevel)
+    .then((RunResult rr) {
+      io.exit(rr.exitCode);
+    });
 }
 
 /**
