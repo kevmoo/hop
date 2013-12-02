@@ -94,8 +94,16 @@ void _printHopArgsHelp(_Printer printer, ArgParser hopArgParser) {
 String _indent(String input) {
   return Util.splitLines(input)
       .map((String line) => '  ' + line)
+      .map(_trimTrailingWhitespace)
       .join(('\n'));
 }
+
+// DARTBUG: https://code.google.com/p/dart/issues/detail?id=5589
+String _trimTrailingWhitespace(String str) {
+  return str.replaceFirst(_trailingWhitespaceRegExp, "");
+}
+
+final _trailingWhitespaceRegExp = new RegExp(r"\s+$");
 
 ShellString _getTitle(String input) {
   assert(input != null);

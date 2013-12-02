@@ -39,3 +39,27 @@ Future<RunResult> runRegistry(TaskRegistry taskRegistry, List<String> args,
   return Runner.run(config, printAtLogLevel: printAtLogLevel,
       throwTaskExceptions: throwTaskExceptions);
 }
+
+Future<RunShellOutput> runRegistryShell(TaskRegistry registry, List<String> args) {
+  var buffer = new StringBuffer();
+  var zoneSpec = new ZoneSpecification(print: (a,b,c,String line) {
+    buffer.writeln(line);
+  });
+
+  return runZoned(() {
+    return Runner.runShell(args, registry, 'help', null)
+        .then((RunResult rr) {
+          return new RunShellOutput(rr, buffer.toString());
+        });
+  }, zoneSpecification: zoneSpec);
+}
+
+class RunShellOutput {
+  final RunResult runResult;
+  final String printOutput;
+
+  RunShellOutput(this.runResult, this.printOutput) {
+    assert(runResult != null);
+    assert(printOutput != null);
+  }
+}

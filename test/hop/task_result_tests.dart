@@ -74,22 +74,58 @@ Future _testBadParam() {
 
 Future _testNoParam() {
   final taskReg = new TaskRegistry();
-  taskReg.addTask('good', (ctx) => true);
+  taskReg.addTask('good', (ctx) {}, description: 'Just a nice task');
 
-  return runRegistry(taskReg, [])
-      .then((value) {
-        expect(value, RunResult.SUCCESS);
-        // TODO: test that task list is printed
+  return runRegistryShell(taskReg, ['--no-color'])
+      .then((RunShellOutput value) {
+        expect(value.runResult, RunResult.SUCCESS);
+        expect(value.printOutput, _GOOD_TASK_NO_PARAMS_OUTPUT);
       });
 }
 
 Future _testNoTasks() {
   final taskReg = new TaskRegistry();
 
-  return runRegistry(taskReg, [])
-      .then((value) {
-        expect(value, RunResult.SUCCESS);
-
-        // TODO: show help value?
+  return runRegistryShell(taskReg, ['--no-color'])
+      .then((RunShellOutput value) {
+        expect(value.runResult, RunResult.SUCCESS);
+        expect(value.printOutput, _NO_TASK_NO_PARAMS_OUTPUT);
       });
 }
+
+const _NO_TASK_NO_PARAMS_OUTPUT = '''usage: hop [<hop-options>] <task> [<task-options>] [--] [<task-args>]
+
+Tasks:
+  help   Print help information about available tasks
+
+Hop options:
+  --[no-]color     Specifies if shell output can have color.
+                   (defaults to on)
+
+  --[no-]prefix    Specifies if shell output is prefixed by the task name.
+                   (defaults to on)
+
+  --log-level      The log level at which task output is printed to the shell
+                   [all, finest, finer, fine, config, info (default), severe, shout, off]
+
+See 'hop help <task>' for more information on a specific command.
+''';
+
+const _GOOD_TASK_NO_PARAMS_OUTPUT = '''usage: hop [<hop-options>] <task> [<task-options>] [--] [<task-args>]
+
+Tasks:
+  good   Just a nice task
+  help   Print help information about available tasks
+
+Hop options:
+  --[no-]color     Specifies if shell output can have color.
+                   (defaults to on)
+
+  --[no-]prefix    Specifies if shell output is prefixed by the task name.
+                   (defaults to on)
+
+  --log-level      The log level at which task output is printed to the shell
+                   [all, finest, finer, fine, config, info (default), severe, shout, off]
+
+See 'hop help <task>' for more information on a specific command.
+''';
