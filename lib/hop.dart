@@ -12,13 +12,7 @@ export 'hop_core.dart';
 
 import 'src/hop_runner.dart';
 
-// TODO: remove this export at some point...and warn folks
-export 'src/console_context.dart';
-
 final _sharedConfig = new TaskRegistry();
-
-@deprecated
-typedef Future TaskDefinition(TaskContext ctx);
 
 /**
  * Designed to enable features in __Hop__. Should be the last method called in
@@ -27,8 +21,8 @@ typedef Future TaskDefinition(TaskContext ctx);
  * [runHop] calls [io.exit] which terminates the application.
  *
  * If [paranoid] is `true`, [runHop] will verify the running script is
- * `tool/hop_runner.dart` relative to the working directory. If not, an
- * exception is thrown.
+ * `tool/hop_runner.dart` relative to the working directory. If the script does
+ * not, match that requirement, an [Exception] is thrown.
  *
  * If [helpTaskName], defines (surprise!) the name of the help task. If `null`
  * no help task is added. If [helpTaskName] conflicts with an already defined
@@ -50,9 +44,9 @@ void runHop(List<String> args, {
 
 /**
  * [task] can be either an instance of [Task] or a [Function].
-*
+ *
  * If [task] is a [Function], it must take one argument: [TaskContext].
-*
+ *
  * If a [Future] is returned from the [task] [Function], the runner will wait
  * for the [Future] to complete.
  *
@@ -87,8 +81,6 @@ Task addChainedTask(String name, Iterable<String> existingTaskNames,
 
 void _paranoidHopCheck() {
   var runningScript = io.Platform.script.toFilePath();
-  runningScript = path.absolute(runningScript);
-  runningScript = path.normalize(runningScript);
 
   final expectedPath = path.join(path.current, 'tool', 'hop_runner.dart');
   require(runningScript == expectedPath,
