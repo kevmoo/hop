@@ -62,10 +62,10 @@ Future _testExceptionIsSad() =>
     });
 
 Future _testBadParam() {
-  final taskConfig = new TaskRegistry();
-  taskConfig.addTask('good', (ctx) => true);
+  final taskReg = new TaskRegistry();
+  taskReg.addTask('good', (ctx) => true);
 
-  return runRegistry(taskConfig, ['bad'])
+  return runRegistry(taskReg, ['bad'])
       .then((value) {
         expect(value, RunResult.BAD_USAGE);
         // TODO: test that proper error message is printed
@@ -73,10 +73,10 @@ Future _testBadParam() {
 }
 
 Future _testNoParam() {
-  final taskConfig = new TaskRegistry();
-  taskConfig.addTask('good', (ctx) => true);
+  final taskReg = new TaskRegistry();
+  taskReg.addTask('good', (ctx) => true);
 
-  return runRegistry(taskConfig, [])
+  return runRegistry(taskReg, [])
       .then((value) {
         expect(value, RunResult.SUCCESS);
         // TODO: test that task list is printed
@@ -84,10 +84,12 @@ Future _testNoParam() {
 }
 
 Future _testNoTasks() {
-  final taskConfig = new TaskRegistry();
+  final taskReg = new TaskRegistry();
 
-  return runRegistry(taskConfig, [])
+  return runRegistry(taskReg, [])
       .then((value) {
         expect(value, RunResult.SUCCESS);
+
+        // TODO: show help value?
       });
 }
