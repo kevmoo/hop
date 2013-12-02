@@ -127,7 +127,7 @@ class Runner {
   }
 
   static Future<RunResult> _runNamedTask(String name, Task task,
-      ArgResults argResults, Level printAtLogLevel, HopConfig ctx,
+      ArgResults argResults, Level printAtLogLevel, HopConfig config,
       bool throwExceptions) {
 
     Map<String, dynamic> extendedArgs;
@@ -139,11 +139,11 @@ class Runner {
       return new Future.value(RunResult.BAD_USAGE);
     }
 
-    var taskCtx = new _TaskContext(ctx, name, argResults, extendedArgs);
+    var taskCtx = new _TaskContext(config, name, argResults, extendedArgs);
 
     return runTask(taskCtx, task, printAtLogLevel: printAtLogLevel,
         throwExceptions: throwExceptions)
-        .then((RunResult result) => _logExitCode(ctx, result))
+        .then((RunResult result) => _logExitCode(config, result))
           .whenComplete(() {
             taskCtx.dispose();
           });
