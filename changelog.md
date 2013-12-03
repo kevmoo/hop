@@ -1,5 +1,9 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.28.0 2013-12-02 (SDK 1.0.1+3 r30657)
+
+# **BREAKING** If you did anything other than create tasks and use `runHop`, you're probably broken.
+
 ## 0.27.1 2013-11-08 (SDK 0.8.10+10 r30107)
 
 * Lastest SDK
