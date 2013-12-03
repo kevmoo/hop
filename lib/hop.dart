@@ -53,31 +53,30 @@ void runHop(List<String> args, {
  * If [description] is provided and [task] is an instance of [Task], then [task]
  * will be cloned and given the provided [description].
  */
-Task addTask(String name, dynamic task, {String description}) {
-  return _sharedConfig.addTask(name, task, description: description);
-}
+Task addTask(String name, dynamic task, {String description,
+  List<String> dependencies}) =>
+      _sharedConfig.addTask(name, task, description: description,
+          dependencies: dependencies);
 
 /**
  * **DEPRECATED** Use [addTask] instead.
  */
 @deprecated
-Task addSyncTask(String name, Func1<TaskContext, bool> execFunc, {String description}) {
-  return _sharedConfig.addTask(name, execFunc, description: description);
-}
+Task addSyncTask(String name, Func1<TaskContext, bool> execFunc, {
+  String description}) =>
+      _sharedConfig.addTask(name, execFunc, description: description);
 
 /**
  * **DEPRECATED** Use [addTask] instead.
  */
 @deprecated
-Task addAsyncTask(String name, Future execFuture(TaskContext ctx), {String description}) {
-  return _sharedConfig.addTask(name, execFuture, description: description);
-}
-
-Task addChainedTask(String name, Iterable<String> existingTaskNames,
-                           {String description}) {
-  return _sharedConfig.addChainedTask(name, existingTaskNames,
+Task addAsyncTask(String name, Future execFuture(TaskContext ctx), {
+  String description}) => _sharedConfig.addTask(name, execFuture,
       description: description);
-}
+
+Task addChainedTask(String name, Iterable<String> existingTaskNames, {
+  String description}) => _sharedConfig.addChainedTask(name, existingTaskNames,
+      description: description);
 
 void _paranoidHopCheck() {
   var runningScript = io.Platform.script.toFilePath();
