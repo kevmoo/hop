@@ -1,5 +1,9 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.28.1+1 2013-12-02 (SDK 1.0.1+3 r30657)
+
+* Fixed task code that was still using [TaskContext] instead of [TaskLogger].
+
 ## 0.28.1 2013-12-02 (SDK 1.0.1+3 r30657)
 
 * Fixed `addTask` to support dependencies.
