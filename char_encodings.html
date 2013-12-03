@@ -32,12 +32,12 @@
 <h3>Functions</h3>
 <div class="method"><h4 id="decodeWindows1252AsIterable">
 <button class="show-code">Code</button>
-<a href="char_encodings/IterableWindows1252Decoder.html">IterableWindows1252Decoder</a> <strong>decodeWindows1252AsIterable</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; bytes, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> offset = 0, <a href="http://api.dartlang.org/dart_core/int.html">int</a> length, <a href="http://api.dartlang.org/dart_core/int.html">int</a> replacementCodepoint = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT]) <a class="anchor-link" href="#decodeWindows1252AsIterable"
+<a href="char_encodings/IterableWindows1252Decoder.html">IterableWindows1252Decoder</a> <strong>decodeWindows1252AsIterable</strong>(<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt; bytes, [<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> offset = 0, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> length, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> replacementCodepoint = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT]) <a class="anchor-link" href="#decodeWindows1252AsIterable"
               title="Permalink to decodeWindows1252AsIterable">#</a></h4>
 <div class="doc">
 <p>Decodes <a href="http://en.wikipedia.org/wiki/Windows-1252">windows-1252</a> bytes as an
 iterable. Thus, the consumer can only convert as much of the input as needed.
-Set the <code>replacementCharacter</code> to null to throw an <a class="crossref" href="dart_core/ArgumentError.html">ArgumentError</a>
+Set the <code>replacementCharacter</code> to null to throw an <a class="crossref" href="http://api.dartlang.org/dart_core/ArgumentError.html">ArgumentError</a>
 rather than replace the bad value.</p>
 <pre class="source">
 IterableWindows1252Decoder decodeWindows1252AsIterable(List&lt;int&gt; bytes,
@@ -51,7 +51,7 @@ IterableWindows1252Decoder decodeWindows1252AsIterable(List&lt;int&gt; bytes,
 </div>
 <div class="method"><h4 id="toCodepoints">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; <strong>toCodepoints</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> input) <a class="anchor-link" href="#toCodepoints"
+<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt; <strong>toCodepoints</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> input) <a class="anchor-link" href="#toCodepoints"
               title="Permalink to toCodepoints">#</a></h4>
 <div class="doc">
 <p>Returns the code points for the 
@@ -81,7 +81,7 @@ List&lt;int&gt; toCodepoints(String input) {
 </div>
 <div class="method"><h4 id="decodeBytes">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; <strong>decodeBytes</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> encoding, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; bytes, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> offset = 0, <a href="http://api.dartlang.org/dart_core/int.html">int</a> length, <a href="http://api.dartlang.org/dart_core/int.html">int</a> replacementCodepoint = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT]) <a class="anchor-link" href="#decodeBytes"
+<a href="http://api.dartlang.org/dart_core/Iterable.html" ref="external">Iterable</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt; <strong>decodeBytes</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> encoding, <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt; bytes, [<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> offset = 0, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> length, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> replacementCodepoint = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT]) <a class="anchor-link" href="#decodeBytes"
               title="Permalink to decodeBytes">#</a></h4>
 <div class="doc">
 <p>Decodes the 
@@ -145,7 +145,7 @@ Iterable&lt;int&gt; decodeBytes(String encoding, List&lt;int&gt; bytes,
 </div>
 <div class="method"><h4 id="hasUtf8Bom">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>hasUtf8Bom</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; bytes, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> offset = 0, <a href="http://api.dartlang.org/dart_core/int.html">int</a> length]) <a class="anchor-link" href="#hasUtf8Bom"
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>hasUtf8Bom</strong>(<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt; bytes, [<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> offset = 0, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> length]) <a class="anchor-link" href="#hasUtf8Bom"
               title="Permalink to hasUtf8Bom">#</a></h4>
 <div class="doc">
 <p>Returns true if the 

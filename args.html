@@ -67,11 +67,11 @@ option.</p>
 <pre><code>parser.addOption('mode', defaultsTo: 'debug');
 parser.addFlag('verbose', defaultsTo: false);
 </code></pre>
-<p>The default value for non-flag options can be any <a class="crossref" href="dart_core/String.html">String</a>. For flags,
-it must be a <a class="crossref" href="dart_core/bool.html">bool</a>.</p>
+<p>The default value for non-flag options can be any <a class="crossref" href="http://api.dartlang.org/dart_core/String.html">String</a>. For flags,
+it must be a <a class="crossref" href="http://api.dartlang.org/dart_core/bool.html">bool</a>.</p>
 <p>To validate a non-flag option, you can use the <code>allowed</code> parameter to
 provide an allowed set of values. When you do, the parser throws a
-<a class="crossref" href="dart_core/FormatException.html">FormatException</a> if the value for an option is not in the allowed set.
+<a class="crossref" href="http://api.dartlang.org/dart_core/FormatException.html">FormatException</a> if the value for an option is not in the allowed set.
 Here's an example of specifying allowed values:</p>
 <pre><code>parser.addOption('mode', allowed: ['debug', 'release']);
 </code></pre>
@@ -235,6 +235,10 @@ value by using the <code>allowedHelp</code> parameter:</p>
 <p>To assist the formatting of the usage help, single-line help text is
 followed by a single new line. Options with multi-line help text are
 followed by two new lines. This provides spatial diversity between options.</p></div>
+<h3>Exports</h3>
+<ul>
+<ul><a href="options.html">options</a></ul>
+</ul>
 <div>
 <h3>Classes</h3>
           <div class="type">

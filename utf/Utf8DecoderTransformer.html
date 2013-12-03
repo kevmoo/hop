@@ -95,19 +95,19 @@ class Utf8DecoderTransformer extends _StringDecoder {
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>Utf8DecoderTransformer</strong>([<a href="http://api.dartlang.org/dart_core/int.html">int</a> replacementChar = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT]) <a class="anchor-link" href="#"
+new <strong>Utf8DecoderTransformer</strong>([<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> replacementChar = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT]) <a class="anchor-link" href="#"
               title="Permalink to Utf8DecoderTransformer.Utf8DecoderTransformer">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Creates a <a class="crossref" href="../dart_async/StreamTransformer.html">StreamTransformer</a>.</p>
+<p>Creates a <a class="crossref" href="http://api.dartlang.org/dart_async/StreamTransformer.html">StreamTransformer</a>.</p>
 <p>The returned instance takes responsibility of implementing (<a class="crossref" href="../utf/_StringDecoder.html#bind">bind</a>).
 When the user invokes <code>bind</code> it returns a new "bound" stream. Only when
 the user starts listening to the bound stream, the <code>listen</code> method
 invokes the given closure <code>transformer</code>.</p>
 <p>The <code>transformer</code> closure receives the stream, that was bound, as argument
-and returns a <a class="crossref" href="../dart_async/StreamSubscription.html">StreamSubscription</a>. In almost all cases the closure
+and returns a <a class="crossref" href="http://api.dartlang.org/dart_async/StreamSubscription.html">StreamSubscription</a>. In almost all cases the closure
 listens itself to the stream that is given as argument.</p>
-<p>The result of invoking the <code>transformer</code> closure is a <a class="crossref" href="../dart_async/StreamSubscription.html">StreamSubscription</a>.
+<p>The result of invoking the <code>transformer</code> closure is a <a class="crossref" href="http://api.dartlang.org/dart_async/StreamSubscription.html">StreamSubscription</a>.
 The bound stream-transformer (created by the <code>bind</code> method above) then sets
 the handlers it received as part of the <code>listen</code> call.</p>
 <p>Conceptually this can be summarized as follows:</p><ol><li>
@@ -119,15 +119,15 @@ the handlers it received as part of the <code>listen</code> call.</p>
   starts the listening and transformation. This is accomplished
   in 2 steps: first the <code>boundStream</code> invokes the <code>transformerClosure</code> with
   the <code>stream</code> it captured: <code>transformerClosure(stream, b)</code>.
-  The result <code>subscription</code>, a <a class="crossref" href="../dart_async/StreamSubscription.html">StreamSubscription</a>, is then
+  The result <code>subscription</code>, a <a class="crossref" href="http://api.dartlang.org/dart_async/StreamSubscription.html">StreamSubscription</a>, is then
   updated to receive its handlers: <code>subscription.onData(f1)</code>,
   <code>subscription.onError(f2)</code>, <code>subscription(f3)</code>. Finally the subscription
   is returned as result of the <code>listen</code> call.</p></li></ol>
 <p>There are two common ways to create a StreamSubscription:</p><ol><li>
-<p>by creating a new class that implements <a class="crossref" href="../dart_async/StreamSubscription.html">StreamSubscription</a>.
-   Note that the subscription should run callbacks in the <a class="crossref" href="../dart_async/Zone.html">Zone</a> the
+<p>by creating a new class that implements <a class="crossref" href="http://api.dartlang.org/dart_async/StreamSubscription.html">StreamSubscription</a>.
+   Note that the subscription should run callbacks in the <a class="crossref" href="http://api.dartlang.org/dart_async/Zone.html">Zone</a> the
    stream was listened to.</p></li><li>
-<p>by allocating a <a class="crossref" href="../dart_async/StreamController.html">StreamController</a> and to return the result of
+<p>by allocating a <a class="crossref" href="http://api.dartlang.org/dart_async/StreamController.html">StreamController</a> and to return the result of
    listening to its stream.</p></li></ol>
 <p>Example use of a duplicating transformer:</p>
 <pre><code>stringStream.transform(new StreamTransformer&lt;String, String&gt;(
@@ -152,7 +152,7 @@ the handlers it received as part of the <code>listen</code> call.</p>
       return controller.stream.listen(null);
     });
 </code></pre>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/StreamTransformer.html">StreamTransformer</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt;, <a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/StreamTransformer.html" ref="external">StreamTransformer</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt;, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; </div></div>
 <pre class="source">
 Utf8DecoderTransformer(
    [int replacementChar = UNICODE_REPLACEMENT_CHARACTER_CODEPOINT])
@@ -165,12 +165,12 @@ Utf8DecoderTransformer(
 <h3>Methods</h3>
 <div class="method inherited"><h4 id="add">
 <button class="show-code">Code</button>
-void <strong>add</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; bytes) <a class="anchor-link" href="#add"
+void <strong>add</strong>(<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt; bytes) <a class="anchor-link" href="#add"
               title="Permalink to Utf8DecoderTransformer.add">#</a></h4>
 <div class="inherited-from">inherited from <a href="../utf/_StringDecoder.html">_StringDecoder</a> </div><div class="doc">
 <div class="inherited">
 <p>Create a data event </p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt;&gt; </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/EventSink.html" ref="external">EventSink</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt;&gt; </div></div>
 <pre class="source">
 void add(List&lt;int&gt; bytes) {
  try {
@@ -227,12 +227,12 @@ void add(List&lt;int&gt; bytes) {
 </div>
 <div class="method inherited"><h4 id="addError">
 <button class="show-code">Code</button>
-void <strong>addError</strong>(<a href="http://api.dartlang.org/dart_core/Object.html">Object</a> error, [<a href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a> stackTrace]) <a class="anchor-link" href="#addError"
+void <strong>addError</strong>(<a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> error, [<a href="http://api.dartlang.org/dart_core/StackTrace.html" ref="external">StackTrace</a> stackTrace]) <a class="anchor-link" href="#addError"
               title="Permalink to Utf8DecoderTransformer.addError">#</a></h4>
 <div class="inherited-from">inherited from <a href="../utf/_StringDecoder.html">_StringDecoder</a> </div><div class="doc">
 <div class="inherited">
 <p>Create an async error. </p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt;&gt; </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/EventSink.html" ref="external">EventSink</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt;&gt; </div></div>
 <pre class="source">
 void addError(Object error, [StackTrace stackTrace]) {
  _outSink.addError(error, stackTrace);
@@ -242,7 +242,7 @@ void addError(Object error, [StackTrace stackTrace]) {
 </div>
 <div class="method inherited"><h4 id="bind">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; <strong>bind</strong>(<a href="http://api.dartlang.org/dart_async/Stream.html">Stream</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt;&gt; stream) <a class="anchor-link" href="#bind"
+<a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; <strong>bind</strong>(<a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt;&gt; stream) <a class="anchor-link" href="#bind"
               title="Permalink to Utf8DecoderTransformer.bind">#</a></h4>
 <div class="inherited-from">inherited from <a href="../utf/_StringDecoder.html">_StringDecoder</a> </div><div class="doc">
 <pre class="source">
@@ -267,7 +267,7 @@ void <strong>close</strong>() <a class="anchor-link" href="#close"
 <div class="inherited-from">inherited from <a href="../utf/_StringDecoder.html">_StringDecoder</a> </div><div class="doc">
 <div class="inherited">
 <p>Request a stream to close. </p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/EventSink.html">EventSink</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt;&gt; </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_async/EventSink.html" ref="external">EventSink</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt;&gt; </div></div>
 <pre class="source">
 void close() {
  if (_carry != null) {

@@ -31,7 +31,7 @@
 <h3>Functions</h3>
 <div class="method"><h4 id="pipeProcess">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; <strong>pipeProcess</strong>(<a href="http://api.dartlang.org/dart_io/Process.html">Process</a> process, {<a href="bot/Action1.html">Action1</a> stdOutWriter, <a href="bot/Action1.html">Action1</a> stdErrWriter}) <a class="anchor-link" href="#pipeProcess"
+<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt; <strong>pipeProcess</strong>(<a href="http://api.dartlang.org/dart_io/Process.html" ref="external">Process</a> process, {<a href="bot/Action1.html">Action1</a> stdOutWriter, <a href="bot/Action1.html">Action1</a> stdErrWriter}) <a class="anchor-link" href="#pipeProcess"
               title="Permalink to pipeProcess">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -58,29 +58,29 @@ Future&lt;int&gt; pipeProcess(Process process,
 </div>
 <div class="method"><h4 id="startProcess">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a> <strong>startProcess</strong>(<a href="hop/TaskContext.html">TaskContext</a> ctx, <a href="http://api.dartlang.org/dart_core/String.html">String</a> command, [<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; args = null]) <a class="anchor-link" href="#startProcess"
+<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a> <strong>startProcess</strong>(<a href="hop.core/TaskLogger.html">TaskLogger</a> logger, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> command, [<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; args = null]) <a class="anchor-link" href="#startProcess"
               title="Permalink to startProcess">#</a></h4>
 <div class="doc">
 <pre class="source">
-Future startProcess(TaskContext ctx, String command,
+Future startProcess(TaskLogger logger, String command,
    [List&lt;String&gt; args = null]) {
 
- requireArgumentNotNull(ctx, 'ctx');
+ requireArgumentNotNull(logger, 'ctx');
  requireArgumentNotNull(command, 'command');
  if(args == null) {
    args = [];
  }
 
- ctx.fine("Starting process:");
- ctx.fine("$command ${args.join(' ')}");
+ logger.fine("Starting process:");
+ logger.fine("$command ${args.join(' ')}");
  return Process.start(command, args)
      .then((process) {
        return pipeProcess(process,
-           stdOutWriter: ctx.info,
-           stdErrWriter: ctx.severe);
+           stdOutWriter: logger.info,
+           stdErrWriter: logger.severe);
      })
      .then((int exitCode) {
-       if(exitCode != 0) ctx.fail('Process exit code: $exitCode');
+       if(exitCode != 0) throw new Exception('Process exit code: $exitCode');
      });
 }
 </pre>
@@ -88,7 +88,7 @@ Future startProcess(TaskContext ctx, String command,
 </div>
 <div class="method"><h4 id="createProcessTask">
 <button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>createProcessTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> command, {<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; args: null, <a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#createProcessTask"
+<a href="hop.core/Task.html">Task</a> <strong>createProcessTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> command, {<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; args: null, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description}) <a class="anchor-link" href="#createProcessTask"
               title="Permalink to createProcessTask">#</a></h4>
 <div class="doc">
 <pre class="source">

@@ -31,23 +31,20 @@
 <h3>Functions</h3>
 <div class="method"><h4 id="createBenchTask">
 <button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>createBenchTask</strong>() <a class="anchor-link" href="#createBenchTask"
+<a href="hop.core/Task.html">Task</a> <strong>createBenchTask</strong>() <a class="anchor-link" href="#createBenchTask"
               title="Permalink to createBenchTask">#</a></h4>
 <div class="doc">
 <pre class="source">
-Task createBenchTask() {
- return new Task((ctx) {
+Task createBenchTask() =&gt; new Task((TaskContext ctx) {
    final parseResult = ctx.arguments;
 
    final count = int.parse(parseResult[_RUN_COUNT_ARE_NAME],
        onError: (s) =&gt; _DEFAULT_RUN_COUNT);
 
-   if(parseResult.rest.isEmpty) {
-     ctx.fail('No command provided.');
-   }
+   List&lt;String&gt; commandParams = ctx.extendedArgs[_COMMAND_ARG];
 
-   final processName = parseResult.rest.first;
-   final args = parseResult.rest.sublist(1);
+   String processName = commandParams.first;
+   final args = commandParams.sublist(1);
 
    return _runMany(ctx, count, processName, args)
        .then((list) {
@@ -59,8 +56,7 @@ Task createBenchTask() {
  },
  config: _benchParserConfig,
  description: 'Run a benchmark against the provided task',
- extendedArgs: [new TaskArgument('command', required: true)]);
-}
+ extendedArgs: [new TaskArgument('command', required: true, multiple: true)]);
 </pre>
 </div>
 </div>

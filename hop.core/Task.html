@@ -1,0 +1,418 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Task class / hop.core Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="hop.core" data-type="Task">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../hop.core.html">hop.core</a> &rsaquo; <a href="../hop.core/Task.html">Task</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Task</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class Task {
+ final String description;
+ final _TaskDefinition _exec;
+ final _ArgParserConfigure _argParserConfig;
+ final List&lt;TaskArgument&gt; _extendedArgs;
+
+ /**
+  * **DEPRECATED** Use `new Task` instead.
+  */
+ @deprecated
+ factory Task.sync(dynamic taskDefinition(TaskContext ctx),
+     {String description, void config(ArgParser),
+      List&lt;TaskArgument&gt; extendedArgs}) = Task;
+
+ /**
+  * **DEPRECATED** Use `new Task` instead.
+  */
+ @deprecated
+ factory Task.async(Future taskDefinition(TaskContext ctx),
+     {String description, void config(ArgParser),
+      List&lt;TaskArgument&gt; extendedArgs}) = Task;
+
+ Task(dynamic taskDefinition(TaskContext ctx), {String description,
+   void config(ArgParser), List&lt;TaskArgument&gt; extendedArgs}) :
+     this._exec = taskDefinition,
+     this.description = (description == null) ? '' : description,
+     this._argParserConfig = config,
+     this._extendedArgs = (extendedArgs == null) ? const [] :
+       TaskArgument.validateArgs(extendedArgs) {
+   requireArgumentNotNull(_exec, '_exec');
+ }
+
+
+ void configureArgParser(ArgParser parser) {
+   if(_argParserConfig != null) {
+     _argParserConfig(parser);
+   }
+ }
+
+ String getUsage() {
+   final parser = new ArgParser();
+   configureArgParser(parser);
+   return parser.getUsage();
+ }
+
+ String getExtendedArgsUsage() =&gt;
+   _extendedArgs.map((TaskArgument arg) {
+     var value = '&lt;${arg.name}&gt;';
+     if(arg.multiple) {
+       value = value + '...';
+     }
+     if(!arg.required) {
+       value = '[$value]';
+     }
+     return value;
+   }).join(' ');
+
+ Future run(TaskRuntime runtime) {
+   requireArgumentNotNull(runtime, 'runtime');
+
+   Map&lt;String, dynamic&gt; extendedArgs;
+   try {
+     extendedArgs = this.parseExtendedArgs(runtime.argResults.rest);
+   } on FormatException catch(obj, stack) {
+     var usage = new TaskUsageException(obj.message, obj, stack);
+     return new Future.error(usage, stack);
+   }
+   var context = new _TaskContext(runtime, runtime.argResults, extendedArgs);
+
+   return new Future.sync(() {
+     return runZoned(() =&gt; _exec(context),
+         zoneSpecification: _getZoneSpec(runtime));
+   });
+ }
+
+ Task clone({String description}) {
+   if(description == null) description = this.description;
+
+   return new Task(_exec, description: description,
+       config: _argParserConfig, extendedArgs: _extendedArgs);
+ }
+
+ /**
+  * Returned map is in argument order.
+  *
+  * Returned map is unmodifiable.
+  */
+ Map&lt;String, dynamic&gt; parseExtendedArgs(List&lt;String&gt; argResultsRest) {
+   requireArgumentNotNull(argResultsRest, 'argResultRest');
+   requireArgument(argResultsRest.every((e) =&gt; e != null), 'argResultRest',
+       'Every item must be non-null.');
+
+   var actual = argResultsRest.length;
+
+   if(_extendedArgs.isNotEmpty) {
+     if (!_extendedArgs.last.multiple &amp;&amp;
+       argResultsRest.length &gt; _extendedArgs.length) {
+       var expected = _extendedArgs.length;
+       throw new FormatException('Expected $expected argument(s); received $actual');
+     } else {
+       var lastRequiredIndex = lastIndexWhere(_extendedArgs, (arg) =&gt; arg.required);
+       if(argResultsRest.length &lt;= lastRequiredIndex) {
+         var expected = lastRequiredIndex + 1;
+         throw new FormatException('Expected $expected argument(s); received $actual');
+       }
+     }
+   }
+
+   // Note: explicitly using LinkedHashMap so output key order corresponds
+   //       with extended arg order
+   var map = new LinkedHashMap&lt;String, dynamic&gt;();
+
+   for(var i = 0; i &lt; _extendedArgs.length; i++) {
+     var arg = _extendedArgs[i];
+
+     var result = null;
+
+
+     if(arg.multiple) {
+       assert(i == _extendedArgs.length -1); // better be the last arg
+       result = argResultsRest.skip(i).toList(growable: false);
+     } else {
+       if(i &gt;= argResultsRest.length) {
+         assert(!arg.required); // should have already been covered above
+         result = null;
+       } else {
+         result = argResultsRest[i];
+       }
+     }
+     map[arg.name] = result;
+   }
+
+   return new UnmodifiableMapView(map);
+ }
+
+ @override
+ String toString() =&gt; "Task: $description";
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>Task</strong>(taskDefinition(<a href="../hop.core/TaskContext.html">TaskContext</a> ctx), {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description, void config(ArgParser), <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="../hop.core/TaskArgument.html">TaskArgument</a>&gt; extendedArgs}) <a class="anchor-link" href="#"
+              title="Permalink to Task.Task">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
+<pre class="source">
+Task(dynamic taskDefinition(TaskContext ctx), {String description,
+ void config(ArgParser), List&lt;TaskArgument&gt; extendedArgs}) :
+   this._exec = taskDefinition,
+   this.description = (description == null) ? '' : description,
+   this._argParserConfig = config,
+   this._extendedArgs = (extendedArgs == null) ? const [] :
+     TaskArgument.validateArgs(extendedArgs) {
+ requireArgumentNotNull(_exec, '_exec');
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="async">
+<button class="show-code">Code</button>
+factory <strong>Task.async</strong>(<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a> taskDefinition(<a href="../hop.core/TaskContext.html">TaskContext</a> ctx), {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description, void config(ArgParser), <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="../hop.core/TaskArgument.html">TaskArgument</a>&gt; extendedArgs}) <a class="anchor-link" href="#async"
+              title="Permalink to Task.Task.async">#</a></h4>
+<div class="doc">
+<p><strong>DEPRECATED</strong> Use <code>new Task</code> instead.</p>
+<pre class="source">
+@deprecated
+factory Task.async(Future taskDefinition(TaskContext ctx),
+   {String description, void config(ArgParser),
+    List&lt;TaskArgument&gt; extendedArgs}) = Task;
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="sync">
+<button class="show-code">Code</button>
+factory <strong>Task.sync</strong>(taskDefinition(<a href="../hop.core/TaskContext.html">TaskContext</a> ctx), {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description, void config(ArgParser), <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="../hop.core/TaskArgument.html">TaskArgument</a>&gt; extendedArgs}) <a class="anchor-link" href="#sync"
+              title="Permalink to Task.Task.sync">#</a></h4>
+<div class="doc">
+<p><strong>DEPRECATED</strong> Use <code>new Task</code> instead.</p>
+<pre class="source">
+@deprecated
+factory Task.sync(dynamic taskDefinition(TaskContext ctx),
+   {String description, void config(ArgParser),
+    List&lt;TaskArgument&gt; extendedArgs}) = Task;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="description">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>description</strong> <a class="anchor-link"
+            href="#description"
+            title="Permalink to Task.description">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final String description
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="clone">
+<button class="show-code">Code</button>
+<a href="../hop.core/Task.html">Task</a> <strong>clone</strong>({<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description}) <a class="anchor-link" href="#clone"
+              title="Permalink to Task.clone">#</a></h4>
+<div class="doc">
+<pre class="source">
+Task clone({String description}) {
+ if(description == null) description = this.description;
+
+ return new Task(_exec, description: description,
+     config: _argParserConfig, extendedArgs: _extendedArgs);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="configureArgParser">
+<button class="show-code">Code</button>
+void <strong>configureArgParser</strong>(<a href="../args/ArgParser.html">ArgParser</a> parser) <a class="anchor-link" href="#configureArgParser"
+              title="Permalink to Task.configureArgParser">#</a></h4>
+<div class="doc">
+<pre class="source">
+void configureArgParser(ArgParser parser) {
+ if(_argParserConfig != null) {
+   _argParserConfig(parser);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getExtendedArgsUsage">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>getExtendedArgsUsage</strong>() <a class="anchor-link" href="#getExtendedArgsUsage"
+              title="Permalink to Task.getExtendedArgsUsage">#</a></h4>
+<div class="doc">
+<pre class="source">
+String getExtendedArgsUsage() =&gt;
+ _extendedArgs.map((TaskArgument arg) {
+   var value = '&lt;${arg.name}&gt;';
+   if(arg.multiple) {
+     value = value + '...';
+   }
+   if(!arg.required) {
+     value = '[$value]';
+   }
+   return value;
+ }).join(' ');
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getUsage">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>getUsage</strong>() <a class="anchor-link" href="#getUsage"
+              title="Permalink to Task.getUsage">#</a></h4>
+<div class="doc">
+<pre class="source">
+String getUsage() {
+ final parser = new ArgParser();
+ configureArgParser(parser);
+ return parser.getUsage();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="parseExtendedArgs">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Map.html" ref="external">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>, dynamic&gt; <strong>parseExtendedArgs</strong>(<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; argResultsRest) <a class="anchor-link" href="#parseExtendedArgs"
+              title="Permalink to Task.parseExtendedArgs">#</a></h4>
+<div class="doc">
+<p>Returned map is in argument order.</p>
+<p>Returned map is unmodifiable.</p>
+<pre class="source">
+Map&lt;String, dynamic&gt; parseExtendedArgs(List&lt;String&gt; argResultsRest) {
+ requireArgumentNotNull(argResultsRest, 'argResultRest');
+ requireArgument(argResultsRest.every((e) =&gt; e != null), 'argResultRest',
+     'Every item must be non-null.');
+
+ var actual = argResultsRest.length;
+
+ if(_extendedArgs.isNotEmpty) {
+   if (!_extendedArgs.last.multiple &amp;&amp;
+     argResultsRest.length &gt; _extendedArgs.length) {
+     var expected = _extendedArgs.length;
+     throw new FormatException('Expected $expected argument(s); received $actual');
+   } else {
+     var lastRequiredIndex = lastIndexWhere(_extendedArgs, (arg) =&gt; arg.required);
+     if(argResultsRest.length &lt;= lastRequiredIndex) {
+       var expected = lastRequiredIndex + 1;
+       throw new FormatException('Expected $expected argument(s); received $actual');
+     }
+   }
+ }
+
+ // Note: explicitly using LinkedHashMap so output key order corresponds
+ //       with extended arg order
+ var map = new LinkedHashMap&lt;String, dynamic&gt;();
+
+ for(var i = 0; i &lt; _extendedArgs.length; i++) {
+   var arg = _extendedArgs[i];
+
+   var result = null;
+
+
+   if(arg.multiple) {
+     assert(i == _extendedArgs.length -1); // better be the last arg
+     result = argResultsRest.skip(i).toList(growable: false);
+   } else {
+     if(i &gt;= argResultsRest.length) {
+       assert(!arg.required); // should have already been covered above
+       result = null;
+     } else {
+       result = argResultsRest[i];
+     }
+   }
+   map[arg.name] = result;
+ }
+
+ return new UnmodifiableMapView(map);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="run">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a> <strong>run</strong>(<a href="../hop.shared/TaskRuntime.html">TaskRuntime</a> runtime) <a class="anchor-link" href="#run"
+              title="Permalink to Task.run">#</a></h4>
+<div class="doc">
+<pre class="source">
+Future run(TaskRuntime runtime) {
+ requireArgumentNotNull(runtime, 'runtime');
+
+ Map&lt;String, dynamic&gt; extendedArgs;
+ try {
+   extendedArgs = this.parseExtendedArgs(runtime.argResults.rest);
+ } on FormatException catch(obj, stack) {
+   var usage = new TaskUsageException(obj.message, obj, stack);
+   return new Future.error(usage, stack);
+ }
+ var context = new _TaskContext(runtime, runtime.argResults, extendedArgs);
+
+ return new Future.sync(() {
+   return runZoned(() =&gt; _exec(context),
+       zoneSpecification: _getZoneSpec(runtime));
+ });
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to Task.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
+<pre class="source">
+@override
+String toString() =&gt; "Task: $description";
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

@@ -27,86 +27,89 @@
 </div>
 <div class="content">
 <h2><strong>hop</strong> library</h2>
+<h3>Exports</h3>
+<ul>
+<ul><a href="hop.core.html">hop.core</a></ul>
+</ul>
 <div>
 <h3>Functions</h3>
 <div class="method"><h4 id="addChainedTask">
 <button class="show-code">Code</button>
-<a href="hop/ChainedTask.html">ChainedTask</a> <strong>addChainedTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; existingTaskNames, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#addChainedTask"
+<a href="hop.core/Task.html">Task</a> <strong>addChainedTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> name, <a href="http://api.dartlang.org/dart_core/Iterable.html" ref="external">Iterable</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; existingTaskNames, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description}) <a class="anchor-link" href="#addChainedTask"
               title="Permalink to addChainedTask">#</a></h4>
 <div class="doc">
 <pre class="source">
-ChainedTask addChainedTask(String name, Iterable&lt;String&gt; existingTaskNames,
-                          {String description}) {
- return _sharedConfig.addChainedTask(name, existingTaskNames,
+Task addChainedTask(String name, Iterable&lt;String&gt; existingTaskNames, {
+ String description}) =&gt; _sharedConfig.addChainedTask(name, existingTaskNames,
      description: description);
-}
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="addAsyncTask">
 <button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>addAsyncTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="http://api.dartlang.org/dart_async/Future.html">Future</a> execFuture(<a href="hop/TaskContext.html">TaskContext</a> ctx), {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#addAsyncTask"
+<a href="hop.core/Task.html">Task</a> <strong>addAsyncTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> name, <a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a> execFuture(<a href="hop.core/TaskContext.html">TaskContext</a> ctx), {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description}) <a class="anchor-link" href="#addAsyncTask"
               title="Permalink to addAsyncTask">#</a></h4>
 <div class="doc">
 <p><strong>DEPRECATED</strong> Use <a class="crossref" href="hop.html#addTask">addTask</a> instead.</p>
 <pre class="source">
 @deprecated
-Task addAsyncTask(String name, Future execFuture(TaskContext ctx), {String description}) {
- return _sharedConfig.addTask(name, execFuture, description: description);
-}
+Task addAsyncTask(String name, Future execFuture(TaskContext ctx), {
+ String description}) =&gt; _sharedConfig.addTask(name, execFuture,
+     description: description);
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="addSyncTask">
 <button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>addSyncTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, <a href="bot/Func1.html">Func1</a> execFunc, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#addSyncTask"
+<a href="hop.core/Task.html">Task</a> <strong>addSyncTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> name, <a href="bot/Func1.html">Func1</a> execFunc, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description}) <a class="anchor-link" href="#addSyncTask"
               title="Permalink to addSyncTask">#</a></h4>
 <div class="doc">
 <p><strong>DEPRECATED</strong> Use <a class="crossref" href="hop.html#addTask">addTask</a> instead.</p>
 <pre class="source">
 @deprecated
-Task addSyncTask(String name, Func1&lt;TaskContext, bool&gt; execFunc, {String description}) {
- return _sharedConfig.addTask(name, execFunc, description: description);
-}
+Task addSyncTask(String name, Func1&lt;TaskContext, bool&gt; execFunc, {
+ String description}) =&gt;
+     _sharedConfig.addTask(name, execFunc, description: description);
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="addTask">
 <button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>addTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> name, task, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> description}) <a class="anchor-link" href="#addTask"
+<a href="hop.core/Task.html">Task</a> <strong>addTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> name, task, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description, <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; dependencies}) <a class="anchor-link" href="#addTask"
               title="Permalink to addTask">#</a></h4>
 <div class="doc">
 <p>
-<span class="param">task</span> can be either an instance of <a class="crossref" href="hop/Task.html">Task</a> or a <a class="crossref" href="dart_core/Function.html">Function</a>.</p>
+<span class="param">task</span> can be either an instance of <a class="crossref" href="hop.core/Task.html">Task</a> or a <a class="crossref" href="http://api.dartlang.org/dart_core/Function.html">Function</a>.</p>
 <p>If 
-<span class="param">task</span> is a <a class="crossref" href="dart_core/Function.html">Function</a>, it must take one argument: <a class="crossref" href="hop/TaskContext.html">TaskContext</a>.</p>
-<p>If a <a class="crossref" href="dart_async/Future.html">Future</a> is returned from the [task] [Function], the runner will wait
-for the <a class="crossref" href="dart_async/Future.html">Future</a> to complete.</p>
+<span class="param">task</span> is a <a class="crossref" href="http://api.dartlang.org/dart_core/Function.html">Function</a>, it must take one argument: <a class="crossref" href="hop.core/TaskContext.html">TaskContext</a>.</p>
+<p>If a <a class="crossref" href="http://api.dartlang.org/dart_async/Future.html">Future</a> is returned from the [task] [Function], the runner will wait
+for the <a class="crossref" href="http://api.dartlang.org/dart_async/Future.html">Future</a> to complete.</p>
 <p>If 
 <span class="param">description</span> is provided and 
-<span class="param">task</span> is an instance of <a class="crossref" href="hop/Task.html">Task</a>, then 
+<span class="param">task</span> is an instance of <a class="crossref" href="hop.core/Task.html">Task</a>, then 
 <span class="param">task</span>
 will be cloned and given the provided 
 <span class="param">description</span>.</p>
 <pre class="source">
-Task addTask(String name, dynamic task, {String description}) {
- return _sharedConfig.addTask(name, task, description: description);
-}
+Task addTask(String name, dynamic task, {String description,
+ List&lt;String&gt; dependencies}) =&gt;
+     _sharedConfig.addTask(name, task, description: description,
+         dependencies: dependencies);
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="runHop">
 <button class="show-code">Code</button>
-void <strong>runHop</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; args, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> paranoid: true, <a href="http://api.dartlang.org/dart_core/String.html">String</a> helpTaskName: 'help', <a href="logging/Level.html">Level</a> printAtLogLevel: Level.INFO}) <a class="anchor-link" href="#runHop"
+void <strong>runHop</strong>(<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; args, {<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> paranoid: true, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> helpTaskName: 'help', <a href="logging/Level.html">Level</a> printAtLogLevel: Level.INFO}) <a class="anchor-link" href="#runHop"
               title="Permalink to runHop">#</a></h4>
 <div class="doc">
 <p>Designed to enable features in <strong>Hop</strong>. Should be the last method called in
 <code>tool/hop_runner.dart</code>.</p>
-<p><a class="crossref" href="hop.html#runHop">runHop</a> calls <a class="crossref" href="dart.io.html#exit">io.exit</a> which terminates the application.</p>
+<p><a class="crossref" href="hop.html#runHop">runHop</a> calls <a class="crossref" href="http://api.dartlang.org/dart.io.html#exit">io.exit</a> which terminates the application.</p>
 <p>If 
 <span class="param">paranoid</span> is <code>true</code>, <a class="crossref" href="hop.html#runHop">runHop</a> will verify the running script is
-<code>tool/hop_runner.dart</code> relative to the working directory. If not, an
-exception is thrown.</p>
+<code>tool/hop_runner.dart</code> relative to the working directory. If the script does
+not, match that requirement, an <a class="crossref" href="http://api.dartlang.org/dart_core/Exception.html">Exception</a> is thrown.</p>
 <p>If 
 <span class="param">helpTaskName</span>, defines (surprise!) the name of the help task. If <code>null</code>
 no help task is added. If 
@@ -121,98 +124,14 @@ void runHop(List&lt;String&gt; args, {
  if(paranoid) {
    _paranoidHopCheck();
  }
- Runner._runShell(args, _sharedConfig, helpTaskName, printAtLogLevel);
+ Runner.runShell(args, _sharedConfig, helpTaskName, printAtLogLevel)
+   .then((RunResult rr) {
+     io.exit(rr.exitCode);
+   });
 }
 </pre>
 </div>
 </div>
-</div>
-<div>
-<h3>Abstract Classes</h3>
-          <div class="type">
-          <h4>
-            <a href="hop/Task.html"><strong>Task</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="hop/TaskContext.html"><strong>TaskContext</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="hop/TaskLogger.html"><strong>TaskLogger</strong></a>
-          </h4>
-          </div>
-          
-</div>
-<div>
-<h3>Classes</h3>
-          <div class="type">
-          <h4>
-            <a href="hop/ChainedTask.html"><strong>ChainedTask</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="hop/HopConfig.html"><strong>HopConfig</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="hop/RootTaskContext.html"><strong>RootTaskContext</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="hop/Runner.html"><strong>Runner</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="hop/RunResult.html"><strong>RunResult</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="hop/TaskArgument.html"><strong>TaskArgument</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="hop/TaskRegistry.html"><strong>TaskRegistry</strong></a>
-          </h4>
-          </div>
-          
-</div>
-<div>
-<h3>Typedefs</h3>
-          <div class="type">
-          <h4>
-            <a href="hop/ArgParserConfigure.html"><strong>ArgParserConfigure</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="hop/Printer.html"><strong>Printer</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="hop/TaskDefinition.html"><strong>TaskDefinition</strong></a>
-          </h4>
-          </div>
-          
 </div>
         </div>
         <div class="clear"></div>

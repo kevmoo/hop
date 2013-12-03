@@ -223,7 +223,7 @@ Builder get builder =&gt; new Builder(style: this);
 </div>
 <div class="field"><h4 id="name">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>name</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>name</strong> <a class="anchor-link"
             href="#name"
             title="Permalink to Style.name">#</a>
         </h4>
@@ -236,12 +236,12 @@ String get name;
 </div>
 <div class="field"><h4 id="needsSeparatorPattern">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a>         <strong>needsSeparatorPattern</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/Pattern.html" ref="external">Pattern</a>         <strong>needsSeparatorPattern</strong> <a class="anchor-link"
             href="#needsSeparatorPattern"
             title="Permalink to Style.needsSeparatorPattern">#</a>
         </h4>
         <div class="doc">
-<p>The <a class="crossref" href="../dart_core/Pattern.html">Pattern</a> that matches path components that need a separator after
+<p>The <a class="crossref" href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a> that matches path components that need a separator after
 them.</p>
 <p>Windows and POSIX styles just need separators when the previous component
 doesn't already end in a separator, but the URL always needs to place a
@@ -255,12 +255,12 @@ Pattern get needsSeparatorPattern;
 </div>
 <div class="field"><h4 id="relativeRootPattern">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a>         <strong>relativeRootPattern</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/Pattern.html" ref="external">Pattern</a>         <strong>relativeRootPattern</strong> <a class="anchor-link"
             href="#relativeRootPattern"
             title="Permalink to Style.relativeRootPattern">#</a>
         </h4>
         <div class="doc">
-<p>The <a class="crossref" href="../dart_core/Pattern.html">Pattern</a> that can be used to match the root prefix of a root-relative
+<p>The <a class="crossref" href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a> that can be used to match the root prefix of a root-relative
 path in this style.</p>
 <p>This can be null to indicate that this style doesn't support root-relative
 paths.</p>
@@ -271,12 +271,12 @@ final Pattern relativeRootPattern = null
 </div>
 <div class="field"><h4 id="rootPattern">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a>         <strong>rootPattern</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/Pattern.html" ref="external">Pattern</a>         <strong>rootPattern</strong> <a class="anchor-link"
             href="#rootPattern"
             title="Permalink to Style.rootPattern">#</a>
         </h4>
         <div class="doc">
-<p>The <a class="crossref" href="../dart_core/Pattern.html">Pattern</a> that can be used to match the root prefix of an absolute
+<p>The <a class="crossref" href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a> that can be used to match the root prefix of an absolute
 path in this style.</p>
 <pre class="source">
 Pattern get rootPattern;
@@ -285,7 +285,7 @@ Pattern get rootPattern;
 </div>
 <div class="field"><h4 id="separator">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>separator</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>separator</strong> <a class="anchor-link"
             href="#separator"
             title="Permalink to Style.separator">#</a>
         </h4>
@@ -299,12 +299,12 @@ String get separator;
 </div>
 <div class="field"><h4 id="separatorPattern">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a>         <strong>separatorPattern</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/Pattern.html" ref="external">Pattern</a>         <strong>separatorPattern</strong> <a class="anchor-link"
             href="#separatorPattern"
             title="Permalink to Style.separatorPattern">#</a>
         </h4>
         <div class="doc">
-<p>The <a class="crossref" href="../dart_core/Pattern.html">Pattern</a> that can be used to match a separator for a path in this
+<p>The <a class="crossref" href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a> that can be used to match a separator for a path in this
 style. Windows allows both "/" and "\" as path separators even though "\"
 is the canonical one.</p>
 <pre class="source">
@@ -316,7 +316,7 @@ Pattern get separatorPattern;
 <div>
 <h3>Methods</h3>
 <div class="method"><h4 id="absolutePathToUri">
-abstract <a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> <strong>absolutePathToUri</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#absolutePathToUri"
+abstract <a href="http://api.dartlang.org/dart_core/Uri.html" ref="external">Uri</a> <strong>absolutePathToUri</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> path) <a class="anchor-link" href="#absolutePathToUri"
               title="Permalink to Style.absolutePathToUri">#</a></h4>
 <div class="doc">
 <p>Returns the URI that represents 
@@ -325,7 +325,7 @@ abstract <a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> <strong>ab
 </div>
 <div class="method"><h4 id="getRelativeRoot">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>getRelativeRoot</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#getRelativeRoot"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>getRelativeRoot</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> path) <a class="anchor-link" href="#getRelativeRoot"
               title="Permalink to Style.getRelativeRoot">#</a></h4>
 <div class="doc">
 <p>Gets the root prefix of 
@@ -345,7 +345,7 @@ String getRelativeRoot(String path) {
 </div>
 <div class="method"><h4 id="getRoot">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>getRoot</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#getRoot"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>getRoot</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> path) <a class="anchor-link" href="#getRoot"
               title="Permalink to Style.getRoot">#</a></h4>
 <div class="doc">
 <p>Gets the root prefix of 
@@ -363,7 +363,7 @@ String getRoot(String path) {
 </div>
 </div>
 <div class="method"><h4 id="pathFromUri">
-abstract <a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>pathFromUri</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri) <a class="anchor-link" href="#pathFromUri"
+abstract <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>pathFromUri</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html" ref="external">Uri</a> uri) <a class="anchor-link" href="#pathFromUri"
               title="Permalink to Style.pathFromUri">#</a></h4>
 <div class="doc">
 <p>Returns the path represented by 
@@ -372,7 +372,7 @@ abstract <a href="http://api.dartlang.org/dart_core/String.html">String</a> <str
 </div>
 <div class="method"><h4 id="relativePathToUri">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> <strong>relativePathToUri</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> path) <a class="anchor-link" href="#relativePathToUri"
+<a href="http://api.dartlang.org/dart_core/Uri.html" ref="external">Uri</a> <strong>relativePathToUri</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> path) <a class="anchor-link" href="#relativePathToUri"
               title="Permalink to Style.relativePathToUri">#</a></h4>
 <div class="doc">
 <p>Returns the URI that represents the relative path made of <code>parts</code>.</p>
@@ -384,12 +384,12 @@ Uri relativePathToUri(String path) =&gt;
 </div>
 <div class="method"><h4 id="toString">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
               title="Permalink to Style.toString">#</a></h4>
 <div class="doc">
 <div class="inherited">
 <p>Returns a string representation of this object.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
 <pre class="source">
 String toString() =&gt; name;
 </pre>

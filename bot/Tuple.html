@@ -62,11 +62,11 @@ const <strong>Tuple</strong>(<a href="../bot/Tuple.html">T1</a> item1, <a href="
               title="Permalink to Tuple&lt;T1, T2&gt;.Tuple">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
-<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
-through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+<p>Creates a new <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance is equal to itself
 only.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
 <pre class="source">
 const Tuple(this.item1, this.item2);
 </pre>
@@ -77,7 +77,7 @@ const Tuple(this.item1, this.item2);
 <h3>Properties</h3>
 <div class="field"><h4 id="hashCode">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>hashCode</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>hashCode</strong> <a class="anchor-link"
             href="#hashCode"
             title="Permalink to Tuple&lt;T1, T2&gt;.hashCode">#</a>
         </h4>
@@ -91,7 +91,7 @@ the hash codes. They will not be consistent between runs and
 there are no distribution guarantees.</p>
 <p>If a subclass overrides <a class="crossref" href="../bot/Tuple.html#hashCode">hashCode</a> it should override the
 equality operator as well to maintain consistency.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
 <pre class="source">
 int get hashCode =&gt; Util.getHashCode([item1, item2]);
 </pre>
@@ -126,12 +126,12 @@ final T2 item2
 <h3>Operators</h3>
 <div class="method"><h4 id="==">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>operator ==</strong>(<a href="../bot/Tuple.html">Tuple</a>&lt;<a href="../bot/Tuple.html">T1</a>, <a href="../bot/Tuple.html">T2</a>&gt; other) <a class="anchor-link" href="#=="
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>operator ==</strong>(<a href="../bot/Tuple.html">Tuple</a>&lt;<a href="../bot/Tuple.html">T1</a>, <a href="../bot/Tuple.html">T2</a>&gt; other) <a class="anchor-link" href="#=="
               title="Permalink to Tuple&lt;T1, T2&gt;.operator ==">#</a></h4>
 <div class="doc">
 <div class="inherited">
 <p>The equality operator.</p>
-<p>The default behavior for all <a class="crossref" href="../dart_core/Object.html">Object</a>s is to return true if and
+<p>The default behavior for all <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a>s is to return true if and
 only if <code>this</code> and 
 <span class="param">other</span> are the same object.</p>
 <p>Override this method to specify a different equality relation on
@@ -149,7 +149,7 @@ should not change over time, or at least only change if one of the objects
 was modified.</p>
 <p>If a subclass overrides the equality operator it should override
 the <a class="crossref" href="../bot/Tuple.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
 <pre class="source">
 bool operator ==(Tuple&lt;T1, T2&gt; other) {
  return other != null &amp;&amp; item1 == other.item1 &amp;&amp; item2 == other.item2;
@@ -172,12 +172,12 @@ dynamic toJson() =&gt; { 'item1' : item1, 'item2' : item2 };
 </div>
 <div class="method"><h4 id="toString">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
               title="Permalink to Tuple&lt;T1, T2&gt;.toString">#</a></h4>
 <div class="doc">
 <div class="inherited">
 <p>Returns a string representation of this object.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
 <pre class="source">
 String toString() =&gt; "{item1: $item1, item2: $item2}";
 </pre>

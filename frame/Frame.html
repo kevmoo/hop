@@ -222,15 +222,15 @@ class Frame {
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>Frame</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a> uri, <a href="http://api.dartlang.org/dart_core/int.html">int</a> line, <a href="http://api.dartlang.org/dart_core/int.html">int</a> column, <a href="http://api.dartlang.org/dart_core/String.html">String</a> member) <a class="anchor-link" href="#"
+new <strong>Frame</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html" ref="external">Uri</a> uri, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> line, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> column, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> member) <a class="anchor-link" href="#"
               title="Permalink to Frame.Frame">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
-<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
-through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+<p>Creates a new <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance is equal to itself
 only.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
 <pre class="source">
 Frame(this.uri, this.line, this.column, this.member);
 </pre>
@@ -238,7 +238,7 @@ Frame(this.uri, this.line, this.column, this.member);
 </div>
 <div class="method"><h4 id="caller">
 <button class="show-code">Code</button>
-factory <strong>Frame.caller</strong>([<a href="http://api.dartlang.org/dart_core/int.html">int</a> level = 1]) <a class="anchor-link" href="#caller"
+factory <strong>Frame.caller</strong>([<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> level = 1]) <a class="anchor-link" href="#caller"
               title="Permalink to Frame.Frame.caller">#</a></h4>
 <div class="doc">
 <p>Returns a single frame of the current stack.</p>
@@ -261,7 +261,7 @@ factory Frame.caller([int level=1]) {
 </div>
 <div class="method"><h4 id="parseFirefox">
 <button class="show-code">Code</button>
-factory <strong>Frame.parseFirefox</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseFirefox"
+factory <strong>Frame.parseFirefox</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> frame) <a class="anchor-link" href="#parseFirefox"
               title="Permalink to Frame.Frame.parseFirefox">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a Firefox stack frame.</p>
@@ -288,7 +288,7 @@ factory Frame.parseFirefox(String frame) {
 </div>
 <div class="method"><h4 id="parseFriendly">
 <button class="show-code">Code</button>
-factory <strong>Frame.parseFriendly</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseFriendly"
+factory <strong>Frame.parseFriendly</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> frame) <a class="anchor-link" href="#parseFriendly"
               title="Permalink to Frame.Frame.parseFriendly">#</a></h4>
 <div class="doc">
 <p>Parses this package's string representation of a stack frame.</p>
@@ -316,7 +316,7 @@ factory Frame.parseFriendly(String frame) {
 </div>
 <div class="method"><h4 id="parseIE">
 <button class="show-code">Code</button>
-factory <strong>Frame.parseIE</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseIE"
+factory <strong>Frame.parseIE</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> frame) <a class="anchor-link" href="#parseIE"
               title="Permalink to Frame.Frame.parseIE">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of an IE stack frame.</p>
@@ -329,7 +329,7 @@ factory Frame.parseIE(String frame) =&gt; new Frame.parseV8(frame);
 </div>
 <div class="method"><h4 id="parseSafari6_0">
 <button class="show-code">Code</button>
-factory <strong>Frame.parseSafari6_0</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseSafari6_0"
+factory <strong>Frame.parseSafari6_0</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> frame) <a class="anchor-link" href="#parseSafari6_0"
               title="Permalink to Frame.Frame.parseSafari6_0">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a Safari 6.0 stack frame.</p>
@@ -342,7 +342,7 @@ factory Frame.parseSafari6_0(String frame) =&gt; new Frame.parseFirefox(frame);
 </div>
 <div class="method"><h4 id="parseSafari6_1">
 <button class="show-code">Code</button>
-factory <strong>Frame.parseSafari6_1</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseSafari6_1"
+factory <strong>Frame.parseSafari6_1</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> frame) <a class="anchor-link" href="#parseSafari6_1"
               title="Permalink to Frame.Frame.parseSafari6_1">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a Safari 6.1+ stack frame.</p>
@@ -366,7 +366,7 @@ factory Frame.parseSafari6_1(String frame) {
 </div>
 <div class="method"><h4 id="parseV8">
 <button class="show-code">Code</button>
-factory <strong>Frame.parseV8</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseV8"
+factory <strong>Frame.parseV8</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> frame) <a class="anchor-link" href="#parseV8"
               title="Permalink to Frame.Frame.parseV8">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a Chrome/V8 stack frame.</p>
@@ -395,7 +395,7 @@ factory Frame.parseV8(String frame) {
 </div>
 <div class="method"><h4 id="parseVM">
 <button class="show-code">Code</button>
-factory <strong>Frame.parseVM</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> frame) <a class="anchor-link" href="#parseVM"
+factory <strong>Frame.parseVM</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> frame) <a class="anchor-link" href="#parseVM"
               title="Permalink to Frame.Frame.parseVM">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a Dart VM stack frame.</p>
@@ -432,7 +432,7 @@ factory Frame.parseVM(String frame) {
 <h3>Properties</h3>
 <div class="field"><h4 id="column">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>column</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>column</strong> <a class="anchor-link"
             href="#column"
             title="Permalink to Frame.column">#</a>
         </h4>
@@ -447,7 +447,7 @@ final int column
 </div>
 <div class="field"><h4 id="isCore">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>isCore</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a>         <strong>isCore</strong> <a class="anchor-link"
             href="#isCore"
             title="Permalink to Frame.isCore">#</a>
         </h4>
@@ -460,7 +460,7 @@ bool get isCore =&gt; uri.scheme == 'dart';
 </div>
 <div class="field"><h4 id="library">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>library</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>library</strong> <a class="anchor-link"
             href="#library"
             title="Permalink to Frame.library">#</a>
         </h4>
@@ -479,7 +479,7 @@ String get library {
 </div>
 <div class="field"><h4 id="line">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>line</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>line</strong> <a class="anchor-link"
             href="#line"
             title="Permalink to Frame.line">#</a>
         </h4>
@@ -494,7 +494,7 @@ final int line
 </div>
 <div class="field"><h4 id="location">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>location</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>location</strong> <a class="anchor-link"
             href="#location"
             title="Permalink to Frame.location">#</a>
         </h4>
@@ -511,7 +511,7 @@ String get location {
 </div>
 <div class="field"><h4 id="member">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>member</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>member</strong> <a class="anchor-link"
             href="#member"
             title="Permalink to Frame.member">#</a>
         </h4>
@@ -525,7 +525,7 @@ final String member
 </div>
 <div class="field"><h4 id="package">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>package</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>package</strong> <a class="anchor-link"
             href="#package"
             title="Permalink to Frame.package">#</a>
         </h4>
@@ -542,7 +542,7 @@ String get package {
 </div>
 <div class="field"><h4 id="uri">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/Uri.html">Uri</a>         <strong>uri</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/Uri.html" ref="external">Uri</a>         <strong>uri</strong> <a class="anchor-link"
             href="#uri"
             title="Permalink to Frame.uri">#</a>
         </h4>
@@ -559,12 +559,12 @@ final Uri uri
 <h3>Methods</h3>
 <div class="method"><h4 id="toString">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
               title="Permalink to Frame.toString">#</a></h4>
 <div class="doc">
 <div class="inherited">
 <p>Returns a string representation of this object.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
 <pre class="source">
 String toString() =&gt; '$location in $member';
 </pre>

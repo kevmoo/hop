@@ -31,19 +31,19 @@
 <h3>Functions</h3>
 <div class="method"><h4 id="getDelayedResult">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html">Future</a>&lt;dynamic&gt; <strong>getDelayedResult</strong>(input) <a class="anchor-link" href="#getDelayedResult"
+<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a>&lt;dynamic&gt; <strong>getDelayedResult</strong>(input) <a class="anchor-link" href="#getDelayedResult"
               title="Permalink to getDelayedResult">#</a></h4>
 <div class="doc">
 <p>Designed to allow methods to support a variety of "delayed" inputs.</p>
 <p>If the 
-<span class="param">input</span> is a <a class="crossref" href="dart_async/Future.html">Future</a>, <a class="crossref" href="bot_async.html#getDelayedResult">getDelayedResult</a> waits for a result.</p>
+<span class="param">input</span> is a <a class="crossref" href="http://api.dartlang.org/dart_async/Future.html">Future</a>, <a class="crossref" href="bot_async.html#getDelayedResult">getDelayedResult</a> waits for a result.</p>
 <p>If the 
-<span class="param">input</span> is a <a class="crossref" href="dart_core/Function.html">Function</a>, <a class="crossref" href="bot_async.html#getDelayedResult">getDelayedResult</a> evaluates it for a result.</p>
+<span class="param">input</span> is a <a class="crossref" href="http://api.dartlang.org/dart_core/Function.html">Function</a>, <a class="crossref" href="bot_async.html#getDelayedResult">getDelayedResult</a> evaluates it for a result.</p>
 <p>The result in both cases is provided back to <a class="crossref" href="bot_async.html#getDelayedResult">getDelayedResult</a> evaluated again.</p>
 <p>If the original 
 <span class="param">input</span>--or once a recursive 
-<span class="param">input</span>--is neigther a <a class="crossref" href="dart_async/Future.html">Future</a>
-nor a <a class="crossref" href="dart_core/Function.html">Function</a> that value is returned wrapped in a <a class="crossref" href="dart_async/Future.html">Future</a>.</p>
+<span class="param">input</span>--is neigther a <a class="crossref" href="http://api.dartlang.org/dart_async/Future.html">Future</a>
+nor a <a class="crossref" href="http://api.dartlang.org/dart_core/Function.html">Function</a> that value is returned wrapped in a <a class="crossref" href="http://api.dartlang.org/dart_async/Future.html">Future</a>.</p>
 <pre class="source">
 Future&lt;dynamic&gt; getDelayedResult(dynamic input) {
  if(input is Function) {

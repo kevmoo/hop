@@ -238,7 +238,7 @@ class EncodingParser {
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>EncodingParser</strong>(<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; bytes) <a class="anchor-link" href="#"
+new <strong>EncodingParser</strong>(<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt; bytes) <a class="anchor-link" href="#"
               title="Permalink to EncodingParser.EncodingParser">#</a></h4>
 <div class="doc">
 <p>
@@ -267,7 +267,7 @@ final EncodingBytes data
 </div>
 <div class="field"><h4 id="encoding">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>encoding</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>encoding</strong> <a class="anchor-link"
             href="#encoding"
             title="Permalink to EncodingParser.encoding">#</a>
         </h4>
@@ -282,7 +282,7 @@ String encoding
 <h3>Methods</h3>
 <div class="method"><h4 id="getAttribute">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt; <strong>getAttribute</strong>() <a class="anchor-link" href="#getAttribute"
+<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; <strong>getAttribute</strong>() <a class="anchor-link" href="#getAttribute"
               title="Permalink to EncodingParser.getAttribute">#</a></h4>
 <div class="doc">
 <p>Return a name,value pair for the next attribute in the stream,
@@ -375,7 +375,7 @@ List&lt;String&gt; getAttribute() {
 </div>
 <div class="method"><h4 id="getEncoding">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>getEncoding</strong>() <a class="anchor-link" href="#getEncoding"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>getEncoding</strong>() <a class="anchor-link" href="#getEncoding"
               title="Permalink to EncodingParser.getEncoding">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -416,7 +416,7 @@ String getEncoding() {
 </div>
 <div class="method"><h4 id="handleComment">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>handleComment</strong>() <a class="anchor-link" href="#handleComment"
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>handleComment</strong>() <a class="anchor-link" href="#handleComment"
               title="Permalink to EncodingParser.handleComment">#</a></h4>
 <div class="doc">
 <p>Skip over comments. </p>
@@ -427,7 +427,7 @@ bool handleComment() =&gt; data.jumpTo("--&gt;");
 </div>
 <div class="method"><h4 id="handleMeta">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>handleMeta</strong>() <a class="anchor-link" href="#handleMeta"
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>handleMeta</strong>() <a class="anchor-link" href="#handleMeta"
               title="Permalink to EncodingParser.handleMeta">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -465,7 +465,7 @@ bool handleMeta() {
 </div>
 <div class="method"><h4 id="handleOther">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>handleOther</strong>() <a class="anchor-link" href="#handleOther"
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>handleOther</strong>() <a class="anchor-link" href="#handleOther"
               title="Permalink to EncodingParser.handleOther">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -475,7 +475,7 @@ bool handleOther() =&gt; data.jumpTo("&gt;");
 </div>
 <div class="method"><h4 id="handlePossibleEndTag">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>handlePossibleEndTag</strong>() <a class="anchor-link" href="#handlePossibleEndTag"
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>handlePossibleEndTag</strong>() <a class="anchor-link" href="#handlePossibleEndTag"
               title="Permalink to EncodingParser.handlePossibleEndTag">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -488,7 +488,7 @@ bool handlePossibleEndTag() {
 </div>
 <div class="method"><h4 id="handlePossibleStartTag">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>handlePossibleStartTag</strong>() <a class="anchor-link" href="#handlePossibleStartTag"
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>handlePossibleStartTag</strong>() <a class="anchor-link" href="#handlePossibleStartTag"
               title="Permalink to EncodingParser.handlePossibleStartTag">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -498,7 +498,7 @@ bool handlePossibleStartTag() =&gt; handlePossibleTag(false);
 </div>
 <div class="method"><h4 id="handlePossibleTag">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>handlePossibleTag</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> endTag) <a class="anchor-link" href="#handlePossibleTag"
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>handlePossibleTag</strong>(<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> endTag) <a class="anchor-link" href="#handlePossibleTag"
               title="Permalink to EncodingParser.handlePossibleTag">#</a></h4>
 <div class="doc">
 <pre class="source">

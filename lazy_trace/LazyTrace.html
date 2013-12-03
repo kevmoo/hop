@@ -33,7 +33,7 @@
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
 <p>A wrapper around a <a class="crossref" href="../lazy_trace/TraceThunk.html">TraceThunk</a>. This works around issue 9579 by avoiding
-the conversion of native <a class="crossref" href="../dart_core/StackTrace.html">StackTrace</a>s to strings until it's absolutely
+the conversion of native <a class="crossref" href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a>s to strings until it's absolutely
 necessary.</p>
 <pre class="source">
 class LazyTrace implements Trace {
@@ -82,7 +82,7 @@ LazyTrace(this._thunk);
 <h3>Properties</h3>
 <div class="field"><h4 id="frames">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../frame/Frame.html">Frame</a>&gt;         <strong>frames</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="../frame/Frame.html">Frame</a>&gt;         <strong>frames</strong> <a class="anchor-link"
             href="#frames"
             title="Permalink to LazyTrace.frames">#</a>
         </h4>
@@ -118,13 +118,13 @@ Trace get terse =&gt; new LazyTrace(() =&gt; _trace.terse);
 </div>
 <div class="field"><h4 id="vmTrace">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a>         <strong>vmTrace</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/StackTrace.html" ref="external">StackTrace</a>         <strong>vmTrace</strong> <a class="anchor-link"
             href="#vmTrace"
             title="Permalink to LazyTrace.vmTrace">#</a>
         </h4>
         <div class="doc">
 <div class="inherited">
-<p>Returns a VM-style <a class="crossref" href="../dart_core/StackTrace.html">StackTrace</a> object.</p>
+<p>Returns a VM-style <a class="crossref" href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a> object.</p>
 <p>The return value's <a class="crossref" href="../lazy_trace/LazyTrace.html#toString">toString</a> method will always return a string
 representation in the Dart VM's stack trace format, regardless of what
 platform is being used.</p>
@@ -139,7 +139,7 @@ StackTrace get vmTrace =&gt; _trace.vmTrace;
 <h3>Methods</h3>
 <div class="method"><h4 id="foldFrames">
 <button class="show-code">Code</button>
-<a href="../trace/Trace.html">Trace</a> <strong>foldFrames</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> predicate(frame)) <a class="anchor-link" href="#foldFrames"
+<a href="../trace/Trace.html">Trace</a> <strong>foldFrames</strong>(<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> predicate(frame)) <a class="anchor-link" href="#foldFrames"
               title="Permalink to LazyTrace.foldFrames">#</a></h4>
 <div class="doc">
 <div class="inherited">
@@ -160,7 +160,7 @@ Trace foldFrames(bool predicate(frame)) =&gt;
 </div>
 <div class="method"><h4 id="toString">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
               title="Permalink to LazyTrace.toString">#</a></h4>
 <div class="doc">
 <div class="inherited">

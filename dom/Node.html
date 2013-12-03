@@ -151,6 +151,8 @@ abstract class Node {
    nodes.addAll(parseFragment(value, container: tagName).nodes);
  }
 
+ Node get firstChild =&gt; nodes.isNotEmpty ? nodes[0] : null;
+
  void _addOuterHtml(StringBuffer str);
 
  void _addInnerHtml(StringBuffer str) {
@@ -336,7 +338,7 @@ abstract class Node {
 <h3>Static Properties</h3>
 <div class="field"><h4 id="ATTRIBUTE_NODE">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>ATTRIBUTE_NODE</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>ATTRIBUTE_NODE</strong> <a class="anchor-link"
             href="#ATTRIBUTE_NODE"
             title="Permalink to Node.ATTRIBUTE_NODE">#</a>
         </h4>
@@ -348,7 +350,7 @@ static const int ATTRIBUTE_NODE = 2
 </div>
 <div class="field"><h4 id="CDATA_SECTION_NODE">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>CDATA_SECTION_NODE</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>CDATA_SECTION_NODE</strong> <a class="anchor-link"
             href="#CDATA_SECTION_NODE"
             title="Permalink to Node.CDATA_SECTION_NODE">#</a>
         </h4>
@@ -360,7 +362,7 @@ static const int CDATA_SECTION_NODE = 4
 </div>
 <div class="field"><h4 id="COMMENT_NODE">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>COMMENT_NODE</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>COMMENT_NODE</strong> <a class="anchor-link"
             href="#COMMENT_NODE"
             title="Permalink to Node.COMMENT_NODE">#</a>
         </h4>
@@ -372,7 +374,7 @@ static const int COMMENT_NODE = 8
 </div>
 <div class="field"><h4 id="DOCUMENT_FRAGMENT_NODE">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>DOCUMENT_FRAGMENT_NODE</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>DOCUMENT_FRAGMENT_NODE</strong> <a class="anchor-link"
             href="#DOCUMENT_FRAGMENT_NODE"
             title="Permalink to Node.DOCUMENT_FRAGMENT_NODE">#</a>
         </h4>
@@ -384,7 +386,7 @@ static const int DOCUMENT_FRAGMENT_NODE = 11
 </div>
 <div class="field"><h4 id="DOCUMENT_NODE">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>DOCUMENT_NODE</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>DOCUMENT_NODE</strong> <a class="anchor-link"
             href="#DOCUMENT_NODE"
             title="Permalink to Node.DOCUMENT_NODE">#</a>
         </h4>
@@ -396,7 +398,7 @@ static const int DOCUMENT_NODE = 9
 </div>
 <div class="field"><h4 id="DOCUMENT_TYPE_NODE">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>DOCUMENT_TYPE_NODE</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>DOCUMENT_TYPE_NODE</strong> <a class="anchor-link"
             href="#DOCUMENT_TYPE_NODE"
             title="Permalink to Node.DOCUMENT_TYPE_NODE">#</a>
         </h4>
@@ -408,7 +410,7 @@ static const int DOCUMENT_TYPE_NODE = 10
 </div>
 <div class="field"><h4 id="ELEMENT_NODE">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>ELEMENT_NODE</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>ELEMENT_NODE</strong> <a class="anchor-link"
             href="#ELEMENT_NODE"
             title="Permalink to Node.ELEMENT_NODE">#</a>
         </h4>
@@ -420,7 +422,7 @@ static const int ELEMENT_NODE = 1
 </div>
 <div class="field"><h4 id="ENTITY_NODE">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>ENTITY_NODE</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>ENTITY_NODE</strong> <a class="anchor-link"
             href="#ENTITY_NODE"
             title="Permalink to Node.ENTITY_NODE">#</a>
         </h4>
@@ -432,7 +434,7 @@ static const int ENTITY_NODE = 6
 </div>
 <div class="field"><h4 id="ENTITY_REFERENCE_NODE">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>ENTITY_REFERENCE_NODE</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>ENTITY_REFERENCE_NODE</strong> <a class="anchor-link"
             href="#ENTITY_REFERENCE_NODE"
             title="Permalink to Node.ENTITY_REFERENCE_NODE">#</a>
         </h4>
@@ -444,7 +446,7 @@ static const int ENTITY_REFERENCE_NODE = 5
 </div>
 <div class="field"><h4 id="NOTATION_NODE">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>NOTATION_NODE</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>NOTATION_NODE</strong> <a class="anchor-link"
             href="#NOTATION_NODE"
             title="Permalink to Node.NOTATION_NODE">#</a>
         </h4>
@@ -456,7 +458,7 @@ static const int NOTATION_NODE = 12
 </div>
 <div class="field"><h4 id="PROCESSING_INSTRUCTION_NODE">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>PROCESSING_INSTRUCTION_NODE</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>PROCESSING_INSTRUCTION_NODE</strong> <a class="anchor-link"
             href="#PROCESSING_INSTRUCTION_NODE"
             title="Permalink to Node.PROCESSING_INSTRUCTION_NODE">#</a>
         </h4>
@@ -468,7 +470,7 @@ static const int PROCESSING_INSTRUCTION_NODE = 7
 </div>
 <div class="field"><h4 id="TEXT_NODE">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>TEXT_NODE</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>TEXT_NODE</strong> <a class="anchor-link"
             href="#TEXT_NODE"
             title="Permalink to Node.TEXT_NODE">#</a>
         </h4>
@@ -483,15 +485,15 @@ static const int TEXT_NODE = 3
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>Node</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> tagName) <a class="anchor-link" href="#"
+new <strong>Node</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> tagName) <a class="anchor-link" href="#"
               title="Permalink to Node.Node">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
-<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
-through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+<p>Creates a new <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance is equal to itself
 only.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
 <pre class="source">
 Node(this.tagName) {
  nodes._parent = this;
@@ -504,7 +506,7 @@ Node(this.tagName) {
 <h3>Properties</h3>
 <div class="field"><h4 id="$dom_nodeType">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>$dom_nodeType</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>$dom_nodeType</strong> <a class="anchor-link"
             href="#$dom_nodeType"
             title="Permalink to Node.$dom_nodeType">#</a>
         </h4>
@@ -516,14 +518,14 @@ int get $dom_nodeType =&gt; nodeType;
 </div>
 <div class="field"><h4 id="attributes">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_collection/LinkedHashMap.html">LinkedHashMap</a>&lt;dynamic, <a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt;         <strong>attributes</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_collection/LinkedHashMap.html" ref="external">LinkedHashMap</a>&lt;dynamic, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt;         <strong>attributes</strong> <a class="anchor-link"
             href="#attributes"
             title="Permalink to Node.attributes">#</a>
         </h4>
         <div class="doc">
 <p>A map holding name, value pairs for attributes of the node.</p>
 <p>Note that attribute order needs to be stable for serialization, so we use a
-LinkedHashMap. Each key is a <a class="crossref" href="../dart_core/String.html">String</a> or <a class="crossref" href="../dom/AttributeName.html">AttributeName</a>.</p>
+LinkedHashMap. Each key is a <a class="crossref" href="http://api.dartlang.org/dart_core/String.html">String</a> or <a class="crossref" href="../dom/AttributeName.html">AttributeName</a>.</p>
 <pre class="source">
 LinkedHashMap&lt;dynamic, String&gt; attributes = new LinkedHashMap()
 </pre>
@@ -531,7 +533,7 @@ LinkedHashMap&lt;dynamic, String&gt; attributes = new LinkedHashMap()
 </div>
 <div class="field"><h4 id="attributeSpans">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_collection/LinkedHashMap.html">LinkedHashMap</a>&lt;dynamic, <a href="../source_maps.span/FileSpan.html">FileSpan</a>&gt;         <strong>attributeSpans</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_collection/LinkedHashMap.html" ref="external">LinkedHashMap</a>&lt;dynamic, <a href="../source_maps.span/FileSpan.html">FileSpan</a>&gt;         <strong>attributeSpans</strong> <a class="anchor-link"
             href="#attributeSpans"
             title="Permalink to Node.attributeSpans">#</a>
         </h4>
@@ -550,7 +552,7 @@ LinkedHashMap&lt;dynamic, FileSpan&gt; get attributeSpans {
 </div>
 <div class="field"><h4 id="attributeValueSpans">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_collection/LinkedHashMap.html">LinkedHashMap</a>&lt;dynamic, <a href="../source_maps.span/FileSpan.html">FileSpan</a>&gt;         <strong>attributeValueSpans</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_collection/LinkedHashMap.html" ref="external">LinkedHashMap</a>&lt;dynamic, <a href="../source_maps.span/FileSpan.html">FileSpan</a>&gt;         <strong>attributeValueSpans</strong> <a class="anchor-link"
             href="#attributeValueSpans"
             title="Permalink to Node.attributeValueSpans">#</a>
         </h4>
@@ -569,7 +571,7 @@ LinkedHashMap&lt;dynamic, FileSpan&gt; get attributeValueSpans {
 </div>
 <div class="field"><h4 id="children">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../dom/Element.html">Element</a>&gt;         <strong>children</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="../dom/Element.html">Element</a>&gt;         <strong>children</strong> <a class="anchor-link"
             href="#children"
             title="Permalink to Node.children">#</a>
         </h4>
@@ -584,9 +586,21 @@ List&lt;Element&gt; get children {
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="firstChild">
+<button class="show-code">Code</button>
+final <a href="../dom/Node.html">Node</a>         <strong>firstChild</strong> <a class="anchor-link"
+            href="#firstChild"
+            title="Permalink to Node.firstChild">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Node get firstChild =&gt; nodes.isNotEmpty ? nodes[0] : null;
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="innerHtml">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>innerHtml</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>innerHtml</strong> <a class="anchor-link"
             href="#innerHtml"
             title="Permalink to Node.innerHtml">#</a>
         </h4>
@@ -610,7 +624,7 @@ set innerHtml(String value) {
 </div>
 <div class="field"><h4 id="namespace">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>namespace</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>namespace</strong> <a class="anchor-link"
             href="#namespace"
             title="Permalink to Node.namespace">#</a>
         </h4>
@@ -622,7 +636,7 @@ String get namespace =&gt; null;
 </div>
 <div class="field"><h4 id="nameTuple">
 <button class="show-code">Code</button>
-final <a href="../utils/Pair.html">Pair</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html">String</a>, <a href="http://api.dartlang.org/dart_core/String.html">String</a>&gt;         <strong>nameTuple</strong> <a class="anchor-link"
+final <a href="../utils/Pair.html">Pair</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt;         <strong>nameTuple</strong> <a class="anchor-link"
             href="#nameTuple"
             title="Permalink to Node.nameTuple">#</a>
         </h4>
@@ -651,7 +665,7 @@ final NodeList nodes = new NodeList._()
 </div>
 <div class="field"><h4 id="nodeType">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>nodeType</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>nodeType</strong> <a class="anchor-link"
             href="#nodeType"
             title="Permalink to Node.nodeType">#</a>
         </h4>
@@ -663,7 +677,7 @@ int get nodeType;
 </div>
 <div class="field"><h4 id="outerHtml">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>outerHtml</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>outerHtml</strong> <a class="anchor-link"
             href="#outerHtml"
             title="Permalink to Node.outerHtml">#</a>
         </h4>
@@ -705,7 +719,7 @@ FileSpan sourceSpan
 </div>
 <div class="field"><h4 id="tagName">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>tagName</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>tagName</strong> <a class="anchor-link"
             href="#tagName"
             title="Permalink to Node.tagName">#</a>
         </h4>
@@ -718,7 +732,7 @@ final String tagName
 </div>
 <div class="field"><h4 id="value">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>value</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>value</strong> <a class="anchor-link"
             href="#value"
             title="Permalink to Node.value">#</a>
         </h4>
@@ -742,7 +756,7 @@ name and attributes but with no parent or child nodes.</p>
 </div>
 <div class="method"><h4 id="contains">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>contains</strong>(<a href="../dom/Node.html">Node</a> node) <a class="anchor-link" href="#contains"
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>contains</strong>(<a href="../dom/Node.html">Node</a> node) <a class="anchor-link" href="#contains"
               title="Permalink to Node.contains">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -752,7 +766,7 @@ bool contains(Node node) =&gt; nodes.contains(node);
 </div>
 <div class="method"><h4 id="hasChildNodes">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>hasChildNodes</strong>() <a class="anchor-link" href="#hasChildNodes"
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>hasChildNodes</strong>() <a class="anchor-link" href="#hasChildNodes"
               title="Permalink to Node.hasChildNodes">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -762,7 +776,7 @@ bool hasChildNodes() =&gt; !nodes.isEmpty;
 </div>
 <div class="method"><h4 id="hasContent">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> <strong>hasContent</strong>() <a class="anchor-link" href="#hasContent"
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>hasContent</strong>() <a class="anchor-link" href="#hasContent"
               title="Permalink to Node.hasContent">#</a></h4>
 <div class="doc">
 <p>Return true if the node has children or text. </p>
@@ -796,7 +810,7 @@ void insertBefore(Node node, Node refNode) {
 </div>
 <div class="method"><h4 id="query">
 <button class="show-code">Code</button>
-<a href="../dom/Element.html">Element</a> <strong>query</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> selectors) <a class="anchor-link" href="#query"
+<a href="../dom/Element.html">Element</a> <strong>query</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> selectors) <a class="anchor-link" href="#query"
               title="Permalink to Node.query">#</a></h4>
 <div class="doc">
 <p>Seaches for the first descendant node matching the given selectors, using a
@@ -809,7 +823,7 @@ Element query(String selectors) =&gt; _queryType(_typeSelector(selectors));
 </div>
 <div class="method"><h4 id="queryAll">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../dom/Element.html">Element</a>&gt; <strong>queryAll</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> selectors) <a class="anchor-link" href="#queryAll"
+<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="../dom/Element.html">Element</a>&gt; <strong>queryAll</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> selectors) <a class="anchor-link" href="#queryAll"
               title="Permalink to Node.queryAll">#</a></h4>
 <div class="doc">
 <p>Returns all descendant nodes matching the given selectors, using a
@@ -876,12 +890,12 @@ Node replaceWith(Node otherNode) {
 </div>
 <div class="method"><h4 id="toString">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
               title="Permalink to Node.toString">#</a></h4>
 <div class="doc">
 <div class="inherited">
 <p>Returns a string representation of this object.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
 <pre class="source">
 String toString() =&gt; tagName;
 </pre>

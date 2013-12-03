@@ -150,15 +150,15 @@ class SourceFile {
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>SourceFile</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> url, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; _lineStarts, <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html">int</a>&gt; _decodedChars) <a class="anchor-link" href="#"
+new <strong>SourceFile</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> url, <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt; _lineStarts, <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt; _decodedChars) <a class="anchor-link" href="#"
               title="Permalink to SourceFile.SourceFile">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
-<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
-through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+<p>Creates a new <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance is equal to itself
 only.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html">Object</a> </div></div>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
 <pre class="source">
 SourceFile(this.url, this._lineStarts, this._decodedChars);
 </pre>
@@ -166,7 +166,7 @@ SourceFile(this.url, this._lineStarts, this._decodedChars);
 </div>
 <div class="method"><h4 id="text">
 <button class="show-code">Code</button>
-new <strong>SourceFile.text</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> url, <a href="http://api.dartlang.org/dart_core/String.html">String</a> text) <a class="anchor-link" href="#text"
+new <strong>SourceFile.text</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> url, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> text) <a class="anchor-link" href="#text"
               title="Permalink to SourceFile.SourceFile.text">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -193,7 +193,7 @@ SourceFile.text(this.url, String text)
 <h3>Properties</h3>
 <div class="field"><h4 id="url">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>url</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>url</strong> <a class="anchor-link"
             href="#url"
             title="Permalink to SourceFile.url">#</a>
         </h4>
@@ -209,7 +209,7 @@ final String url
 <h3>Methods</h3>
 <div class="method"><h4 id="getColumn">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>getColumn</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> line, <a href="http://api.dartlang.org/dart_core/int.html">int</a> offset) <a class="anchor-link" href="#getColumn"
+<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> <strong>getColumn</strong>(<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> line, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> offset) <a class="anchor-link" href="#getColumn"
               title="Permalink to SourceFile.getColumn">#</a></h4>
 <div class="doc">
 <p>Gets the 0-based column corresponding to an offset.</p>
@@ -223,7 +223,7 @@ int getColumn(int line, int offset) {
 </div>
 <div class="method"><h4 id="getLine">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>getLine</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> offset) <a class="anchor-link" href="#getLine"
+<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> <strong>getLine</strong>(<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> offset) <a class="anchor-link" href="#getLine"
               title="Permalink to SourceFile.getLine">#</a></h4>
 <div class="doc">
 <p>Gets the 0-based line corresponding to an offset.</p>
@@ -234,7 +234,7 @@ int getLine(int offset) =&gt; binarySearch(_lineStarts, (o) =&gt; o &gt; offset)
 </div>
 <div class="method"><h4 id="getLocationMessage">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>getLocationMessage</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message, <a href="http://api.dartlang.org/dart_core/int.html">int</a> start, <a href="http://api.dartlang.org/dart_core/int.html">int</a> end, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> useColors: false, <a href="http://api.dartlang.org/dart_core/String.html">String</a> color}) <a class="anchor-link" href="#getLocationMessage"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>getLocationMessage</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> message, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> start, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> end, {<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> useColors: false, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> color}) <a class="anchor-link" href="#getLocationMessage"
               title="Permalink to SourceFile.getLocationMessage">#</a></h4>
 <div class="doc">
 <p>Create a pretty string representation from a span.</p>
@@ -293,7 +293,7 @@ String getLocationMessage(String message, int start, int end,
 </div>
 <div class="method"><h4 id="getOffset">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/int.html">int</a> <strong>getOffset</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> line, <a href="http://api.dartlang.org/dart_core/int.html">int</a> column) <a class="anchor-link" href="#getOffset"
+<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> <strong>getOffset</strong>(<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> line, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> column) <a class="anchor-link" href="#getOffset"
               title="Permalink to SourceFile.getOffset">#</a></h4>
 <div class="doc">
 <p>Get the offset for a given line and column</p>
@@ -311,7 +311,7 @@ int getOffset(int line, int column) {
 </div>
 <div class="method"><h4 id="getText">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>getText</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> start, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> end]) <a class="anchor-link" href="#getText"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>getText</strong>(<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> start, [<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> end]) <a class="anchor-link" href="#getText"
               title="Permalink to SourceFile.getText">#</a></h4>
 <div class="doc">
 <p>Gets the text at the given offsets.</p>
@@ -323,7 +323,7 @@ String getText(int start, [int end]) =&gt;
 </div>
 <div class="method"><h4 id="location">
 <button class="show-code">Code</button>
-<a href="../source_maps.span/Location.html">Location</a> <strong>location</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> offset) <a class="anchor-link" href="#location"
+<a href="../source_maps.span/Location.html">Location</a> <strong>location</strong>(<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> offset) <a class="anchor-link" href="#location"
               title="Permalink to SourceFile.location">#</a></h4>
 <div class="doc">
 <p>Returns a location in this <a class="crossref" href="../source_maps.span/SourceFile.html">SourceFile</a> with the given offset.</p>
@@ -334,7 +334,7 @@ Location location(int offset) =&gt; new FileLocation(this, offset);
 </div>
 <div class="method"><h4 id="span">
 <button class="show-code">Code</button>
-<a href="../source_maps.span/Span.html">Span</a> <strong>span</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> start, [<a href="http://api.dartlang.org/dart_core/int.html">int</a> end, <a href="http://api.dartlang.org/dart_core/bool.html">bool</a> isIdentifier = false]) <a class="anchor-link" href="#span"
+<a href="../source_maps.span/Span.html">Span</a> <strong>span</strong>(<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> start, [<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> end, <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> isIdentifier = false]) <a class="anchor-link" href="#span"
               title="Permalink to SourceFile.span">#</a></h4>
 <div class="doc">
 <p>Returns a span in this <a class="crossref" href="../source_maps.span/SourceFile.html">SourceFile</a> with the given offsets.</p>

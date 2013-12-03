@@ -31,7 +31,7 @@
 <h3>Functions</h3>
 <div class="method"><h4 id="createUnitTestTask">
 <button class="show-code">Code</button>
-<a href="hop/Task.html">Task</a> <strong>createUnitTestTask</strong>(void unitTestAction(<a href="unittest/Configuration.html">Configuration</a> config), {<a href="http://api.dartlang.org/dart_core/Duration.html">Duration</a> timeout: const Duration(seconds:20)}) <a class="anchor-link" href="#createUnitTestTask"
+<a href="hop.core/Task.html">Task</a> <strong>createUnitTestTask</strong>(void unitTestAction(<a href="unittest/Configuration.html">Configuration</a> config), {<a href="http://api.dartlang.org/dart_core/Duration.html" ref="external">Duration</a> timeout: const Duration(seconds:20)}) <a class="anchor-link" href="#createUnitTestTask"
               title="Permalink to createUnitTestTask">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -56,7 +56,7 @@ Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
    // TODO: wrap this in a try/catch
    unitTestAction(config);
 
-   if(!ctx.arguments.rest.isEmpty) {
+   if(ctx.extendedArgs[_FILTER_ARG].isNotEmpty) {
      ctx.info('Filtering tests by: ${ctx.arguments.rest}');
 
      unittest.filterTests((unittest.TestCase tc) {
@@ -75,7 +75,7 @@ Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
 
      ctx.info(list.join('\n'));
 
-     return new Future.value();
+     return null;
    }
 
    unittest.runTests();
@@ -83,7 +83,7 @@ Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
  },
  config: _unittestParserConfig,
  description: 'Run unit tests in the console',
- extendedArgs: [new TaskArgument('filter', multiple: true)]);
+ extendedArgs: [new TaskArgument(_FILTER_ARG, multiple: true)]);
 }
 </pre>
 </div>

@@ -1,0 +1,438 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>TaskRegistry class / hop.runner Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="hop.runner" data-type="TaskRegistry">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../hop.runner.html">hop.runner</a> &rsaquo; <a href="../hop.runner/TaskRegistry.html">TaskRegistry</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>TaskRegistry</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class TaskRegistry {
+
+ // There could be cases (testing, perhaps?) where a single task is added to
+ // many registries. So we're keeping the expando per-instance, instead of
+ // static
+ final Expando&lt;_TaskMetadata&gt; _metadata =
+     new Expando&lt;_TaskMetadata&gt;('metadata');
+
+ final SplayTreeMap&lt;String, Task&gt; _tasks;
+ final Map&lt;String, Task&gt; tasks;
+
+ String _helpTaskName;
+ bool _frozen = false;
+
+ factory TaskRegistry() =&gt;
+     new TaskRegistry._(new SplayTreeMap&lt;String, Task&gt;());
+
+ TaskRegistry._(SplayTreeMap&lt;String, Task&gt; map) :
+   this._tasks = map,
+   this.tasks = new UnmodifiableMapView(map);
+
+ bool get isFrozen =&gt; _frozen;
+
+ /**
+  * **DEPRECATED** Use [tasks.keys] instead.
+  */
+ List&lt;String&gt; get taskNames {
+   _requireFrozen();
+   return _tasks.keys.toList();
+ }
+
+ /**
+  * **DEPRECATED** Use [tasks.containsKey] instead.
+  */
+ @deprecated
+ bool hasTask(String taskName) {
+   _requireFrozen();
+   return _tasks.containsKey(taskName);
+ }
+
+ /**
+  * **DEPRECATED** Use [addTask] instead.
+  */
+ @deprecated
+ Task addSync(String name, dynamic func(TaskContext ctx), {String description}) {
+   return addTask(name, new Task(func, description: description));
+ }
+
+ /**
+  * **DEPRECATED** Use [addTask] instead.
+  */
+ @deprecated
+ Task addAsync(String name, Future execFuture(TaskContext ctx), {String description}) {
+   return addTask(name, new Task(execFuture, description: description));
+ }
+
+ /**
+  * [task] can be either an instance of [Task] or a [Function].
+  *
+  * If [task] is a [Function], it must take one argument: [TaskContext].
+  *
+  * If a [Future] is returned from the [task] [Function], the runner will wait
+  * for the [Future] to complete.
+  *
+  * If [description] is provided and [task] is an instance of [Task], then
+  * [task] will be cloned and given the provided [description].
+  */
+ Task addTask(String name, dynamic task, {String description,
+   List&lt;String&gt; dependencies} ) {
+
+   require(!isFrozen, "Cannot add a task. Frozen.");
+   validateTaskName(name);
+   requireArgument(!_tasks.containsKey(name), 'task',
+       'A task with name ${name} already exists');
+
+   requireArgumentNotNull(task, 'task');
+
+   if(dependencies == null) dependencies = [];
+
+   var list = $(dependencies)
+       .map((String subName) {
+         var task = _tasks[subName];
+         require(task != null, 'The task "$subName" has not be registered');
+         return task;
+       });
+
+   var set = new LinkedHashSet&lt;Task&gt;.identity()
+       ..addAll(list);
+
+   if(task is Task) {
+     task = task.clone(description: description);
+   } else {
+     // wrap it?
+     task = new Task(task, description: description);
+   }
+
+   assert(_metadata[task] == null);
+   _metadata[task] = new _TaskMetadata(name, set);
+
+   _tasks[name] = task;
+   return task;
+ }
+
+ /**
+  * The keys in the returned [Map] are in dependency order, with the [Task] for
+  * the provided [taskName] occurring last.
+  */
+ Map&lt;String, Task&gt; getTaskWithDependencies(String taskName) {
+   requireArgument(tasks.containsKey(taskName), 'taskName',
+       'No task with name: $taskName');
+
+   var depMap = _getDependencyMap(taskName);
+
+   var sorted = topoSort(depMap);
+
+   var deps = new LinkedHashMap();
+
+   for(var t in sorted) {
+     var name = _metadata[t].name;
+     assert(!deps.containsKey(name));
+     deps[name] = t;
+   }
+
+   assert(deps.keys.last == taskName);
+
+   return deps;
+ }
+
+ Task addChainedTask(String name, Iterable&lt;String&gt; existingTaskNames,
+                            {String description}) {
+
+   if(description == null) {
+     description = 'Chained Task: ' + existingTaskNames.join(', ');
+   }
+
+   return addTask(name, _noopTask, description: description,
+       dependencies: existingTaskNames);
+ }
+
+ HashMap&lt;Task, List&lt;Task&gt;&gt; _getDependencyMap(String taskName) {
+   assert(tasks.containsKey(taskName));
+
+   var visited = new Set&lt;Task&gt;.identity();
+   var remaining = new Set&lt;Task&gt;.identity();
+
+   var depMap = new LinkedHashMap.identity();
+
+   remaining.add(tasks[taskName]);
+
+   while(remaining.isNotEmpty) {
+     var task = remaining.first;
+     var added = visited.add(task);
+     assert(added); // should never visit the same task twice
+     remaining.remove(task);
+
+     Set&lt;Task&gt; deps = depMap[task] = _metadata[task].dependencies;
+     remaining.addAll(deps.where((t) =&gt; !visited.contains(t)));
+   }
+
+   return depMap;
+ }
+
+ void _requireFrozen() {
+   if(!isFrozen) {
+     throw new StateError("Operation not allowed unless frozen.");
+   }
+ }
+
+ void _freeze() {
+   if(!isFrozen) {
+     _frozen = true;
+   }
+ }
+
+ static void _noopTask(TaskContext ctx) { }
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+factory <strong>TaskRegistry</strong>() <a class="anchor-link" href="#"
+              title="Permalink to TaskRegistry.TaskRegistry">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
+<pre class="source">
+factory TaskRegistry() =&gt;
+   new TaskRegistry._(new SplayTreeMap&lt;String, Task&gt;());
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="isFrozen">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a>         <strong>isFrozen</strong> <a class="anchor-link"
+            href="#isFrozen"
+            title="Permalink to TaskRegistry.isFrozen">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+bool get isFrozen =&gt; _frozen;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="taskNames">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt;         <strong>taskNames</strong> <a class="anchor-link"
+            href="#taskNames"
+            title="Permalink to TaskRegistry.taskNames">#</a>
+        </h4>
+        <div class="doc">
+<p><strong>DEPRECATED</strong> Use <code>tasks.keys</code> instead.</p>
+<pre class="source">
+List&lt;String&gt; get taskNames {
+ _requireFrozen();
+ return _tasks.keys.toList();
+}
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="tasks">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/Map.html" ref="external">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>, <a href="../hop.core/Task.html">Task</a>&gt;         <strong>tasks</strong> <a class="anchor-link"
+            href="#tasks"
+            title="Permalink to TaskRegistry.tasks">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+final Map&lt;String, Task&gt; tasks
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="addAsync">
+<button class="show-code">Code</button>
+<a href="../hop.core/Task.html">Task</a> <strong>addAsync</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> name, <a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a> execFuture(<a href="../hop.core/TaskContext.html">TaskContext</a> ctx), {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description}) <a class="anchor-link" href="#addAsync"
+              title="Permalink to TaskRegistry.addAsync">#</a></h4>
+<div class="doc">
+<p><strong>DEPRECATED</strong> Use <a class="crossref" href="../hop.runner/TaskRegistry.html#addTask">addTask</a> instead.</p>
+<pre class="source">
+@deprecated
+Task addAsync(String name, Future execFuture(TaskContext ctx), {String description}) {
+ return addTask(name, new Task(execFuture, description: description));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="addChainedTask">
+<button class="show-code">Code</button>
+<a href="../hop.core/Task.html">Task</a> <strong>addChainedTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> name, <a href="http://api.dartlang.org/dart_core/Iterable.html" ref="external">Iterable</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; existingTaskNames, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description}) <a class="anchor-link" href="#addChainedTask"
+              title="Permalink to TaskRegistry.addChainedTask">#</a></h4>
+<div class="doc">
+<pre class="source">
+Task addChainedTask(String name, Iterable&lt;String&gt; existingTaskNames,
+                          {String description}) {
+
+ if(description == null) {
+   description = 'Chained Task: ' + existingTaskNames.join(', ');
+ }
+
+ return addTask(name, _noopTask, description: description,
+     dependencies: existingTaskNames);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="addSync">
+<button class="show-code">Code</button>
+<a href="../hop.core/Task.html">Task</a> <strong>addSync</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> name, func(<a href="../hop.core/TaskContext.html">TaskContext</a> ctx), {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description}) <a class="anchor-link" href="#addSync"
+              title="Permalink to TaskRegistry.addSync">#</a></h4>
+<div class="doc">
+<p><strong>DEPRECATED</strong> Use <a class="crossref" href="../hop.runner/TaskRegistry.html#addTask">addTask</a> instead.</p>
+<pre class="source">
+@deprecated
+Task addSync(String name, dynamic func(TaskContext ctx), {String description}) {
+ return addTask(name, new Task(func, description: description));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="addTask">
+<button class="show-code">Code</button>
+<a href="../hop.core/Task.html">Task</a> <strong>addTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> name, task, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description, <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; dependencies}) <a class="anchor-link" href="#addTask"
+              title="Permalink to TaskRegistry.addTask">#</a></h4>
+<div class="doc">
+<p>
+<span class="param">task</span> can be either an instance of <a class="crossref" href="../hop.core/Task.html">Task</a> or a <a class="crossref" href="http://api.dartlang.org/dart_core/Function.html">Function</a>.</p>
+<p>If 
+<span class="param">task</span> is a <a class="crossref" href="http://api.dartlang.org/dart_core/Function.html">Function</a>, it must take one argument: <a class="crossref" href="../hop.core/TaskContext.html">TaskContext</a>.</p>
+<p>If a <a class="crossref" href="http://api.dartlang.org/dart_async/Future.html">Future</a> is returned from the [task] [Function], the runner will wait
+for the <a class="crossref" href="http://api.dartlang.org/dart_async/Future.html">Future</a> to complete.</p>
+<p>If 
+<span class="param">description</span> is provided and 
+<span class="param">task</span> is an instance of <a class="crossref" href="../hop.core/Task.html">Task</a>, then
+
+<span class="param">task</span> will be cloned and given the provided 
+<span class="param">description</span>.</p>
+<pre class="source">
+Task addTask(String name, dynamic task, {String description,
+ List&lt;String&gt; dependencies} ) {
+
+ require(!isFrozen, "Cannot add a task. Frozen.");
+ validateTaskName(name);
+ requireArgument(!_tasks.containsKey(name), 'task',
+     'A task with name ${name} already exists');
+
+ requireArgumentNotNull(task, 'task');
+
+ if(dependencies == null) dependencies = [];
+
+ var list = $(dependencies)
+     .map((String subName) {
+       var task = _tasks[subName];
+       require(task != null, 'The task "$subName" has not be registered');
+       return task;
+     });
+
+ var set = new LinkedHashSet&lt;Task&gt;.identity()
+     ..addAll(list);
+
+ if(task is Task) {
+   task = task.clone(description: description);
+ } else {
+   // wrap it?
+   task = new Task(task, description: description);
+ }
+
+ assert(_metadata[task] == null);
+ _metadata[task] = new _TaskMetadata(name, set);
+
+ _tasks[name] = task;
+ return task;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getTaskWithDependencies">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Map.html" ref="external">Map</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>, <a href="../hop.core/Task.html">Task</a>&gt; <strong>getTaskWithDependencies</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> taskName) <a class="anchor-link" href="#getTaskWithDependencies"
+              title="Permalink to TaskRegistry.getTaskWithDependencies">#</a></h4>
+<div class="doc">
+<p>The keys in the returned <a class="crossref" href="http://api.dartlang.org/dart_core/Map.html">Map</a> are in dependency order, with the <a class="crossref" href="../hop.core/Task.html">Task</a> for
+the provided 
+<span class="param">taskName</span> occurring last.</p>
+<pre class="source">
+Map&lt;String, Task&gt; getTaskWithDependencies(String taskName) {
+ requireArgument(tasks.containsKey(taskName), 'taskName',
+     'No task with name: $taskName');
+
+ var depMap = _getDependencyMap(taskName);
+
+ var sorted = topoSort(depMap);
+
+ var deps = new LinkedHashMap();
+
+ for(var t in sorted) {
+   var name = _metadata[t].name;
+   assert(!deps.containsKey(name));
+   deps[name] = t;
+ }
+
+ assert(deps.keys.last == taskName);
+
+ return deps;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="hasTask">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>hasTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> taskName) <a class="anchor-link" href="#hasTask"
+              title="Permalink to TaskRegistry.hasTask">#</a></h4>
+<div class="doc">
+<p><strong>DEPRECATED</strong> Use <code>tasks.containsKey</code> instead.</p>
+<pre class="source">
+@deprecated
+bool hasTask(String taskName) {
+ _requireFrozen();
+ return _tasks.containsKey(taskName);
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

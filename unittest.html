@@ -125,7 +125,7 @@ that exceptions are properly handled.</p>
 first parameter and a predicate function as the second parameter; after each
 time * the callback is called, the predicate function will be called; if it
 returns false the test will still be considered incomplete.</p>
-<p>Test functions can return <a class="crossref" href="dart_async/Future.html">Future</a>s, which provide another way of doing
+<p>Test functions can return <a class="crossref" href="http://api.dartlang.org/dart_async/Future.html">Future</a>s, which provide another way of doing
 asynchronous tests. The test framework will handle exceptions thrown by
 the Future, and will advance to the next test when the Future is complete.
 It is still important to use expectAsync/guardAsync with any parts of the
@@ -138,11 +138,15 @@ future, we plan to expose a single <code>expectAsync</code> function that can be
 regardless of the number of positional arguments. This requires new langauge
 features or fixes to the current spec (e.g. see
 <a href="http://dartbug.com/2706">Issue 2706</a>).</p></div>
+<h3>Exports</h3>
+<ul>
+<ul><a href="matcher.html">matcher</a></ul>
+</ul>
 <div>
 <h3>Properties</h3>
 <div class="field"><h4 id="BREATH_INTERVAL">
 <button class="show-code">Code</button>
-const <a href="http://api.dartlang.org/dart_core/int.html">int</a>         <strong>BREATH_INTERVAL</strong> <a class="anchor-link"
+const <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>         <strong>BREATH_INTERVAL</strong> <a class="anchor-link"
             href="#BREATH_INTERVAL"
             title="Permalink to BREATH_INTERVAL">#</a>
         </h4>
@@ -196,7 +200,7 @@ const FAIL  = 'fail'
 </div>
 <div class="field"><h4 id="filterStacks">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>filterStacks</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a>         <strong>filterStacks</strong> <a class="anchor-link"
             href="#filterStacks"
             title="Permalink to filterStacks">#</a>
         </h4>
@@ -210,7 +214,7 @@ bool filterStacks = true
 </div>
 <div class="field"><h4 id="formatStacks">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/bool.html">bool</a>         <strong>formatStacks</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a>         <strong>formatStacks</strong> <a class="anchor-link"
             href="#formatStacks"
             title="Permalink to formatStacks">#</a>
         </h4>
@@ -225,7 +229,7 @@ bool formatStacks = true
 </div>
 <div class="field"><h4 id="groupSep">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a>         <strong>groupSep</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>groupSep</strong> <a class="anchor-link"
             href="#groupSep"
             title="Permalink to groupSep">#</a>
         </h4>
@@ -251,7 +255,7 @@ const PASS  = 'pass'
 </div>
 <div class="field"><h4 id="testCases">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="unittest/TestCase.html">TestCase</a>&gt;         <strong>testCases</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="unittest/TestCase.html">TestCase</a>&gt;         <strong>testCases</strong> <a class="anchor-link"
             href="#testCases"
             title="Permalink to testCases">#</a>
         </h4>
@@ -286,7 +290,7 @@ void <strong>set unittestConfiguration</strong>(<a href="unittest/Configuration.
               title="Permalink to set unittestConfiguration">#</a></h4>
 <div class="doc">
 <p>Sets the <a class="crossref" href="unittest/Configuration.html">Configuration</a> used by the unittest library.</p>
-<p>Throws a <a class="crossref" href="dart_core/StateError.html">StateError</a> if there is an existing, incompatible value.</p>
+<p>Throws a <a class="crossref" href="http://api.dartlang.org/dart_core/StateError.html">StateError</a> if there is an existing, incompatible value.</p>
 <pre class="source">
 void set unittestConfiguration(Configuration value) {
  if(!identical(_config, value)) {
@@ -304,7 +308,7 @@ void set unittestConfiguration(Configuration value) {
 <h3>Functions</h3>
 <div class="method"><h4 id="disableTest">
 <button class="show-code">Code</button>
-void <strong>disableTest</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> testId) <a class="anchor-link" href="#disableTest"
+void <strong>disableTest</strong>(<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> testId) <a class="anchor-link" href="#disableTest"
               title="Permalink to disableTest">#</a></h4>
 <div class="doc">
 <p>Disable a test by ID. </p>
@@ -315,7 +319,7 @@ void disableTest(int testId) =&gt; _setTestEnabledState(testId, false);
 </div>
 <div class="method"><h4 id="enableTest">
 <button class="show-code">Code</button>
-void <strong>enableTest</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> testId) <a class="anchor-link" href="#enableTest"
+void <strong>enableTest</strong>(<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> testId) <a class="anchor-link" href="#enableTest"
               title="Permalink to enableTest">#</a></h4>
 <div class="doc">
 <p>Enable a test by ID. </p>
@@ -326,7 +330,7 @@ void enableTest(int testId) =&gt; _setTestEnabledState(testId, true);
 </div>
 <div class="method"><h4 id="setSoloTest">
 <button class="show-code">Code</button>
-void <strong>setSoloTest</strong>(<a href="http://api.dartlang.org/dart_core/int.html">int</a> id) <a class="anchor-link" href="#setSoloTest"
+void <strong>setSoloTest</strong>(<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> id) <a class="anchor-link" href="#setSoloTest"
               title="Permalink to setSoloTest">#</a></h4>
 <div class="doc">
 <p>Select a solo test by ID. </p>
@@ -364,7 +368,7 @@ void registerException(e, [trace]) {
 </div>
 <div class="method"><h4 id="guardAsync">
 <button class="show-code">Code</button>
-dynamic <strong>guardAsync</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> tryBody) <a class="anchor-link" href="#guardAsync"
+dynamic <strong>guardAsync</strong>(<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> tryBody) <a class="anchor-link" href="#guardAsync"
               title="Permalink to guardAsync">#</a></h4>
 <div class="doc">
 <p>Run 
@@ -401,7 +405,7 @@ void <strong>filterTests</strong>(testFilter) <a class="anchor-link" href="#filt
               title="Permalink to filterTests">#</a></h4>
 <div class="doc">
 <p>Filter the tests. 
-<span class="param">testFilter</span> can be a <a class="crossref" href="dart_core/RegExp.html">RegExp</a>, a <a class="crossref" href="dart_core/String.html">String</a> or a
+<span class="param">testFilter</span> can be a <a class="crossref" href="http://api.dartlang.org/dart_core/RegExp.html">RegExp</a>, a <a class="crossref" href="http://api.dartlang.org/dart_core/String.html">String</a> or a
 predicate function. This is different to enabling/disabling tests
 in that it removes the tests completely.</p>
 <pre class="source">
@@ -436,7 +440,7 @@ void rerunTests() {
 </div>
 <div class="method"><h4 id="handleExternalError">
 <button class="show-code">Code</button>
-void <strong>handleExternalError</strong>(e, <a href="http://api.dartlang.org/dart_core/String.html">String</a> message, [stack]) <a class="anchor-link" href="#handleExternalError"
+void <strong>handleExternalError</strong>(e, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> message, [stack]) <a class="anchor-link" href="#handleExternalError"
               title="Permalink to handleExternalError">#</a></h4>
 <div class="doc">
 <p>Handle errors that happen outside the tests. </p>
@@ -455,7 +459,7 @@ void handleExternalError(e, String message, [stack]) {
 </div>
 <div class="method"><h4 id="tearDown">
 <button class="show-code">Code</button>
-void <strong>tearDown</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> teardownTest) <a class="anchor-link" href="#tearDown"
+void <strong>tearDown</strong>(<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> teardownTest) <a class="anchor-link" href="#tearDown"
               title="Permalink to tearDown">#</a></h4>
 <div class="doc">
 <p>Register a <a class="crossref" href="unittest.html#tearDown">tearDown</a> function for a test <a class="crossref" href="unittest.html#group">group</a>. This function will
@@ -465,7 +469,7 @@ are nested only the most locally scoped
 <a class="crossref" href="unittest.html#setUp">setUp</a> and <a class="crossref" href="unittest.html#tearDown">tearDown</a> should be called within the <a class="crossref" href="unittest.html#group">group</a> before any
 calls to <a class="crossref" href="unittest.html#test">test</a>. The 
 <span class="param">teardownTest</span> function can be asynchronous; in this
-case it must return a <a class="crossref" href="dart_async/Future.html">Future</a>.</p>
+case it must return a <a class="crossref" href="http://api.dartlang.org/dart_async/Future.html">Future</a>.</p>
 <pre class="source">
 void tearDown(Function teardownTest) {
  _currentContext.testTeardown = teardownTest;
@@ -475,7 +479,7 @@ void tearDown(Function teardownTest) {
 </div>
 <div class="method"><h4 id="setUp">
 <button class="show-code">Code</button>
-void <strong>setUp</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> setupTest) <a class="anchor-link" href="#setUp"
+void <strong>setUp</strong>(<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> setupTest) <a class="anchor-link" href="#setUp"
               title="Permalink to setUp">#</a></h4>
 <div class="doc">
 <p>Register a <a class="crossref" href="unittest.html#setUp">setUp</a> function for a test <a class="crossref" href="unittest.html#group">group</a>. This function will
@@ -483,7 +487,7 @@ be called before each test in the group is run.
 <a class="crossref" href="unittest.html#setUp">setUp</a> and <a class="crossref" href="unittest.html#tearDown">tearDown</a> should be called within the <a class="crossref" href="unittest.html#group">group</a> before any
 calls to <a class="crossref" href="unittest.html#test">test</a>. The 
 <span class="param">setupTest</span> function can be asynchronous; in this
-case it must return a <a class="crossref" href="dart_async/Future.html">Future</a>.</p>
+case it must return a <a class="crossref" href="http://api.dartlang.org/dart_async/Future.html">Future</a>.</p>
 <pre class="source">
 void setUp(Function setupTest) {
  _currentContext.testSetup = setupTest;
@@ -493,7 +497,7 @@ void setUp(Function setupTest) {
 </div>
 <div class="method"><h4 id="solo_group">
 <button class="show-code">Code</button>
-void <strong>solo_group</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> description, void body()) <a class="anchor-link" href="#solo_group"
+void <strong>solo_group</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description, void body()) <a class="anchor-link" href="#solo_group"
               title="Permalink to solo_group">#</a></h4>
 <div class="doc">
 <p>Like <a class="crossref" href="unittest.html#solo_test">solo_test</a>, but for groups. </p>
@@ -517,7 +521,7 @@ void solo_group(String description, void body()) {
 </div>
 <div class="method"><h4 id="skip_group">
 <button class="show-code">Code</button>
-void <strong>skip_group</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> description, void body()) <a class="anchor-link" href="#skip_group"
+void <strong>skip_group</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description, void body()) <a class="anchor-link" href="#skip_group"
               title="Permalink to skip_group">#</a></h4>
 <div class="doc">
 <p>Like <a class="crossref" href="unittest.html#skip_test">skip_test</a>, but for groups. </p>
@@ -528,7 +532,7 @@ void skip_group(String description, void body()) {}
 </div>
 <div class="method"><h4 id="group">
 <button class="show-code">Code</button>
-void <strong>group</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> description, void body()) <a class="anchor-link" href="#group"
+void <strong>group</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description, void body()) <a class="anchor-link" href="#group"
               title="Permalink to group">#</a></h4>
 <div class="doc">
 <p>Creates a new named group of tests. Calls to group() or test() within the
@@ -552,7 +556,7 @@ void group(String description, void body()) {
 </div>
 <div class="method"><h4 id="protectAsync2">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> <strong>protectAsync2</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> id}) <a class="anchor-link" href="#protectAsync2"
+<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> <strong>protectAsync2</strong>(<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> id}) <a class="anchor-link" href="#protectAsync2"
               title="Permalink to protectAsync2">#</a></h4>
 <div class="doc">
 <p>Like <a class="crossref" href="unittest.html#protectAsync0">protectAsync0</a> but 
@@ -566,7 +570,7 @@ Function protectAsync2(Function callback, {String id}) {
 </div>
 <div class="method"><h4 id="protectAsync1">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> <strong>protectAsync1</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> id}) <a class="anchor-link" href="#protectAsync1"
+<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> <strong>protectAsync1</strong>(<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> id}) <a class="anchor-link" href="#protectAsync1"
               title="Permalink to protectAsync1">#</a></h4>
 <div class="doc">
 <p>Like <a class="crossref" href="unittest.html#protectAsync0">protectAsync0</a> but 
@@ -580,7 +584,7 @@ Function protectAsync1(Function callback, {String id}) {
 </div>
 <div class="method"><h4 id="protectAsync0">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> <strong>protectAsync0</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> id}) <a class="anchor-link" href="#protectAsync0"
+<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> <strong>protectAsync0</strong>(<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> id}) <a class="anchor-link" href="#protectAsync0"
               title="Permalink to protectAsync0">#</a></h4>
 <div class="doc">
 <p>Wraps the 
@@ -602,7 +606,7 @@ Function protectAsync0(Function callback, {String id}) {
 </div>
 <div class="method"><h4 id="expectAsyncUntil2">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> <strong>expectAsyncUntil2</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> callback, <a href="http://api.dartlang.org/dart_core/Function.html">Function</a> isDone, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> id}) <a class="anchor-link" href="#expectAsyncUntil2"
+<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> <strong>expectAsyncUntil2</strong>(<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> callback, <a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> isDone, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> id}) <a class="anchor-link" href="#expectAsyncUntil2"
               title="Permalink to expectAsyncUntil2">#</a></h4>
 <div class="doc">
 <p>Like <a class="crossref" href="unittest.html#expectAsyncUntil0">expectAsyncUntil0</a> but 
@@ -616,7 +620,7 @@ Function expectAsyncUntil2(Function callback, Function isDone, {String id}) {
 </div>
 <div class="method"><h4 id="expectAsyncUntil1">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> <strong>expectAsyncUntil1</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> callback, <a href="http://api.dartlang.org/dart_core/Function.html">Function</a> isDone, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> id}) <a class="anchor-link" href="#expectAsyncUntil1"
+<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> <strong>expectAsyncUntil1</strong>(<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> callback, <a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> isDone, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> id}) <a class="anchor-link" href="#expectAsyncUntil1"
               title="Permalink to expectAsyncUntil1">#</a></h4>
 <div class="doc">
 <p>Like <a class="crossref" href="unittest.html#expectAsyncUntil0">expectAsyncUntil0</a> but 
@@ -630,7 +634,7 @@ Function expectAsyncUntil1(Function callback, Function isDone, {String id}) {
 </div>
 <div class="method"><h4 id="expectAsyncUntil0">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> <strong>expectAsyncUntil0</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> callback, <a href="http://api.dartlang.org/dart_core/Function.html">Function</a> isDone, {<a href="http://api.dartlang.org/dart_core/String.html">String</a> id}) <a class="anchor-link" href="#expectAsyncUntil0"
+<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> <strong>expectAsyncUntil0</strong>(<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> callback, <a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> isDone, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> id}) <a class="anchor-link" href="#expectAsyncUntil0"
               title="Permalink to expectAsyncUntil0">#</a></h4>
 <div class="doc">
 <p>Indicate that 
@@ -656,7 +660,7 @@ Function expectAsyncUntil0(Function callback, Function isDone, {String id}) {
 </div>
 <div class="method"><h4 id="expectAsync2">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> <strong>expectAsync2</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/int.html">int</a> count: 1, <a href="http://api.dartlang.org/dart_core/int.html">int</a> max: 0, <a href="http://api.dartlang.org/dart_core/String.html">String</a> id}) <a class="anchor-link" href="#expectAsync2"
+<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> <strong>expectAsync2</strong>(<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> count: 1, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> max: 0, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> id}) <a class="anchor-link" href="#expectAsync2"
               title="Permalink to expectAsync2">#</a></h4>
 <div class="doc">
 <p>Like <a class="crossref" href="unittest.html#expectAsync0">expectAsync0</a> but 
@@ -671,7 +675,7 @@ Function expectAsync2(Function callback,
 </div>
 <div class="method"><h4 id="expectAsync1">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> <strong>expectAsync1</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/int.html">int</a> count: 1, <a href="http://api.dartlang.org/dart_core/int.html">int</a> max: 0, <a href="http://api.dartlang.org/dart_core/String.html">String</a> id}) <a class="anchor-link" href="#expectAsync1"
+<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> <strong>expectAsync1</strong>(<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> count: 1, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> max: 0, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> id}) <a class="anchor-link" href="#expectAsync1"
               title="Permalink to expectAsync1">#</a></h4>
 <div class="doc">
 <p>Like <a class="crossref" href="unittest.html#expectAsync0">expectAsync0</a> but 
@@ -686,7 +690,7 @@ Function expectAsync1(Function callback,
 </div>
 <div class="method"><h4 id="expectAsync0">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> <strong>expectAsync0</strong>(<a href="http://api.dartlang.org/dart_core/Function.html">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/int.html">int</a> count: 1, <a href="http://api.dartlang.org/dart_core/int.html">int</a> max: 0, <a href="http://api.dartlang.org/dart_core/String.html">String</a> id}) <a class="anchor-link" href="#expectAsync0"
+<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> <strong>expectAsync0</strong>(<a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> callback, {<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> count: 1, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> max: 0, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> id}) <a class="anchor-link" href="#expectAsync0"
               title="Permalink to expectAsync0">#</a></h4>
 <div class="doc">
 <p>Indicate that 
@@ -723,7 +727,7 @@ Function expectAsync0(Function callback,
 </div>
 <div class="method"><h4 id="solo_test">
 <button class="show-code">Code</button>
-void <strong>solo_test</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> spec, <a href="unittest/TestFunction.html">TestFunction</a> body) <a class="anchor-link" href="#solo_test"
+void <strong>solo_test</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> spec, <a href="unittest/TestFunction.html">TestFunction</a> body) <a class="anchor-link" href="#solo_test"
               title="Permalink to solo_test">#</a></h4>
 <div class="doc">
 <p>Creates a new test case with the given description and body. The
@@ -758,7 +762,7 @@ void solo_test(String spec, TestFunction body) {
 </div>
 <div class="method"><h4 id="skip_test">
 <button class="show-code">Code</button>
-void <strong>skip_test</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> spec, <a href="unittest/TestFunction.html">TestFunction</a> body) <a class="anchor-link" href="#skip_test"
+void <strong>skip_test</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> spec, <a href="unittest/TestFunction.html">TestFunction</a> body) <a class="anchor-link" href="#skip_test"
               title="Permalink to skip_test">#</a></h4>
 <div class="doc">
 <p>Convenience function for skipping a test. </p>
@@ -769,7 +773,7 @@ void skip_test(String spec, TestFunction body){}
 </div>
 <div class="method"><h4 id="test">
 <button class="show-code">Code</button>
-void <strong>test</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> spec, <a href="unittest/TestFunction.html">TestFunction</a> body) <a class="anchor-link" href="#test"
+void <strong>test</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> spec, <a href="unittest/TestFunction.html">TestFunction</a> body) <a class="anchor-link" href="#test"
               title="Permalink to test">#</a></h4>
 <div class="doc">
 <p>Creates a new test case with the given description and body. The
@@ -789,11 +793,11 @@ void test(String spec, TestFunction body) {
 </div>
 <div class="method"><h4 id="logMessage">
 <button class="show-code">Code</button>
-void <strong>logMessage</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> message) <a class="anchor-link" href="#logMessage"
+void <strong>logMessage</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> message) <a class="anchor-link" href="#logMessage"
               title="Permalink to logMessage">#</a></h4>
 <div class="doc">
 <p>Can be called by tests to log status. Tests should use this
-instead of <a class="crossref" href="dart.core.html#print">print</a>.</p>
+instead of <a class="crossref" href="http://api.dartlang.org/dart.core.html#print">print</a>.</p>
 <pre class="source">
 void logMessage(String message) =&gt;
    _config.onLogMessage(currentTestCase, message);

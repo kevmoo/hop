@@ -222,12 +222,12 @@ class Trace implements StackTrace {
 <span class="type-box"><span class="icon-class"></span><a href="../lazy_trace/LazyTrace.html">LazyTrace</a></span></p>
 <h3>Implements</h3>
 <p>
-<span class="type-box"><span class="icon-class"></span><a href="../dart_core/StackTrace.html">StackTrace</a></span></p>
+<span class="type-box"><span class="icon-class"></span><a href="http://api.dartlang.org/dart_core/StackTrace.html" ref="external">StackTrace</a></span></p>
 <div>
 <h3>Static Methods</h3>
 <div class="method"><h4 id="format">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>format</strong>(<a href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a> stackTrace, {<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> terse: true}) <a class="anchor-link" href="#format"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>format</strong>(<a href="http://api.dartlang.org/dart_core/StackTrace.html" ref="external">StackTrace</a> stackTrace, {<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> terse: true}) <a class="anchor-link" href="#format"
               title="Permalink to Trace.format">#</a></h4>
 <div class="doc">
 <p>Returns a human-readable representation of 
@@ -250,7 +250,7 @@ static String format(StackTrace stackTrace, {bool terse: true}) {
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>Trace</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>&lt;<a href="../frame/Frame.html">Frame</a>&gt; frames) <a class="anchor-link" href="#"
+new <strong>Trace</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html" ref="external">Iterable</a>&lt;<a href="../frame/Frame.html">Frame</a>&gt; frames) <a class="anchor-link" href="#"
               title="Permalink to Trace.Trace">#</a></h4>
 <div class="doc">
 <p>Returns a new <a class="crossref" href="../trace/Trace.html">Trace</a> comprised of 
@@ -263,7 +263,7 @@ Trace(Iterable&lt;Frame&gt; frames)
 </div>
 <div class="method"><h4 id="current">
 <button class="show-code">Code</button>
-factory <strong>Trace.current</strong>([<a href="http://api.dartlang.org/dart_core/int.html">int</a> level = 0]) <a class="anchor-link" href="#current"
+factory <strong>Trace.current</strong>([<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> level = 0]) <a class="anchor-link" href="#current"
               title="Permalink to Trace.Trace.current">#</a></h4>
 <div class="doc">
 <p>Returns the current stack trace.</p>
@@ -290,13 +290,13 @@ factory Trace.current([int level=0]) {
 </div>
 <div class="method"><h4 id="from">
 <button class="show-code">Code</button>
-factory <strong>Trace.from</strong>(<a href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a> trace) <a class="anchor-link" href="#from"
+factory <strong>Trace.from</strong>(<a href="http://api.dartlang.org/dart_core/StackTrace.html" ref="external">StackTrace</a> trace) <a class="anchor-link" href="#from"
               title="Permalink to Trace.Trace.from">#</a></h4>
 <div class="doc">
 <p>Returns a new stack trace containing the same data as 
 <span class="param">trace</span>.</p>
 <p>If 
-<span class="param">trace</span> is a native <a class="crossref" href="../dart_core/StackTrace.html">StackTrace</a>, its data will be parsed out; if it's
+<span class="param">trace</span> is a native <a class="crossref" href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a>, its data will be parsed out; if it's
 a <a class="crossref" href="../trace/Trace.html">Trace</a>, it will be returned as-is.</p>
 <pre class="source">
 factory Trace.from(StackTrace trace) {
@@ -308,7 +308,7 @@ factory Trace.from(StackTrace trace) {
 </div>
 <div class="method"><h4 id="parse">
 <button class="show-code">Code</button>
-factory <strong>Trace.parse</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parse"
+factory <strong>Trace.parse</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> trace) <a class="anchor-link" href="#parse"
               title="Permalink to Trace.Trace.parse">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a stack trace.</p>
@@ -343,7 +343,7 @@ factory Trace.parse(String trace) {
 </div>
 <div class="method"><h4 id="parseFirefox">
 <button class="show-code">Code</button>
-new <strong>Trace.parseFirefox</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseFirefox"
+new <strong>Trace.parseFirefox</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> trace) <a class="anchor-link" href="#parseFirefox"
               title="Permalink to Trace.Trace.parseFirefox">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a Firefox stack trace.</p>
@@ -356,7 +356,7 @@ Trace.parseFirefox(String trace)
 </div>
 <div class="method"><h4 id="parseFriendly">
 <button class="show-code">Code</button>
-new <strong>Trace.parseFriendly</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseFriendly"
+new <strong>Trace.parseFriendly</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> trace) <a class="anchor-link" href="#parseFriendly"
               title="Permalink to Trace.Trace.parseFriendly">#</a></h4>
 <div class="doc">
 <p>Parses this package's a string representation of a stack trace.</p>
@@ -369,7 +369,7 @@ Trace.parseFriendly(String trace)
 </div>
 <div class="method"><h4 id="parseIE">
 <button class="show-code">Code</button>
-new <strong>Trace.parseIE</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseIE"
+new <strong>Trace.parseIE</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> trace) <a class="anchor-link" href="#parseIE"
               title="Permalink to Trace.Trace.parseIE">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of an Internet Explorer stack trace.</p>
@@ -383,7 +383,7 @@ Trace.parseIE(String trace)
 </div>
 <div class="method"><h4 id="parseSafari">
 <button class="show-code">Code</button>
-factory <strong>Trace.parseSafari</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseSafari"
+factory <strong>Trace.parseSafari</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> trace) <a class="anchor-link" href="#parseSafari"
               title="Permalink to Trace.Trace.parseSafari">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a Safari stack trace.</p>
@@ -400,7 +400,7 @@ factory Trace.parseSafari(String trace) {
 </div>
 <div class="method"><h4 id="parseSafari6_0">
 <button class="show-code">Code</button>
-new <strong>Trace.parseSafari6_0</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseSafari6_0"
+new <strong>Trace.parseSafari6_0</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> trace) <a class="anchor-link" href="#parseSafari6_0"
               title="Permalink to Trace.Trace.parseSafari6_0">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a Safari 6.0 stack trace.</p>
@@ -418,7 +418,7 @@ Trace.parseSafari6_0(String trace)
 </div>
 <div class="method"><h4 id="parseSafari6_1">
 <button class="show-code">Code</button>
-new <strong>Trace.parseSafari6_1</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseSafari6_1"
+new <strong>Trace.parseSafari6_1</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> trace) <a class="anchor-link" href="#parseSafari6_1"
               title="Permalink to Trace.Trace.parseSafari6_1">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a Safari 6.1+ stack trace.</p>
@@ -431,7 +431,7 @@ Trace.parseSafari6_1(String trace)
 </div>
 <div class="method"><h4 id="parseV8">
 <button class="show-code">Code</button>
-new <strong>Trace.parseV8</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseV8"
+new <strong>Trace.parseV8</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> trace) <a class="anchor-link" href="#parseV8"
               title="Permalink to Trace.Trace.parseV8">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a Chrome/V8 stack trace.</p>
@@ -448,7 +448,7 @@ Trace.parseV8(String trace)
 </div>
 <div class="method"><h4 id="parseVM">
 <button class="show-code">Code</button>
-new <strong>Trace.parseVM</strong>(<a href="http://api.dartlang.org/dart_core/String.html">String</a> trace) <a class="anchor-link" href="#parseVM"
+new <strong>Trace.parseVM</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> trace) <a class="anchor-link" href="#parseVM"
               title="Permalink to Trace.Trace.parseVM">#</a></h4>
 <div class="doc">
 <p>Parses a string representation of a Dart VM stack trace.</p>
@@ -463,7 +463,7 @@ Trace.parseVM(String trace)
 <h3>Properties</h3>
 <div class="field"><h4 id="frames">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/List.html">List</a>&lt;<a href="../frame/Frame.html">Frame</a>&gt;         <strong>frames</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="../frame/Frame.html">Frame</a>&gt;         <strong>frames</strong> <a class="anchor-link"
             href="#frames"
             title="Permalink to Trace.frames">#</a>
         </h4>
@@ -498,12 +498,12 @@ Trace get terse {
 </div>
 <div class="field"><h4 id="vmTrace">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a>         <strong>vmTrace</strong> <a class="anchor-link"
+final <a href="http://api.dartlang.org/dart_core/StackTrace.html" ref="external">StackTrace</a>         <strong>vmTrace</strong> <a class="anchor-link"
             href="#vmTrace"
             title="Permalink to Trace.vmTrace">#</a>
         </h4>
         <div class="doc">
-<p>Returns a VM-style <a class="crossref" href="../dart_core/StackTrace.html">StackTrace</a> object.</p>
+<p>Returns a VM-style <a class="crossref" href="http://api.dartlang.org/dart_core/StackTrace.html">StackTrace</a> object.</p>
 <p>The return value's <a class="crossref" href="../trace/Trace.html#toString">toString</a> method will always return a string
 representation in the Dart VM's stack trace format, regardless of what
 platform is being used.</p>
@@ -517,7 +517,7 @@ StackTrace get vmTrace =&gt; new VMTrace(frames);
 <h3>Methods</h3>
 <div class="method"><h4 id="foldFrames">
 <button class="show-code">Code</button>
-<a href="../trace/Trace.html">Trace</a> <strong>foldFrames</strong>(<a href="http://api.dartlang.org/dart_core/bool.html">bool</a> predicate(frame)) <a class="anchor-link" href="#foldFrames"
+<a href="../trace/Trace.html">Trace</a> <strong>foldFrames</strong>(<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> predicate(frame)) <a class="anchor-link" href="#foldFrames"
               title="Permalink to Trace.foldFrames">#</a></h4>
 <div class="doc">
 <p>Returns a new <a class="crossref" href="../trace/Trace.html">Trace</a> based on <code>this</code> where multiple stack frames matching
@@ -547,7 +547,7 @@ Trace foldFrames(bool predicate(frame)) {
 </div>
 <div class="method"><h4 id="toString">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/String.html">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
               title="Permalink to Trace.toString">#</a></h4>
 <div class="doc">
 <p>Returns a human-readable string representation of <code>this</code>.</p>

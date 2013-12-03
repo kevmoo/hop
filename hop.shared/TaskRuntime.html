@@ -1,0 +1,105 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>TaskRuntime abstract class / hop.shared Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="hop.shared" data-type="TaskRuntime">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../hop.shared.html">hop.shared</a> &rsaquo; <a href="../hop.shared/TaskRuntime.html">TaskRuntime</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>TaskRuntime</strong>
+          abstract class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+abstract class TaskRuntime {
+ void addLog(Level level, String message, {List&lt;String&gt; source});
+ bool get isDisposed;
+ ArgResults get argResults;
+
+ /**
+  * If `null`, calls to [print] will not be logged and will be behave normally.
+  */
+ Level get printAtLevel;
+}
+</pre>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="argResults">
+<button class="show-code">Code</button>
+final <a href="../args/ArgResults.html">ArgResults</a>         <strong>argResults</strong> <a class="anchor-link"
+            href="#argResults"
+            title="Permalink to TaskRuntime.argResults">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+ArgResults get argResults;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="isDisposed">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a>         <strong>isDisposed</strong> <a class="anchor-link"
+            href="#isDisposed"
+            title="Permalink to TaskRuntime.isDisposed">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+bool get isDisposed;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="printAtLevel">
+<button class="show-code">Code</button>
+final <a href="../logging/Level.html">Level</a>         <strong>printAtLevel</strong> <a class="anchor-link"
+            href="#printAtLevel"
+            title="Permalink to TaskRuntime.printAtLevel">#</a>
+        </h4>
+        <div class="doc">
+<p>If <code>null</code>, calls to <a class="crossref" href="http://api.dartlang.org/dart.core.html#print">print</a> will not be logged and will be behave normally.</p>
+<pre class="source">
+Level get printAtLevel;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="addLog">
+abstract void <strong>addLog</strong>(<a href="../logging/Level.html">Level</a> level, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> message, {<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; source}) <a class="anchor-link" href="#addLog"
+              title="Permalink to TaskRuntime.addLog">#</a></h4>
+<div class="doc">
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        
