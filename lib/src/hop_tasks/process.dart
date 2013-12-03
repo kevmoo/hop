@@ -12,25 +12,25 @@ Task createProcessTask(String command, {List<String> args: null, String descript
 // TODO: document that start does an 'interactive' process
 //       stderr and stdout are piped to context, etc
 //       This aligns with io.Process.start
-Future startProcess(TaskLogger logger, String command,
+Future startProcess(TaskContext ctx, String command,
     [List<String> args = null]) {
 
-  requireArgumentNotNull(logger, 'ctx');
+  requireArgumentNotNull(ctx, 'ctx');
   requireArgumentNotNull(command, 'command');
   if(args == null) {
     args = [];
   }
 
-  logger.fine("Starting process:");
-  logger.fine("$command ${args.join(' ')}");
+  ctx.fine("Starting process:");
+  ctx.fine("$command ${args.join(' ')}");
   return Process.start(command, args)
       .then((process) {
         return pipeProcess(process,
-            stdOutWriter: logger.info,
-            stdErrWriter: logger.severe);
+            stdOutWriter: ctx.info,
+            stdErrWriter: ctx.severe);
       })
       .then((int exitCode) {
-        if(exitCode != 0) throw new Exception('Process exit code: $exitCode');
+        if(exitCode != 0) ctx.fail('Process exit code: $exitCode');
       });
 }
 
