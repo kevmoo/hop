@@ -58,29 +58,29 @@ Future&lt;int&gt; pipeProcess(Process process,
 </div>
 <div class="method"><h4 id="startProcess">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a> <strong>startProcess</strong>(<a href="hop.core/TaskLogger.html">TaskLogger</a> logger, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> command, [<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; args = null]) <a class="anchor-link" href="#startProcess"
+<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a> <strong>startProcess</strong>(<a href="hop.core/TaskContext.html">TaskContext</a> ctx, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> command, [<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt; args = null]) <a class="anchor-link" href="#startProcess"
               title="Permalink to startProcess">#</a></h4>
 <div class="doc">
 <pre class="source">
-Future startProcess(TaskLogger logger, String command,
+Future startProcess(TaskContext ctx, String command,
    [List&lt;String&gt; args = null]) {
 
- requireArgumentNotNull(logger, 'ctx');
+ requireArgumentNotNull(ctx, 'ctx');
  requireArgumentNotNull(command, 'command');
  if(args == null) {
    args = [];
  }
 
- logger.fine("Starting process:");
- logger.fine("$command ${args.join(' ')}");
+ ctx.fine("Starting process:");
+ ctx.fine("$command ${args.join(' ')}");
  return Process.start(command, args)
      .then((process) {
        return pipeProcess(process,
-           stdOutWriter: logger.info,
-           stdErrWriter: logger.severe);
+           stdOutWriter: ctx.info,
+           stdErrWriter: ctx.severe);
      })
      .then((int exitCode) {
-       if(exitCode != 0) throw new Exception('Process exit code: $exitCode');
+       if(exitCode != 0) ctx.fail('Process exit code: $exitCode');
      });
 }
 </pre>
