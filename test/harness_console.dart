@@ -13,6 +13,6 @@ void testCore(Configuration config) {
   unittestConfiguration = config;
   groupSep = ' - ';
 
-  hop.main();
-  hop_tasks.main();
+  group('hop', hop.main);
+  group('hop_tasks', hop_tasks.main);
 }

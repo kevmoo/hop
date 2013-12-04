@@ -1,34 +1,38 @@
+library test.hop_tasks.analyzer;
+
+import 'dart:async';
+import 'dart:io';
+import 'package:path/path.dart' as pathos;
+import 'package:unittest/unittest.dart';
+import 'package:bot_io/bot_io.dart';
+import 'package:hop/hop_core.dart';
+import 'package:hop/hop_tasks.dart';
+import '../test_util.dart';
+
 // TODO(kevmoo): figure out a way to validate output...
 
-part of test_hop_tasks;
+void main() {
+  test('1 pass, 1 warn', () {
+    final fileTexts = {"main1.dart": "void main() => print('hello bot');",
+                       "main2.dart": "void main() { String i = 42; }"};
 
-class DartAnalyzerTests {
+    return _testAnalyzerTask(fileTexts, RunResult.SUCCESS);
+  });
 
-  static void register() {
-    group('dartanalyzer', () {
-      test('1 pass, 1 warn', () {
-        final fileTexts = {"main1.dart": "void main() => print('hello bot');",
-                           "main2.dart": "void main() { String i = 42; }"};
+  test('failed file', () {
+    final fileTexts = {"main.dart": "void main() => asdf { XXXX i = 42; }"};
 
-        return _testAnalyzerTask(fileTexts, RunResult.SUCCESS);
-      });
+    return _testAnalyzerTask(fileTexts, RunResult.FAIL);
+  });
 
-      test('failed file', () {
-        final fileTexts = {"main.dart": "void main() => asdf { XXXX i = 42; }"};
+  test('1 pass, 1 warn, 1 error', () {
+    final fileTexts = {"main1.dart": "void main() asdf { String i = 42; }",
+                       "main2.dart": "void main() asdf { String i = 42; }",
+                       "main3.dart": "void main() asdf { String i = 42; }" };
 
-        return _testAnalyzerTask(fileTexts, RunResult.FAIL);
-      });
+    return _testAnalyzerTask(fileTexts, RunResult.FAIL);
 
-      test('1 pass, 1 warn, 1 error', () {
-        final fileTexts = {"main1.dart": "void main() asdf { String i = 42; }",
-                           "main2.dart": "void main() asdf { String i = 42; }",
-                           "main3.dart": "void main() asdf { String i = 42; }" };
-
-        return _testAnalyzerTask(fileTexts, RunResult.FAIL);
-
-      });
-    });
-  }
+  });
 }
 
 Future _testAnalyzerTask(Map<String, String> inputs,

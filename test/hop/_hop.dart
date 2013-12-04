@@ -16,27 +16,25 @@ import 'util_tests.dart' as util;
 import 'extended_args_test.dart' as extended_args;
 
 void main() {
-  group('hop', () {
-    group('args', args.main);
-    group('chain tasks', chain.main);
-    group('dependency', dependency.main);
-    group('extended args', extended_args.main);
-    group('integration', integration.main);
-    group('logging', logging.main);
-    group('add task', simple_add_task.main);
-    group('task list', task_list.main);
-    group('task result', task_result.main);
-    group('util', util.main);
+  group('args', args.main);
+  group('chain tasks', chain.main);
+  group('dependency', dependency.main);
+  group('extended args', extended_args.main);
+  group('integration', integration.main);
+  group('logging', logging.main);
+  group('add task', simple_add_task.main);
+  group('task list', task_list.main);
+  group('task result', task_result.main);
+  group('util', util.main);
 
-    group('HopConfig', () {
-      test('HopConfig: registry cannot be null', () {
-        expect(() => runRegistry(null, []), throwsArgumentError);
-      });
+  group('HopConfig', () {
+    test('HopConfig: registry cannot be null', () {
+      expect(() => runRegistry(null, []), throwsArgumentError);
+    });
 
-      test('HopConfig: args cannot be null', () {
-        var reg = new TaskRegistry();
-        expect(() => runRegistry(reg, null), throwsArgumentError);
-      });
+    test('HopConfig: args cannot be null', () {
+      var reg = new TaskRegistry();
+      expect(() => runRegistry(reg, null), throwsArgumentError);
     });
   });
 }

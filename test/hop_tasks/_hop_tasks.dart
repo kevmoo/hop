@@ -1,25 +1,15 @@
 library test_hop_tasks;
 
-import 'dart:async';
-import 'dart:io';
-import 'package:path/path.dart' as pathos;
 import 'package:unittest/unittest.dart';
-import 'package:bot_io/bot_git.dart';
-import 'package:bot_io/bot_io.dart';
-import 'package:hop/hop_core.dart';
-import 'package:hop/hop_tasks.dart';
-import '../test_util.dart';
 
-part 'process_tests.dart';
-part 'git_tests.dart';
-part 'dartanalyzer_tests.dart';
-part 'compiler_tests.dart';
+import 'compiler_tests.dart' as compiler;
+import 'dartanalyzer_tests.dart' as dart_analyzer;
+import 'git_tests.dart' as git;
+import 'process_tests.dart' as process;
 
 void main() {
-  group('hop_tasks', () {
-    ProcessTests.run();
-    GitTests.register();
-    DartAnalyzerTests.register();
-    CompilerTests.register();
-  });
+  group('compiler', compiler.main);
+  group('dart analyzer', dart_analyzer.main);
+  group('git', git.main);
+  group('process', process.main);
 }

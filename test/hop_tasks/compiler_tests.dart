@@ -1,75 +1,79 @@
-part of test_hop_tasks;
+library test.hop_tasks.compiler;
 
-// TODO: test error cases w/ bad input names or mappers
-// TODO: test mappers
 
-class CompilerTests {
-  static void register() {
-    group('compiler', () {
-      [CompilerTargetType.DART, CompilerTargetType.JS].forEach((targetType) {
+import 'dart:async';
+import 'dart:io';
+import 'package:path/path.dart' as pathos;
+import 'package:unittest/unittest.dart';
+import 'package:bot_io/bot_io.dart';
+import 'package:hop/hop_core.dart';
+import 'package:hop/hop_tasks.dart';
+import '../test_util.dart';
 
-        group(targetType.toString(), (){
+void main() {
+  [CompilerTargetType.DART, CompilerTargetType.JS].forEach((targetType) {
 
-          test('good input', () {
-            return _testCompiler(_goodTestFile, targetType, RunResult.SUCCESS);
-          });
+    group(targetType.toString(), (){
 
-          test('bad input', () {
-            return _testCompiler(_badTestFile, targetType, RunResult.FAIL);
-          });
-        });
+      test('good input', () {
+        return _testCompiler(_goodTestFile, targetType, RunResult.SUCCESS);
+      });
 
+      test('bad input', () {
+        return _testCompiler(_badTestFile, targetType, RunResult.FAIL);
       });
     });
-  }
 
-  static Future _testCompiler(String contents, CompilerTargetType target,
-                              RunResult expectedResult) {
-    TempDir tmpDir;
-    Task task;
-
-    final sourceDirMap = {
-      'main.dart' : contents
-    };
-
-    List<String> sources;
-
-    return TempDir.create()
-        .then((TempDir value) {
-          tmpDir = value;
-
-          return tmpDir.populate(sourceDirMap);
-        })
-        .then((TempDir value) {
-          assert(value == tmpDir);
-
-          sources = [pathos.join(tmpDir.path, 'main.dart')];
-
-          task = createDartCompilerTask(sources, outputType: target);
-
-          return runTaskInTestRunner(task);
-
-        })
-        .then((RunResult result) {
-          expect(result, expectedResult);
-
-          return tmpDir.dir.list().toList();
-        })
-        .then((list) {
-          var entityNames = list.map((e) => e.path).toList();
-
-          var outFiles = _getOutputFiles(sources, target,
-              expectedResult.success);
-
-          expect(entityNames, unorderedEquals(outFiles));
-        })
-        .whenComplete(() {
-          if(tmpDir != null) {
-            tmpDir.dispose();
-          }
-        });
-  }
+  });
 }
+
+Future _testCompiler(String contents, CompilerTargetType target,
+                            RunResult expectedResult) {
+  TempDir tmpDir;
+  Task task;
+
+  final sourceDirMap = {
+    'main.dart' : contents
+  };
+
+  List<String> sources;
+
+  return TempDir.create()
+      .then((TempDir value) {
+        tmpDir = value;
+
+        return tmpDir.populate(sourceDirMap);
+      })
+      .then((TempDir value) {
+        assert(value == tmpDir);
+
+        sources = [pathos.join(tmpDir.path, 'main.dart')];
+
+        task = createDartCompilerTask(sources, outputType: target);
+
+        return runTaskInTestRunner(task);
+
+      })
+      .then((RunResult result) {
+        expect(result, expectedResult);
+
+        return tmpDir.dir.list().toList();
+      })
+      .then((list) {
+        var entityNames = list.map((e) => e.path).toList();
+
+        var outFiles = _getOutputFiles(sources, target,
+            expectedResult.success);
+
+        expect(entityNames, unorderedEquals(outFiles));
+      })
+      .whenComplete(() {
+        if(tmpDir != null) {
+          tmpDir.dispose();
+        }
+      });
+}
+
 
 Set<String> _getOutputFiles(List<String> inputFiles, CompilerTargetType type,
     bool expectSuccess) {
