@@ -62,6 +62,7 @@ int lastIndexWhere(Iterable source, bool predicate(dynamic element)) {
   return foundIndex;
 }
 
+// TODO: move this to bot?
 List topoSort(Map<dynamic, Iterable<dynamic>> dependencies) {
   requireArgumentNotNull(dependencies, 'dependencies');
 
@@ -94,6 +95,7 @@ List topoSort(Map<dynamic, Iterable<dynamic>> dependencies) {
   return items.toList();
 }
 
+// TODO: align with Tarjan code in bot
 class _Graph<T> {
   final LinkedHashMap<T, _GraphNode<T>> _map;
 
