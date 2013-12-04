@@ -1,4 +1,14 @@
-part of hop_tasks;
+library hop_tasks.dart_analyzer;
+
+import 'dart:async';
+import 'dart:io';
+
+import 'package:args/args.dart';
+import 'package:bot/bot_async.dart';
+import 'package:hop/hop_core.dart';
+import 'package:hop/src/tasks_shared.dart';
+import 'package:hop/src/hop_tasks/process.dart';
+import 'package:path/path.dart' as pathos;
 
 const _verboseArgName = 'verbose';
 const _formatMachineArgName = 'format-machine';
@@ -107,7 +117,7 @@ Future<int> _dartAnalyzer(TaskLogger logger, String filePath, bool verbose,
 
         processArgs.addAll([pathos.normalize(filePath)]);
 
-        return Process.start(_getPlatformBin('dartanalyzer'), processArgs);
+        return Process.start(getPlatformBin('dartanalyzer'), processArgs);
       })
       .then((process) {
         if(verbose) {

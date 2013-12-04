@@ -1,4 +1,15 @@
-part of hop_tasks;
+library hop_tasks.compiler;
+
+
+import 'dart:async';
+import 'dart:io';
+
+
+import 'package:bot/bot.dart';
+import 'package:bot/bot_async.dart';
+import 'package:hop/hop_core.dart';
+import 'package:hop/src/tasks_shared.dart';
+import 'package:hop/src/hop_tasks/process.dart';
 
 class CompilerTargetType {
 
@@ -124,5 +135,5 @@ Future _dart2js(TaskContext ctx, String file,
     args.add('--enable-checked-mode');
   }
 
-  return startProcess(ctx, _getPlatformBin('dart2js'), args);
+  return startProcess(ctx, getPlatformBin('dart2js'), args);
 }

@@ -7,7 +7,7 @@ import 'package:path/path.dart' as pathos;
 import 'package:unittest/unittest.dart';
 import 'package:bot_io/bot_io.dart';
 import 'package:hop/hop_core.dart';
-import 'package:hop/hop_tasks.dart';
+import 'package:hop/src/hop_tasks/compiler.dart';
 import '../test_util.dart';
 
 void main() {

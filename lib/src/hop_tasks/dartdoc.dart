@@ -1,4 +1,16 @@
-part of hop_tasks;
+library hop_tasks.dart_doc;
+
+import 'dart:async';
+
+import 'package:args/args.dart';
+import 'package:bot/bot.dart';
+import 'package:bot/bot_async.dart';
+import 'package:bot_io/bot_git.dart';
+import 'package:bot_io/bot_io.dart';
+import 'package:hop/hop_core.dart';
+import 'package:hop/src/tasks_shared.dart';
+import 'package:hop/src/hop_tasks/process.dart';
+import 'package:path/path.dart' as pathos;
 
 const _allowDirtyArg = 'allow-dirty';
 const _targetBranchArg = 'target-branch';
@@ -128,7 +140,7 @@ Future _doDocsPopulate(TaskContext ctx, TempDir dir, Iterable<String> libs,
 
   var subCtx = ctx.getSubContext('dartdoc');
 
-  return startProcess(subCtx, _getPlatformBin('dartdoc'), args)
+  return startProcess(subCtx, getPlatformBin('dartdoc'), args)
       .then((_) {
         subCtx.dispose();
 
