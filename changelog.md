@@ -1,5 +1,10 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.28.1+3 2013-12-02 (SDK 1.0.1+3 r30657)
+
+* Moved each task into its own library.
+* Updated `bot` dependency.
+
 ## 0.28.1+2 2013-12-02 (SDK 1.0.1+3 r30657)
 
 * Basically rolled back the previous commit and some more.
