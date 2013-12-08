@@ -8,7 +8,7 @@ description: Dart Task Framework
 documentation: http://kevmoo.github.io/hop.dart
 dependencies:
   args: '>=0.9.0 <0.10.0'
-  bot: '>=0.25.1'
+  bot: '>=0.25.3'
   bot_io: '>=0.25.0'
   collection_helpers: '>=0.9.0 <0.10.0'
   html5lib: '>=0.9.1 <0.10.0'
