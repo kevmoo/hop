@@ -113,7 +113,7 @@ class TaskRegistry {
 
     var depMap = _getDependencyMap(taskName);
 
-    var sorted = topoSort(depMap);
+    var sorted = topologicalSort(depMap);
 
     var deps = new LinkedHashMap();
 

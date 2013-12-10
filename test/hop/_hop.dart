@@ -12,7 +12,6 @@ import 'logging_tests.dart' as logging;
 import 'simple_add_task_tests.dart' as simple_add_task;
 import 'task_list_tests.dart' as task_list;
 import 'task_result_tests.dart' as task_result;
-import 'util_tests.dart' as util;
 import 'extended_args_test.dart' as extended_args;
 
 void main() {
@@ -25,7 +24,6 @@ void main() {
   group('add task', simple_add_task.main);
   group('task list', task_list.main);
   group('task result', task_result.main);
-  group('util', util.main);
 
   group('HopConfig', () {
     test('HopConfig: registry cannot be null', () {
