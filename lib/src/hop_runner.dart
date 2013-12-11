@@ -7,8 +7,8 @@ import 'package:bot/bot.dart';
 import 'package:bot_io/bot_io.dart';
 import 'package:bot_io/completion.dart';
 import 'package:collection_helpers/equality.dart';
+import 'package:collection_helpers/wrappers.dart';
 import 'package:logging/logging.dart';
-import 'package:unmodifiable_collection/unmodifiable_collection.dart';
 
 import 'package:hop/hop_core.dart';
 import 'shared.dart';
@@ -35,7 +35,7 @@ ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
   parser.addFlag(_PREFIX_FLAG, defaultsTo: true,
       help: 'Specifies if shell output is prefixed by the task name.');
 
-  final logLevelAllowed = _sortedLogLevels
+  final logLevelAllowed = Level.LEVELS
       .map((Level l) => l.name.toLowerCase())
       .toList();
 
@@ -52,14 +52,6 @@ void _initParserForTask(ArgParser parser, String taskName, Task task) {
   final subParser = parser.addCommand(taskName);
   task.configureArgParser(subParser);
 }
-
-// DARTBUG: https://code.google.com/p/dart/issues/detail?id=15321
-// Wating for this to land: https://code.google.com/p/dart/source/detail?r=30676
-// it'd be nice if this was in logging
-final List<Level> _sortedLogLevels = [Level.ALL, Level.CONFIG, Level.FINE,
-                                      Level.FINER, Level.FINEST, Level.INFO,
-                                      Level.OFF, Level.SEVERE, Level.SHOUT]
-                                      ..sort();
 
 const String _COLOR_FLAG = 'color';
 const String _PREFIX_FLAG = 'prefix';

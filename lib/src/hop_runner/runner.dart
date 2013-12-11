@@ -202,7 +202,7 @@ class Runner {
   }
 
 
-  static Level _getLevel(String logLevelOption) => _sortedLogLevels
+  static Level _getLevel(String logLevelOption) => Level.LEVELS
       .singleWhere((Level l) => l.name.toLowerCase() == logLevelOption);
 }
 
