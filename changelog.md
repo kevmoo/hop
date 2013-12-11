@@ -1,5 +1,9 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.28.2 2013-12-10 (SDK 1.0.2.1 r30821)
+
+* Using new features in latest `bot`, `logging`, and `collection_helpers`.
+
 ## 0.28.1+3 2013-12-02 (SDK 1.0.1+3 r30657)
 
 * Moved each task into its own library.
