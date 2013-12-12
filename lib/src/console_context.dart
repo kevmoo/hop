@@ -29,8 +29,7 @@ class ConsoleContext extends TaskRuntime {
   static void runTaskAsProcess(List<String> mainArgs, Task task) {
     assert(task != null);
 
-    final parser = new ArgParser();
-    task.configureArgParser(parser);
+    var parser = task.argParser;
 
     ArgResults args;
     try {

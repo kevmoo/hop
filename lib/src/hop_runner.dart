@@ -49,8 +49,7 @@ ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
 }
 
 void _initParserForTask(ArgParser parser, String taskName, Task task) {
-  final subParser = parser.addCommand(taskName);
-  task.configureArgParser(subParser);
+  final subParser = parser.addCommand(taskName, task.argParser);
 }
 
 const String _COLOR_FLAG = 'color';

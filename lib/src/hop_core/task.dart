@@ -4,11 +4,51 @@ typedef void _ArgParserConfigure(ArgParser);
 
 typedef dynamic _TaskDefinition(TaskContext ctx);
 
-class Task {
+class _TaskWithConfig extends Task {
+  final _ArgParserConfigure _argParserConfig;
+  ArgParser _argParser;
+
+  _TaskWithConfig(dynamic taskDefinition(TaskContext ctx), String description,
+    List<TaskArgument> extendedArgs, this._argParserConfig) :
+      super._impl(taskDefinition, description, extendedArgs);
+
+  ArgParser get argParser {
+    if(_argParser == null) {
+      _argParser = new ArgParser();
+      _argParserConfig(_argParser);
+    }
+    return _argParser;
+  }
+
+  Task clone({String description}) {
+    if(description == null) description = this.description;
+
+    return new Task(_exec, description: description, config: _argParserConfig,
+        extendedArgs: _extendedArgs);
+  }
+}
+
+class _TaskWithParser extends Task {
+  final ArgParser argParser;
+
+  _TaskWithParser(dynamic taskDefinition(TaskContext ctx), String description,
+    List<TaskArgument> extendedArgs, this.argParser) :
+      super._impl(taskDefinition, description, extendedArgs);
+
+  Task clone({String description}) {
+    if(description == null) description = this.description;
+
+    return new Task(_exec, description: description, argParser: argParser,
+        extendedArgs: _extendedArgs);
+  }
+}
+
+abstract class Task {
   final String description;
   final _TaskDefinition _exec;
-  final _ArgParserConfigure _argParserConfig;
   final List<TaskArgument> _extendedArgs;
+
+  ArgParser get argParser;
 
   /**
    * **DEPRECATED** Use `new Task` instead.
@@ -26,27 +66,37 @@ class Task {
       {String description, void config(ArgParser),
        List<TaskArgument> extendedArgs}) = Task;
 
-  Task(dynamic taskDefinition(TaskContext ctx), {String description,
-    void config(ArgParser), List<TaskArgument> extendedArgs}) :
+  /**
+   * The [config] paramater is **DEPRECATED**. Provide the [argParser] parameter
+   * instead.
+   */
+  factory Task(dynamic taskDefinition(TaskContext ctx), {String description,
+    List<TaskArgument> extendedArgs, ArgParser argParser,
+    @deprecated void config(ArgParser)}) {
+
+    if(config != null) {
+      if(argParser != null) {
+        throw new ArgumentError('Cannot provide both an argParser and config.');
+      }
+
+      return new _TaskWithConfig(taskDefinition, description, extendedArgs, config);
+    }
+
+    return new _TaskWithParser(taskDefinition, description,
+        extendedArgs, argParser);
+  }
+
+  Task._impl(dynamic taskDefinition(TaskContext ctx), String description,
+    List<TaskArgument> extendedArgs) :
       this._exec = taskDefinition,
       this.description = (description == null) ? '' : description,
-      this._argParserConfig = config,
       this._extendedArgs = (extendedArgs == null) ? const [] :
         TaskArgument.validateArgs(extendedArgs) {
     requireArgumentNotNull(_exec, '_exec');
   }
 
-
-  void configureArgParser(ArgParser parser) {
-    if(_argParserConfig != null) {
-      _argParserConfig(parser);
-    }
-  }
-
   String getUsage() {
-    final parser = new ArgParser();
-    configureArgParser(parser);
-    return parser.getUsage();
+    return argParser.getUsage();
   }
 
   String getExtendedArgsUsage() =>
@@ -79,12 +129,7 @@ class Task {
     });
   }
 
-  Task clone({String description}) {
-    if(description == null) description = this.description;
-
-    return new Task(_exec, description: description,
-        config: _argParserConfig, extendedArgs: _extendedArgs);
-  }
+  Task clone({String description});
 
   /**
    * Returned map is in argument order.

@@ -102,8 +102,7 @@ class Runner {
           args = subCommandArgResults;
         } else {
           var parser = new ArgParser();
-          var subParser = parser.addCommand(subTaskName);
-          task.configureArgParser(subParser);
+          var subParser = parser.addCommand(subTaskName, task.argParser);
           args = subParser.parse([]);
         }
 
