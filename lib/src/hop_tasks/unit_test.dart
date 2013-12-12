@@ -59,18 +59,20 @@ Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
     unittest.runTests();
     return config.future;
   },
-  config: _unittestParserConfig,
+  argParser: _unittestParserConfig(),
   description: 'Run unit tests in the console',
   extendedArgs: [new TaskArgument(_FILTER_ARG, multiple: true)]);
 }
 
-void _unittestParserConfig(ArgParser parser) {
+ArgParser _unittestParserConfig() {
+  var parser = new ArgParser();
   parser.addFlag(_LIST_FLAG, abbr: 'l', defaultsTo: false,
       help: "Just list the test case names. Don't run them. Any filter is still applied.");
   parser.addOption(_SUMMARY_FLAG, abbr: 's',
       help: 'Summarize the results of individual tests.',
       allowed: [_SUMMARY_ALL, _SUMARY_FAIL, _SUMMARY_PASS, _SUMMARY_ERROR],
       allowMultiple: false);
+  return parser;
 }
 
 class _HopTestConfiguration extends unittest.Configuration {

@@ -44,7 +44,7 @@ Task createDartDocTask(dynamic delayedLibraryList, {
         excludeLibs, linkApi, postBuild);
   },
   description: 'Generate documentation for the provided libraries.',
-  config: (parser) => _dartDocParserConfig(parser, targetBranch));
+  argParser: _dartDocParserConfig(targetBranch));
 }
 
 Future _compileDocs(TaskContext ctx, String targetBranch,
@@ -99,9 +99,11 @@ Future _compileDocs(TaskContext ctx, String targetBranch,
       });
 }
 
-void _dartDocParserConfig(ArgParser parser, String targetBranch) {
+ArgParser _dartDocParserConfig(String targetBranch) {
+  var parser = new ArgParser();
   parser.addFlag(_allowDirtyArg, abbr: 'd', help: 'Allow a dirty tree to run', defaultsTo: false);
   parser.addOption(_targetBranchArg, abbr: 'b', help: 'The git branch which gets the doc output', defaultsTo: targetBranch);
+  return parser;
 }
 
 Future<String> _getCommitMessageFuture(GitDir gitDir, bool isClean) {

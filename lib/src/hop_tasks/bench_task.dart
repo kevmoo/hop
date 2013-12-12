@@ -37,15 +37,15 @@ Task createBenchTask() => new Task((TaskContext ctx) {
         });
 
   },
-  config: _benchParserConfig,
+  argParser: _benchParserConfig(),
   description: 'Run a benchmark against the provided task',
   extendedArgs: [new TaskArgument('command', required: true, multiple: true)]);
 
-void _benchParserConfig(ArgParser parser) {
-  parser.addOption(_RUN_COUNT_ARE_NAME, abbr: 'r',
-      defaultsTo: _DEFAULT_RUN_COUNT.toString(),
-      help: 'Specify the number times the specified command should be run');
-}
+ArgParser _benchParserConfig() =>
+    new ArgParser()
+      ..addOption(_RUN_COUNT_ARE_NAME, abbr: 'r',
+          defaultsTo: _DEFAULT_RUN_COUNT.toString(),
+          help: 'Specify the number times the specified command should be run');
 
 Future<List<_BenchRunResult>> _runMany(TaskContext ctx, int count,
     String processName, List<String> args) {

@@ -44,16 +44,15 @@ Task createAnalyzerTask(dynamic delayedFileList) {
         });
   },
   description: 'Run "dartanalyzer" for the provided dart files.',
-  config: _parserConfig);
+  argParser: _parserConfig());
 }
 
-void _parserConfig(ArgParser parser) {
-  parser
+ArgParser _parserConfig() =>
+  new ArgParser()
     ..addFlag(_verboseArgName, abbr: 'v', defaultsTo: false,
         help: 'verbose output of all errors')
     ..addFlag(_formatMachineArgName, abbr: 'm', defaultsTo: false,
         help: 'Print errors in a format suitable for parsing');
-}
 
 Future _processDartAnalyzerFile(TaskContext context,
     List<String> analyzerFilePaths, bool verbose, bool formatMachine) {
