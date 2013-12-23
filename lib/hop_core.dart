@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'package:args/args.dart';
 import 'package:bot/bot.dart';
-import 'package:collection_helpers/wrappers.dart';
+import 'package:collection/wrappers.dart';
 import 'package:logging/logging.dart';
 
 import 'package:hop/src/shared.dart';

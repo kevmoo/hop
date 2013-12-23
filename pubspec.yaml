@@ -10,7 +10,7 @@ dependencies:
   args: '>=0.9.0 <0.11.0'
   bot: '>=0.26.0'
   bot_io: '>=0.25.1+1'
-  collection_helpers: '>=0.9.1 <0.10.0'
+  collection: '>=0.9.0 <0.10.0'
   html5lib: '>=0.9.1 <0.10.0'
   logging: '>=0.9.1 <0.10.0'
   path: '>=0.9.0 <2.0.0'
