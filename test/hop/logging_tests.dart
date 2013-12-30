@@ -72,7 +72,7 @@ void main() {
         ctx.severe('severe');
       });
 
-      return runTaskInTestRunner(task, eventLog: records)
+      return runTaskInTestRunner(task, eventLog: records, throwTaskExceptions: true)
           .then((RunResult result) {
             expect(result, same(RunResult.SUCCESS));
 
@@ -107,7 +107,7 @@ void main() {
         ctx.severe('severe');
       });
 
-      return runTaskInTestRunner(task, eventLog: records)
+      return runTaskInTestRunner(task, eventLog: records, throwTaskExceptions: true)
           .then((RunResult result) {
             expect(result, same(RunResult.SUCCESS));
 
