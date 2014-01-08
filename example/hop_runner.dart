@@ -17,7 +17,7 @@ void main(List<String> args) {
   /*
    * 1: Hello, World!
    *
-   * A task is just a function with one paramater: `TaskContext`.
+   * A task is just a function with one argument: `TaskContext`.
    *
    * The `TaskContext` object allows reporting status to the user via log
    * methods that look similiar to those provided by the Logging package.
@@ -29,8 +29,8 @@ void main(List<String> args) {
   /*
    * 2: Async tasks
    *
-   * Tasks can run asynchronously by returning a `Future` -- similar to have the
-   * unittest packaged does async testing.
+   * Tasks can run asynchronously by returning a `Future` -- similar to how the
+   * unittest package does async testing.
    *
    * The task is not completed until the returned `Future` completes.
    */
