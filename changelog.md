@@ -1,5 +1,20 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.28.3+1 2014-01-18 (SDK 1.1.1 r31822)
+
+* Better error message when running 'tool/hop_runner.dart' with an unexpected working directory.
+* Doc tweaks.
+* Simplified `bin/hop` bash script.
+
+## 0.28.3 2013-12-23 
+
+* Using `collection` package directly
+* Using new arg parser model in shipping tasks
+
+## 0.28.2+1 2013-12-10 
+
+* Dependency oops
+
 ## 0.28.2 2013-12-10 (SDK 1.0.2.1 r30821)
 
 * Using new features in latest `bot`, `logging`, and `collection_helpers`.
