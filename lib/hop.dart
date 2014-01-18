@@ -79,9 +79,21 @@ Task addChainedTask(String name, Iterable<String> existingTaskNames, {
       description: description);
 
 void _paranoidHopCheck() {
+  var currentDir = path.current;
+
+  var expectedPubspecFile = path.join(currentDir, 'pubspec.yaml');
+
+  require(io.FileSystemEntity.isFileSync(expectedPubspecFile),
+      'pubspec.yaml is not in the working directory "$currentDir". '
+      'Hop expects to run from a project root directory. '
+      'When running from the Editor, change the working directory in '
+      'Run -> Manage Launches.'
+      );
+
   var runningScript = io.Platform.script.toFilePath();
 
-  final expectedPath = path.join(path.current, 'tool', 'hop_runner.dart');
-  require(runningScript == expectedPath,
-      'Running script should be at "$expectedPath" but was at "$runningScript"');
+  final expectedPath = path.join(currentDir, 'tool', 'hop_runner.dart');
+
+  require(runningScript == expectedPath, 'Running script should be at '
+      '"$expectedPath", but it was at "$runningScript"');
 }
