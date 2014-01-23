@@ -36,7 +36,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
 
   requireArgument(outputType == CompilerTargetType.JS || outputType == CompilerTargetType.DART, 'outputType');
 
-  if(singleOutput != null && outputMapper != null) {
+  if (singleOutput != null && outputMapper != null) {
     throw new ArgumentError('Only one of "singleOutput" and "outputMapper" can be set.');
   }
 
@@ -77,7 +77,7 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
 String _dart2jsOutputMapper(String input) => input + '.js';
 
 String _dart2DartOutputMapper(String input) {
-  if(input.endsWith('.dart')) {
+  if (input.endsWith('.dart')) {
     return input.substring(0, input.length - 5) + '.compiled.dart';
   } else {
     return input + '.dart';
@@ -112,23 +112,23 @@ Future _dart2js(TaskContext ctx, String file,
     args.add('--suppress-warnings');
   }
 
-  if(throwOnError) {
+  if (throwOnError) {
     args.add('--throw-on-error');
   }
 
-  if(liveTypeAnalysis == false) {
+  if (liveTypeAnalysis == false) {
     args.add('--disable-native-live-type-analysis');
   }
 
-  if(minify) {
+  if (minify) {
     args.add('--minify');
   }
 
-  if(packageRoot != null) {
+  if (packageRoot != null) {
     args.add('--package-root=$packageRoot');
   }
 
-  if(checked == true) {
+  if (checked == true) {
     args.add('--enable-checked-mode');
   }
 

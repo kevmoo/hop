@@ -63,7 +63,7 @@ Future<String> _fixApiDoc(String jsonInput) {
 
   var navMap = new Map<String, Map>();
 
-  for(var foo in navList) {
+  for (var foo in navList) {
     var name = foo['name'];
     navMap[name] = foo;
   }
@@ -120,7 +120,7 @@ Future<Document> _updateIndex(Document source, DocsConfig cfg) {
 
       final libName = anchor.innerHtml;
 
-      if(cfg.libFilter(libName)) {
+      if (cfg.libFilter(libName)) {
         targetLibraryHeaders[libName] = child;
       } else {
         otherHeaders[libName] = child;
@@ -133,15 +133,14 @@ Future<Document> _updateIndex(Document source, DocsConfig cfg) {
   contentDiv.children.add(_getAboutElement(cfg));
 
   final doSection = (String name, Map<String, Element> sectionContent) {
-    if(!sectionContent.isEmpty) {
+    if (!sectionContent.isEmpty) {
       contentDiv.children.add(new Element.tag('h3')
-        ..innerHtml = name);
+          ..innerHtml = name);
 
-      var orderedSectionKeys = sectionContent.keys
-          .toList(growable: false)
+      var orderedSectionKeys = sectionContent.keys.toList(growable: false)
           ..sort();
 
-      for(var k in orderedSectionKeys) {
+      for (var k in orderedSectionKeys) {
         contentDiv.children.add(sectionContent[k]);
       }
     }
@@ -156,26 +155,26 @@ Future<Document> _updateIndex(Document source, DocsConfig cfg) {
 
 Element _getAboutElement(DocsConfig cfg) {
   final logo = new Element.tag('img')
-    ..attributes['src'] = cfg.logoPath
-    ..attributes['width'] = cfg.logoWidth.toString()
-    ..attributes['height'] = cfg.logoHeight.toString()
-    ..attributes['title'] = cfg.outputTitle;
+      ..attributes['src'] = cfg.logoPath
+      ..attributes['width'] = cfg.logoWidth.toString()
+      ..attributes['height'] = cfg.logoHeight.toString()
+      ..attributes['title'] = cfg.outputTitle;
 
   final logoLink = new Element.tag('a')
-    ..attributes['href'] = cfg.sourceUrl
-    ..children.add(logo);
+      ..attributes['href'] = cfg.sourceUrl
+      ..children.add(logo);
 
   final sourceLabel = new Element.tag('strong')
-    ..innerHtml = 'Source code: ';
+      ..innerHtml = 'Source code: ';
 
   final ghLink = new Element.tag('a')
-  ..attributes['href'] = cfg.sourceUrl
-  ..innerHtml = cfg.sourceUrl;
+      ..attributes['href'] = cfg.sourceUrl
+      ..innerHtml = cfg.sourceUrl;
 
   return new Element.tag('div')
-    ..attributes['class'] = 'about'
-    ..children.add(logoLink)
-    ..children.add(new Element.tag('br'))
-    ..children.add(sourceLabel)
-    ..children.add(ghLink);
+      ..attributes['class'] = 'about'
+      ..children.add(logoLink)
+      ..children.add(new Element.tag('br'))
+      ..children.add(sourceLabel)
+      ..children.add(ghLink);
 }

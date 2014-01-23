@@ -24,7 +24,7 @@ void main() {
     var he2b = new HopEvent(Level.CONFIG, 'test', source: ['test', 'test']);
     var he2c = new HopEvent(Level.CONFIG, 'test3', source: ['another']);
 
-    for(var he in [he2, he2a, he2b, he2c]) {
+    for (var he in [he2, he2a, he2b, he2c]) {
       expect(he, equals(he));
       expect(he, isNot(equals(he1)));
       expect(he, isNot(equals(he1a)));

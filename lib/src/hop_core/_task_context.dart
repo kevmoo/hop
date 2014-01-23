@@ -65,7 +65,7 @@ class _LoggerChild extends TaskLogger {
    * Throws [DisposedError] if the instance has already been disposed.
    */
   void _requireNotDisposed() {
-    if(isDisposed) {
+    if (isDisposed) {
       throw new DisposedError();
     }
   }
@@ -73,8 +73,8 @@ class _LoggerChild extends TaskLogger {
 
 class _DeprecatedSubTaskContext extends _TaskContext implements TaskContext {
 
-  _DeprecatedSubTaskContext(_TaskContext parent, String name) :
-    super._deprecated(parent, name);
+  _DeprecatedSubTaskContext(_TaskContext parent, String name)
+      : super._deprecated(parent, name);
 }
 
 List<String> _namePlusOne(List<String> source, String oneMore) =>

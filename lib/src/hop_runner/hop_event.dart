@@ -7,8 +7,9 @@ class HopEvent {
 
   bool get isPrint => logger.isEmpty;
 
-  const HopEvent.print(this.message) :
-    this.level = Level.INFO, this.logger = const [];
+  const HopEvent.print(this.message)
+      : this.level = Level.INFO,
+        this.logger = const [];
 
   HopEvent(this.level, this.message, {List<String> source}) :
     this.logger = source == null ?

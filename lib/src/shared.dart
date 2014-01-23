@@ -5,7 +5,7 @@ import 'package:bot/bot.dart';
 import 'package:bot_io/completion.dart' as completion;
 import 'package:logging/logging.dart';
 
-const _RESERVED_TASKS = const[completion.COMPLETION_COMMAND_NAME];
+const _RESERVED_TASKS = const [completion.COMPLETION_COMMAND_NAME];
 final RegExp _validNameRegExp = new RegExp(r'^[a-z]([a-z0-9_\-]*[a-z0-9])?$');
 
 class TaskFailError extends Error {
@@ -52,8 +52,8 @@ int lastIndexWhere(Iterable source, bool predicate(dynamic element)) {
 
   var foundIndex = -1;
   var currentIndex = 0;
-  for(var e in source) {
-    if(predicate(e)) {
+  for (var e in source) {
+    if (predicate(e)) {
       foundIndex = currentIndex;
     }
     currentIndex++;

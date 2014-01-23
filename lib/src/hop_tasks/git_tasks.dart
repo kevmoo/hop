@@ -23,7 +23,7 @@ Task getBranchForDirTask(String sourceBranch, String sourceDir,
 Future branchForDir(TaskContext ctx, String sourceBranch, String sourceDir,
     String targetBranch, {String workingDir}) {
 
-  if(workingDir == null) {
+  if (workingDir == null) {
     workingDir = pathos.current;
   }
 

@@ -26,6 +26,6 @@ class _TaskRuntime extends TaskRuntime {
   }
 
   void _requireNotDisposed() {
-    if(_disposed) throw new DisposedError();
+    if (_disposed) throw new DisposedError();
   }
 }

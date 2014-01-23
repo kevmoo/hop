@@ -13,9 +13,9 @@ const _masterBranch = 'master';
 const _testBranch = 'targetBranch';
 
 const sourceDirMap = const {
-  'file.txt' : 'file contents',
-  'docs_dir' : const {
-    'doc.txt' : 'the doc'
+  'file.txt': 'file contents',
+  'docs_dir': const {
+    'doc.txt': 'the doc'
   }
 };
 
@@ -27,8 +27,8 @@ const testContent2 = const {
 const testContent3 = const {
   'file4.txt': 'file 4 contents',
   'file5.txt': 'file 5 contents',
-  'docs_dir' : const {
-    'doc2.txt' : 'the other doc'
+  'docs_dir': const {
+    'doc2.txt': 'the other doc'
   },
   'foo-dir': const {
     'foo_file.txt': 'full of foo'

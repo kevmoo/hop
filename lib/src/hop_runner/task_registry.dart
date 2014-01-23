@@ -17,9 +17,9 @@ class TaskRegistry {
   factory TaskRegistry() =>
       new TaskRegistry._(new SplayTreeMap<String, Task>());
 
-  TaskRegistry._(SplayTreeMap<String, Task> map) :
-    this._tasks = map,
-    this.tasks = new UnmodifiableMapView(map);
+  TaskRegistry._(SplayTreeMap<String, Task> map)
+      : this._tasks = map,
+        this.tasks = new UnmodifiableMapView(map);
 
   bool get isFrozen => _frozen;
 
@@ -77,7 +77,7 @@ class TaskRegistry {
 
     requireArgumentNotNull(task, 'task');
 
-    if(dependencies == null) dependencies = [];
+    if (dependencies == null) dependencies = [];
 
     var list = $(dependencies)
         .map((String subName) {
@@ -89,7 +89,7 @@ class TaskRegistry {
     var set = new LinkedHashSet<Task>.identity()
         ..addAll(list);
 
-    if(task is Task) {
+    if (task is Task) {
       task = task.clone(description: description);
     } else {
       // wrap it?
@@ -117,7 +117,7 @@ class TaskRegistry {
 
     var deps = new LinkedHashMap();
 
-    for(var t in sorted) {
+    for (var t in sorted) {
       var name = _metadata[t].name;
       assert(!deps.containsKey(name));
       deps[name] = t;
@@ -131,7 +131,7 @@ class TaskRegistry {
   Task addChainedTask(String name, Iterable<String> existingTaskNames,
                              {String description}) {
 
-    if(description == null) {
+    if (description == null) {
       description = 'Chained Task: ' + existingTaskNames.join(', ');
     }
 
@@ -149,7 +149,7 @@ class TaskRegistry {
 
     remaining.add(tasks[taskName]);
 
-    while(remaining.isNotEmpty) {
+    while (remaining.isNotEmpty) {
       var task = remaining.first;
       var added = visited.add(task);
       assert(added); // should never visit the same task twice
@@ -163,13 +163,13 @@ class TaskRegistry {
   }
 
   void _requireFrozen() {
-    if(!isFrozen) {
+    if (!isFrozen) {
       throw new StateError("Operation not allowed unless frozen.");
     }
   }
 
   void _freeze() {
-    if(!isFrozen) {
+    if (!isFrozen) {
       _frozen = true;
     }
   }

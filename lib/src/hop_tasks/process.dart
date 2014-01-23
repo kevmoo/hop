@@ -17,7 +17,7 @@ Future startProcess(TaskContext ctx, String command,
 
   requireArgumentNotNull(ctx, 'ctx');
   requireArgumentNotNull(command, 'command');
-  if(args == null) {
+  if (args == null) {
     args = [];
   }
 
@@ -54,7 +54,7 @@ Future<int> pipeProcess(Process process,
 }
 
 void _stdListen(List<int> data, void writer(String input)) {
-  if(writer != null) {
+  if (writer != null) {
     final str = SYSTEM_ENCODING.decode(data).trim();
     writer(str);
   }

@@ -15,7 +15,7 @@ Future<RunResult> runTaskInTestRunner(dynamic task, {List<String> extraArgs,
   taskRegistry.addTask(TEST_TASK_NAME, task);
 
   final args = [TEST_TASK_NAME];
-  if(extraArgs != null) {
+  if (extraArgs != null) {
     args.addAll(extraArgs);
   }
 
@@ -30,7 +30,7 @@ Future<RunResult> runRegistry(TaskRegistry taskRegistry, List<String> args,
 
   var config = new HopConfig(taskRegistry, args);
 
-  if(eventLog != null) {
+  if (eventLog != null) {
     // should probably be empty here, right?
     assert(eventLog.isEmpty);
     config.onEvent.listen(eventLog.add);
@@ -42,7 +42,7 @@ Future<RunResult> runRegistry(TaskRegistry taskRegistry, List<String> args,
 
 Future<RunShellOutput> runRegistryShell(TaskRegistry registry, List<String> args) {
   var buffer = new StringBuffer();
-  var zoneSpec = new ZoneSpecification(print: (a,b,c,String line) {
+  var zoneSpec = new ZoneSpecification(print: (a, b, c, String line) {
     buffer.writeln(line);
   });
 

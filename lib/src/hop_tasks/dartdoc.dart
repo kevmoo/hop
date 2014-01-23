@@ -127,11 +127,11 @@ Future _doDocsPopulate(TaskContext ctx, TempDir dir, Iterable<String> libs,
                        bool linkApi, Func2<TaskContext, String, Future> postBuild) {
   final args = ['--pkg', packageDir, '--omit-generation-time', '--out', dir.path, '--verbose'];
 
-  if(linkApi) {
+  if (linkApi) {
     args.add('--link-api');
   }
 
-  if(!excludeList.isEmpty) {
+  if (!excludeList.isEmpty) {
     args.add('--exclude-lib');
     args.add(excludeList.join(','));
   }

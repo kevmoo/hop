@@ -30,19 +30,19 @@ class TaskArgument {
       final argName = 'args[$i]';
       requireArgumentNotNull(arg, argName);
 
-      if(finishRequired && arg.required) {
+      if (finishRequired && arg.required) {
         throw new DetailedArgumentError(argName, 'required arguments must all be at the beginning');
       }
 
-      if(!arg.required) {
+      if (!arg.required) {
         finishRequired = true;
       }
 
-      if(arg.multiple && i != (list.length - 1)) {
+      if (arg.multiple && i != (list.length - 1)) {
         throw new DetailedArgumentError(argName, 'only the last argument can be multiple');
       }
 
-      for(final other in list.take(i)) {
+      for (final other in list.take(i)) {
         requireArgument(arg.name != other.name, argName, 'name ${arg.name} has already been defined');
       }
     });

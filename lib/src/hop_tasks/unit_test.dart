@@ -83,8 +83,8 @@ class _HopTestConfiguration extends unittest.Configuration {
   final bool errorSummary;
   final Duration timeout;
 
-  _HopTestConfiguration(this._context, this.failSummary, this.passSummary,
-      this.errorSummary, this.timeout) : super.blank();
+  _HopTestConfiguration(this._context, this.failSummary, this.passSummary, this.errorSummary, this.timeout)
+      : super.blank();
 
   Future get future => _completer.future;
 
@@ -108,7 +108,7 @@ class _HopTestConfiguration extends unittest.Configuration {
   @override
   void onLogMessage(unittest.TestCase testCase, String message) {
     String msg;
-    if(testCase != null) {
+    if (testCase != null) {
       msg = '${testCase.description}\n$message';
     } else {
       msg = message;
@@ -121,12 +121,12 @@ class _HopTestConfiguration extends unittest.Configuration {
     // result should not be null here
     assert(testCase.result != null);
 
-    if(testCase.result == unittest.PASS) {
+    if (testCase.result == unittest.PASS) {
       _context.info('${testCase.description} -- PASS');
     } else {
       var msg = '''[${testCase.result}] ${testCase.description}
 ${testCase.message}''';
-      if(testCase.stackTrace != null) {
+      if (testCase.stackTrace != null) {
         msg = msg + '''
 ${testCase.stackTrace}''';
       }
@@ -152,28 +152,28 @@ ${testCase.stackTrace}''');
     final message = "$passed PASSED, $failed FAILED, $errors ERRORS";
 
 
-    if(passSummary) {
+    if (passSummary) {
       final summaryCtx = _context.getSubLogger('PASS');
       results.where((tc) => tc.result == unittest.PASS).forEach((tc) {
         summaryCtx.info(tc.description);
       });
     }
 
-    if(failSummary) {
+    if (failSummary) {
       final summaryCtx = _context.getSubLogger('FAIL');
       results.where((tc) => tc.result == unittest.FAIL).forEach((tc) {
         summaryCtx.severe(tc.description);
       });
     }
 
-    if(errorSummary) {
+    if (errorSummary) {
       final summaryCtx = _context.getSubLogger('ERROR');
       results.where((tc) => tc.result == unittest.ERROR).forEach((tc) {
         summaryCtx.severe(tc.description);
       });
     }
 
-    if(success) {
+    if (success) {
       _context.info(message);
     } else {
       _context.severe(message);
@@ -182,7 +182,7 @@ ${testCase.stackTrace}''');
 
   @override
   void onDone(bool success) {
-    if(success) {
+    if (success) {
       _completer.complete();
     } else {
       _completer.completeError('The unittest system did not complete with success.');

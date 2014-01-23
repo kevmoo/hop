@@ -16,12 +16,12 @@ Task _getHelpTask(_HelpArgs helpArgs) {
   return new Task((TaskContext ctx) {
     final args = ctx.arguments;
 
-    if(args.command != null) {
+    if (args.command != null) {
       _printHelpForTask(helpArgs.printer, helpArgs.registry, args.command.name, helpArgs.parser);
     } else {
       _printHelp(helpArgs.printer, helpArgs.registry, helpArgs.parser);
 
-      if(!args.rest.isEmpty) {
+      if (!args.rest.isEmpty) {
         ctx.fail('Not sure how to give help for: ${args.rest}');
       }
     }
@@ -34,7 +34,7 @@ Task _getHelpTask(_HelpArgs helpArgs) {
 void _helpParserConfig(TaskRegistry config, ArgParser parser) {
   config._requireFrozen();
 
-  for(final taskName in config.tasks.keys) {
+  for (final taskName in config.tasks.keys) {
     parser.addCommand(taskName);
   }
 }
@@ -47,12 +47,12 @@ void _printHelpForTask(_Printer printer, TaskRegistry config, String taskName, A
 
   printer(_getUsage(showOptions: !usage.isEmpty, taskName: taskName, extendedArgsUsage: task.getExtendedArgsUsage()));
   printer('');
-  if(!task.description.isEmpty) {
+  if (!task.description.isEmpty) {
     printer(_indent(task.description));
     printer('');
   }
 
-  if(!usage.isEmpty) {
+  if (!usage.isEmpty) {
     printer(_getTitle('${taskName} options'));
     printer(_indent(usage));
     printer('');
@@ -72,7 +72,7 @@ void _printHelp(_Printer printer, TaskRegistry registry, ArgParser parser) {
   _printHopArgsHelp(printer, parser);
 
   final helpName = registry._helpTaskName;
-  if(helpName != null) {
+  if (helpName != null) {
     printer("See '$_HOP_CMD_NAME $helpName <task>' for more information on a specific command.");
   }
 }
@@ -122,7 +122,7 @@ void _printTaskTable(_Printer printer, TaskRegistry config) {
                    })
                    ];
   final rows = Console.getTable(config.taskNames, columns);
-  for(final r in rows) {
+  for (final r in rows) {
     printer('  ' + r);
   }
 }

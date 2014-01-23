@@ -13,7 +13,7 @@ import '../test_util.dart';
 void main() {
   [CompilerTargetType.DART, CompilerTargetType.JS].forEach((targetType) {
 
-    group(targetType.toString(), (){
+    group(targetType.toString(), () {
 
       test('good input', () {
         return _testCompiler(_goodTestFile, targetType, RunResult.SUCCESS);
@@ -33,7 +33,7 @@ Future _testCompiler(String contents, CompilerTargetType target,
   Task task;
 
   final sourceDirMap = {
-    'main.dart' : contents
+    'main.dart': contents
   };
 
   List<String> sources;
@@ -82,8 +82,8 @@ Set<String> _getOutputFiles(List<String> inputFiles, CompilerTargetType type,
   inputFiles.forEach((inFile) {
     outputFiles.add(inFile);
 
-    if(expectSuccess) {
-      if(type == CompilerTargetType.JS) {
+    if (expectSuccess) {
+      if (type == CompilerTargetType.JS) {
         var newName = inFile + '.js';
         var inFileDir = pathos.dirname(inFile);
 

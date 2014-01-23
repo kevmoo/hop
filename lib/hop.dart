@@ -33,7 +33,7 @@ void runHop(List<String> args, {
     String helpTaskName: 'help',
     Level printAtLogLevel: Level.INFO
   }) {
-  if(paranoid) {
+  if (paranoid) {
     _paranoidHopCheck();
   }
   Runner.runShell(args, _sharedConfig, helpTaskName, printAtLogLevel)

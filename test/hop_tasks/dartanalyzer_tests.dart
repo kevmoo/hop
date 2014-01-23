@@ -13,22 +13,28 @@ import '../test_util.dart';
 
 void main() {
   test('1 pass, 1 warn', () {
-    final fileTexts = {"main1.dart": "void main() => print('hello bot');",
-                       "main2.dart": "void main() { String i = 42; }"};
+    final fileTexts = {
+      "main1.dart": "void main() => print('hello bot');",
+      "main2.dart": "void main() { String i = 42; }"
+    };
 
     return _testAnalyzerTask(fileTexts, RunResult.SUCCESS);
   });
 
   test('failed file', () {
-    final fileTexts = {"main.dart": "void main() => asdf { XXXX i = 42; }"};
+    final fileTexts = {
+      "main.dart": "void main() => asdf { XXXX i = 42; }"
+    };
 
     return _testAnalyzerTask(fileTexts, RunResult.FAIL);
   });
 
   test('1 pass, 1 warn, 1 error', () {
-    final fileTexts = {"main1.dart": "void main() asdf { String i = 42; }",
-                       "main2.dart": "void main() asdf { String i = 42; }",
-                       "main3.dart": "void main() asdf { String i = 42; }" };
+    final fileTexts = {
+      "main1.dart": "void main() asdf { String i = 42; }",
+      "main2.dart": "void main() asdf { String i = 42; }",
+      "main3.dart": "void main() asdf { String i = 42; }"
+    };
 
     return _testAnalyzerTask(fileTexts, RunResult.FAIL);
 

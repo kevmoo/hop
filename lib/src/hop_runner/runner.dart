@@ -98,7 +98,7 @@ class Runner {
         var task = tasks[subTaskName];
 
         ArgResults args;
-        if(subTaskName == taskName) {
+        if (subTaskName == taskName) {
           args = subCommandArgResults;
         } else {
           var parser = new ArgParser();
@@ -117,7 +117,7 @@ class Runner {
         return finalResult;
       });
 
-    } else if(config.argResults.rest.length == 0) {
+    } else if (config.argResults.rest.length == 0) {
       _printHelp(config.contextPrint, config.taskRegistry, config.parser);
       return new Future.value(RunResult.SUCCESS);
     } else {
@@ -170,7 +170,7 @@ class Runner {
     ArgResults args;
     try {
       args = tryArgsCompletion(mainArgs, parser);
-    } on FormatException catch(ex, stack) {
+    } on FormatException catch (ex, stack) {
       // TODO: try to guess if --no-color was passed in here?
       print("There was an error parsing the provided arguments");
       print(ex.message);
@@ -193,7 +193,7 @@ class Runner {
   }
 
   static RunResult _logExitCode(HopConfig ctx, RunResult result) {
-    if(!result.success) {
+    if (!result.success) {
       final msg = 'Task did not complete - ${result.name} (${result.exitCode})';
       ctx.contextPrint(new ShellString.withColor(msg, AnsiColor.RED));
     }
@@ -227,21 +227,21 @@ class _ConsolePrinter extends _ContextLogger {
 
     final title = event.logger.join(' - ') + ': ';
 
-    if(event.level >= _minLogLevel) {
-      if(_prefixEnabled) {
+    if (event.level >= _minLogLevel) {
+      if (_prefixEnabled) {
         final color = _getLogColor(event.level);
         final coloredTitle = new ShellString.withColor(title, color);
 
         var indent = '';
 
-        while(indent.length < title.length) {
-          indent =  indent + ' ';
+        while (indent.length < title.length) {
+          indent = indent + ' ';
         }
 
         final lines = Util.splitLines(event.message);
         var first = true;
-        for(final line in lines) {
-          if(first) {
+        for (final line in lines) {
+          if (first) {
             first = false;
             _print(coloredTitle.concat(line));
           } else {
@@ -256,11 +256,11 @@ class _ConsolePrinter extends _ContextLogger {
 
   static AnsiColor _getLogColor(Level logLevel) {
     requireArgumentNotNull(logLevel, 'logLevel');
-    if(logLevel.value > Level.WARNING.value) {
+    if (logLevel.value > Level.WARNING.value) {
       return AnsiColor.RED;
-    } else if(logLevel.value > Level.INFO.value) {
+    } else if (logLevel.value > Level.INFO.value) {
       return AnsiColor.LIGHT_RED;
-    } else if(logLevel.value >= Level.INFO.value) {
+    } else if (logLevel.value >= Level.INFO.value) {
       return AnsiColor.BLUE;
     } else {
       return AnsiColor.GRAY;

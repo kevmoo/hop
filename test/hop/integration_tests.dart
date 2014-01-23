@@ -20,8 +20,8 @@ Future _testBadHopCommand() {
 
 Future _testOutputSorted() {
   final env = {
-               'COMP_LINE': 'hop',
-               'COMP_POINT': '4'
+    'COMP_LINE': 'hop',
+    'COMP_POINT': '4'
   };
 
   return _runHop(['completion', '--', 'hop'], env)

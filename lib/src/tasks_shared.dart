@@ -10,7 +10,7 @@ import 'dart:io';
  * This handles things transparently.
  */
 String getPlatformBin(String binName) {
-  if(Platform.operatingSystem == 'windows') {
+  if (Platform.operatingSystem == 'windows') {
     return '${binName}.bat';
   } else {
     return binName;

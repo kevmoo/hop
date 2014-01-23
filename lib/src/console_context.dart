@@ -17,7 +17,7 @@ class ConsoleContext extends TaskRuntime {
 
   @override
   void addLog(Level logLevel, String message, {List<String> source}) {
-    if(logLevel >= Level.FINE) {
+    if (logLevel >= Level.FINE) {
       print(message);
     }
   }

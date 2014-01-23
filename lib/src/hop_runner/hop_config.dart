@@ -52,18 +52,18 @@ class HopConfig implements _ContextLogger {
   Stream<HopEvent> get onEvent => _eventController.stream;
 
   void contextPrint(dynamic value) {
-    if(_printer != null) _printer.contextPrint(value);
+    if (_printer != null) _printer.contextPrint(value);
 
-    if(_eventController.hasListener) {
+    if (_eventController.hasListener) {
       String val = (value is ShellString) ? value.format(false) : value;
       _eventController.add(new HopEvent.print(val));
     }
   }
 
   void hopEventListen(HopEvent event) {
-    if(_printer != null) _printer.hopEventListen(event);
+    if (_printer != null) _printer.hopEventListen(event);
 
-    if(_eventController.hasListener) _eventController.add(event);
+    if (_eventController.hasListener) _eventController.add(event);
   }
 
   void addLog(Level logLevel, String message, {List<String> source}) {
