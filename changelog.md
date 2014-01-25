@@ -8,6 +8,7 @@
 * Removed deprecated items from `Task` class:
     * `factory Task.sync`
     * `factory Task.async`
+    * Optinal `config` argument in `factory Task` 
 
 ## 0.28.3+3 2014-01-25 (SDK 1.2.0-dev.1.0 r31918)
 
