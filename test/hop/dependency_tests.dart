@@ -75,14 +75,13 @@ void main() {
 
 }
 
-Task _createTaskWithArgs(dynamic taskExec(TaskContext ctx)) {
-  return new Task(taskExec, config: _parserConfig);
-}
+Task _createTaskWithArgs(dynamic taskExec(TaskContext ctx)) =>
+  new Task(taskExec, argParser: _parserConfig());
 
-void _parserConfig(ArgParser parser) {
-  parser.addFlag('trueFlag', defaultsTo: true);
-  parser.addOption('option', allowed: ['a,b,c'], defaultsTo: 'c');
-}
+ArgParser _parserConfig() =>
+    new ArgParser()
+      ..addFlag('trueFlag', defaultsTo: true)
+      ..addOption('option', allowed: ['a,b,c'], defaultsTo: 'c');
 
 void _increment(Map<String, int> counts, String value) {
   int current = counts.putIfAbsent(value, () => 0);

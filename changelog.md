@@ -3,7 +3,11 @@
 ## 0.29.0-dev PRE-RELEASE
 
 * Removed deprecated items from `TaskRegistry`: `taskNames`, `hasTask`, `addSync`, `addAsync`
-* Removed `TaskContext.getSubContext`.
+* Removed deprecated `TaskContext.getSubContext`.
+* Removed deprecated, top-level methods from `hop.dart`: `addSyncTask`, `addAsyncTask`
+* Removed deprecated items from `Task` class:
+    * `factory Task.sync`
+    * `factory Task.async`
 
 ## 0.28.3+3 2014-01-25 (SDK 1.2.0-dev.1.0 r31918)
 

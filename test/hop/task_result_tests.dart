@@ -108,12 +108,11 @@ Future _testNoTasks() {
 }
 
 Task _getGoodTask() => new Task(noopTaskRunner, description: 'Just a nice task',
-    config: (ArgParser parser) {
-      parser.addFlag('foo', abbr: 'f', help: 'The foo flag', defaultsTo: true,
-          negatable: true);
-      parser.addOption('bar', abbr: 'b', help: 'the bar flag',
-          allowed: ['a', 'b', 'c'], defaultsTo: 'b', allowMultiple: true);
-    },
+    argParser: new ArgParser()
+      ..addFlag('foo', abbr: 'f', help: 'The foo flag', defaultsTo: true,
+          negatable: true)
+      ..addOption('bar', abbr: 'b', help: 'the bar flag',
+          allowed: ['a', 'b', 'c'], defaultsTo: 'b', allowMultiple: true),
     extendedArgs: [
                    new TaskArgument('ta-first', required: true),
                    new TaskArgument('ta-second'),

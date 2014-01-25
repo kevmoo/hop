@@ -27,16 +27,18 @@ Task _getHelpTask(_HelpArgs helpArgs) {
     }
   },
   description: 'Print help information about available tasks',
-  config: (parser) => _helpParserConfig(helpArgs.registry, parser),
+  argParser: _helpParserConfig(helpArgs.registry.tasks.keys),
   extendedArgs: [new TaskArgument('task-name')]);
 }
 
-void _helpParserConfig(TaskRegistry config, ArgParser parser) {
-  config._requireFrozen();
+ArgParser _helpParserConfig(Iterable<String> taskNames) {
+  var parser = new ArgParser();
 
-  for (final taskName in config.tasks.keys) {
+  for (var taskName in taskNames) {
     parser.addCommand(taskName);
   }
+
+  return parser;
 }
 
 void _printHelpForTask(_Printer printer, TaskRegistry config, String taskName, ArgParser hopArgParser) {

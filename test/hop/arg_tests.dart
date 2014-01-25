@@ -16,22 +16,6 @@ void main() {
         });
   });
 
-  // providing an arg populator is fine, but deprecated
-
-  test('provide a "config" for ArgParser', () {
-
-    var task = new Task((TaskContext ctx) {
-      expect(ctx.arguments['foo'], true);
-    }, config: (ArgParser parser) {
-      parser.addFlag('foo', defaultsTo: false);
-    });
-
-    return runTaskInTestRunner(task, extraArgs: ['--foo'])
-        .then((RunResult rr) {
-          expect(rr, RunResult.SUCCESS);
-        });
-  });
-
   test('provide a parser for ArgParser', () {
     var parser = new ArgParser()
       ..addFlag('foo', defaultsTo: false);
@@ -44,11 +28,6 @@ void main() {
         .then((RunResult rr) {
           expect(rr, RunResult.SUCCESS);
         });
-  });
-
-  test('provide a parser and parser config - throws', () {
-    expect(() => new Task(noopTaskRunner, argParser: new ArgParser(),
-        config: (ArgParser parser) {}), throwsArgumentError);
   });
 }
 

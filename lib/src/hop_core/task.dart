@@ -1,32 +1,6 @@
 part of hop.core;
 
-typedef void _ArgParserConfigure(ArgParser);
-
 typedef dynamic _TaskDefinition(TaskContext ctx);
-
-class _TaskWithConfig extends Task {
-  final _ArgParserConfigure _argParserConfig;
-  ArgParser _argParser;
-
-  _TaskWithConfig(dynamic taskDefinition(TaskContext ctx), String description,
-    List<TaskArgument> extendedArgs, this._argParserConfig) :
-      super._impl(taskDefinition, description, extendedArgs);
-
-  ArgParser get argParser {
-    if(_argParser == null) {
-      _argParser = new ArgParser();
-      _argParserConfig(_argParser);
-    }
-    return _argParser;
-  }
-
-  Task clone({String description}) {
-    if(description == null) description = this.description;
-
-    return new Task(_exec, description: description, config: _argParserConfig,
-        extendedArgs: _extendedArgs);
-  }
-}
 
 class _TaskWithParser extends Task {
   final ArgParser argParser;
@@ -50,37 +24,8 @@ abstract class Task {
 
   ArgParser get argParser;
 
-  /**
-   * **DEPRECATED** Use `new Task` instead.
-   */
-  @deprecated
-  factory Task.sync(dynamic taskDefinition(TaskContext ctx),
-      {String description, void config(ArgParser),
-       List<TaskArgument> extendedArgs}) = Task;
-
-  /**
-   * **DEPRECATED** Use `new Task` instead.
-   */
-  @deprecated
-  factory Task.async(Future taskDefinition(TaskContext ctx),
-      {String description, void config(ArgParser),
-       List<TaskArgument> extendedArgs}) = Task;
-
-  /**
-   * The [config] paramater is **DEPRECATED**. Provide the [argParser] parameter
-   * instead.
-   */
   factory Task(dynamic taskDefinition(TaskContext ctx), {String description,
-    List<TaskArgument> extendedArgs, ArgParser argParser,
-    @deprecated void config(ArgParser)}) {
-
-    if(config != null) {
-      if(argParser != null) {
-        throw new ArgumentError('Cannot provide both an argParser and config.');
-      }
-
-      return new _TaskWithConfig(taskDefinition, description, extendedArgs, config);
-    }
+    List<TaskArgument> extendedArgs, ArgParser argParser}) {
 
     return new _TaskWithParser(taskDefinition, description,
         extendedArgs, argParser);
