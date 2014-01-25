@@ -1,6 +1,5 @@
 library test.hop_tasks.compiler;
 
-
 import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as pathos;
@@ -20,7 +19,7 @@ void main() {
       });
 
       test('bad input', () {
-        return _testCompiler(_badTestFile, targetType, RunResult.FAIL);
+        return _testCompiler(_badTestFile, targetType, RunResult.EXCEPTION);
       });
     });
 

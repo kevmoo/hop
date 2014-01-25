@@ -7,7 +7,7 @@ import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_tasks/process.dart';
 import '../test_util.dart';
 
-// TODO: support windows? Test on Linux?
+// TODO: support windows?
 // TODO: need to extend TestTaskContext to have logging events
 //       needed to verify output of commands, right?
 
@@ -33,7 +33,7 @@ Future _testProcessFail() {
 
   return runTaskInTestRunner(task)
       .then((RunResult rr) {
-        expect(rr, RunResult.FAIL);
+        expect(rr, RunResult.EXCEPTION);
       });
 }
 
