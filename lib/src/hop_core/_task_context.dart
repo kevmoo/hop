@@ -11,18 +11,6 @@ class _TaskContext extends _LoggerChild with TaskLogger implements TaskContext {
     assert(extendedArgs != null);
   }
 
-  _TaskContext._deprecated(_TaskContext sourceCtx, String name) :
-    this.arguments = null,
-    this.extendedArgs = const {},
-    super(sourceCtx._parent, _namePlusOne(sourceCtx._name, name));
-
-  /**
-   * **DEPRECATED** Use [getSubLogger] instead.
-   */
-  @deprecated
-  TaskContext getSubContext(String name) =>
-      new _DeprecatedSubTaskContext(this, name);
-
   /**
    * Terminates the current [Task] with a failure, explained by [message].
    */
@@ -69,12 +57,6 @@ class _LoggerChild extends TaskLogger {
       throw new DisposedError();
     }
   }
-}
-
-class _DeprecatedSubTaskContext extends _TaskContext implements TaskContext {
-
-  _DeprecatedSubTaskContext(_TaskContext parent, String name)
-      : super._deprecated(parent, name);
 }
 
 List<String> _namePlusOne(List<String> source, String oneMore) =>

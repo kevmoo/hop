@@ -139,14 +139,13 @@ Future _doDocsPopulate(TaskContext ctx, TempDir dir, Iterable<String> libs,
   args.addAll(libs);
   ctx.fine("Generating docs into: $dir");
 
-  var subCtx = ctx.getSubContext('dartdoc');
+  var subLogger = ctx.getSubLogger('dartdoc');
 
-  return startProcess(subCtx, getPlatformBin('dartdoc'), args)
+  return startProcess(subLogger, getPlatformBin('dartdoc'), args)
       .then((_) {
-        subCtx.dispose();
-
         if(postBuild != null) {
           return postBuild(ctx.getSubLogger('post-build'), dir.path);
         }
-      });
+      })
+      .whenComplete(() => subLogger.dispose());
 }

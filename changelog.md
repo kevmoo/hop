@@ -3,6 +3,7 @@
 ## 0.29.0-dev PRE-RELEASE
 
 * Removed deprecated items from `TaskRegistry`: `taskNames`, `hasTask`, `addSync`, `addAsync`
+* Removed `TaskContext.getSubContext`.
 
 ## 0.28.3+3 2014-01-25 (SDK 1.2.0-dev.1.0 r31918)
 

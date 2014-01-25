@@ -11,12 +11,6 @@ abstract class TaskContext implements TaskLogger {
   Map<String, dynamic> get extendedArgs;
 
   /**
-   * **DEPRECATED** Use [getSubLogger] instead.
-   */
-  @deprecated
-  TaskContext getSubContext(String name);
-
-  /**
    * Terminates the current [Task] with a failure, explained by [message].
    */
   void fail(String message);
