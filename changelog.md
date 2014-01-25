@@ -4,6 +4,11 @@
 
 * Removed deprecated items from `TaskRegistry`: `taskNames`, `hasTask`, `addSync`, `addAsync`
 
+## 0.28.3+3 2014-01-25 (SDK 1.2.0-dev.1.0 r31918)
+
+* Code formatting
+* Updated URLs to point to new repo: [https://github.com/dart-lang/hop]
+
 ## 0.28.3+1 2014-01-18 (SDK 1.1.1 r31822)
 
 * Better error message when running 'tool/hop_runner.dart' with an unexpected working directory.
