@@ -38,5 +38,5 @@ Future<List<String>> _getLibs() {
       .toList();
 }
 
-final _cfg = new dartdoc.DocsConfig('Hop', 'https://github.com/kevmoo/hop.dart',
+final _cfg = new dartdoc.DocsConfig('Hop', 'https://github.com/dart-lang/hop',
     'logo.png', 500, 304, (String libName) => libName.startsWith('hop'));

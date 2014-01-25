@@ -1,4 +1,4 @@
-![Hop!](https://raw.github.com/kevmoo/hop.dart/master/resource/logo.png)
+![Hop!](https://raw.github.com/dart-lang/hop/master/resource/logo.png)
 ## A Dart framework for reusable tasks
 
 [![Build Status](https://drone.io/github.com/kevmoo/hop.dart/status.png)](https://drone.io/github.com/kevmoo/hop.dart/latest) [![Stories in Ready](https://badge.waffle.io/kevmoo/hop.dart.png?label=ready)](http://waffle.io/kevmoo/hop.dart)
@@ -19,13 +19,13 @@
 
 The __The Hop task management system for Dart__ is hosted on [pub.dartlang.org](http://pub.dartlang.org/packages/hop). Add the __Hop__ package to your `pubspec.yaml` file, selecting a version range that works with your version of the SDK. _Always check the [Hop page](http://pub.dartlang.org/packages/hop) on pub to find the latest release._
 
-See the [changelog](https://github.com/kevmoo/hop.dart/blob/master/changelog.md) to find the version that works best for you.
+See the [changelog](https://github.com/dart-lang/hop/blob/master/changelog.md) to find the version that works best for you.
 
-If you'd like to track bleeding edge developments, you can reference the the [GitHub repository](https://github.com/kevmoo/hop.dart) directly:
+If you'd like to track bleeding edge developments, you can reference the the [GitHub repository](https://github.com/dart-lang/hop) directly:
 ```yaml
 dependencies:
   hop:
-    git: https://github.com/kevmoo/hop.dart.git
+    git: https://github.com/dart-lang/hop.git
 ```
 
 # Versioning
@@ -40,7 +40,7 @@ dependencies:
 
 * We're going to try to keep __Hop__ in line with the [latest integration build](https://gsdview.appspot.com/dart-editor-archive-integration/latest/) of the Dart SDK and Editor.
 * At this point, each SDK release tends to introduce breaking changes, which usually require breaking changes in __Hop__.
-* Keep an eye on the [changelog](https://github.com/kevmoo/hop.dart/blob/master/changelog.md) to see how __Hop__ aligns with each SDK release.
+* Keep an eye on the [changelog](https://github.com/dart-lang/hop/blob/master/changelog.md) to see how __Hop__ aligns with each SDK release.
 
 # The libraries
 

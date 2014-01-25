@@ -2,7 +2,7 @@ name: hop
 version: 0.28.3-dev+2
 author: Kevin Moore <kevmoo@google.com>
 description: Dart Task Framework
-homepage: https://github.com/kevmoo/hop.dart
+homepage: https://github.com/dart-lang/hop
 environment:
   sdk: '>=1.0.0 <2.0.0'
 documentation: http://kevmoo.github.io/hop.dart
