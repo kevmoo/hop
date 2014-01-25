@@ -53,77 +53,69 @@ void main() {
         });
   });
 
+  test('sub-logger', () {
 
-  void _testLogger(String name, TaskLogger getLogThing(String name, ctx)) {
+    var records = <HopEvent>[];
 
-    test(name, () {
+    var task = new Task((TaskContext ctx) {
+      ctx.info('info');
 
-      var records = <HopEvent>[];
+      var subLogger = ctx.getSubLogger('sub');
+      subLogger.warning('sub warn');
 
-      var task = new Task((TaskContext ctx) {
-        ctx.info('info');
+      var subsub = subLogger.getSubLogger('subsub');
+      subsub.severe('subsub severe');
 
-        var subLogger = getLogThing('sub', ctx);
-        subLogger.warning('sub warn');
-
-        var subsub = getLogThing('subsub', subLogger);
-        subsub.severe('subsub severe');
-
-        ctx.severe('severe');
-      });
-
-      return runTaskInTestRunner(task, eventLog: records, throwTaskExceptions: true)
-          .then((RunResult result) {
-            expect(result, same(RunResult.SUCCESS));
-
-            records.removeWhere((e) => e.level <= Level.FINE);
-
-            expect(records, orderedEquals(
-                [new HopEvent(Level.INFO, 'info', source: [TEST_TASK_NAME]),
-                 new HopEvent(Level.WARNING, 'sub warn', source: [TEST_TASK_NAME, 'sub']),
-                 new HopEvent(Level.SEVERE, 'subsub severe', source: [TEST_TASK_NAME, 'sub', 'subsub']),
-                 new HopEvent(Level.SEVERE, 'severe', source: [TEST_TASK_NAME])]));
-          });
+      ctx.severe('severe');
     });
 
-    test('$name - parent disposes child', () {
+    return runTaskInTestRunner(task, eventLog: records, throwTaskExceptions: true)
+        .then((RunResult result) {
+          expect(result, same(RunResult.SUCCESS));
 
-      var records = <HopEvent>[];
+          records.removeWhere((e) => e.level <= Level.FINE);
 
-      TaskContext ctx;
-      TaskLogger subLogger;
-      TaskLogger subsub;
+          expect(records, orderedEquals(
+              [new HopEvent(Level.INFO, 'info', source: [TEST_TASK_NAME]),
+               new HopEvent(Level.WARNING, 'sub warn', source: [TEST_TASK_NAME, 'sub']),
+               new HopEvent(Level.SEVERE, 'subsub severe', source: [TEST_TASK_NAME, 'sub', 'subsub']),
+               new HopEvent(Level.SEVERE, 'severe', source: [TEST_TASK_NAME])]));
+        });
+  });
 
-      var task = new Task((TaskContext val) {
-        ctx = val;
-        ctx.info('info');
+  test('sub-logger, parent disposes child', () {
 
-        subLogger = getLogThing('sub', ctx);
-        subLogger.warning('sub warn');
+    var records = <HopEvent>[];
 
-        subsub = getLogThing('subsub', subLogger);
-        subsub.severe('subsub severe');
+    TaskContext ctx;
+    TaskLogger subLogger;
+    TaskLogger subsub;
 
-        ctx.severe('severe');
-      });
+    var task = new Task((TaskContext val) {
+      ctx = val;
+      ctx.info('info');
 
-      return runTaskInTestRunner(task, eventLog: records, throwTaskExceptions: true)
-          .then((RunResult result) {
-            expect(result, same(RunResult.SUCCESS));
+      subLogger = ctx.getSubLogger('sub');
+      subLogger.warning('sub warn');
 
-            expect(ctx.isDisposed, isTrue);
-            expect(() => ctx.info('test'), throwsStateError);
+      subsub = subLogger.getSubLogger('subsub');
+      subsub.severe('subsub severe');
 
-            expect(subLogger.isDisposed, isTrue);
-            expect(() => subLogger.info('test'), throwsStateError);
+      ctx.severe('severe');
+    });
 
-            expect(subsub.isDisposed, isTrue);
-            expect(() => subsub.info('test'), throwsStateError);
-          });
-      });
-  }
+    return runTaskInTestRunner(task, eventLog: records, throwTaskExceptions: true)
+        .then((RunResult result) {
+          expect(result, same(RunResult.SUCCESS));
 
-  _testLogger('sub-logging', (name, ctx) => ctx.getSubLogger(name));
-  _testLogger('sub-context', (name, ctx) => ctx.getSubContext(name));
+          expect(ctx.isDisposed, isTrue);
+          expect(() => ctx.info('test'), throwsStateError);
 
+          expect(subLogger.isDisposed, isTrue);
+          expect(() => subLogger.info('test'), throwsStateError);
+
+          expect(subsub.isDisposed, isTrue);
+          expect(() => subsub.info('test'), throwsStateError);
+        });
+    });
 }
