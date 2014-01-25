@@ -121,7 +121,7 @@ void _printTaskTable(_Printer printer, TaskRegistry config) {
                      return task.description;
                    })
                    ];
-  final rows = Console.getTable(config.taskNames, columns);
+  final rows = Console.getTable(config.tasks.keys, columns);
   for (final r in rows) {
     printer('  ' + r);
   }

@@ -24,39 +24,6 @@ class TaskRegistry {
   bool get isFrozen => _frozen;
 
   /**
-   * **DEPRECATED** Use [tasks.keys] instead.
-   */
-  List<String> get taskNames {
-    _requireFrozen();
-    return _tasks.keys.toList();
-  }
-
-  /**
-   * **DEPRECATED** Use [tasks.containsKey] instead.
-   */
-  @deprecated
-  bool hasTask(String taskName) {
-    _requireFrozen();
-    return _tasks.containsKey(taskName);
-  }
-
-  /**
-   * **DEPRECATED** Use [addTask] instead.
-   */
-  @deprecated
-  Task addSync(String name, dynamic func(TaskContext ctx), {String description}) {
-    return addTask(name, new Task(func, description: description));
-  }
-
-  /**
-   * **DEPRECATED** Use [addTask] instead.
-   */
-  @deprecated
-  Task addAsync(String name, Future execFuture(TaskContext ctx), {String description}) {
-    return addTask(name, new Task(execFuture, description: description));
-  }
-
-  /**
    * [task] can be either an instance of [Task] or a [Function].
    *
    * If [task] is a [Function], it must take one argument: [TaskContext].

@@ -1,5 +1,9 @@
 # Changelog - Dart Hop Task Management Framework
 
+## 0.29.0-dev PRE-RELEASE
+
+* Removed deprecated items from `TaskRegistry`: `taskNames`, `hasTask`, `addSync`, `addAsync`
+
 ## 0.28.3+1 2014-01-18 (SDK 1.1.1 r31822)
 
 * Better error message when running 'tool/hop_runner.dart' with an unexpected working directory.

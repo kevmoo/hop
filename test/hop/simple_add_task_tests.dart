@@ -8,38 +8,6 @@ import '../test_util.dart';
 
 void main() {
 
-  test('old addAsync', () {
-    var reg = new TaskRegistry();
-
-    bool ran = false;
-
-    reg.addAsync('foo', (ctx) {
-      return new Future(() => ran = true);
-    }, description: 'async foo');
-
-    return runRegistry(reg, ['foo'])
-        .then((RunResult rr) {
-          expect(rr, RunResult.SUCCESS);
-          expect(ran, isTrue);
-        });
-  });
-
-  test('old addSsync', () {
-    var reg = new TaskRegistry();
-
-    bool ran = false;
-
-    reg.addSync('foo', (ctx) {
-      ran = true;
-    }, description: 'sync foo');
-
-    return runRegistry(reg, ['foo'])
-        .then((RunResult rr) {
-          expect(rr, RunResult.SUCCESS);
-          expect(ran, isTrue);
-        });
-  });
-
   test('addTask', () {
     var reg = new TaskRegistry();
 
