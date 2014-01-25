@@ -29,6 +29,31 @@
 <h2><strong>stack_trace.src.utils</strong> library</h2>
 <div>
 <h3>Functions</h3>
+<div class="method"><h4 id="flatten">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a> <strong>flatten</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html" ref="external">Iterable</a> nested) <a class="anchor-link" href="#flatten"
+              title="Permalink to flatten">#</a></h4>
+<div class="doc">
+<p>Flattens nested lists inside an iterable into a single list containing only
+non-list elements.</p>
+<pre class="source">
+List flatten(Iterable nested) {
+ var result = [];
+ helper(list) {
+   for (var element in list) {
+     if (element is List) {
+       helper(element);
+     } else {
+       result.add(element);
+     }
+   }
+ }
+ helper(nested);
+ return result;
+}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="padRight">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>padRight</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> string, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> length) <a class="anchor-link" href="#padRight"

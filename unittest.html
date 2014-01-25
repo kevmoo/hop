@@ -35,9 +35,9 @@
 <h2>Concepts</h2><ul><li>
 <p><strong>Tests</strong>: Tests are specified via the top-level function <a class="crossref" href="unittest.html#test">test</a>, they can be
    organized together using <a class="crossref" href="unittest.html#group">group</a>.</p></li><li>
-<p><strong>Checks</strong>: Test expectations can be specified via <a class="crossref" href="matcher.html#expect">expect</a></p></li><li>
-<p><strong>Matchers</strong>: <a class="crossref" href="matcher.html#expect">expect</a> assertions are written declaratively using the
-   <a class="crossref" href="matcher/Matcher.html">Matcher</a> class.</p></li><li>
+<p><strong>Checks</strong>: Test expectations can be specified via <a class="crossref" href="unittest.matcher.html#expect">expect</a></p></li><li>
+<p><strong>Matchers</strong>: <a class="crossref" href="unittest.matcher.html#expect">expect</a> assertions are written declaratively using the
+   <a class="crossref" href="unittest.matcher/Matcher.html">Matcher</a> class.</p></li><li>
 <p><strong>Configuration</strong>: The framework can be adapted by setting
    <a class="crossref" href="unittest.html#unittestConfiguration">unittestConfiguration</a> with a <a class="crossref" href="unittest/Configuration.html">Configuration</a>. See the other libraries
    in the <code>unittest</code> package for alternative implementations of
@@ -140,7 +140,7 @@ features or fixes to the current spec (e.g. see
 <a href="http://dartbug.com/2706">Issue 2706</a>).</p></div>
 <h3>Exports</h3>
 <ul>
-<ul><a href="matcher.html">matcher</a></ul>
+<ul><a href="unittest.matcher.html">unittest.matcher</a></ul>
 </ul>
 <div>
 <h3>Properties</h3>
@@ -181,6 +181,7 @@ const         <strong>ERROR</strong> <a class="anchor-link"
             title="Permalink to ERROR">#</a>
         </h4>
         <div class="doc">
+<p>Result string for an test case with an error.</p>
 <pre class="source">
 const ERROR = 'error'
 </pre>
@@ -193,6 +194,7 @@ const         <strong>FAIL</strong> <a class="anchor-link"
             title="Permalink to FAIL">#</a>
         </h4>
         <div class="doc">
+<p>Result string for a failing test case.</p>
 <pre class="source">
 const FAIL  = 'fail'
 </pre>
@@ -247,7 +249,7 @@ const         <strong>PASS</strong> <a class="anchor-link"
             title="Permalink to PASS">#</a>
         </h4>
         <div class="doc">
-<p>Test case result strings. </p>
+<p>Result string for a passing test case.</p>
 <pre class="source">
 const PASS  = 'pass'
 </pre>

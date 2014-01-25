@@ -51,13 +51,13 @@ abstract class EntityValidator {
    var future = fileSha1Hex(entity)
        .then((String sha1) {
          if(sha1 == targetSha) {
-           return [];
+           return null;
          } else {
-           return ['content does not match: $entity'];
+           return 'content does not match: $entity';
          }
        });
 
-   return _streamFromIterableFuture(future);
+   return _oneOrNoneOnNull(future);
  }
 
  static Stream&lt;String&gt; validateDirectoryFromMap(FileSystemEntity entity,
@@ -140,13 +140,13 @@ static Stream&lt;String&gt; validateFileContentSha(FileSystemEntity entity,
  var future = fileSha1Hex(entity)
      .then((String sha1) {
        if(sha1 == targetSha) {
-         return [];
+         return null;
        } else {
-         return ['content does not match: $entity'];
+         return 'content does not match: $entity';
        }
      });
 
- return _streamFromIterableFuture(future);
+ return _oneOrNoneOnNull(future);
 }
 </pre>
 </div>

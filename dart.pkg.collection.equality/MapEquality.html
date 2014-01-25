@@ -1,0 +1,193 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>MapEquality&lt;K, V&gt; class / dart.pkg.collection.equality Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="dart.pkg.collection.equality" data-type="MapEquality&amp;lt;K, V&amp;gt;">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../dart.pkg.collection.equality.html">dart.pkg.collection.equality</a> &rsaquo; <a href="../dart.pkg.collection.equality/MapEquality.html">MapEquality&lt;K, V&gt;</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>MapEquality&lt;K, V&gt;</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Equality on maps.</p>
+<p>Two maps are equal if they have the same number of entries, and if the
+entries of the two maps are pairwise equal on both key and value.</p>
+<pre class="source">
+class MapEquality&lt;K, V&gt; implements Equality&lt;Map&lt;K, V&gt;&gt; {
+ final Equality&lt;K&gt; _keyEquality;
+ final Equality&lt;V&gt; _valueEquality;
+ const MapEquality({ Equality&lt;K&gt; keys : const DefaultEquality(),
+                     Equality&lt;V&gt; values : const DefaultEquality() })
+     : _keyEquality = keys, _valueEquality = values;
+
+ bool equals(Map&lt;K, V&gt; e1, Map&lt;K, V&gt; e2) {
+   if (identical(e1, e2)) return true;
+   if (e1 == null || e2 == null) return false;
+   int length = e1.length;
+   if (length != e2.length) return false;
+   Map&lt;_MapEntry, int&gt; equalElementCounts = new HashMap();
+   for (K key in e1.keys) {
+     _MapEntry entry = new _MapEntry(this, key, e1[key]);
+     int count = equalElementCounts[entry];
+     if (count == null) count = 0;
+     equalElementCounts[entry] = count + 1;
+   }
+   for (K key in e2.keys) {
+     _MapEntry entry = new _MapEntry(this, key, e2[key]);
+     int count = equalElementCounts[entry];
+     if (count == null || count == 0) return false;
+     equalElementCounts[entry] = count - 1;
+   }
+   return true;
+ }
+
+ int hash(Map&lt;K, V&gt; map) {
+   int hash = 0;
+   for (K key in map.keys) {
+     int keyHash = _keyEquality.hash(key);
+     int valueHash = _valueEquality.hash(map[key]);
+     hash = (hash + 3 * keyHash + 7 * valueHash) &amp; _HASH_MASK;
+   }
+   hash = (hash + (hash &lt;&lt; 3)) &amp; _HASH_MASK;
+   hash ^= (hash &gt;&gt; 11);
+   hash = (hash + (hash &lt;&lt; 15)) &amp; _HASH_MASK;
+   return hash;
+ }
+
+ bool isValidKey(Object o) =&gt; o is Map&lt;K, V&gt;;
+}
+</pre>
+</div>
+<h3>Implements</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../dart.pkg.collection.equality/Equality.html">Equality&lt;Map&lt;K, V&gt;&gt;</a></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+const <strong>MapEquality</strong>({<a href="../dart.pkg.collection.equality/Equality.html">Equality</a>&lt;<a href="../dart.pkg.collection.equality/MapEquality.html">K</a>&gt; keys: const DefaultEquality(), <a href="../dart.pkg.collection.equality/Equality.html">Equality</a>&lt;<a href="../dart.pkg.collection.equality/MapEquality.html">V</a>&gt; values: const DefaultEquality()}) <a class="anchor-link" href="#"
+              title="Permalink to MapEquality&lt;K, V&gt;.MapEquality">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
+<pre class="source">
+const MapEquality({ Equality&lt;K&gt; keys : const DefaultEquality(),
+                   Equality&lt;V&gt; values : const DefaultEquality() })
+   : _keyEquality = keys, _valueEquality = values;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="equals">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>equals</strong>(<a href="http://api.dartlang.org/dart_core/Map.html" ref="external">Map</a>&lt;<a href="../dart.pkg.collection.equality/MapEquality.html">K</a>, <a href="../dart.pkg.collection.equality/MapEquality.html">V</a>&gt; e1, <a href="http://api.dartlang.org/dart_core/Map.html" ref="external">Map</a>&lt;<a href="../dart.pkg.collection.equality/MapEquality.html">K</a>, <a href="../dart.pkg.collection.equality/MapEquality.html">V</a>&gt; e2) <a class="anchor-link" href="#equals"
+              title="Permalink to MapEquality&lt;K, V&gt;.equals">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Compare two elements for being equal.</p>
+<p>This should be a proper equality relation.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../dart.pkg.collection.equality/Equality.html">Equality</a>&lt;<a href="http://api.dartlang.org/dart_core/Map.html" ref="external">Map</a>&lt;<a href="../dart.pkg.collection.equality/MapEquality.html">K</a>, <a href="../dart.pkg.collection.equality/MapEquality.html">V</a>&gt;&gt; </div></div>
+<pre class="source">
+bool equals(Map&lt;K, V&gt; e1, Map&lt;K, V&gt; e2) {
+ if (identical(e1, e2)) return true;
+ if (e1 == null || e2 == null) return false;
+ int length = e1.length;
+ if (length != e2.length) return false;
+ Map&lt;_MapEntry, int&gt; equalElementCounts = new HashMap();
+ for (K key in e1.keys) {
+   _MapEntry entry = new _MapEntry(this, key, e1[key]);
+   int count = equalElementCounts[entry];
+   if (count == null) count = 0;
+   equalElementCounts[entry] = count + 1;
+ }
+ for (K key in e2.keys) {
+   _MapEntry entry = new _MapEntry(this, key, e2[key]);
+   int count = equalElementCounts[entry];
+   if (count == null || count == 0) return false;
+   equalElementCounts[entry] = count - 1;
+ }
+ return true;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="hash">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> <strong>hash</strong>(<a href="http://api.dartlang.org/dart_core/Map.html" ref="external">Map</a>&lt;<a href="../dart.pkg.collection.equality/MapEquality.html">K</a>, <a href="../dart.pkg.collection.equality/MapEquality.html">V</a>&gt; map) <a class="anchor-link" href="#hash"
+              title="Permalink to MapEquality&lt;K, V&gt;.hash">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Get a hashcode of an element.</p>
+<p>The hashcode should be compatible with <a class="crossref" href="../dart.pkg.collection.equality/MapEquality.html#equals">equals</a>, so that if
+<code>equals(a, b)</code> then <code>hash(a) == hash(b)</code>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../dart.pkg.collection.equality/Equality.html">Equality</a>&lt;<a href="http://api.dartlang.org/dart_core/Map.html" ref="external">Map</a>&lt;<a href="../dart.pkg.collection.equality/MapEquality.html">K</a>, <a href="../dart.pkg.collection.equality/MapEquality.html">V</a>&gt;&gt; </div></div>
+<pre class="source">
+int hash(Map&lt;K, V&gt; map) {
+ int hash = 0;
+ for (K key in map.keys) {
+   int keyHash = _keyEquality.hash(key);
+   int valueHash = _valueEquality.hash(map[key]);
+   hash = (hash + 3 * keyHash + 7 * valueHash) &amp; _HASH_MASK;
+ }
+ hash = (hash + (hash &lt;&lt; 3)) &amp; _HASH_MASK;
+ hash ^= (hash &gt;&gt; 11);
+ hash = (hash + (hash &lt;&lt; 15)) &amp; _HASH_MASK;
+ return hash;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isValidKey">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>isValidKey</strong>(<a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> o) <a class="anchor-link" href="#isValidKey"
+              title="Permalink to MapEquality&lt;K, V&gt;.isValidKey">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Test whether an object is a valid argument to <a class="crossref" href="../dart.pkg.collection.equality/MapEquality.html#equals">equals</a> and <a class="crossref" href="../dart.pkg.collection.equality/MapEquality.html#hash">hash</a>.</p>
+<p>Some implementations may be restricted to only work on specific types
+of objects.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../dart.pkg.collection.equality/Equality.html">Equality</a>&lt;<a href="http://api.dartlang.org/dart_core/Map.html" ref="external">Map</a>&lt;<a href="../dart.pkg.collection.equality/MapEquality.html">K</a>, <a href="../dart.pkg.collection.equality/MapEquality.html">V</a>&gt;&gt; </div></div>
+<pre class="source">
+bool isValidKey(Object o) =&gt; o is Map&lt;K, V&gt;;
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

@@ -27,6 +27,15 @@
 </div>
 <div class="content">
 <h2><strong>bot</strong> library</h2>
+<h3>Exports</h3>
+<ul>
+<ul><a href="bot.typedefs.html">bot.typedefs</a></ul>
+<ul><a href="bot.require.html">bot.require</a></ul>
+<ul><a href="bot.errors.html">bot.errors</a></ul>
+<ul><a href="bot.throttled_stream.html">bot.throttled_stream</a></ul>
+<ul><a href="bot.expand_stream.html">bot.expand_stream</a></ul>
+<ul><a href="bot.graph.html">bot.graph</a></ul>
+</ul>
 <div>
 <h3>Properties</h3>
 <div class="field"><h4 id="protected">
@@ -66,14 +75,14 @@ math.Random get rnd {
 <h3>Functions</h3>
 <div class="method"><h4 id="lerp">
 <button class="show-code">Code</button>
-dynamic <strong>lerp</strong>(<a href="http://api.dartlang.org/dart_core/num.html" ref="external">num</a> a, <a href="http://api.dartlang.org/dart_core/num.html" ref="external">num</a> b, <a href="http://api.dartlang.org/dart_core/num.html" ref="external">num</a> x) <a class="anchor-link" href="#lerp"
+<a href="http://api.dartlang.org/dart_core/num.html" ref="external">num</a> <strong>lerp</strong>(<a href="http://api.dartlang.org/dart_core/num.html" ref="external">num</a> a, <a href="http://api.dartlang.org/dart_core/num.html" ref="external">num</a> b, <a href="http://api.dartlang.org/dart_core/num.html" ref="external">num</a> x) <a class="anchor-link" href="#lerp"
               title="Permalink to lerp">#</a></h4>
 <div class="doc">
 <p>Performs linear interpolation between values a and b. Returns the value
 between a and b proportional to x (when x is between 0 and 1. When x is
 outside this range, the return value is a linear extrapolation).</p>
 <pre class="source">
-lerp(num a, num b, num x) {
+num lerp(num a, num b, num x) {
  requireArgument(isValidNumber(a), 'a');
  requireArgument(isValidNumber(b), 'b');
  requireArgument(isValidNumber(x), 'x');
@@ -122,85 +131,31 @@ Enumerable $(Iterable source) {
 </pre>
 </div>
 </div>
-<div class="method"><h4 id="requireArgumentContainsPattern">
+<div class="method"><h4 id="getDelayedResult">
 <button class="show-code">Code</button>
-void <strong>requireArgumentContainsPattern</strong>(<a href="http://api.dartlang.org/dart_core/Pattern.html" ref="external">Pattern</a> pattern, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> argValue, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> argName) <a class="anchor-link" href="#requireArgumentContainsPattern"
-              title="Permalink to requireArgumentContainsPattern">#</a></h4>
+<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a>&lt;dynamic&gt; <strong>getDelayedResult</strong>(input) <a class="anchor-link" href="#getDelayedResult"
+              title="Permalink to getDelayedResult">#</a></h4>
 <div class="doc">
+<p>Designed to allow methods to support a variety of "delayed" inputs.</p>
+<p>If the 
+<span class="param">input</span> is a <code>Future</code>, <a class="crossref" href="bot.html#getDelayedResult">getDelayedResult</a> waits for a result.</p>
+<p>If the 
+<span class="param">input</span> is a <a class="crossref" href="http://api.dartlang.org/dart_core/Function.html">Function</a>, <a class="crossref" href="bot.html#getDelayedResult">getDelayedResult</a> evaluates it for a result.</p>
+<p>The result in both cases is provided back to <a class="crossref" href="bot.html#getDelayedResult">getDelayedResult</a> evaluated again.</p>
+<p>If the original 
+<span class="param">input</span>--or once a recursive 
+<span class="param">input</span>--is neigther a <code>Future</code>
+nor a <a class="crossref" href="http://api.dartlang.org/dart_core/Function.html">Function</a> that value is returned wrapped in a <code>Future</code>.</p>
 <pre class="source">
-void requireArgumentContainsPattern(Pattern pattern, String argValue, String argName) {
- if(pattern == null) {
-   throw new InvalidOperationError("That's just sad. No null pattern");
+async.Future&lt;dynamic&gt; getDelayedResult(dynamic input) {
+ if(input is Function) {
+   input = new async.Future(input);
  }
- requireArgumentNotNull(argValue, argName);
- if(!argValue.contains(pattern)) {
-   throw new DetailedArgumentError(argName,
-       'The value "$argValue" does not contain the pattern "${pattern}"');
- }
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="requireArgumentNotNullOrEmpty">
-<button class="show-code">Code</button>
-void <strong>requireArgumentNotNullOrEmpty</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> argument, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> argName) <a class="anchor-link" href="#requireArgumentNotNullOrEmpty"
-              title="Permalink to requireArgumentNotNullOrEmpty">#</a></h4>
-<div class="doc">
-<pre class="source">
-void requireArgumentNotNullOrEmpty(String argument, String argName) {
- _metaRequireArgumentNotNullOrEmpty(argName);
- if(argument == null) {
-   throw new NullArgumentError(argName);
- }
- else if(argument.length == 0) {
-   throw new DetailedArgumentError(argName, 'cannot be an empty string');
- }
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="requireArgumentNotNull">
-<button class="show-code">Code</button>
-void <strong>requireArgumentNotNull</strong>(argument, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> argName) <a class="anchor-link" href="#requireArgumentNotNull"
-              title="Permalink to requireArgumentNotNull">#</a></h4>
-<div class="doc">
-<pre class="source">
-void requireArgumentNotNull(argument, String argName) {
- _metaRequireArgumentNotNullOrEmpty(argName);
- if(argument == null) {
-   throw new NullArgumentError(argName);
- }
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="requireArgument">
-<button class="show-code">Code</button>
-void <strong>requireArgument</strong>(<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> truth, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> argName, [<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> message]) <a class="anchor-link" href="#requireArgument"
-              title="Permalink to requireArgument">#</a></h4>
-<div class="doc">
-<pre class="source">
-void requireArgument(bool truth, String argName, [String message]) {
- _metaRequireArgumentNotNullOrEmpty(argName);
- if(!truth) {
-   if(message == null || message.isEmpty) {
-     message = 'value was invalid';
-   }
-   throw new DetailedArgumentError(argName, message);
- }
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="require">
-<button class="show-code">Code</button>
-void <strong>require</strong>(<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> truth, [<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> message]) <a class="anchor-link" href="#require"
-              title="Permalink to require">#</a></h4>
-<div class="doc">
-<pre class="source">
-void require(bool truth, [String message]) {
- if(!truth) {
-   throw new Exception(message);
+
+ if(input is async.Future) {
+   return input.then((value) =&gt; getDelayedResult(value));
+ } else {
+   return new async.Future.value(input);
  }
 }
 </pre>
@@ -376,12 +331,6 @@ void require(bool truth, [String message]) {
           
           <div class="type">
           <h4>
-            <a href="bot/TarjanCycleDetect.html"><strong>TarjanCycleDetect&lt;TNode&gt;</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
             <a href="bot/Tuple.html"><strong>Tuple&lt;T1, T2&gt;</strong></a>
           </h4>
           </div>
@@ -406,73 +355,10 @@ void require(bool truth, [String message]) {
           
 </div>
 <div>
-<h3>Typedefs</h3>
-          <div class="type">
-          <h4>
-            <a href="bot/Action0.html"><strong>Action0</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="bot/Action1.html"><strong>Action1&lt;T&gt;</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="bot/Action2.html"><strong>Action2&lt;T1, T2&gt;</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="bot/Action3.html"><strong>Action3&lt;T1, T2, T3&gt;</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="bot/Func.html"><strong>Func&lt;T&gt;</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="bot/Func1.html"><strong>Func1&lt;T1, TR&gt;</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="bot/Func2.html"><strong>Func2&lt;T1, T2, TR&gt;</strong></a>
-          </h4>
-          </div>
-          
-</div>
-<div>
 <h3>Exceptions</h3>
           <div class="type">
           <h4>
-            <a href="bot/DetailedArgumentError.html"><strong>DetailedArgumentError</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
             <a href="bot/DisposedError.html"><strong>DisposedError</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="bot/InvalidOperationError.html"><strong>InvalidOperationError</strong></a>
-          </h4>
-          </div>
-          
-          <div class="type">
-          <h4>
-            <a href="bot/NullArgumentError.html"><strong>NullArgumentError</strong></a>
           </h4>
           </div>
           

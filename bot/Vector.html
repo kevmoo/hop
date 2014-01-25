@@ -37,14 +37,6 @@
 class Vector&lt;T extends num&gt; extends Coordinate&lt;T&gt; {
  const Vector([T x = 0, T y = 0]) : super(x,y);
 
- /**
-  * Computes the length of this [Vector].
-  *
-  * Use [magnitude] instead.
-  **/
- @deprecated
- double get length =&gt; this.magnitude;
-
  Vector get normal =&gt; this.scale(1 / this.magnitude);
 
  /**
@@ -178,21 +170,6 @@ bool get isValid =&gt; isValidNumber(x) &amp;&amp; isValidNumber(y);
 </pre>
 </div>
 </div>
-<div class="field"><h4 id="length">
-<button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/double.html" ref="external">double</a>         <strong>length</strong> <a class="anchor-link"
-            href="#length"
-            title="Permalink to Vector&lt;T&gt;.length">#</a>
-        </h4>
-        <div class="doc">
-<p>Computes the length of this <a class="crossref" href="../bot/Vector.html">Vector</a>.</p>
-<p>Use <a class="crossref" href="http://api.dartlang.org/dart_math/Point.html#magnitude">magnitude</a> instead.</p>
-<pre class="source">
-@deprecated
-double get length =&gt; this.magnitude;
-</pre>
-</div>
-</div>
 <div class="field inherited"><h4 id="magnitude">
 <button class="show-code">Code</button>
 final <a href="http://api.dartlang.org/dart_core/double.html" ref="external">double</a>         <strong>magnitude</strong> <a class="anchor-link"
@@ -289,27 +266,10 @@ Vector&lt;T&gt; operator *(num magnitude) =&gt;
 <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>operator ==</strong>(other) <a class="anchor-link" href="#=="
               title="Permalink to Vector&lt;T&gt;.operator ==">#</a></h4>
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_math/Point.html" ref="external">Point</a> </div><div class="doc">
-<div class="inherited">
-<p>The equality operator.</p>
-<p>The default behavior for all <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a>s is to return true if and
-only if <code>this</code> and 
-<span class="param">other</span> are the same object.</p>
-<p>Override this method to specify a different equality relation on
-a class. The overriding method must still be an equivalence relation.
-That is, it must be:</p><ul><li>
-<p>Total: It must return a boolean for all arguments. It should never throw
-   or return <code>null</code>.</p></li><li>
-<p>Reflexive: For all objects <code>o</code>, <code>o == o</code> must be true.</p></li><li>
-<p>Symmetric: For all objects <code>o1</code> and <code>o2</code>, <code>o1 == o2</code> and <code>o2 == o1</code> must
-   either both be true, or both be false.</p></li><li>
-<p>Transitive: For all objects <code>o1</code>, <code>o2</code>, and <code>o3</code>, if <code>o1 == o2</code> and
-   <code>o2 == o3</code> are true, then <code>o1 == o3</code> must be true.</p></li></ul>
-<p>The method should also be consistent over time, so equality of two objects
-should not change over time, or at least only change if one of the objects
-was modified.</p>
-<p>If a subclass overrides the equality operator it should override
-the <a class="crossref" href="http://api.dartlang.org/dart_math/Point.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
+<p>A <code>Point</code> is only equal to another <code>Point</code> with the same coordinates.</p>
+<p>This point is equal to <code>other</code> if, and only if,
+<code>other</code> is a <code>Point</code> with
+<code>x</code> equal to <code>other.x</code> and <code>y</code> equal to <code>other.y</code>.</p>
 <pre class="source">
 bool operator ==(other) {
  if (other is !Point) return false;
@@ -369,19 +329,6 @@ Angle zero points in the +X direction, 90 degrees points in the +Y
 direction (down) and from there we grow clockwise.</p>
 <pre class="source">
 num getAngle (Vector other) =&gt; other.angle - angle;
-</pre>
-</div>
-</div>
-<div class="method inherited"><h4 id="getDistance">
-<button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/double.html" ref="external">double</a> <strong>getDistance</strong>(<a href="http://api.dartlang.org/dart_math/Point.html" ref="external">Point</a> other) <a class="anchor-link" href="#getDistance"
-              title="Permalink to Vector&lt;T&gt;.getDistance">#</a></h4>
-<div class="inherited-from">inherited from <a href="../bot/Coordinate.html">Coordinate</a> </div><div class="doc">
-<p>Computes the distance to another <a class="crossref" href="../bot/Coordinate.html">Coordinate</a>.</p>
-<p>Use <a class="crossref" href="http://api.dartlang.org/dart_math/Point.html#distanceTo">distanceTo</a> instead.</p>
-<pre class="source">
-@deprecated
-double getDistance (math.Point other) =&gt; distanceTo(other);
 </pre>
 </div>
 </div>

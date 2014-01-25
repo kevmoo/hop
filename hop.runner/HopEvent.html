@@ -40,8 +40,9 @@ class HopEvent {
 
  bool get isPrint =&gt; logger.isEmpty;
 
- const HopEvent.print(this.message) :
-   this.level = Level.INFO, this.logger = const [];
+ const HopEvent.print(this.message)
+     : this.level = Level.INFO,
+       this.logger = const [];
 
  HopEvent(this.level, this.message, {List&lt;String&gt; source}) :
    this.logger = source == null ?
@@ -93,8 +94,9 @@ const <strong>HopEvent.print</strong>(<a href="http://api.dartlang.org/dart_core
               title="Permalink to HopEvent.HopEvent.print">#</a></h4>
 <div class="doc">
 <pre class="source">
-const HopEvent.print(this.message) :
- this.level = Level.INFO, this.logger = const [];
+const HopEvent.print(this.message)
+   : this.level = Level.INFO,
+     this.logger = const [];
 </pre>
 </div>
 </div>

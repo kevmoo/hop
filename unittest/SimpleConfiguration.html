@@ -67,10 +67,6 @@ class SimpleConfiguration extends Configuration {
  // we do with this List.
  final _testLogBuffer = &lt;Pair&lt;String, StackTrace&gt;&gt;[];
 
- /// How long a [TestCase] can run before it is considered an error.
- /// A [timeout] value of [:null:] means that the limit is infinite.
- Duration timeout = const Duration(minutes: 2);
-
  /**
   * The constructor sets up a failure handler for [expect] that redirects
   * [expect] failures to [onExpectFailure].
@@ -248,8 +244,8 @@ class SimpleConfiguration extends Configuration {
 new <strong>SimpleConfiguration</strong>() <a class="anchor-link" href="#"
               title="Permalink to SimpleConfiguration.SimpleConfiguration">#</a></h4>
 <div class="doc">
-<p>The constructor sets up a failure handler for <a class="crossref" href="../matcher.html#expect">expect</a> that redirects
-<a class="crossref" href="../matcher.html#expect">expect</a> failures to <a class="crossref" href="../unittest/SimpleConfiguration.html#onExpectFailure">onExpectFailure</a>.</p>
+<p>The constructor sets up a failure handler for <a class="crossref" href="../unittest.matcher.html#expect">expect</a> that redirects
+<a class="crossref" href="../unittest.matcher.html#expect">expect</a> failures to <a class="crossref" href="../unittest/SimpleConfiguration.html#onExpectFailure">onExpectFailure</a>.</p>
 <pre class="source">
 SimpleConfiguration() : super.blank() {
  configureExpectFailureHandler(new _ExpectFailureHandler(this));
@@ -299,7 +295,7 @@ String get name =&gt; 'Configuration';
         </h4>
         <div class="doc">
 <p>If true (the default), then tests will stop after the first failed
-<a class="crossref" href="../matcher.html#expect">expect</a>. If false, failed <a class="crossref" href="../matcher.html#expect">expect</a>s will not cause the test
+<a class="crossref" href="../unittest.matcher.html#expect">expect</a>. If false, failed <a class="crossref" href="../unittest.matcher.html#expect">expect</a>s will not cause the test
 to stop (other exceptions will still terminate the test).</p>
 <pre class="source">
 bool stopTestOnExpectFailure = true
@@ -319,15 +315,15 @@ bool throwOnTestFailures = true
 </pre>
 </div>
 </div>
-<div class="field"><h4 id="timeout">
+<div class="field inherited"><h4 id="timeout">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/Duration.html" ref="external">Duration</a>         <strong>timeout</strong> <a class="anchor-link"
             href="#timeout"
             title="Permalink to SimpleConfiguration.timeout">#</a>
         </h4>
-        <div class="doc">
+        <div class="inherited-from">inherited from <a href="../unittest/Configuration.html">Configuration</a> </div><div class="doc">
 <p>How long a <a class="crossref" href="../unittest/TestCase.html">TestCase</a> can run before it is considered an error.
-A <a class="crossref" href="../unittest/SimpleConfiguration.html#timeout">timeout</a> value of <code>null</code> means that the limit is infinite.</p>
+A <code>timeout</code> value of <code>null</code> means that the limit is infinite.</p>
 <pre class="source">
 Duration timeout = const Duration(minutes: 2)
 </pre>

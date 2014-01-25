@@ -50,14 +50,14 @@ abstract class Configuration {
  Configuration.blank();
 
  /**
-  * If [true], tests are started automatically. Otherwise [runTests]
+  * If [:true:], tests are started automatically. Otherwise [runTests]
   * must be called explicitly after tests are set up.
   */
  bool get autoStart =&gt; true;
 
  /// How long a [TestCase] can run before it is considered an error.
  /// A [timeout] value of [:null:] means that the limit is infinite.
- Duration get timeout =&gt; const Duration(minutes: 2);
+ Duration timeout = const Duration(minutes: 2);
 
  /**
   * Called as soon as the unittest framework becomes initialized. This is done
@@ -160,7 +160,7 @@ bool get autoStart =&gt; true;
 </div>
 <div class="field"><h4 id="timeout">
 <button class="show-code">Code</button>
-final <a href="http://api.dartlang.org/dart_core/Duration.html" ref="external">Duration</a>         <strong>timeout</strong> <a class="anchor-link"
+<a href="http://api.dartlang.org/dart_core/Duration.html" ref="external">Duration</a>         <strong>timeout</strong> <a class="anchor-link"
             href="#timeout"
             title="Permalink to Configuration.timeout">#</a>
         </h4>
@@ -168,7 +168,7 @@ final <a href="http://api.dartlang.org/dart_core/Duration.html" ref="external">D
 <p>How long a <a class="crossref" href="../unittest/TestCase.html">TestCase</a> can run before it is considered an error.
 A <a class="crossref" href="../unittest/Configuration.html#timeout">timeout</a> value of <code>null</code> means that the limit is infinite.</p>
 <pre class="source">
-Duration get timeout =&gt; const Duration(minutes: 2);
+Duration timeout = const Duration(minutes: 2)
 </pre>
 </div>
 </div>

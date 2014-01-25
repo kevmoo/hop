@@ -29,46 +29,6 @@
 <h2><strong>hop.shared</strong> library</h2>
 <div>
 <h3>Functions</h3>
-<div class="method"><h4 id="topoSort">
-<button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a> <strong>topoSort</strong>(<a href="http://api.dartlang.org/dart_core/Map.html" ref="external">Map</a>&lt;dynamic, <a href="http://api.dartlang.org/dart_core/Iterable.html" ref="external">Iterable</a>&lt;dynamic&gt;&gt; dependencies) <a class="anchor-link" href="#topoSort"
-              title="Permalink to topoSort">#</a></h4>
-<div class="doc">
-<pre class="source">
-List topoSort(Map&lt;dynamic, Iterable&lt;dynamic&gt;&gt; dependencies) {
- requireArgumentNotNull(dependencies, 'dependencies');
-
- var graph = new _Graph(dependencies);
-
- var items = new LinkedHashSet();
-
- int targetCount = graph._map.length;
-
- while(items.length &lt; targetCount) {
-
-   var zeros = graph._map.values
-       .where((_GraphNode node) {
-         return !items.contains(node.value) &amp;&amp;
-             node.outNodes
-             .where((node) =&gt; !items.contains(node.value))
-             .isEmpty;
-       })
-       .map((node) =&gt; node.value)
-       .toList();
-
-   if(zeros.isEmpty) throw new ArgumentError('There is a loop in the map');
-
-   for(var item in zeros) {
-     var added = items.add(item);
-     assert(added);
-   }
- }
-
- return items.toList();
-}
-</pre>
-</div>
-</div>
 <div class="method"><h4 id="lastIndexWhere">
 <button class="show-code">Code</button>
 <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> <strong>lastIndexWhere</strong>(<a href="http://api.dartlang.org/dart_core/Iterable.html" ref="external">Iterable</a> source, <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> predicate(element)) <a class="anchor-link" href="#lastIndexWhere"
@@ -79,8 +39,8 @@ int lastIndexWhere(Iterable source, bool predicate(dynamic element)) {
 
  var foundIndex = -1;
  var currentIndex = 0;
- for(var e in source) {
-   if(predicate(e)) {
+ for (var e in source) {
+   if (predicate(e)) {
      foundIndex = currentIndex;
    }
    currentIndex++;

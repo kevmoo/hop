@@ -73,6 +73,7 @@ class Trace implements StackTrace {
  /// a [Trace], it will be returned as-is.
  factory Trace.from(StackTrace trace) {
    if (trace is Trace) return trace;
+   if (trace is Chain) return trace.toTrace();
    return new LazyTrace(() =&gt; new Trace.parse(trace.toString()));
  }
 
@@ -153,9 +154,14 @@ class Trace implements StackTrace {
          .where((line) =&gt; line != '[native code]')
          .map((line) =&gt; new Frame.parseFirefox(line)));
 
- /// Parses this package's a string representation of a stack trace.
+ /// Parses this package's string representation of a stack trace.
+ ///
+ /// This also parses string representations of [Chain]s. They parse to the
+ /// same trace that [Chain.toTrace] would return.
  Trace.parseFriendly(String trace)
      : this(trace.trim().split("\n")
+         // Filter out asynchronous gaps from [Chain]s.
+         .where((line) =&gt; !line.startsWith('====='))
          .map((line) =&gt; new Frame.parseFriendly(line)));
 
  /// Returns a new [Trace] comprised of [frames].
@@ -172,10 +178,13 @@ class Trace implements StackTrace {
  /// Returns a terser version of [this].
  ///
  /// This is accomplished by folding together multiple stack frames from the
- /// core library, as in [foldFrames]. Remaining core library frames have their
- /// libraries, "-patch" suffixes, and line numbers removed.
+ /// core library or from this package, as in [foldFrames]. Remaining core
+ /// library frames have their libraries, "-patch" suffixes, and line numbers
+ /// removed.
  Trace get terse {
-   return new Trace(foldFrames((frame) =&gt; frame.isCore).frames.map((frame) {
+   return new Trace(foldFrames((frame) {
+     return frame.isCore || frame.package == 'stack_trace';
+   }).frames.map((frame) {
      if (!frame.isCore) return frame;
      var library = frame.library.replaceAll(_terseRegExp, '');
      return new Frame(Uri.parse(library), null, null, frame.member);
@@ -301,6 +310,7 @@ a <a class="crossref" href="../trace/Trace.html">Trace</a>, it will be returned 
 <pre class="source">
 factory Trace.from(StackTrace trace) {
  if (trace is Trace) return trace;
+ if (trace is Chain) return trace.toTrace();
  return new LazyTrace(() =&gt; new Trace.parse(trace.toString()));
 }
 </pre>
@@ -359,10 +369,14 @@ Trace.parseFirefox(String trace)
 new <strong>Trace.parseFriendly</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> trace) <a class="anchor-link" href="#parseFriendly"
               title="Permalink to Trace.Trace.parseFriendly">#</a></h4>
 <div class="doc">
-<p>Parses this package's a string representation of a stack trace.</p>
+<p>Parses this package's string representation of a stack trace.</p>
+<p>This also parses string representations of <a class="crossref" href="../stack_trace.chain/Chain.html">Chain</a>s. They parse to the
+same trace that <a class="crossref" href="../stack_trace.chain/Chain.html#toTrace">Chain.toTrace</a> would return.</p>
 <pre class="source">
 Trace.parseFriendly(String trace)
    : this(trace.trim().split("\n")
+       // Filter out asynchronous gaps from [Chain]s.
+       .where((line) =&gt; !line.startsWith('====='))
        .map((line) =&gt; new Frame.parseFriendly(line)));
 </pre>
 </div>
@@ -483,11 +497,14 @@ final <a href="../trace/Trace.html">Trace</a>         <strong>terse</strong> <a 
         <div class="doc">
 <p>Returns a terser version of <code>this</code>.</p>
 <p>This is accomplished by folding together multiple stack frames from the
-core library, as in <a class="crossref" href="../trace/Trace.html#foldFrames">foldFrames</a>. Remaining core library frames have their
-libraries, "-patch" suffixes, and line numbers removed.</p>
+core library or from this package, as in <a class="crossref" href="../trace/Trace.html#foldFrames">foldFrames</a>. Remaining core
+library frames have their libraries, "-patch" suffixes, and line numbers
+removed.</p>
 <pre class="source">
 Trace get terse {
- return new Trace(foldFrames((frame) =&gt; frame.isCore).frames.map((frame) {
+ return new Trace(foldFrames((frame) {
+   return frame.isCore || frame.package == 'stack_trace';
+ }).frames.map((frame) {
    if (!frame.isCore) return frame;
    var library = frame.library.replaceAll(_terseRegExp, '');
    return new Frame(Uri.parse(library), null, null, frame.member);

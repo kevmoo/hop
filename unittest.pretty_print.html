@@ -1,0 +1,144 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>unittest.pretty_print Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="unittest.pretty_print">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Hop Documentation</a>
+         &rsaquo; <a href="unittest.pretty_print.html">unittest.pretty_print</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>unittest.pretty_print</strong> library</h2>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="prettyPrint">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>prettyPrint</strong>(object, {<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> maxLineLength, <a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> maxItems}) <a class="anchor-link" href="#prettyPrint"
+              title="Permalink to prettyPrint">#</a></h4>
+<div class="doc">
+<p>Returns a pretty-printed representation of 
+<span class="param">object</span>.</p>
+<p>If 
+<span class="param">maxLineLength</span> is passed, this will attempt to ensure that each line is
+no longer than 
+<span class="param">maxLineLength</span> characters long. This isn't guaranteed, since
+individual objects may have string representations that are too long, but
+most lines will be less than 
+<span class="param">maxLineLength</span> long.</p>
+<p>If 
+<span class="param">maxItems</span> is passed, <a class="crossref" href="http://api.dartlang.org/dart_core/Iterable.html">Iterable</a>s and <a class="crossref" href="http://api.dartlang.org/dart_core/Map.html">Map</a>s will only print their first
+
+<span class="param">maxItems</span> members or key/value pairs, respectively.</p>
+<pre class="source">
+String prettyPrint(object, {int maxLineLength, int maxItems}) {
+ String _prettyPrint(object, int indent, Set seen, bool top) {
+   // Avoid looping infinitely on recursively-nested data structures.
+   if (seen.contains(object)) return "(recursive)";
+   seen = seen.union(new Set.from([object]));
+   String pp(child) =&gt; _prettyPrint(child, indent + 2, seen, false);
+
+   if (object is Iterable) {
+     // Print the type name for non-List iterables.
+     var type = object is List ? "" : typeName(object) + ":";
+
+     // Truncate the list of strings if it's longer than [maxItems].
+     var strings = object.map(pp).toList();
+     if (maxItems != null &amp;&amp; strings.length &gt; maxItems) {
+       strings.replaceRange(maxItems - 1, strings.length, ['...']);
+     }
+
+     // If the printed string is short and doesn't contain a newline, print it
+     // as a single line.
+     var singleLine = "$type[${strings.join(', ')}]";
+     if ((maxLineLength == null ||
+             singleLine.length + indent &lt;= maxLineLength) &amp;&amp;
+         !singleLine.contains("\n")) {
+       return singleLine;
+     }
+
+     // Otherwise, print each member on its own line.
+     return "$type[\n" + strings.map((string) {
+       return _indent(indent + 2) + string;
+     }).join(",\n") + "\n" + _indent(indent) + "]";
+   } else if (object is Map) {
+     // Convert the contents of the map to string representations.
+     var strings = object.keys.map((key) {
+       return '${pp(key)}: ${pp(object[key])}';
+     }).toList();
+
+     // Truncate the list of strings if it's longer than [maxItems].
+     if (maxItems != null &amp;&amp; strings.length &gt; maxItems) {
+       strings.replaceRange(maxItems - 1, strings.length, ['...']);
+     }
+
+     // If the printed string is short and doesn't contain a newline, print it
+     // as a single line.
+     var singleLine = "{${strings.join(", ")}}";
+     if ((maxLineLength == null ||
+             singleLine.length + indent &lt;= maxLineLength) &amp;&amp;
+         !singleLine.contains("\n")) {
+       return singleLine;
+     }
+
+     // Otherwise, print each key/value pair on its own line.
+     return "{\n" + strings.map((string) {
+       return _indent(indent + 2) + string;
+     }).join(",\n") + "\n" + _indent(indent) + "}";
+   } else if (object is String) {
+     // Escape strings and print each line on its own line.
+     var lines = object.split("\n");
+     return "'" + lines.map(escapeString)
+         .join("\\n'\n${_indent(indent + 2)}'") + "'";
+   } else {
+     var value = object.toString().replaceAll("\n", _indent(indent) + "\n");
+     var defaultToString = value.startsWith("Instance of ");
+
+     // If this is the top-level call to [prettyPrint], wrap the value on angle
+     // brackets to set it apart visually.
+     if (top) value = "&lt;$value&gt;";
+
+     // Print the type of objects with custom [toString] methods. Primitive
+     // objects and objects that don't implement a custom [toString] don't need
+     // to have their types printed.
+     if (object is num || object is bool || object is Function ||
+         object == null || defaultToString) {
+       return value;
+     } else {
+       return "${typeName(object)}:$value";
+     }
+   }
+ }
+
+ return _prettyPrint(object, 0, new Set(), true);
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

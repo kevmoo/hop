@@ -37,14 +37,6 @@ class Coordinate&lt;T extends num&gt; extends math.Point&lt;T&gt; {
 
  const Coordinate([T x = 0, T y = 0]) : super(x, y);
 
- /**
-  * Computes the distance to another [Coordinate].
-  *
-  * Use [distanceTo] instead.
-  **/
- @deprecated
- double getDistance (math.Point other) =&gt; distanceTo(other);
-
  bool get isValid =&gt; isValidNumber(x) &amp;&amp; isValidNumber(y);
 
  /**
@@ -253,27 +245,10 @@ Point&lt;T&gt; operator *(num factor) {
 <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> <strong>operator ==</strong>(other) <a class="anchor-link" href="#=="
               title="Permalink to Coordinate&lt;T&gt;.operator ==">#</a></h4>
 <div class="inherited-from">inherited from <a href="http://api.dartlang.org/dart_math/Point.html" ref="external">Point</a> </div><div class="doc">
-<div class="inherited">
-<p>The equality operator.</p>
-<p>The default behavior for all <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a>s is to return true if and
-only if <code>this</code> and 
-<span class="param">other</span> are the same object.</p>
-<p>Override this method to specify a different equality relation on
-a class. The overriding method must still be an equivalence relation.
-That is, it must be:</p><ul><li>
-<p>Total: It must return a boolean for all arguments. It should never throw
-   or return <code>null</code>.</p></li><li>
-<p>Reflexive: For all objects <code>o</code>, <code>o == o</code> must be true.</p></li><li>
-<p>Symmetric: For all objects <code>o1</code> and <code>o2</code>, <code>o1 == o2</code> and <code>o2 == o1</code> must
-   either both be true, or both be false.</p></li><li>
-<p>Transitive: For all objects <code>o1</code>, <code>o2</code>, and <code>o3</code>, if <code>o1 == o2</code> and
-   <code>o2 == o3</code> are true, then <code>o1 == o3</code> must be true.</p></li></ul>
-<p>The method should also be consistent over time, so equality of two objects
-should not change over time, or at least only change if one of the objects
-was modified.</p>
-<p>If a subclass overrides the equality operator it should override
-the <a class="crossref" href="http://api.dartlang.org/dart_math/Point.html#hashCode">hashCode</a> method as well to maintain consistency.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
+<p>A <code>Point</code> is only equal to another <code>Point</code> with the same coordinates.</p>
+<p>This point is equal to <code>other</code> if, and only if,
+<code>other</code> is a <code>Point</code> with
+<code>x</code> equal to <code>other.x</code> and <code>y</code> equal to <code>other.y</code>.</p>
 <pre class="source">
 bool operator ==(other) {
  if (other is !Point) return false;
@@ -298,19 +273,6 @@ double distanceTo(Point&lt;T&gt; other) {
  var dy = y - other.y;
  return sqrt(dx * dx + dy * dy);
 }
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="getDistance">
-<button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_core/double.html" ref="external">double</a> <strong>getDistance</strong>(<a href="http://api.dartlang.org/dart_math/Point.html" ref="external">Point</a> other) <a class="anchor-link" href="#getDistance"
-              title="Permalink to Coordinate&lt;T&gt;.getDistance">#</a></h4>
-<div class="doc">
-<p>Computes the distance to another <a class="crossref" href="../bot/Coordinate.html">Coordinate</a>.</p>
-<p>Use <a class="crossref" href="http://api.dartlang.org/dart_math/Point.html#distanceTo">distanceTo</a> instead.</p>
-<pre class="source">
-@deprecated
-double getDistance (math.Point other) =&gt; distanceTo(other);
 </pre>
 </div>
 </div>

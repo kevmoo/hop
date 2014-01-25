@@ -81,7 +81,7 @@ Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
    unittest.runTests();
    return config.future;
  },
- config: _unittestParserConfig,
+ argParser: _unittestParserConfig(),
  description: 'Run unit tests in the console',
  extendedArgs: [new TaskArgument(_FILTER_ARG, multiple: true)]);
 }

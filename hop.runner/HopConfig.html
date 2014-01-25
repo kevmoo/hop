@@ -76,18 +76,18 @@ class HopConfig implements _ContextLogger {
  Stream&lt;HopEvent&gt; get onEvent =&gt; _eventController.stream;
 
  void contextPrint(dynamic value) {
-   if(_printer != null) _printer.contextPrint(value);
+   if (_printer != null) _printer.contextPrint(value);
 
-   if(_eventController.hasListener) {
+   if (_eventController.hasListener) {
      String val = (value is ShellString) ? value.format(false) : value;
      _eventController.add(new HopEvent.print(val));
    }
  }
 
  void hopEventListen(HopEvent event) {
-   if(_printer != null) _printer.hopEventListen(event);
+   if (_printer != null) _printer.hopEventListen(event);
 
-   if(_eventController.hasListener) _eventController.add(event);
+   if (_eventController.hasListener) _eventController.add(event);
  }
 
  void addLog(Level logLevel, String message, {List&lt;String&gt; source}) {
@@ -200,9 +200,9 @@ void <strong>contextPrint</strong>(value) <a class="anchor-link" href="#contextP
 <div class="docs-inherited-from">docs inherited from <a href="../hop.runner/_ContextLogger.html">_ContextLogger</a> </div></div>
 <pre class="source">
 void contextPrint(dynamic value) {
- if(_printer != null) _printer.contextPrint(value);
+ if (_printer != null) _printer.contextPrint(value);
 
- if(_eventController.hasListener) {
+ if (_eventController.hasListener) {
    String val = (value is ShellString) ? value.format(false) : value;
    _eventController.add(new HopEvent.print(val));
  }
@@ -217,9 +217,9 @@ void <strong>hopEventListen</strong>(<a href="../hop.runner/HopEvent.html">HopEv
 <div class="doc">
 <pre class="source">
 void hopEventListen(HopEvent event) {
- if(_printer != null) _printer.hopEventListen(event);
+ if (_printer != null) _printer.hopEventListen(event);
 
- if(_eventController.hasListener) _eventController.add(event);
+ if (_eventController.hasListener) _eventController.add(event);
 }
 </pre>
 </div>

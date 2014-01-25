@@ -63,7 +63,7 @@ class TestCase {
 
  String _result;
  /**
-  * One of [PASS], [FAIL], [ERROR], or [null] if the test hasn't run yet.
+  * One of [PASS], [FAIL], [ERROR], or [:null:] if the test hasn't run yet.
   */
  String get result =&gt; _result;
 
@@ -71,7 +71,7 @@ class TestCase {
  bool get passed =&gt; _result == PASS;
 
  StackTrace _stackTrace;
- /** Stack trace associated with this test, or [null] if it succeeded. */
+ /** Stack trace associated with this test, or [:null:] if it succeeded. */
  StackTrace get stackTrace =&gt; _stackTrace;
 
  /** The group (or groups) under which this test is running. */
@@ -97,7 +97,6 @@ class TestCase {
  bool get isComplete =&gt; !enabled || result != null;
 
  Function _errorHandler(String stage) =&gt; (e, stack) {
-   var stack;
    if (stack == null &amp;&amp; e is Error) {
      stack = e.stackTrace;
    }

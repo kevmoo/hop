@@ -1,0 +1,107 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>bot.graph Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="bot.graph">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Hop Documentation</a>
+         &rsaquo; <a href="bot.graph.html">bot.graph</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>bot.graph</strong> library</h2>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="stronglyConnectedComponents">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&gt; <strong>stronglyConnectedComponents</strong>(<a href="http://api.dartlang.org/dart_core/Map.html" ref="external">Map</a>&lt;dynamic, <a href="http://api.dartlang.org/dart_core/Iterable.html" ref="external">Iterable</a>&gt; graph) <a class="anchor-link" href="#stronglyConnectedComponents"
+              title="Permalink to stronglyConnectedComponents">#</a></h4>
+<div class="doc">
+<p><a href="http://en.wikipedia.org/wiki/Tarjan's_strongly_connected_components_algorithm">Tarjan's strongly connected components algorithm</a></p>
+<pre class="source">
+List&lt;List&gt; stronglyConnectedComponents(Map&lt;dynamic, Iterable&gt; graph) {
+ requireArgumentNotNull(graph, 'graph');
+
+ var nodes = new _Graph(graph);
+ var tarjan = new _TarjanCycleDetect(nodes);
+ return tarjan.calculate();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="topologicalSort">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a> <strong>topologicalSort</strong>(<a href="http://api.dartlang.org/dart_core/Map.html" ref="external">Map</a>&lt;dynamic, <a href="http://api.dartlang.org/dart_core/Iterable.html" ref="external">Iterable</a>&lt;dynamic&gt;&gt; dependencies) <a class="anchor-link" href="#topologicalSort"
+              title="Permalink to topologicalSort">#</a></h4>
+<div class="doc">
+<pre class="source">
+List topologicalSort(Map&lt;dynamic, Iterable&lt;dynamic&gt;&gt; dependencies) {
+ requireArgumentNotNull(dependencies, 'dependencies');
+
+ var graph = new _Graph(dependencies);
+
+ var items = new LinkedHashSet();
+
+ int targetCount = graph._map.length;
+
+ while(items.length &lt; targetCount) {
+
+   var zeros = graph._map.values
+       .where((_GraphNode node) {
+         return !items.contains(node.value) &amp;&amp;
+             node.outNodes
+             .where((node) =&gt; !items.contains(node.value))
+             .isEmpty;
+       })
+       .map((node) =&gt; node.value)
+       .toList();
+
+   if(zeros.isEmpty) throw new ArgumentError('There is a loop in the map');
+
+   for(var item in zeros) {
+     var added = items.add(item);
+     assert(added);
+   }
+ }
+
+ return items.toList();
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Classes</h3>
+          <div class="type">
+          <h4>
+            <a href="bot.graph/TarjanCycleDetect.html"><strong>TarjanCycleDetect&lt;TNode&gt;</strong></a>
+          </h4>
+          </div>
+          
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

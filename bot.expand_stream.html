@@ -1,0 +1,78 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>bot.expand_stream Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="bot.expand_stream">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Hop Documentation</a>
+         &rsaquo; <a href="bot.expand_stream.html">bot.expand_stream</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>bot.expand_stream</strong> library</h2>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="streamForEachAsync">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a> <strong>streamForEachAsync</strong>(<a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a> source, action(item)) <a class="anchor-link" href="#streamForEachAsync"
+              title="Permalink to streamForEachAsync">#</a></h4>
+<div class="doc">
+<pre class="source">
+Future streamForEachAsync(Stream source, action(item)) {
+ var obj = new _StreamForEachAsync(source, action);
+ return obj.future;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="expandStream">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a> <strong>expandStream</strong>(<a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a> source, <a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a> convert(input), {<a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a> onDone()}) <a class="anchor-link" href="#expandStream"
+              title="Permalink to expandStream">#</a></h4>
+<div class="doc">
+<pre class="source">
+Stream expandStream(Stream source, Stream convert(input), {Stream onDone()}) {
+ var controller = new StreamController();
+
+ streamForEachAsync(source, (item) =&gt; controller.addStream(convert(item)))
+   .then((_) {
+     if(onDone != null) {
+       return controller.addStream(onDone());
+     }
+   })
+   .then((_) {
+     return controller.close();
+   });
+
+ return controller.stream;
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

@@ -131,12 +131,11 @@ class Runner {
        var task = tasks[subTaskName];
 
        ArgResults args;
-       if(subTaskName == taskName) {
+       if (subTaskName == taskName) {
          args = subCommandArgResults;
        } else {
          var parser = new ArgParser();
-         var subParser = parser.addCommand(subTaskName);
-         task.configureArgParser(subParser);
+         var subParser = parser.addCommand(subTaskName, task.argParser);
          args = subParser.parse([]);
        }
 
@@ -151,7 +150,7 @@ class Runner {
        return finalResult;
      });
 
-   } else if(config.argResults.rest.length == 0) {
+   } else if (config.argResults.rest.length == 0) {
      _printHelp(config.contextPrint, config.taskRegistry, config.parser);
      return new Future.value(RunResult.SUCCESS);
    } else {
@@ -204,7 +203,7 @@ class Runner {
    ArgResults args;
    try {
      args = tryArgsCompletion(mainArgs, parser);
-   } on FormatException catch(ex, stack) {
+   } on FormatException catch (ex, stack) {
      // TODO: try to guess if --no-color was passed in here?
      print("There was an error parsing the provided arguments");
      print(ex.message);
@@ -227,7 +226,7 @@ class Runner {
  }
 
  static RunResult _logExitCode(HopConfig ctx, RunResult result) {
-   if(!result.success) {
+   if (!result.success) {
      final msg = 'Task did not complete - ${result.name} (${result.exitCode})';
      ctx.contextPrint(new ShellString.withColor(msg, AnsiColor.RED));
    }
@@ -235,7 +234,7 @@ class Runner {
  }
 
 
- static Level _getLevel(String logLevelOption) =&gt; _sortedLogLevels
+ static Level _getLevel(String logLevelOption) =&gt; Level.LEVELS
      .singleWhere((Level l) =&gt; l.name.toLowerCase() == logLevelOption);
 }
 </pre>
@@ -346,12 +345,11 @@ static Future&lt;RunResult&gt; run(HopConfig config, {Level printAtLogLevel,
      var task = tasks[subTaskName];
 
      ArgResults args;
-     if(subTaskName == taskName) {
+     if (subTaskName == taskName) {
        args = subCommandArgResults;
      } else {
        var parser = new ArgParser();
-       var subParser = parser.addCommand(subTaskName);
-       task.configureArgParser(subParser);
+       var subParser = parser.addCommand(subTaskName, task.argParser);
        args = subParser.parse([]);
      }
 
@@ -366,7 +364,7 @@ static Future&lt;RunResult&gt; run(HopConfig config, {Level printAtLogLevel,
      return finalResult;
    });
 
- } else if(config.argResults.rest.length == 0) {
+ } else if (config.argResults.rest.length == 0) {
    _printHelp(config.contextPrint, config.taskRegistry, config.parser);
    return new Future.value(RunResult.SUCCESS);
  } else {
@@ -411,7 +409,7 @@ static Future&lt;RunResult&gt; runShell(List&lt;String&gt; mainArgs,
  ArgResults args;
  try {
    args = tryArgsCompletion(mainArgs, parser);
- } on FormatException catch(ex, stack) {
+ } on FormatException catch (ex, stack) {
    // TODO: try to guess if --no-color was passed in here?
    print("There was an error parsing the provided arguments");
    print(ex.message);

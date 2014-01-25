@@ -1,0 +1,82 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>hop_tasks.dart_analyzer Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="hop_tasks.dart_analyzer">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Hop Documentation</a>
+         &rsaquo; <a href="hop_tasks.dart_analyzer.html">hop_tasks.dart_analyzer</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>hop_tasks.dart_analyzer</strong> library</h2>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="createAnalyzerTask">
+<button class="show-code">Code</button>
+<a href="hop.core/Task.html">Task</a> <strong>createAnalyzerTask</strong>(delayedFileList) <a class="anchor-link" href="#createAnalyzerTask"
+              title="Permalink to createAnalyzerTask">#</a></h4>
+<div class="doc">
+<p>
+<span class="param">delayedFileList</span> a [List<String>] mapping to paths to dart files or some
+combinations of <a class="crossref" href="http://api.dartlang.org/dart_async/Future.html">Future</a> or <a class="crossref" href="http://api.dartlang.org/dart_core/Function.html">Function</a> values that return a [List<String>].</p>
+<pre class="source">
+Task createAnalyzerTask(dynamic delayedFileList) {
+ return new Task((context) {
+   final parseResult = context.arguments;
+
+   final bool verbose = parseResult[_verboseArgName];
+   final bool formatMachine = parseResult[_formatMachineArgName];
+
+   return getDelayedResult(delayedFileList)
+       .then((List&lt;String&gt; files) {
+         return Future.forEach(files, (f) {
+           return FileSystemEntity.isFile(f)
+               .then((bool isFile) {
+                 if(!isFile) {
+                   context.fail("$f does not exist or is not a file");
+                 }
+               });
+         })
+         .then((_) {
+           return files;
+         });
+       })
+       .then((List&lt;String&gt; files) {
+         return _processDartAnalyzerFile(context, files, verbose,
+             formatMachine);
+       });
+ },
+ description: 'Run "dartanalyzer" for the provided dart files.',
+ argParser: _parserConfig());
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

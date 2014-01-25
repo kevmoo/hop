@@ -1,0 +1,125 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>bot.require Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="favicon.ico">
+        
+        </head>
+        <body data-library="bot.require">
+        <div class="page">
+        <div class="header">
+          <a href="index.html"><div class="logo"></div></a>
+          <a href="index.html">Hop Documentation</a>
+         &rsaquo; <a href="bot.require.html">bot.require</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+<h2><strong>bot.require</strong> library</h2>
+<div>
+<h3>Functions</h3>
+<div class="method"><h4 id="requireArgumentContainsPattern">
+<button class="show-code">Code</button>
+void <strong>requireArgumentContainsPattern</strong>(<a href="http://api.dartlang.org/dart_core/Pattern.html" ref="external">Pattern</a> pattern, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> argValue, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> argName) <a class="anchor-link" href="#requireArgumentContainsPattern"
+              title="Permalink to requireArgumentContainsPattern">#</a></h4>
+<div class="doc">
+<pre class="source">
+void requireArgumentContainsPattern(Pattern pattern, String argValue, String argName) {
+ if(pattern == null) {
+   throw new InvalidOperationError("That's just sad. No null pattern");
+ }
+ requireArgumentNotNull(argValue, argName);
+ if(!argValue.contains(pattern)) {
+   throw new DetailedArgumentError(argName,
+       'The value "$argValue" does not contain the pattern "${pattern}"');
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="requireArgumentNotNullOrEmpty">
+<button class="show-code">Code</button>
+void <strong>requireArgumentNotNullOrEmpty</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> argument, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> argName) <a class="anchor-link" href="#requireArgumentNotNullOrEmpty"
+              title="Permalink to requireArgumentNotNullOrEmpty">#</a></h4>
+<div class="doc">
+<pre class="source">
+void requireArgumentNotNullOrEmpty(String argument, String argName) {
+ _metaRequireArgumentNotNullOrEmpty(argName);
+ if(argument == null) {
+   throw new NullArgumentError(argName);
+ }
+ else if(argument.length == 0) {
+   throw new DetailedArgumentError(argName, 'cannot be an empty string');
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="requireArgumentNotNull">
+<button class="show-code">Code</button>
+void <strong>requireArgumentNotNull</strong>(argument, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> argName) <a class="anchor-link" href="#requireArgumentNotNull"
+              title="Permalink to requireArgumentNotNull">#</a></h4>
+<div class="doc">
+<pre class="source">
+void requireArgumentNotNull(argument, String argName) {
+ _metaRequireArgumentNotNullOrEmpty(argName);
+ if(argument == null) {
+   throw new NullArgumentError(argName);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="requireArgument">
+<button class="show-code">Code</button>
+void <strong>requireArgument</strong>(<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> truth, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> argName, [<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> message]) <a class="anchor-link" href="#requireArgument"
+              title="Permalink to requireArgument">#</a></h4>
+<div class="doc">
+<pre class="source">
+void requireArgument(bool truth, String argName, [String message]) {
+ _metaRequireArgumentNotNullOrEmpty(argName);
+ if(!truth) {
+   if(message == null || message.isEmpty) {
+     message = 'value was invalid';
+   }
+   throw new DetailedArgumentError(argName, message);
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="require">
+<button class="show-code">Code</button>
+void <strong>require</strong>(<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> truth, [<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> message]) <a class="anchor-link" href="#require"
+              title="Permalink to require">#</a></h4>
+<div class="doc">
+<pre class="source">
+void require(bool truth, [String message]) {
+ if(!truth) {
+   throw new Exception(message);
+ }
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="client-live-nav.js"></script>
+        </body></html>
+        

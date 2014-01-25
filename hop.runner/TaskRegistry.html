@@ -50,9 +50,9 @@ class TaskRegistry {
  factory TaskRegistry() =&gt;
      new TaskRegistry._(new SplayTreeMap&lt;String, Task&gt;());
 
- TaskRegistry._(SplayTreeMap&lt;String, Task&gt; map) :
-   this._tasks = map,
-   this.tasks = new UnmodifiableMapView(map);
+ TaskRegistry._(SplayTreeMap&lt;String, Task&gt; map)
+     : this._tasks = map,
+       this.tasks = new UnmodifiableMapView(map);
 
  bool get isFrozen =&gt; _frozen;
 
@@ -110,7 +110,7 @@ class TaskRegistry {
 
    requireArgumentNotNull(task, 'task');
 
-   if(dependencies == null) dependencies = [];
+   if (dependencies == null) dependencies = [];
 
    var list = $(dependencies)
        .map((String subName) {
@@ -122,7 +122,7 @@ class TaskRegistry {
    var set = new LinkedHashSet&lt;Task&gt;.identity()
        ..addAll(list);
 
-   if(task is Task) {
+   if (task is Task) {
      task = task.clone(description: description);
    } else {
      // wrap it?
@@ -146,11 +146,11 @@ class TaskRegistry {
 
    var depMap = _getDependencyMap(taskName);
 
-   var sorted = topoSort(depMap);
+   var sorted = topologicalSort(depMap);
 
    var deps = new LinkedHashMap();
 
-   for(var t in sorted) {
+   for (var t in sorted) {
      var name = _metadata[t].name;
      assert(!deps.containsKey(name));
      deps[name] = t;
@@ -164,7 +164,7 @@ class TaskRegistry {
  Task addChainedTask(String name, Iterable&lt;String&gt; existingTaskNames,
                             {String description}) {
 
-   if(description == null) {
+   if (description == null) {
      description = 'Chained Task: ' + existingTaskNames.join(', ');
    }
 
@@ -182,7 +182,7 @@ class TaskRegistry {
 
    remaining.add(tasks[taskName]);
 
-   while(remaining.isNotEmpty) {
+   while (remaining.isNotEmpty) {
      var task = remaining.first;
      var added = visited.add(task);
      assert(added); // should never visit the same task twice
@@ -196,13 +196,13 @@ class TaskRegistry {
  }
 
  void _requireFrozen() {
-   if(!isFrozen) {
+   if (!isFrozen) {
      throw new StateError("Operation not allowed unless frozen.");
    }
  }
 
  void _freeze() {
-   if(!isFrozen) {
+   if (!isFrozen) {
      _frozen = true;
    }
  }
@@ -299,7 +299,7 @@ Task addAsync(String name, Future execFuture(TaskContext ctx), {String descripti
 Task addChainedTask(String name, Iterable&lt;String&gt; existingTaskNames,
                           {String description}) {
 
- if(description == null) {
+ if (description == null) {
    description = 'Chained Task: ' + existingTaskNames.join(', ');
  }
 
@@ -351,7 +351,7 @@ Task addTask(String name, dynamic task, {String description,
 
  requireArgumentNotNull(task, 'task');
 
- if(dependencies == null) dependencies = [];
+ if (dependencies == null) dependencies = [];
 
  var list = $(dependencies)
      .map((String subName) {
@@ -363,7 +363,7 @@ Task addTask(String name, dynamic task, {String description,
  var set = new LinkedHashSet&lt;Task&gt;.identity()
      ..addAll(list);
 
- if(task is Task) {
+ if (task is Task) {
    task = task.clone(description: description);
  } else {
    // wrap it?
@@ -394,11 +394,11 @@ Map&lt;String, Task&gt; getTaskWithDependencies(String taskName) {
 
  var depMap = _getDependencyMap(taskName);
 
- var sorted = topoSort(depMap);
+ var sorted = topologicalSort(depMap);
 
  var deps = new LinkedHashMap();
 
- for(var t in sorted) {
+ for (var t in sorted) {
    var name = _metadata[t].name;
    assert(!deps.containsKey(name));
    deps[name] = t;

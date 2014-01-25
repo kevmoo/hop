@@ -31,7 +31,7 @@
 <h3>Functions</h3>
 <div class="method"><h4 id="pipeProcess">
 <button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt; <strong>pipeProcess</strong>(<a href="http://api.dartlang.org/dart_io/Process.html" ref="external">Process</a> process, {<a href="bot/Action1.html">Action1</a> stdOutWriter, <a href="bot/Action1.html">Action1</a> stdErrWriter}) <a class="anchor-link" href="#pipeProcess"
+<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a>&lt;<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a>&gt; <strong>pipeProcess</strong>(<a href="http://api.dartlang.org/dart_io/Process.html" ref="external">Process</a> process, {<a href="bot.typedefs/Action1.html">Action1</a> stdOutWriter, <a href="bot.typedefs/Action1.html">Action1</a> stdErrWriter}) <a class="anchor-link" href="#pipeProcess"
               title="Permalink to pipeProcess">#</a></h4>
 <div class="doc">
 <pre class="source">
@@ -67,7 +67,7 @@ Future startProcess(TaskContext ctx, String command,
 
  requireArgumentNotNull(ctx, 'ctx');
  requireArgumentNotNull(command, 'command');
- if(args == null) {
+ if (args == null) {
    args = [];
  }
 

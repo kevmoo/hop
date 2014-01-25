@@ -61,7 +61,7 @@ Task addAsyncTask(String name, Future execFuture(TaskContext ctx), {
 </div>
 <div class="method"><h4 id="addSyncTask">
 <button class="show-code">Code</button>
-<a href="hop.core/Task.html">Task</a> <strong>addSyncTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> name, <a href="bot/Func1.html">Func1</a> execFunc, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description}) <a class="anchor-link" href="#addSyncTask"
+<a href="hop.core/Task.html">Task</a> <strong>addSyncTask</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> name, <a href="bot.typedefs/Func1.html">Func1</a> execFunc, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description}) <a class="anchor-link" href="#addSyncTask"
               title="Permalink to addSyncTask">#</a></h4>
 <div class="doc">
 <p><strong>DEPRECATED</strong> Use <a class="crossref" href="hop.html#addTask">addTask</a> instead.</p>
@@ -121,7 +121,7 @@ void runHop(List&lt;String&gt; args, {
    String helpTaskName: 'help',
    Level printAtLogLevel: Level.INFO
  }) {
- if(paranoid) {
+ if (paranoid) {
    _paranoidHopCheck();
  }
  Runner.runShell(args, _sharedConfig, helpTaskName, printAtLogLevel)

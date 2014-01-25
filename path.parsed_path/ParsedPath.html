@@ -1,0 +1,524 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>ParsedPath class / path.parsed_path Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="path.parsed_path" data-type="ParsedPath">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../path.parsed_path.html">path.parsed_path</a> &rsaquo; <a href="../path.parsed_path/ParsedPath.html">ParsedPath</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>ParsedPath</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class ParsedPath {
+ /// The [Style] that was used to parse this path.
+ Style style;
+
+ /// The absolute root portion of the path, or `null` if the path is relative.
+ /// On POSIX systems, this will be `null` or "/". On Windows, it can be
+ /// `null`, "//" for a UNC path, or something like "C:\" for paths with drive
+ /// letters.
+ String root;
+
+ /// Whether this path is root-relative.
+ ///
+ /// See [Context.isRootRelative].
+ bool isRootRelative;
+
+ /// The path-separated parts of the path. All but the last will be
+ /// directories.
+ List&lt;String&gt; parts;
+
+ /// The path separators preceding each part.
+ ///
+ /// The first one will be an empty string unless the root requires a separator
+ /// between it and the path. The last one will be an empty string unless the
+ /// path ends with a trailing separator.
+ List&lt;String&gt; separators;
+
+ /// The file extension of the last non-empty part, or "" if it doesn't have
+ /// one.
+ String get extension =&gt; _splitExtension()[1];
+
+ /// `true` if this is an absolute path.
+ bool get isAbsolute =&gt; root != null;
+
+ factory ParsedPath.parse(String path, Style style) {
+   var before = path;
+
+   // Remove the root prefix, if any.
+   var root = style.getRoot(path);
+   var isRootRelative = style.getRelativeRoot(path) != null;
+   if (root != null) path = path.substring(root.length);
+
+   // Split the parts on path separators.
+   var parts = [];
+   var separators = [];
+
+   var firstSeparator = style.separatorPattern.matchAsPrefix(path);
+   if (firstSeparator != null) {
+     separators.add(firstSeparator[0]);
+     path = path.substring(firstSeparator[0].length);
+   } else {
+     separators.add('');
+   }
+
+   var start = 0;
+   for (var match in style.separatorPattern.allMatches(path)) {
+     parts.add(path.substring(start, match.start));
+     separators.add(match[0]);
+     start = match.end;
+   }
+
+   // Add the final part, if any.
+   if (start &lt; path.length) {
+     parts.add(path.substring(start));
+     separators.add('');
+   }
+
+   return new ParsedPath._(style, root, isRootRelative, parts, separators);
+ }
+
+ ParsedPath._(this.style, this.root, this.isRootRelative, this.parts,
+     this.separators);
+
+ String get basename {
+   var copy = this.clone();
+   copy.removeTrailingSeparators();
+   if (copy.parts.isEmpty) return root == null ? '' : root;
+   return copy.parts.last;
+ }
+
+ String get basenameWithoutExtension =&gt; _splitExtension()[0];
+
+ bool get hasTrailingSeparator =&gt;
+     !parts.isEmpty &amp;&amp; (parts.last == '' || separators.last != '');
+
+ void removeTrailingSeparators() {
+   while (!parts.isEmpty &amp;&amp; parts.last == '') {
+     parts.removeLast();
+     separators.removeLast();
+   }
+   if (separators.length &gt; 0) separators[separators.length - 1] = '';
+ }
+
+ void normalize() {
+   // Handle '.', '..', and empty parts.
+   var leadingDoubles = 0;
+   var newParts = [];
+   for (var part in parts) {
+     if (part == '.' || part == '') {
+       // Do nothing. Ignore it.
+     } else if (part == '..') {
+       // Pop the last part off.
+       if (newParts.length &gt; 0) {
+         newParts.removeLast();
+       } else {
+         // Backed out past the beginning, so preserve the "..".
+         leadingDoubles++;
+       }
+     } else {
+       newParts.add(part);
+     }
+   }
+
+   // A relative path can back out from the start directory.
+   if (!isAbsolute) {
+     newParts.insertAll(0, new List.filled(leadingDoubles, '..'));
+   }
+
+   // If we collapsed down to nothing, do ".".
+   if (newParts.length == 0 &amp;&amp; !isAbsolute) {
+     newParts.add('.');
+   }
+
+   // Canonicalize separators.
+   var newSeparators = new List.generate(
+       newParts.length, (_) =&gt; style.separator, growable: true);
+   newSeparators.insert(0,
+       isAbsolute &amp;&amp; newParts.length &gt; 0 &amp;&amp;
+               root.contains(style.needsSeparatorPattern) ?
+           style.separator : '');
+
+   parts = newParts;
+   separators = newSeparators;
+
+   // Normalize the Windows root if needed.
+   if (root != null &amp;&amp; style == Style.windows) {
+     root = root.replaceAll('/', '\\');
+   }
+   removeTrailingSeparators();
+ }
+
+ String toString() {
+   var builder = new StringBuffer();
+   if (root != null) builder.write(root);
+   for (var i = 0; i &lt; parts.length; i++) {
+     builder.write(separators[i]);
+     builder.write(parts[i]);
+   }
+   builder.write(separators.last);
+
+   return builder.toString();
+ }
+
+ /// Splits the last non-empty part of the path into a `[basename, extension`]
+ /// pair.
+ ///
+ /// Returns a two-element list. The first is the name of the file without any
+ /// extension. The second is the extension or "" if it has none.
+ List&lt;String&gt; _splitExtension() {
+   var file = parts.lastWhere((p) =&gt; p != '', orElse: () =&gt; null);
+
+   if (file == null) return ['', ''];
+   if (file == '..') return ['..', ''];
+
+   var lastDot = file.lastIndexOf('.');
+
+   // If there is no dot, or it's the first character, like '.bashrc', it
+   // doesn't count.
+   if (lastDot &lt;= 0) return [file, ''];
+
+   return [file.substring(0, lastDot), file.substring(lastDot)];
+ }
+
+ ParsedPath clone() =&gt; new ParsedPath._(
+     style, root, isRootRelative,
+     new List.from(parts), new List.from(separators));
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="parse">
+<button class="show-code">Code</button>
+factory <strong>ParsedPath.parse</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> path, <a href="../path.style/Style.html">Style</a> style) <a class="anchor-link" href="#parse"
+              title="Permalink to ParsedPath.ParsedPath.parse">#</a></h4>
+<div class="doc">
+<pre class="source">
+factory ParsedPath.parse(String path, Style style) {
+ var before = path;
+
+ // Remove the root prefix, if any.
+ var root = style.getRoot(path);
+ var isRootRelative = style.getRelativeRoot(path) != null;
+ if (root != null) path = path.substring(root.length);
+
+ // Split the parts on path separators.
+ var parts = [];
+ var separators = [];
+
+ var firstSeparator = style.separatorPattern.matchAsPrefix(path);
+ if (firstSeparator != null) {
+   separators.add(firstSeparator[0]);
+   path = path.substring(firstSeparator[0].length);
+ } else {
+   separators.add('');
+ }
+
+ var start = 0;
+ for (var match in style.separatorPattern.allMatches(path)) {
+   parts.add(path.substring(start, match.start));
+   separators.add(match[0]);
+   start = match.end;
+ }
+
+ // Add the final part, if any.
+ if (start &lt; path.length) {
+   parts.add(path.substring(start));
+   separators.add('');
+ }
+
+ return new ParsedPath._(style, root, isRootRelative, parts, separators);
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="basename">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>basename</strong> <a class="anchor-link"
+            href="#basename"
+            title="Permalink to ParsedPath.basename">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get basename {
+ var copy = this.clone();
+ copy.removeTrailingSeparators();
+ if (copy.parts.isEmpty) return root == null ? '' : root;
+ return copy.parts.last;
+}
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="basenameWithoutExtension">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>basenameWithoutExtension</strong> <a class="anchor-link"
+            href="#basenameWithoutExtension"
+            title="Permalink to ParsedPath.basenameWithoutExtension">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get basenameWithoutExtension =&gt; _splitExtension()[0];
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="extension">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>extension</strong> <a class="anchor-link"
+            href="#extension"
+            title="Permalink to ParsedPath.extension">#</a>
+        </h4>
+        <div class="doc">
+<p>The file extension of the last non-empty part, or "" if it doesn't have
+one.</p>
+<pre class="source">
+String get extension =&gt; _splitExtension()[1];
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="hasTrailingSeparator">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a>         <strong>hasTrailingSeparator</strong> <a class="anchor-link"
+            href="#hasTrailingSeparator"
+            title="Permalink to ParsedPath.hasTrailingSeparator">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+bool get hasTrailingSeparator =&gt;
+   !parts.isEmpty &amp;&amp; (parts.last == '' || separators.last != '');
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="isAbsolute">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a>         <strong>isAbsolute</strong> <a class="anchor-link"
+            href="#isAbsolute"
+            title="Permalink to ParsedPath.isAbsolute">#</a>
+        </h4>
+        <div class="doc">
+<p><code>true</code> if this is an absolute path.</p>
+<pre class="source">
+bool get isAbsolute =&gt; root != null;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="isRootRelative">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a>         <strong>isRootRelative</strong> <a class="anchor-link"
+            href="#isRootRelative"
+            title="Permalink to ParsedPath.isRootRelative">#</a>
+        </h4>
+        <div class="doc">
+<p>Whether this path is root-relative.</p>
+<p>See <code>Context.isRootRelative</code>.</p>
+<pre class="source">
+bool isRootRelative
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="parts">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt;         <strong>parts</strong> <a class="anchor-link"
+            href="#parts"
+            title="Permalink to ParsedPath.parts">#</a>
+        </h4>
+        <div class="doc">
+<p>The path-separated parts of the path. All but the last will be
+directories.</p>
+<pre class="source">
+List&lt;String&gt; parts
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="root">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>root</strong> <a class="anchor-link"
+            href="#root"
+            title="Permalink to ParsedPath.root">#</a>
+        </h4>
+        <div class="doc">
+<p>The absolute root portion of the path, or <code>null</code> if the path is relative.
+On POSIX systems, this will be <code>null</code> or "/". On Windows, it can be
+<code>null</code>, "//" for a UNC path, or something like "C:\" for paths with drive
+letters.</p>
+<pre class="source">
+String root
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="separators">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>&gt;         <strong>separators</strong> <a class="anchor-link"
+            href="#separators"
+            title="Permalink to ParsedPath.separators">#</a>
+        </h4>
+        <div class="doc">
+<p>The path separators preceding each part.</p>
+<p>The first one will be an empty string unless the root requires a separator
+between it and the path. The last one will be an empty string unless the
+path ends with a trailing separator.</p>
+<pre class="source">
+List&lt;String&gt; separators
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="style">
+<button class="show-code">Code</button>
+<a href="../path.style/Style.html">Style</a>         <strong>style</strong> <a class="anchor-link"
+            href="#style"
+            title="Permalink to ParsedPath.style">#</a>
+        </h4>
+        <div class="doc">
+<p>The <a class="crossref" href="../path.style/Style.html">Style</a> that was used to parse this path.</p>
+<pre class="source">
+Style style
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="clone">
+<button class="show-code">Code</button>
+<a href="../path.parsed_path/ParsedPath.html">ParsedPath</a> <strong>clone</strong>() <a class="anchor-link" href="#clone"
+              title="Permalink to ParsedPath.clone">#</a></h4>
+<div class="doc">
+<pre class="source">
+ParsedPath clone() =&gt; new ParsedPath._(
+   style, root, isRootRelative,
+   new List.from(parts), new List.from(separators));
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="normalize">
+<button class="show-code">Code</button>
+void <strong>normalize</strong>() <a class="anchor-link" href="#normalize"
+              title="Permalink to ParsedPath.normalize">#</a></h4>
+<div class="doc">
+<pre class="source">
+void normalize() {
+ // Handle '.', '..', and empty parts.
+ var leadingDoubles = 0;
+ var newParts = [];
+ for (var part in parts) {
+   if (part == '.' || part == '') {
+     // Do nothing. Ignore it.
+   } else if (part == '..') {
+     // Pop the last part off.
+     if (newParts.length &gt; 0) {
+       newParts.removeLast();
+     } else {
+       // Backed out past the beginning, so preserve the "..".
+       leadingDoubles++;
+     }
+   } else {
+     newParts.add(part);
+   }
+ }
+
+ // A relative path can back out from the start directory.
+ if (!isAbsolute) {
+   newParts.insertAll(0, new List.filled(leadingDoubles, '..'));
+ }
+
+ // If we collapsed down to nothing, do ".".
+ if (newParts.length == 0 &amp;&amp; !isAbsolute) {
+   newParts.add('.');
+ }
+
+ // Canonicalize separators.
+ var newSeparators = new List.generate(
+     newParts.length, (_) =&gt; style.separator, growable: true);
+ newSeparators.insert(0,
+     isAbsolute &amp;&amp; newParts.length &gt; 0 &amp;&amp;
+             root.contains(style.needsSeparatorPattern) ?
+         style.separator : '');
+
+ parts = newParts;
+ separators = newSeparators;
+
+ // Normalize the Windows root if needed.
+ if (root != null &amp;&amp; style == Style.windows) {
+   root = root.replaceAll('/', '\\');
+ }
+ removeTrailingSeparators();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="removeTrailingSeparators">
+<button class="show-code">Code</button>
+void <strong>removeTrailingSeparators</strong>() <a class="anchor-link" href="#removeTrailingSeparators"
+              title="Permalink to ParsedPath.removeTrailingSeparators">#</a></h4>
+<div class="doc">
+<pre class="source">
+void removeTrailingSeparators() {
+ while (!parts.isEmpty &amp;&amp; parts.last == '') {
+   parts.removeLast();
+   separators.removeLast();
+ }
+ if (separators.length &gt; 0) separators[separators.length - 1] = '';
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to ParsedPath.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
+<pre class="source">
+String toString() {
+ var builder = new StringBuffer();
+ if (root != null) builder.write(root);
+ for (var i = 0; i &lt; parts.length; i++) {
+   builder.write(separators[i]);
+   builder.write(parts[i]);
+ }
+ builder.write(separators.last);
+
+ return builder.toString();
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

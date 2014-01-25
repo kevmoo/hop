@@ -27,6 +27,16 @@
 </div>
 <div class="content">
 <h2><strong>bot_io</strong> library</h2>
+<h3>Exports</h3>
+<ul>
+<ul><a href="bot.html">bot</a> show <code>expandStream</code></ul>
+<ul><a href="bot.typedefs.html">bot.typedefs</a> show <code>expandStream</code></ul>
+<ul><a href="bot.require.html">bot.require</a> show <code>expandStream</code></ul>
+<ul><a href="bot.errors.html">bot.errors</a> show <code>expandStream</code></ul>
+<ul><a href="bot.throttled_stream.html">bot.throttled_stream</a> show <code>expandStream</code></ul>
+<ul><a href="bot.expand_stream.html">bot.expand_stream</a> show <a class="crossref" href="bot.expand_stream.html#expandStream">expandStream</a></ul>
+<ul><a href="bot.graph.html">bot.graph</a> show <code>expandStream</code></ul>
+</ul>
 <div>
 <h3>Functions</h3>
 <div class="method"><h4 id="fileSha1Hex">
@@ -61,42 +71,6 @@ Future&lt;bool&gt; fileContentsMatch(File file1, File file2) {
        assert(shas.length == 2);
        return shas[0] == shas[1];
  });
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="expandStream">
-<button class="show-code">Code</button>
-<a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a> <strong>expandStream</strong>(<a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a> source, <a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a> convert(input), {<a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a> onDone()}) <a class="anchor-link" href="#expandStream"
-              title="Permalink to expandStream">#</a></h4>
-<div class="doc">
-<pre class="source">
-Stream expandStream(Stream source, Stream convert(input), {Stream onDone()}) {
- final controller = new StreamController();
-
- Future itemFuture;
-
- source.listen((sourceItem) {
-   Stream subStream = convert(sourceItem);
-   Future next = _pipeStreamToController(controller, subStream);
-   if(itemFuture == null) {
-     itemFuture = next;
-   } else {
-     itemFuture = itemFuture.then((_) =&gt; next);
-   }
- }, onDone: () {
-   Future next = _pipeStreamToController(controller, onDone());
-   if(itemFuture == null) {
-     itemFuture = next;
-   } else {
-     itemFuture = itemFuture.then((_) =&gt; next);
-   }
-   itemFuture.whenComplete(() {
-     controller.close();
-   });
- });
-
- return controller.stream;
 }
 </pre>
 </div>

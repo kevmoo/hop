@@ -1,0 +1,418 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>StackZoneSpecification class / stack_trace.stack_zone_specification Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="stack_trace.stack_zone_specification" data-type="StackZoneSpecification">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../stack_trace.stack_zone_specification.html">stack_trace.stack_zone_specification</a> &rsaquo; <a href="../stack_trace.stack_zone_specification/StackZoneSpecification.html">StackZoneSpecification</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>StackZoneSpecification</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>A class encapsulating the zone specification for a <a class="crossref" href="../stack_trace.chain/Chain.html#capture">Chain.capture</a> zone.</p>
+<p>Until they're materialized and exposed to the user, stack chains are tracked
+as linked lists of <a class="crossref" href="../trace/Trace.html">Trace</a>s using the <a class="crossref" href="../stack_trace.stack_zone_specification/_Node.html">_Node</a> class. These nodes are stored
+in three distinct ways:</p><ul><li>
+<p>When a callback is registered, a node is created and stored as a captured
+  local variable until the callback is run.</p></li><li>
+<p>When a callback is run, its captured node is set as the <a class="crossref" href="../stack_trace.stack_zone_specification/StackZoneSpecification.html#_currentNode">_currentNode</a> so
+  it can be available to <a class="crossref" href="../stack_trace.chain/Chain.html#current">Chain.current</a> and to be linked into additional
+  chains when more callbacks are scheduled.</p></li><li>
+<p>When a callback throws an error or a <a class="crossref" href="../stack_trace.chain/Chain.html#track">Chain.track</a>ed Future or Stream
+  emits an error, the current node is associated with that error's stack
+  trace using the <a class="crossref" href="../stack_trace.stack_zone_specification/StackZoneSpecification.html#_chains">_chains</a> expando.</p></li></ul>
+<p>Since <a class="crossref" href="http://api.dartlang.org/dart_async/ZoneSpecification.html">ZoneSpecification</a> can't be extended or even implemented, in order to
+get a real <a class="crossref" href="http://api.dartlang.org/dart_async/ZoneSpecification.html">ZoneSpecification</a> instance it's necessary to call <a class="crossref" href="../stack_trace.stack_zone_specification/StackZoneSpecification.html#toSpec">toSpec</a>.</p>
+<pre class="source">
+class StackZoneSpecification {
+ /// The expando that associates stack chains with [StackTrace]s.
+ ///
+ /// The chains are associated with stack traces rather than errors themselves
+ /// because it's a common practice to throw strings as errors, which can't be
+ /// used with expandos.
+ ///
+ /// The chain associated with a given stack trace doesn't contain a node for
+ /// that stack trace.
+ final _chains = new Expando&lt;_Node&gt;("stack chains");
+
+ /// The error handler for the zone.
+ ///
+ /// If this is null, that indicates that any unhandled errors should be passed
+ /// to the parent zone.
+ final ChainHandler _onError;
+
+ /// The most recent node of the current stack chain.
+ _Node _currentNode;
+
+ StackZoneSpecification([this._onError]);
+
+ /// Converts [this] to a real [ZoneSpecification].
+ ZoneSpecification toSpec() {
+   return new ZoneSpecification(
+       handleUncaughtError: handleUncaughtError,
+       registerCallback: registerCallback,
+       registerUnaryCallback: registerUnaryCallback,
+       registerBinaryCallback: registerBinaryCallback);
+ }
+
+ /// Returns the current stack chain.
+ ///
+ /// By default, the first frame of the first trace will be the line where
+ /// [currentChain] is called. If [level] is passed, the first trace will start
+ /// that many frames up instead.
+ Chain currentChain([int level=0]) =&gt; _createNode(level + 1).toChain();
+
+ /// Returns the stack chain associated with [trace], if one exists.
+ ///
+ /// The first stack trace in the returned chain will always be [trace]
+ /// (converted to a [Trace] if necessary). If there is no chain associated
+ /// with [trace], this just returns a single-trace chain containing [trace].
+ Chain chainFor(StackTrace trace) {
+   if (trace is Chain) return trace;
+   var previous = trace == null ? null : _chains[trace];
+   return new _Node(trace, previous).toChain();
+ }
+
+ /// Ensures that an error emitted by [future] has the correct stack
+ /// information associated with it.
+ ///
+ /// By default, the first frame of the first trace will be the line where
+ /// [trackFuture] is called. If [level] is passed, the first trace will start
+ /// that many frames up instead.
+ Future trackFuture(Future future, [int level=0]) {
+   var completer = new Completer.sync();
+   var node = _createNode(level + 1);
+   future.then(completer.complete).catchError((e, stackTrace) {
+     if (stackTrace == null) stackTrace = new Trace.current();
+     if (_chains[stackTrace] == null) _chains[stackTrace] = node;
+     completer.completeError(e, stackTrace);
+   });
+   return completer.future;
+ }
+
+ /// Ensures that any errors emitted by [stream] have the correct stack
+ /// information associated with them.
+ ///
+ /// By default, the first frame of the first trace will be the line where
+ /// [trackStream] is called. If [level] is passed, the first trace will start
+ /// that many frames up instead.
+ Stream trackStream(Stream stream, [int level=0]) {
+   var node = _createNode(level + 1);
+   return stream.transform(new StreamTransformer.fromHandlers(
+       handleError: (error, stackTrace, sink) {
+     if (stackTrace == null) stackTrace = new Trace.current();
+     if (_chains[stackTrace] == null) _chains[stackTrace] = node;
+     sink.addError(error, stackTrace);
+   }));
+ }
+
+ /// Tracks the current stack chain so it can be set to [_currentChain] when
+ /// [f] is run.
+ ZoneCallback registerCallback(Zone self, ZoneDelegate parent, Zone zone,
+     Function f) {
+   if (f == null) return parent.registerCallback(zone, null);
+   var node = _createNode(1);
+   return parent.registerCallback(zone, () =&gt; _run(f, node));
+ }
+
+ /// Tracks the current stack chain so it can be set to [_currentChain] when
+ /// [f] is run.
+ ZoneUnaryCallback registerUnaryCallback(Zone self, ZoneDelegate parent,
+     Zone zone, Function f) {
+   if (f == null) return parent.registerUnaryCallback(zone, null);
+   var node = _createNode(1);
+   return parent.registerUnaryCallback(zone, (arg) {
+     return _run(() =&gt; f(arg), node);
+   });
+ }
+
+ /// Tracks the current stack chain so it can be set to [_currentChain] when
+ /// [f] is run.
+ ZoneBinaryCallback registerBinaryCallback(Zone self, ZoneDelegate parent,
+     Zone zone, Function f) {
+   if (f == null) return parent.registerBinaryCallback(zone, null);
+   var node = _createNode(1);
+   return parent.registerBinaryCallback(zone, (arg1, arg2) {
+     return _run(() =&gt; f(arg1, arg2), node);
+   });
+ }
+
+ /// Looks up the chain associated with [stackTrace] and passes it either to
+ /// [_onError] or [parent]'s error handler.
+ handleUncaughtError(Zone self, ZoneDelegate parent, Zone zone, error,
+     StackTrace stackTrace) {
+   if (_onError == null) {
+     return parent.handleUncaughtError(zone, error, chainFor(stackTrace));
+   } else {
+     _onError(error, chainFor(stackTrace));
+   }
+ }
+
+ /// Creates a [_Node] with the current stack trace and linked to
+ /// [_currentNode].
+ ///
+ /// By default, the first frame of the first trace will be the line where
+ /// [_createNode] is called. If [level] is passed, the first trace will start
+ /// that many frames up instead.
+ _Node _createNode([int level=0]) =&gt;
+   new _Node(new Trace.current(level + 1), _currentNode);
+
+ // TODO(nweiz): use a more robust way of detecting and tracking errors when
+ // issue 15105 is fixed.
+ /// Runs [f] with [_currentNode] set to [node].
+ ///
+ /// If [f] throws an error, this associates [node] with that error's stack
+ /// trace.
+ _run(Function f, _Node node) {
+   var previousNode = _currentNode;
+   _currentNode = node;
+   try {
+     return f();
+   } catch (e, stackTrace) {
+     _chains[stackTrace] = node;
+     rethrow;
+   } finally {
+     _currentNode = previousNode;
+   }
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>StackZoneSpecification</strong>([<a href="../stack_trace.chain/ChainHandler.html">ChainHandler</a> _onError]) <a class="anchor-link" href="#"
+              title="Permalink to StackZoneSpecification.StackZoneSpecification">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
+<pre class="source">
+StackZoneSpecification([this._onError]);
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="chainFor">
+<button class="show-code">Code</button>
+<a href="../stack_trace.chain/Chain.html">Chain</a> <strong>chainFor</strong>(<a href="http://api.dartlang.org/dart_core/StackTrace.html" ref="external">StackTrace</a> trace) <a class="anchor-link" href="#chainFor"
+              title="Permalink to StackZoneSpecification.chainFor">#</a></h4>
+<div class="doc">
+<p>Returns the stack chain associated with 
+<span class="param">trace</span>, if one exists.</p>
+<p>The first stack trace in the returned chain will always be 
+<span class="param">trace</span>
+(converted to a <a class="crossref" href="../trace/Trace.html">Trace</a> if necessary). If there is no chain associated
+with 
+<span class="param">trace</span>, this just returns a single-trace chain containing 
+<span class="param">trace</span>.</p>
+<pre class="source">
+Chain chainFor(StackTrace trace) {
+ if (trace is Chain) return trace;
+ var previous = trace == null ? null : _chains[trace];
+ return new _Node(trace, previous).toChain();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="currentChain">
+<button class="show-code">Code</button>
+<a href="../stack_trace.chain/Chain.html">Chain</a> <strong>currentChain</strong>([<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> level = 0]) <a class="anchor-link" href="#currentChain"
+              title="Permalink to StackZoneSpecification.currentChain">#</a></h4>
+<div class="doc">
+<p>Returns the current stack chain.</p>
+<p>By default, the first frame of the first trace will be the line where
+<a class="crossref" href="../stack_trace.stack_zone_specification/StackZoneSpecification.html#currentChain">currentChain</a> is called. If 
+<span class="param">level</span> is passed, the first trace will start
+that many frames up instead.</p>
+<pre class="source">
+Chain currentChain([int level=0]) =&gt; _createNode(level + 1).toChain();
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="handleUncaughtError">
+<button class="show-code">Code</button>
+dynamic <strong>handleUncaughtError</strong>(<a href="http://api.dartlang.org/dart_async/Zone.html" ref="external">Zone</a> self, <a href="http://api.dartlang.org/dart_async/ZoneDelegate.html" ref="external">ZoneDelegate</a> parent, <a href="http://api.dartlang.org/dart_async/Zone.html" ref="external">Zone</a> zone, error, <a href="http://api.dartlang.org/dart_core/StackTrace.html" ref="external">StackTrace</a> stackTrace) <a class="anchor-link" href="#handleUncaughtError"
+              title="Permalink to StackZoneSpecification.handleUncaughtError">#</a></h4>
+<div class="doc">
+<p>Looks up the chain associated with 
+<span class="param">stackTrace</span> and passes it either to
+<a class="crossref" href="../stack_trace.stack_zone_specification/StackZoneSpecification.html#_onError">_onError</a> or 
+<span class="param">parent</span>'s error handler.</p>
+<pre class="source">
+handleUncaughtError(Zone self, ZoneDelegate parent, Zone zone, error,
+   StackTrace stackTrace) {
+ if (_onError == null) {
+   return parent.handleUncaughtError(zone, error, chainFor(stackTrace));
+ } else {
+   _onError(error, chainFor(stackTrace));
+ }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="registerBinaryCallback">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/ZoneBinaryCallback.html" ref="external">ZoneBinaryCallback</a> <strong>registerBinaryCallback</strong>(<a href="http://api.dartlang.org/dart_async/Zone.html" ref="external">Zone</a> self, <a href="http://api.dartlang.org/dart_async/ZoneDelegate.html" ref="external">ZoneDelegate</a> parent, <a href="http://api.dartlang.org/dart_async/Zone.html" ref="external">Zone</a> zone, <a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> f) <a class="anchor-link" href="#registerBinaryCallback"
+              title="Permalink to StackZoneSpecification.registerBinaryCallback">#</a></h4>
+<div class="doc">
+<p>Tracks the current stack chain so it can be set to <code>_currentChain</code> when
+
+<span class="param">f</span> is run.</p>
+<pre class="source">
+ZoneBinaryCallback registerBinaryCallback(Zone self, ZoneDelegate parent,
+   Zone zone, Function f) {
+ if (f == null) return parent.registerBinaryCallback(zone, null);
+ var node = _createNode(1);
+ return parent.registerBinaryCallback(zone, (arg1, arg2) {
+   return _run(() =&gt; f(arg1, arg2), node);
+ });
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="registerCallback">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/ZoneCallback.html" ref="external">ZoneCallback</a> <strong>registerCallback</strong>(<a href="http://api.dartlang.org/dart_async/Zone.html" ref="external">Zone</a> self, <a href="http://api.dartlang.org/dart_async/ZoneDelegate.html" ref="external">ZoneDelegate</a> parent, <a href="http://api.dartlang.org/dart_async/Zone.html" ref="external">Zone</a> zone, <a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> f) <a class="anchor-link" href="#registerCallback"
+              title="Permalink to StackZoneSpecification.registerCallback">#</a></h4>
+<div class="doc">
+<p>Tracks the current stack chain so it can be set to <code>_currentChain</code> when
+
+<span class="param">f</span> is run.</p>
+<pre class="source">
+ZoneCallback registerCallback(Zone self, ZoneDelegate parent, Zone zone,
+   Function f) {
+ if (f == null) return parent.registerCallback(zone, null);
+ var node = _createNode(1);
+ return parent.registerCallback(zone, () =&gt; _run(f, node));
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="registerUnaryCallback">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/ZoneUnaryCallback.html" ref="external">ZoneUnaryCallback</a> <strong>registerUnaryCallback</strong>(<a href="http://api.dartlang.org/dart_async/Zone.html" ref="external">Zone</a> self, <a href="http://api.dartlang.org/dart_async/ZoneDelegate.html" ref="external">ZoneDelegate</a> parent, <a href="http://api.dartlang.org/dart_async/Zone.html" ref="external">Zone</a> zone, <a href="http://api.dartlang.org/dart_core/Function.html" ref="external">Function</a> f) <a class="anchor-link" href="#registerUnaryCallback"
+              title="Permalink to StackZoneSpecification.registerUnaryCallback">#</a></h4>
+<div class="doc">
+<p>Tracks the current stack chain so it can be set to <code>_currentChain</code> when
+
+<span class="param">f</span> is run.</p>
+<pre class="source">
+ZoneUnaryCallback registerUnaryCallback(Zone self, ZoneDelegate parent,
+   Zone zone, Function f) {
+ if (f == null) return parent.registerUnaryCallback(zone, null);
+ var node = _createNode(1);
+ return parent.registerUnaryCallback(zone, (arg) {
+   return _run(() =&gt; f(arg), node);
+ });
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toSpec">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/ZoneSpecification.html" ref="external">ZoneSpecification</a> <strong>toSpec</strong>() <a class="anchor-link" href="#toSpec"
+              title="Permalink to StackZoneSpecification.toSpec">#</a></h4>
+<div class="doc">
+<p>Converts <code>this</code> to a real <a class="crossref" href="http://api.dartlang.org/dart_async/ZoneSpecification.html">ZoneSpecification</a>.</p>
+<pre class="source">
+ZoneSpecification toSpec() {
+ return new ZoneSpecification(
+     handleUncaughtError: handleUncaughtError,
+     registerCallback: registerCallback,
+     registerUnaryCallback: registerUnaryCallback,
+     registerBinaryCallback: registerBinaryCallback);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="trackFuture">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a> <strong>trackFuture</strong>(<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a> future, [<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> level = 0]) <a class="anchor-link" href="#trackFuture"
+              title="Permalink to StackZoneSpecification.trackFuture">#</a></h4>
+<div class="doc">
+<p>Ensures that an error emitted by 
+<span class="param">future</span> has the correct stack
+information associated with it.</p>
+<p>By default, the first frame of the first trace will be the line where
+<a class="crossref" href="../stack_trace.stack_zone_specification/StackZoneSpecification.html#trackFuture">trackFuture</a> is called. If 
+<span class="param">level</span> is passed, the first trace will start
+that many frames up instead.</p>
+<pre class="source">
+Future trackFuture(Future future, [int level=0]) {
+ var completer = new Completer.sync();
+ var node = _createNode(level + 1);
+ future.then(completer.complete).catchError((e, stackTrace) {
+   if (stackTrace == null) stackTrace = new Trace.current();
+   if (_chains[stackTrace] == null) _chains[stackTrace] = node;
+   completer.completeError(e, stackTrace);
+ });
+ return completer.future;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="trackStream">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a> <strong>trackStream</strong>(<a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a> stream, [<a href="http://api.dartlang.org/dart_core/int.html" ref="external">int</a> level = 0]) <a class="anchor-link" href="#trackStream"
+              title="Permalink to StackZoneSpecification.trackStream">#</a></h4>
+<div class="doc">
+<p>Ensures that any errors emitted by 
+<span class="param">stream</span> have the correct stack
+information associated with them.</p>
+<p>By default, the first frame of the first trace will be the line where
+<a class="crossref" href="../stack_trace.stack_zone_specification/StackZoneSpecification.html#trackStream">trackStream</a> is called. If 
+<span class="param">level</span> is passed, the first trace will start
+that many frames up instead.</p>
+<pre class="source">
+Stream trackStream(Stream stream, [int level=0]) {
+ var node = _createNode(level + 1);
+ return stream.transform(new StreamTransformer.fromHandlers(
+     handleError: (error, stackTrace, sink) {
+   if (stackTrace == null) stackTrace = new Trace.current();
+   if (_chains[stackTrace] == null) _chains[stackTrace] = node;
+   sink.addError(error, stackTrace);
+ }));
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

@@ -108,8 +108,9 @@ final <a href="../trace/Trace.html">Trace</a>         <strong>terse</strong> <a 
 <div class="inherited">
 <p>Returns a terser version of <code>this</code>.</p>
 <p>This is accomplished by folding together multiple stack frames from the
-core library, as in <a class="crossref" href="../lazy_trace/LazyTrace.html#foldFrames">foldFrames</a>. Remaining core library frames have their
-libraries, "-patch" suffixes, and line numbers removed.</p>
+core library or from this package, as in <a class="crossref" href="../lazy_trace/LazyTrace.html#foldFrames">foldFrames</a>. Remaining core
+library frames have their libraries, "-patch" suffixes, and line numbers
+removed.</p>
 <div class="docs-inherited-from">docs inherited from <a href="../trace/Trace.html">Trace</a> </div></div>
 <pre class="source">
 Trace get terse =&gt; new LazyTrace(() =&gt; _trace.terse);

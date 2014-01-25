@@ -84,9 +84,9 @@ class ArgParser {
   * * There is already an option using abbreviation [abbr].
   */
  void addFlag(String name, {String abbr, String help, bool defaultsTo: false,
-     bool negatable: true, void callback(bool value)}) {
+     bool negatable: true, void callback(bool value), bool hide: false}) {
    _addOption(name, abbr, help, null, null, defaultsTo, callback,
-       isFlag: true, negatable: negatable);
+       isFlag: true, negatable: negatable, hide: hide);
  }
 
  /**
@@ -244,7 +244,7 @@ ArgParser addCommand(String name, [ArgParser parser]) {
 </div>
 <div class="method"><h4 id="addFlag">
 <button class="show-code">Code</button>
-void <strong>addFlag</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> name, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> abbr, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> help, <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> defaultsTo: false, <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> negatable: true, void callback(<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> value)}) <a class="anchor-link" href="#addFlag"
+void <strong>addFlag</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> name, {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> abbr, <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> help, <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> defaultsTo: false, <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> negatable: true, void callback(<a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> value), <a href="http://api.dartlang.org/dart_core/bool.html" ref="external">bool</a> hide: false}) <a class="anchor-link" href="#addFlag"
               title="Permalink to ArgParser.addFlag">#</a></h4>
 <div class="doc">
 <p>Defines a flag. Throws an <a class="crossref" href="http://api.dartlang.org/dart_core/ArgumentError.html">ArgumentError</a> if:</p><ul><li>There is already an option named 
@@ -252,9 +252,9 @@ void <strong>addFlag</strong>(<a href="http://api.dartlang.org/dart_core/String.
 <span class="param">abbr</span>.</li></ul>
 <pre class="source">
 void addFlag(String name, {String abbr, String help, bool defaultsTo: false,
-   bool negatable: true, void callback(bool value)}) {
+   bool negatable: true, void callback(bool value), bool hide: false}) {
  _addOption(name, abbr, help, null, null, defaultsTo, callback,
-     isFlag: true, negatable: negatable);
+     isFlag: true, negatable: negatable, hide: hide);
 }
 </pre>
 </div>

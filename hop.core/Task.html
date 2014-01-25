@@ -2,7 +2,7 @@
         <html>
         <head>
                 <meta charset="utf-8">
-        <title>Task class / hop.core Library / Hop Documentation</title>
+        <title>Task abstract class / hop.core Library / Hop Documentation</title>
         <link rel="stylesheet" type="text/css"
             href="../styles.css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
@@ -27,17 +27,18 @@
 </div>
 <div class="content">
         <h2><strong>Task</strong>
-          class
+          abstract class
         </h2>
         
 <button id="show-inherited" class="show-inherited">Hide inherited</button>
 <div class="doc">
 <pre class="source">
-class Task {
+abstract class Task {
  final String description;
  final _TaskDefinition _exec;
- final _ArgParserConfigure _argParserConfig;
  final List&lt;TaskArgument&gt; _extendedArgs;
+
+ ArgParser get argParser;
 
  /**
   * **DEPRECATED** Use `new Task` instead.
@@ -55,27 +56,37 @@ class Task {
      {String description, void config(ArgParser),
       List&lt;TaskArgument&gt; extendedArgs}) = Task;
 
- Task(dynamic taskDefinition(TaskContext ctx), {String description,
-   void config(ArgParser), List&lt;TaskArgument&gt; extendedArgs}) :
+ /**
+  * The [config] paramater is **DEPRECATED**. Provide the [argParser] parameter
+  * instead.
+  */
+ factory Task(dynamic taskDefinition(TaskContext ctx), {String description,
+   List&lt;TaskArgument&gt; extendedArgs, ArgParser argParser,
+   void config(ArgParser)}) {
+
+   if(config != null) {
+     if(argParser != null) {
+       throw new ArgumentError('Cannot provide both an argParser and config.');
+     }
+
+     return new _TaskWithConfig(taskDefinition, description, extendedArgs, config);
+   }
+
+   return new _TaskWithParser(taskDefinition, description,
+       extendedArgs, argParser);
+ }
+
+ Task._impl(dynamic taskDefinition(TaskContext ctx), String description,
+   List&lt;TaskArgument&gt; extendedArgs) :
      this._exec = taskDefinition,
      this.description = (description == null) ? '' : description,
-     this._argParserConfig = config,
      this._extendedArgs = (extendedArgs == null) ? const [] :
        TaskArgument.validateArgs(extendedArgs) {
    requireArgumentNotNull(_exec, '_exec');
  }
 
-
- void configureArgParser(ArgParser parser) {
-   if(_argParserConfig != null) {
-     _argParserConfig(parser);
-   }
- }
-
  String getUsage() {
-   final parser = new ArgParser();
-   configureArgParser(parser);
-   return parser.getUsage();
+   return argParser.getUsage();
  }
 
  String getExtendedArgsUsage() =&gt;
@@ -108,12 +119,7 @@ class Task {
    });
  }
 
- Task clone({String description}) {
-   if(description == null) description = this.description;
-
-   return new Task(_exec, description: description,
-       config: _argParserConfig, extendedArgs: _extendedArgs);
- }
+ Task clone({String description});
 
  /**
   * Returned map is in argument order.
@@ -177,24 +183,28 @@ class Task {
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>Task</strong>(taskDefinition(<a href="../hop.core/TaskContext.html">TaskContext</a> ctx), {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description, void config(ArgParser), <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="../hop.core/TaskArgument.html">TaskArgument</a>&gt; extendedArgs}) <a class="anchor-link" href="#"
+factory <strong>Task</strong>(taskDefinition(<a href="../hop.core/TaskContext.html">TaskContext</a> ctx), {<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description, <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="../hop.core/TaskArgument.html">TaskArgument</a>&gt; extendedArgs, <a href="../args/ArgParser.html">ArgParser</a> argParser, void config(ArgParser)}) <a class="anchor-link" href="#"
               title="Permalink to Task.Task">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Creates a new <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance.</p>
-<p><a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
-through their identity. An <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance is equal to itself
-only.</p>
-<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
+<p>The 
+<span class="param">config</span> paramater is <strong>DEPRECATED</strong>. Provide the 
+<span class="param">argParser</span> parameter
+instead.</p>
 <pre class="source">
-Task(dynamic taskDefinition(TaskContext ctx), {String description,
- void config(ArgParser), List&lt;TaskArgument&gt; extendedArgs}) :
-   this._exec = taskDefinition,
-   this.description = (description == null) ? '' : description,
-   this._argParserConfig = config,
-   this._extendedArgs = (extendedArgs == null) ? const [] :
-     TaskArgument.validateArgs(extendedArgs) {
- requireArgumentNotNull(_exec, '_exec');
+factory Task(dynamic taskDefinition(TaskContext ctx), {String description,
+ List&lt;TaskArgument&gt; extendedArgs, ArgParser argParser,
+ void config(ArgParser)}) {
+
+ if(config != null) {
+   if(argParser != null) {
+     throw new ArgumentError('Cannot provide both an argParser and config.');
+   }
+
+   return new _TaskWithConfig(taskDefinition, description, extendedArgs, config);
+ }
+
+ return new _TaskWithParser(taskDefinition, description,
+     extendedArgs, argParser);
 }
 </pre>
 </div>
@@ -230,6 +240,18 @@ factory Task.sync(dynamic taskDefinition(TaskContext ctx),
 </div>
 <div>
 <h3>Properties</h3>
+<div class="field"><h4 id="argParser">
+<button class="show-code">Code</button>
+final <a href="../args/ArgParser.html">ArgParser</a>         <strong>argParser</strong> <a class="anchor-link"
+            href="#argParser"
+            title="Permalink to Task.argParser">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+ArgParser get argParser;
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="description">
 <button class="show-code">Code</button>
 final <a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a>         <strong>description</strong> <a class="anchor-link"
@@ -246,32 +268,9 @@ final String description
 <div>
 <h3>Methods</h3>
 <div class="method"><h4 id="clone">
-<button class="show-code">Code</button>
-<a href="../hop.core/Task.html">Task</a> <strong>clone</strong>({<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description}) <a class="anchor-link" href="#clone"
+abstract <a href="../hop.core/Task.html">Task</a> <strong>clone</strong>({<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> description}) <a class="anchor-link" href="#clone"
               title="Permalink to Task.clone">#</a></h4>
 <div class="doc">
-<pre class="source">
-Task clone({String description}) {
- if(description == null) description = this.description;
-
- return new Task(_exec, description: description,
-     config: _argParserConfig, extendedArgs: _extendedArgs);
-}
-</pre>
-</div>
-</div>
-<div class="method"><h4 id="configureArgParser">
-<button class="show-code">Code</button>
-void <strong>configureArgParser</strong>(<a href="../args/ArgParser.html">ArgParser</a> parser) <a class="anchor-link" href="#configureArgParser"
-              title="Permalink to Task.configureArgParser">#</a></h4>
-<div class="doc">
-<pre class="source">
-void configureArgParser(ArgParser parser) {
- if(_argParserConfig != null) {
-   _argParserConfig(parser);
- }
-}
-</pre>
 </div>
 </div>
 <div class="method"><h4 id="getExtendedArgsUsage">
@@ -301,9 +300,7 @@ String getExtendedArgsUsage() =&gt;
 <div class="doc">
 <pre class="source">
 String getUsage() {
- final parser = new ArgParser();
- configureArgParser(parser);
- return parser.getUsage();
+ return argParser.getUsage();
 }
 </pre>
 </div>

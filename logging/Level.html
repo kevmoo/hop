@@ -84,6 +84,9 @@ class Level implements Comparable&lt;Level&gt; {
  /** Key for extra debugging loudness ([value] = 1200). */
  static const Level SHOUT = const Level('SHOUT', 1200);
 
+ static const List&lt;Level&gt; LEVELS = const
+     [ALL, FINEST, FINER, FINE, CONFIG, INFO, WARNING, SEVERE, SHOUT, OFF];
+
  bool operator ==(Object other) =&gt; other is Level &amp;&amp; value == other.value;
  bool operator &lt;(Level other) =&gt; value &lt; other.value;
  bool operator &lt;=(Level other) =&gt; value &lt;= other.value;
@@ -175,6 +178,19 @@ const <a href="../logging/Level.html">Level</a>         <strong>INFO</strong> <a
 <p>Key for informational messages (<a class="crossref" href="../logging/Level.html#value">value</a> = 800). </p>
 <pre class="source">
 static const Level INFO = const Level('INFO', 800)
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="LEVELS">
+<button class="show-code">Code</button>
+const <a href="http://api.dartlang.org/dart_core/List.html" ref="external">List</a>&lt;<a href="../logging/Level.html">Level</a>&gt;         <strong>LEVELS</strong> <a class="anchor-link"
+            href="#LEVELS"
+            title="Permalink to Level.LEVELS">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const List&lt;Level&gt; LEVELS = const
+   [ALL, FINEST, FINER, FINE, CONFIG, INFO, WARNING, SEVERE, SHOUT, OFF]
 </pre>
 </div>
 </div>
@@ -385,10 +401,15 @@ bool operator ==(Object other) =&gt; other is Level &amp;&amp; value == other.va
 <div class="inherited">
 <p>Compares this object to another <a class="crossref" href="http://api.dartlang.org/dart_core/Comparable.html">Comparable</a></p>
 <p>Returns a value like a <a class="crossref" href="http://api.dartlang.org/dart_core/Comparator.html">Comparator</a> when comparing <code>this</code> to 
-<span class="param">other</span>.</p>
-<p>May throw an <a class="crossref" href="http://api.dartlang.org/dart_core/ArgumentError.html">ArgumentError</a> if 
-<span class="param">other</span> is of a type that
-is not comparable to <code>this</code>.</p>
+<span class="param">other</span>.
+That is, it returns a negative integer if <code>this</code> is ordered before 
+<span class="param">other</span>,
+a positive integer if <code>this</code> is ordered after 
+<span class="param">other</span>,
+and zero if <code>this</code> and 
+<span class="param">other</span> are ordered together.</p>
+<p>The 
+<span class="param">other</span> argument must be a value that is comparable to this object.</p>
 <div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Comparable.html" ref="external">Comparable</a>&lt;<a href="../logging/Level.html">Level</a>&gt; </div></div>
 <pre class="source">
 int compareTo(Level other) =&gt; value - other.value;

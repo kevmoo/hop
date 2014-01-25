@@ -1,0 +1,332 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>PosixStyle class / path.style.posix Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="path.style.posix" data-type="PosixStyle">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../path.style.posix.html">path.style.posix</a> &rsaquo; <a href="../path.style.posix/PosixStyle.html">PosixStyle</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>PosixStyle</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>The style for POSIX paths.</p>
+<pre class="source">
+class PosixStyle extends Style {
+ PosixStyle();
+
+ final name = 'posix';
+ final separator = '/';
+ final separatorPattern = new RegExp(r'/');
+ final needsSeparatorPattern = new RegExp(r'[^/]$');
+ final rootPattern = new RegExp(r'^/');
+
+ String pathFromUri(Uri uri) {
+   if (uri.scheme == '' || uri.scheme == 'file') {
+     return Uri.decodeComponent(uri.path);
+   }
+   throw new ArgumentError("Uri $uri must have scheme 'file:'.");
+ }
+
+ Uri absolutePathToUri(String path) {
+   var parsed = new ParsedPath.parse(path, this);
+   if (parsed.parts.isEmpty) {
+     // If the path is a bare root (e.g. "/"), [components] will
+     // currently be empty. We add two empty components so the URL constructor
+     // produces "file:///", with a trailing slash.
+     parsed.parts.addAll(["", ""]);
+   } else if (parsed.hasTrailingSeparator) {
+     // If the path has a trailing slash, add a single empty component so the
+     // URI has a trailing slash as well.
+     parsed.parts.add("");
+   }
+
+   return new Uri(scheme: 'file', pathSegments: parsed.parts);
+ }
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../path.style/Style.html">Style</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>PosixStyle</strong></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>PosixStyle</strong>() <a class="anchor-link" href="#"
+              title="Permalink to PosixStyle.PosixStyle">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
+<pre class="source">
+PosixStyle();
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field inherited"><h4 id="context">
+<button class="show-code">Code</button>
+final <a href="../path.context/Context.html">Context</a>         <strong>context</strong> <a class="anchor-link"
+            href="#context"
+            title="Permalink to PosixStyle.context">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../path.style/Style.html">Style</a> </div><div class="doc">
+<p>A <a class="crossref" href="../path.context/Context.html">Context</a> that uses this style.</p>
+<pre class="source">
+Context get context =&gt; new Context(style: this);
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="name">
+<button class="show-code">Code</button>
+final         <strong>name</strong> <a class="anchor-link"
+            href="#name"
+            title="Permalink to PosixStyle.name">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>The name of this path style. Will be "posix" or "windows".</p>
+<div class="docs-inherited-from">docs inherited from <a href="../path.style/Style.html">Style</a> </div></div>
+<pre class="source">
+final name = 'posix'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="needsSeparatorPattern">
+<button class="show-code">Code</button>
+final         <strong>needsSeparatorPattern</strong> <a class="anchor-link"
+            href="#needsSeparatorPattern"
+            title="Permalink to PosixStyle.needsSeparatorPattern">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>The <a class="crossref" href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a> that matches path components that need a separator after
+them.</p>
+<p>Windows and POSIX styles just need separators when the previous component
+doesn't already end in a separator, but the URL always needs to place a
+separator between the root and the first component, even if the root
+already ends in a separator character. For example, to join "file://" and
+"usr", an additional "/" is needed (making "file:///usr").</p>
+<div class="docs-inherited-from">docs inherited from <a href="../path.style/Style.html">Style</a> </div></div>
+<pre class="source">
+final needsSeparatorPattern = new RegExp(r'[^/]$')
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="relativeRootPattern">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_core/Pattern.html" ref="external">Pattern</a>         <strong>relativeRootPattern</strong> <a class="anchor-link"
+            href="#relativeRootPattern"
+            title="Permalink to PosixStyle.relativeRootPattern">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../path.style/Style.html">Style</a> </div><div class="doc">
+<p>The <a class="crossref" href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a> that can be used to match the root prefix of a root-relative
+path in this style.</p>
+<p>This can be null to indicate that this style doesn't support root-relative
+paths.</p>
+<pre class="source">
+final Pattern relativeRootPattern = null
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="rootPattern">
+<button class="show-code">Code</button>
+final         <strong>rootPattern</strong> <a class="anchor-link"
+            href="#rootPattern"
+            title="Permalink to PosixStyle.rootPattern">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>The <a class="crossref" href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a> that can be used to match the root prefix of an absolute
+path in this style.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../path.style/Style.html">Style</a> </div></div>
+<pre class="source">
+final rootPattern = new RegExp(r'^/')
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="separator">
+<button class="show-code">Code</button>
+final         <strong>separator</strong> <a class="anchor-link"
+            href="#separator"
+            title="Permalink to PosixStyle.separator">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>The path separator for this style. On POSIX, this is <code>/</code>. On Windows,
+it's <code>\</code>.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../path.style/Style.html">Style</a> </div></div>
+<pre class="source">
+final separator = '/'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="separatorPattern">
+<button class="show-code">Code</button>
+final         <strong>separatorPattern</strong> <a class="anchor-link"
+            href="#separatorPattern"
+            title="Permalink to PosixStyle.separatorPattern">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>The <a class="crossref" href="http://api.dartlang.org/dart_core/Pattern.html">Pattern</a> that can be used to match a separator for a path in this
+style. Windows allows both "/" and "\" as path separators even though "\"
+is the canonical one.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../path.style/Style.html">Style</a> </div></div>
+<pre class="source">
+final separatorPattern = new RegExp(r'/')
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="absolutePathToUri">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Uri.html" ref="external">Uri</a> <strong>absolutePathToUri</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> path) <a class="anchor-link" href="#absolutePathToUri"
+              title="Permalink to PosixStyle.absolutePathToUri">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns the URI that represents 
+<span class="param">path</span>, which is assumed to be absolute.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../path.style/Style.html">Style</a> </div></div>
+<pre class="source">
+Uri absolutePathToUri(String path) {
+ var parsed = new ParsedPath.parse(path, this);
+ if (parsed.parts.isEmpty) {
+   // If the path is a bare root (e.g. "/"), [components] will
+   // currently be empty. We add two empty components so the URL constructor
+   // produces "file:///", with a trailing slash.
+   parsed.parts.addAll(["", ""]);
+ } else if (parsed.hasTrailingSeparator) {
+   // If the path has a trailing slash, add a single empty component so the
+   // URI has a trailing slash as well.
+   parsed.parts.add("");
+ }
+
+ return new Uri(scheme: 'file', pathSegments: parsed.parts);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="getRelativeRoot">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>getRelativeRoot</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> path) <a class="anchor-link" href="#getRelativeRoot"
+              title="Permalink to PosixStyle.getRelativeRoot">#</a></h4>
+<div class="inherited-from">inherited from <a href="../path.style/Style.html">Style</a> </div><div class="doc">
+<p>Gets the root prefix of 
+<span class="param">path</span> if it's root-relative.</p>
+<p>If 
+<span class="param">path</span> is relative or absolute and not root-relative, returns <code>null</code>.</p>
+<pre class="source">
+String getRelativeRoot(String path) {
+ if (relativeRootPattern == null) return null;
+ // TODO(rnystrom): Use firstMatch() when #7080 is fixed.
+ var matches = relativeRootPattern.allMatches(path);
+ if (matches.isEmpty) return null;
+ return matches.first[0];
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="getRoot">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>getRoot</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> path) <a class="anchor-link" href="#getRoot"
+              title="Permalink to PosixStyle.getRoot">#</a></h4>
+<div class="inherited-from">inherited from <a href="../path.style/Style.html">Style</a> </div><div class="doc">
+<p>Gets the root prefix of 
+<span class="param">path</span> if path is absolute. If 
+<span class="param">path</span> is relative,
+returns <code>null</code>.</p>
+<pre class="source">
+String getRoot(String path) {
+ // TODO(rnystrom): Use firstMatch() when #7080 is fixed.
+ var matches = rootPattern.allMatches(path);
+ if (matches.isNotEmpty) return matches.first[0];
+ return getRelativeRoot(path);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="pathFromUri">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>pathFromUri</strong>(<a href="http://api.dartlang.org/dart_core/Uri.html" ref="external">Uri</a> uri) <a class="anchor-link" href="#pathFromUri"
+              title="Permalink to PosixStyle.pathFromUri">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns the path represented by 
+<span class="param">uri</span> in this style.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../path.style/Style.html">Style</a> </div></div>
+<pre class="source">
+String pathFromUri(Uri uri) {
+ if (uri.scheme == '' || uri.scheme == 'file') {
+   return Uri.decodeComponent(uri.path);
+ }
+ throw new ArgumentError("Uri $uri must have scheme 'file:'.");
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="relativePathToUri">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/Uri.html" ref="external">Uri</a> <strong>relativePathToUri</strong>(<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> path) <a class="anchor-link" href="#relativePathToUri"
+              title="Permalink to PosixStyle.relativePathToUri">#</a></h4>
+<div class="inherited-from">inherited from <a href="../path.style/Style.html">Style</a> </div><div class="doc">
+<p>Returns the URI that represents the relative path made of <code>parts</code>.</p>
+<pre class="source">
+Uri relativePathToUri(String path) =&gt;
+   new Uri(pathSegments: context.split(path));
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="toString">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_core/String.html" ref="external">String</a> <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to PosixStyle.toString">#</a></h4>
+<div class="inherited-from">inherited from <a href="../path.style/Style.html">Style</a> </div><div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
+<pre class="source">
+String toString() =&gt; name;
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

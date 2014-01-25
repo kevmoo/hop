@@ -1,0 +1,192 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>ThrottledStream&lt;S, T&gt; class / bot.throttled_stream Library / Hop Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="bot.throttled_stream" data-type="ThrottledStream&amp;lt;S, T&amp;gt;">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Hop Documentation</a>
+         &rsaquo; <a href="../bot.throttled_stream.html">bot.throttled_stream</a> &rsaquo; <a href="../bot.throttled_stream/ThrottledStream.html">ThrottledStream&lt;S, T&gt;</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>ThrottledStream&lt;S, T&gt;</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class ThrottledStream&lt;S, T&gt; {
+
+ final _AsyncMethod&lt;S&gt; _asyncMethod;
+ final StreamController&lt;T&gt; _controller = new StreamController.broadcast();
+
+ S _source;
+ S _sendingSource;
+ T _outputValue;
+ Future&lt;T&gt; _outputFuture;
+ bool _forceUpdate = false;
+
+ ThrottledStream(dynamic asyncMethod(S source)) :
+   this._asyncMethod = asyncMethod;
+
+ Stream&lt;T&gt; get outputStream =&gt; _controller.stream;
+
+ S get source =&gt; _source;
+
+ void set source(S value) {
+   _source = value;
+   _tryUpdate();
+ }
+
+ T get outputValue =&gt; _outputValue;
+
+ Future close() =&gt; _controller.close();
+
+ void refresh() {
+   _forceUpdate = true;
+   _tryUpdate();
+ }
+
+ bool get _shouldUpdate =&gt; (_source != _sendingSource) || _forceUpdate;
+
+ void _tryUpdate() {
+   if(!_controller.isClosed &amp;&amp;
+       _outputFuture == null &amp;&amp;
+       _shouldUpdate) {
+     _sendingSource = _source;
+     _outputFuture = new Future(() =&gt; _asyncMethod(_sendingSource))
+       .then((T output) {
+         _forceUpdate = false;
+         _outputValue = output;
+         _controller.add(output);
+       })
+       .catchError((error, StackTrace st) {
+         _controller.addError(error, st);
+       })
+       .whenComplete(() {
+         _outputFuture = null;
+         _tryUpdate();
+       });
+   }
+ }
+}
+</pre>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>ThrottledStream</strong>(asyncMethod(<a href="../bot.throttled_stream/ThrottledStream.html">S</a> source)) <a class="anchor-link" href="#"
+              title="Permalink to ThrottledStream&lt;S, T&gt;.ThrottledStream">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="http://api.dartlang.org/dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from <a href="http://api.dartlang.org/dart_core/Object.html" ref="external">Object</a> </div></div>
+<pre class="source">
+ThrottledStream(dynamic asyncMethod(S source)) :
+ this._asyncMethod = asyncMethod;
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="outputStream">
+<button class="show-code">Code</button>
+final <a href="http://api.dartlang.org/dart_async/Stream.html" ref="external">Stream</a>&lt;<a href="../bot.throttled_stream/ThrottledStream.html">T</a>&gt;         <strong>outputStream</strong> <a class="anchor-link"
+            href="#outputStream"
+            title="Permalink to ThrottledStream&lt;S, T&gt;.outputStream">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+Stream&lt;T&gt; get outputStream =&gt; _controller.stream;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="outputValue">
+<button class="show-code">Code</button>
+final <a href="../bot.throttled_stream/ThrottledStream.html">T</a>         <strong>outputValue</strong> <a class="anchor-link"
+            href="#outputValue"
+            title="Permalink to ThrottledStream&lt;S, T&gt;.outputValue">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+T get outputValue =&gt; _outputValue;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="source">
+<button class="show-code">Code</button>
+<a href="../bot.throttled_stream/ThrottledStream.html">S</a>         <strong>source</strong> <a class="anchor-link"
+            href="#source"
+            title="Permalink to ThrottledStream&lt;S, T&gt;.source">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+S get source =&gt; _source;
+</pre>
+<pre class="source">
+void set source(S value) {
+ _source = value;
+ _tryUpdate();
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="close">
+<button class="show-code">Code</button>
+<a href="http://api.dartlang.org/dart_async/Future.html" ref="external">Future</a> <strong>close</strong>() <a class="anchor-link" href="#close"
+              title="Permalink to ThrottledStream&lt;S, T&gt;.close">#</a></h4>
+<div class="doc">
+<pre class="source">
+Future close() =&gt; _controller.close();
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="refresh">
+<button class="show-code">Code</button>
+void <strong>refresh</strong>() <a class="anchor-link" href="#refresh"
+              title="Permalink to ThrottledStream&lt;S, T&gt;.refresh">#</a></h4>
+<div class="doc">
+<pre class="source">
+void refresh() {
+ _forceUpdate = true;
+ _tryUpdate();
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

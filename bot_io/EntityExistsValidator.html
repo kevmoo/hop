@@ -43,10 +43,10 @@ class EntityExistsValidator implements EntityValidator {
  @override
  Stream&lt;String&gt; validateEntity(FileSystemEntity entity) {
    assert(entity != null);
-   return _streamFromIterableFuture(_getValidation(entity));
+   return _oneOrNoneOnNull(_getValidation(entity));
  }
 
- Future&lt;List&lt;String&gt;&gt; _getValidation(FileSystemEntity entity) {
+ Future&lt;String&gt; _getValidation(FileSystemEntity entity) {
    assert(entity != null);
 
    final entType = _getType(entity);
@@ -54,14 +54,14 @@ class EntityExistsValidator implements EntityValidator {
      return _exists(entity)
          .then((bool exists) {
            if(exists) {
-             return [];
+             return null;
            }
-           return ["$entity does not exist on disk"];
+           return "$entity does not exist on disk";
          });
    }
 
-   return new Future.value(["Expected $entity to be $entityType,"
-                            " but it is $entType"]);
+   return new Future.value(
+       "Expected $entity to be $entityType, but it is $entType");
  }
 
  static Future&lt;bool&gt; _exists(FileSystemEntity entity) {
@@ -139,7 +139,7 @@ final FileSystemEntityType entityType
 @override
 Stream&lt;String&gt; validateEntity(FileSystemEntity entity) {
  assert(entity != null);
- return _streamFromIterableFuture(_getValidation(entity));
+ return _oneOrNoneOnNull(_getValidation(entity));
 }
 </pre>
 </div>
