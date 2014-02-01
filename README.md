@@ -3,6 +3,10 @@
 
 [![Build Status](https://drone.io/github.com/dart-lang/hop/status.png)](https://drone.io/github.com/dart-lang/hop/latest) [![Stories in Ready](https://badge.waffle.io/dart-lang/hop.png?label=ready)](http://waffle.io/dart-lang/hop)
 
+# What is this thing?
+
+**hop** is [rake](http://rake.rubyforge.org/) for Dart.
+
 # Projects using Hop
 
 * [Pop, Pop, Win!](https://github.com/dart-lang/pop-pop-win) - Minesweeper with balloons
