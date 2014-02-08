@@ -1,6 +1,6 @@
 # Changelog - Dart Hop Task Management Framework
 
-## 0.29.0-dev PRE-RELEASE
+## 0.29.0 2014-02-07 (SDK 1.2.0-dev.3.2 r32242)
 
 * Removed deprecated items from `TaskRegistry`: `taskNames`, `hasTask`, `addSync`, `addAsync`
 * Removed deprecated `TaskContext.getSubContext`.
