@@ -41,8 +41,7 @@ void main() {
   });
 }
 
-Future _testAnalyzerTask(Map<String, String> inputs,
-                       RunResult expectedResult) {
+Future _testAnalyzerTask(Map<String, String> inputs, RunResult expectedResult) {
   String path;
   return TempDir
       .then((Directory dir) {

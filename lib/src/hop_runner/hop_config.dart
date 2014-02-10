@@ -18,7 +18,7 @@ class HopConfig implements _ContextLogger {
   final ArgResults argResults;
   final _ContextLogger _printer;
   final StreamController<HopEvent> _eventController =
-      new StreamController<HopEvent>.broadcast(sync:true);
+      new StreamController<HopEvent>.broadcast(sync: true);
 
   /**
    * This constructor exists for testing Hop.

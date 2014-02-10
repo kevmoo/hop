@@ -13,7 +13,7 @@ class _TaskRuntime extends TaskRuntime {
 
   bool get isDisposed => _disposed;
 
-  void addLog(Level level, String message, {List<String> source: const[]}) {
+  void addLog(Level level, String message, {List<String> source: const []}) {
     assert(source != null);
     _requireNotDisposed();
     source = [name]..addAll(source);

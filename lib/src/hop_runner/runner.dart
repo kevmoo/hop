@@ -79,7 +79,7 @@ class Runner {
     bool throwTaskExceptions: false}) {
     requireArgumentNotNull(config, 'config');
 
-    if(config.argResults.command != null) {
+    if (config.argResults.command != null) {
       // we're executing a command
       final subCommandArgResults = config.argResults.command;
       final taskName = subCommandArgResults.name;
@@ -156,7 +156,7 @@ class Runner {
     final helpArgs = new _HelpArgs(registry);
 
     // wire up help task
-    if(helpTaskName != null) {
+    if (helpTaskName != null) {
       assert(registry._helpTaskName == null);
       registry._helpTaskName = helpTaskName;
       registry.addTask(helpTaskName, _getHelpTask(helpArgs));

@@ -37,7 +37,8 @@ Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
   requireArgument(outputType == CompilerTargetType.JS || outputType == CompilerTargetType.DART, 'outputType');
 
   if (singleOutput != null && outputMapper != null) {
-    throw new ArgumentError('Only one of "singleOutput" and "outputMapper" can be set.');
+    throw new ArgumentError(
+        'Only one of "singleOutput" and "outputMapper" can be set.');
   }
 
   return new Task((TaskContext context) {
@@ -91,7 +92,7 @@ Future _dart2js(TaskContext ctx, String file,
 
   requireArgumentNotNullOrEmpty(output, 'output');
 
-  if(output == file) {
+  if (output == file) {
     ctx.fail('The provided or derived output value "$output" is the same as the'
         ' input file.');
   }

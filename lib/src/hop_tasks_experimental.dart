@@ -112,7 +112,7 @@ Future<Document> _updateIndex(Document source, DocsConfig cfg) {
   for(final child in contentDiv.children) {
     assert(child.tagName == 'h2' || child.tagName == 'h3' || child.tagName == 'h4');
 
-    if(child.tagName == 'h4') {
+    if (child.tagName == 'h4') {
       assert(child.children.length == 1);
 
       final anchor = child.children[0];

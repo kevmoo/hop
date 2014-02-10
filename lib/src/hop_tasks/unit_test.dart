@@ -34,7 +34,7 @@ Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
     // TODO: wrap this in a try/catch
     unitTestAction(config);
 
-    if(ctx.extendedArgs[_FILTER_ARG].isNotEmpty) {
+    if (ctx.extendedArgs[_FILTER_ARG].isNotEmpty) {
       ctx.info('Filtering tests by: ${ctx.arguments.rest}');
 
       unittest.filterTests((unittest.TestCase tc) {

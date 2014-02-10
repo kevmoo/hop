@@ -97,7 +97,7 @@ void main() {
           task.parseExtendedArgs(['1st', '2rd', '3rd', '4th']);
           fail("should throw");
         } catch (ex) {
-          if(ex is! FormatException) rethrow;
+          if (ex is! FormatException) rethrow;
           expect(ex.message, 'Expected 3 argument(s); received 4');
         }
       });

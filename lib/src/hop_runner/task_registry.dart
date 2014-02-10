@@ -141,7 +141,7 @@ class TaskRegistry {
     }
   }
 
-  static void _noopTask(TaskContext ctx) { }
+  static void _noopTask(TaskContext ctx) {}
 }
 
 class _TaskMetadata {

@@ -44,7 +44,7 @@ void validateTaskName(String name) {
   requireArgumentNotNullOrEmpty(name, 'name');
   requireArgumentContainsPattern(_validNameRegExp, name, 'name');
   requireArgument(!_RESERVED_TASKS.contains(name), 'task',
-  'The provided task has a reserved name');
+      'The provided task has a reserved name');
 }
 
 // TODO: move this to bot?

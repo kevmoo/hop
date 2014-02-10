@@ -64,4 +64,4 @@ class RunShellOutput {
   }
 }
 
-dynamic noopTaskRunner(TaskContext ctx) { }
+dynamic noopTaskRunner(TaskContext ctx) {}

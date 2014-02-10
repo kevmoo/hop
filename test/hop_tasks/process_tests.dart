@@ -57,7 +57,7 @@ String _getTestScriptPath(String name) {
   final filePath = 'test/hop_tasks/process_scripts/$name.dart';
   final file = new File(filePath);
 
-  if(!file.existsSync()) {
+  if (!file.existsSync()) {
     throw
 '''Could not find file "$filePath".
 Are you running this script from the root of the project?''';

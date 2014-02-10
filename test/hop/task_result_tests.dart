@@ -132,7 +132,8 @@ good options:
 Hop options:
 ''';
 
-const _NO_TASK_NO_PARAMS_OUTPUT = '''usage: hop [<hop-options>] <task> [<task-options>] [--] [<task-args>]
+const _NO_TASK_NO_PARAMS_OUTPUT =
+    '''usage: hop [<hop-options>] <task> [<task-options>] [--] [<task-args>]
 
 Tasks:
   help   Print help information about available tasks
@@ -140,7 +141,8 @@ Tasks:
 Hop options:
 ''';
 
-const _GOOD_TASK_NO_PARAMS_OUTPUT = '''usage: hop [<hop-options>] <task> [<task-options>] [--] [<task-args>]
+const _GOOD_TASK_NO_PARAMS_OUTPUT =
+    '''usage: hop [<hop-options>] <task> [<task-options>] [--] [<task-args>]
 
 Tasks:
   good   Just a nice task

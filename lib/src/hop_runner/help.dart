@@ -47,7 +47,8 @@ void _printHelpForTask(_Printer printer, TaskRegistry config, String taskName, A
 
   final usage = task.getUsage();
 
-  printer(_getUsage(showOptions: !usage.isEmpty, taskName: taskName, extendedArgsUsage: task.getExtendedArgsUsage()));
+  printer(_getUsage(showOptions: !usage.isEmpty, taskName: taskName,
+      extendedArgsUsage: task.getExtendedArgsUsage()));
   printer('');
   if (!task.description.isEmpty) {
     printer(_indent(task.description));

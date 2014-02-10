@@ -108,8 +108,8 @@ void main() {
 
 Task _getTask(String str, List<String> log, [bool shouldSucceed = true]) {
   return new Task((TaskContext ctx) {
-    if(shouldSucceed == null) throw 'foo!';
-    if(shouldSucceed == false) ctx.fail("fail!");
+    if (shouldSucceed == null) throw 'foo!';
+    if (shouldSucceed == false) ctx.fail("fail!");
     log.add(str);
   });
 }

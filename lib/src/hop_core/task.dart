@@ -62,7 +62,7 @@ abstract class Task {
     Map<String, dynamic> extendedArgs;
     try {
       extendedArgs = this.parseExtendedArgs(runtime.argResults.rest);
-    } on FormatException catch(obj, stack) {
+    } on FormatException catch (obj, stack) {
       var usage = new TaskUsageException(obj.message, obj, stack);
       return new Future.error(usage, stack);
     }
@@ -106,17 +106,17 @@ abstract class Task {
     //       with extended arg order
     var map = new LinkedHashMap<String, dynamic>();
 
-    for(var i = 0; i < _extendedArgs.length; i++) {
+    for (var i = 0; i < _extendedArgs.length; i++) {
       var arg = _extendedArgs[i];
 
       var result = null;
 
 
-      if(arg.multiple) {
-        assert(i == _extendedArgs.length -1); // better be the last arg
+      if (arg.multiple) {
+        assert(i == _extendedArgs.length - 1); // better be the last arg
         result = argResultsRest.skip(i).toList(growable: false);
       } else {
-        if(i >= argResultsRest.length) {
+        if (i >= argResultsRest.length) {
           assert(!arg.required); // should have already been covered above
           result = null;
         } else {
@@ -134,9 +134,9 @@ abstract class Task {
 }
 
 ZoneSpecification _getZoneSpec(TaskRuntime runtime) {
-  if(runtime.printAtLevel == null) return null;
+  if (runtime.printAtLevel == null) return null;
 
-  return new ZoneSpecification(print: (a,b,c,String line) {
+  return new ZoneSpecification(print: (a, b, c, String line) {
     runtime.addLog(runtime.printAtLevel, line);
   });
 }

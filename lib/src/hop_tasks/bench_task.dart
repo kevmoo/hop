@@ -155,7 +155,7 @@ class _Stats {
 
     num median = null;
     // if length is odd, take middle value
-    if(count % 2 == 1) {
+    if (count % 2 == 1) {
       final middleIndex = (count / 2 - 0.5).toInt();
       median = list[middleIndex];
     } else {
