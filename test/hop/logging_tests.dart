@@ -1,6 +1,5 @@
 library test.hop.logging;
 
-import 'dart:async';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_runner.dart';
 import 'package:logging/logging.dart';

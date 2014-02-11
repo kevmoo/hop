@@ -1,6 +1,5 @@
 library test.hop.args;
 
-import 'dart:async';
 import 'package:args/args.dart';
 import 'package:hop/hop_core.dart';
 import 'package:unittest/unittest.dart';

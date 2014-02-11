@@ -1,7 +1,6 @@
 library test.hop_tasks.compiler;
 
 import 'dart:async';
-import 'dart:io';
 import 'package:path/path.dart' as pathos;
 import 'package:unittest/unittest.dart';
 import 'package:bot_io/bot_io.dart';
