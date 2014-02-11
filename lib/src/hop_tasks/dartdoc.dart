@@ -15,6 +15,11 @@ const _allowDirtyArg = 'allow-dirty';
 const _targetBranchArg = 'target-branch';
 
 /**
+ * *DEPRECATED*.
+ *
+ * `createDartDocTask` maps to the old `dartdoc` command which has been removed
+ * from Dart v1.2. Look for an updated
+ *
  * [targetBranch] the Git branch that will contain the generated docs. If the
  * branch doesn't exist, it will be created. Default: `gh-pages`
  *
@@ -27,6 +32,7 @@ const _targetBranchArg = 'target-branch';
  * signature `Future postBuild(TaskLogger logger, String tempDocPath)`. Use this
  * if you want to modify the doc output.
  */
+@deprecated
 Task createDartDocTask(dynamic delayedLibraryList, {
   String targetBranch: 'gh-pages',
   String packageDir: 'packages/',
