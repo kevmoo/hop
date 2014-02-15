@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'package:args/args.dart';
 import 'package:bot/bot.dart';
-import 'package:bot_io/bot_git.dart';
+import 'package:git/git.dart';
 import 'package:bot_io/bot_io.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/tasks_shared.dart';

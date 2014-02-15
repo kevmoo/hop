@@ -3,7 +3,7 @@ library test.hop_tasks.git;
 import 'dart:async';
 import 'dart:io';
 import 'package:unittest/unittest.dart';
-import 'package:bot_io/bot_git.dart';
+import 'package:git/git.dart';
 import 'package:bot_io/bot_io.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_tasks/git_tasks.dart';

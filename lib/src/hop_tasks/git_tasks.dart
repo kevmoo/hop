@@ -3,7 +3,7 @@ library hop_tasks.git;
 import 'dart:async';
 import 'package:path/path.dart' as pathos;
 import 'package:bot/bot.dart';
-import 'package:bot_io/bot_git.dart';
+import 'package:git/git.dart';
 import 'package:hop/hop_core.dart';
 
 Task getBranchForDirTask(String sourceBranch, String sourceDir,
