@@ -36,23 +36,20 @@ Future startProcess(TaskLogger logger, String command,
       });
 }
 
-Future<int> pipeProcess(Process process,
-    {Action1<String> stdOutWriter, Action1<String> stdErrWriter}) {
+Future<int> pipeProcess(Process process, {Action1<String>
+    stdOutWriter, Action1<String> stdErrWriter}) {
 
   var futures = [process.exitCode];
 
-  futures.add(process.stdout.forEach((data)
-      => _stdListen(data, stdOutWriter)));
+  futures.add(process.stdout.forEach((data) => _stdListen(data, stdOutWriter)));
 
-  futures.add(process.stderr.forEach((data)
-      => _stdListen(data, stdErrWriter)));
+  futures.add(process.stderr.forEach((data) => _stdListen(data, stdErrWriter)));
 
-  return Future.wait(futures)
-      .then((List values) {
-        assert(values.length == futures.length);
-        assert(values[0] != null);
-        return values[0] as int;
-      });
+  return Future.wait(futures).then((List values) {
+    assert(values.length == futures.length);
+    assert(values[0] != null);
+    return values[0] as int;
+  });
 }
 
 void _stdListen(List<int> data, void writer(String input)) {

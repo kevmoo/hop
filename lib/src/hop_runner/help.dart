@@ -17,7 +17,8 @@ Task _getHelpTask(_HelpArgs helpArgs) {
     final args = ctx.arguments;
 
     if (args.command != null) {
-      _printHelpForTask(helpArgs.printer, helpArgs.registry, args.command.name, helpArgs.parser);
+      _printHelpForTask(helpArgs.printer, helpArgs.registry, args.command.name,
+          helpArgs.parser);
     } else {
       _printHelp(helpArgs.printer, helpArgs.registry, helpArgs.parser);
 

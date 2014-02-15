@@ -10,7 +10,7 @@ class _TaskWithParser extends Task {
       super._impl(taskDefinition, description, extendedArgs);
 
   Task clone({String description}) {
-    if(description == null) description = this.description;
+    if (description == null) description = this.description;
 
     return new Task(_exec, description: description, argParser: argParser,
         extendedArgs: _extendedArgs);
@@ -27,8 +27,8 @@ abstract class Task {
   factory Task(dynamic taskDefinition(TaskContext ctx), {String description,
     List<TaskArgument> extendedArgs, ArgParser argParser}) {
 
-    return new _TaskWithParser(taskDefinition, description,
-        extendedArgs, argParser);
+    return new _TaskWithParser(taskDefinition, description, extendedArgs,
+        argParser);
   }
 
   Task._impl(dynamic taskDefinition(TaskContext ctx), String description,
@@ -92,12 +92,15 @@ abstract class Task {
       if (!_extendedArgs.last.multiple &&
         argResultsRest.length > _extendedArgs.length) {
         var expected = _extendedArgs.length;
-        throw new FormatException('Expected $expected argument(s); received $actual');
+        throw new FormatException(
+            'Expected $expected argument(s); received $actual');
       } else {
-        var lastRequiredIndex = lastIndexWhere(_extendedArgs, (arg) => arg.required);
-        if(argResultsRest.length <= lastRequiredIndex) {
+        var lastRequiredIndex = lastIndexWhere(_extendedArgs, (arg) =>
+            arg.required);
+        if (argResultsRest.length <= lastRequiredIndex) {
           var expected = lastRequiredIndex + 1;
-          throw new FormatException('Expected $expected argument(s); received $actual');
+          throw new FormatException(
+              'Expected $expected argument(s); received $actual');
         }
       }
     }

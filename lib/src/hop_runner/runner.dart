@@ -90,7 +90,7 @@ class Runner {
       RunResult finalResult;
 
       return Future.forEach(tasks.keys, (String subTaskName) {
-        if(finalResult != null && finalResult != RunResult.SUCCESS) {
+        if (finalResult != null && finalResult != RunResult.SUCCESS) {
           config.contextPrint('Skipping $subTaskName');
           return null;
         }
@@ -211,12 +211,10 @@ class _ConsolePrinter extends _ContextLogger {
   final Level _minLogLevel;
   final bool _prefixEnabled;
 
-  _ConsolePrinter(this._linePrinter, this._useColor, this._minLogLevel,
-      this._prefixEnabled);
+  _ConsolePrinter(this._linePrinter, this._useColor, this._minLogLevel, this._prefixEnabled);
 
   void _print(dynamic value) {
-    String line = (value is ShellString) ?
-        value.format(_useColor) : value;
+    String line = (value is ShellString) ? value.format(_useColor) : value;
 
     _linePrinter(line);
   }
