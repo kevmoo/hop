@@ -2,7 +2,7 @@ library hop.shared;
 
 import 'package:args/args.dart';
 import 'package:bot/bot.dart';
-import 'package:bot_io/completion.dart' as completion;
+import 'package:completion/completion.dart' as completion;
 import 'package:logging/logging.dart';
 
 const _RESERVED_TASKS = const [completion.COMPLETION_COMMAND_NAME];

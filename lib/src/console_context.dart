@@ -2,7 +2,7 @@ library hop.console_context;
 
 import 'dart:io' as io;
 import 'package:args/args.dart';
-import 'package:bot_io/completion.dart';
+import 'package:completion/completion.dart';
 import 'package:logging/logging.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/shared.dart';

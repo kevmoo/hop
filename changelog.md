@@ -1,5 +1,8 @@
 # Changelog - Hop - Dart Task Management Framework
 
+## 0.29.1+1 2014-02-15 (SDK 1.2.0-dev.5.7 32688)
+* Using the new `completion` package.
+
 ## 0.29.1 2014-02-15 (SDK 1.2.0-dev.5.7 32688)
 * Marked `createDartDocTask` as **DEPRECATED**. This task is broken in Dart 1.2. Hoping to create a new, compatible task soon.
 * Set upper bound on dependencies to minimize unexpected breaking changes.
