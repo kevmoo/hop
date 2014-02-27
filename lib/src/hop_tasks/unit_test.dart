@@ -124,13 +124,13 @@ class _HopTestConfiguration extends unittest.Configuration {
     if (testCase.result == unittest.PASS) {
       _context.info('${testCase.description} -- PASS');
     } else {
-      var msg = '''[${testCase.result}] ${testCase.description}
-${testCase.message}''';
+      var sb = new StringBuffer();
+      sb.writeln('[${testCase.result}] ${testCase.description}');
+      sb.writeln(testCase.message);
       if (testCase.stackTrace != null) {
-        msg = msg + '''
-${testCase.stackTrace}''';
+        sb.writeln(testCase.stackTrace);
       }
-      _context.severe(msg);
+      _context.severe(sb.toString());
     }
 
     _context.fine('Duration: ${testCase.runningTime}');
