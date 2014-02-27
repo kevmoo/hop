@@ -14,11 +14,11 @@ void main() {
     group(targetType.toString(), () {
 
       test('good input', () {
-        return _testCompiler(_goodTestFile, targetType, RunResult.SUCCESS);
+        return _testCompiler(_GOOD_TEST_CONTENT, targetType, RunResult.SUCCESS);
       });
 
       test('bad input', () {
-        return _testCompiler(_badTestFile, targetType, RunResult.EXCEPTION);
+        return _testCompiler(_BAD_TEST_CONTENT, targetType, RunResult.EXCEPTION);
       });
     });
 
@@ -102,5 +102,5 @@ Set<String> _getOutputFiles(List<String> inputFiles, CompilerTargetType type,
   return outputFiles;
 }
 
-const _goodTestFile = 'main() { print("hello, world!"); }';
-const _badTestFile = 'ain() { print("hello, world!"); }';
+const _GOOD_TEST_CONTENT = 'main() { print("hello, world!"); }';
+const _BAD_TEST_CONTENT = 'ain() { print("hello, world!"); }';
