@@ -1,5 +1,15 @@
 # Changelog - Hop - Dart Task Management Framework
 
+## 0.30.0-dev pre-release
+
+* Updated minimum SDK version to 1.2.
+* **BREAKING** Removed `dartdoc` task.
+    * Look at the new `hop_docgen` package for the same features.
+* **BREAKING** Removed `createCopyJSTask`.
+    * In a world of `pub build`, this should not be needed.
+* **BREAKING-ish** Removed "experimental" code from `lib/src`.
+* Improved the error output from the `unittest` task.
+
 ## 0.29.1+1 2014-02-15 (SDK 1.2.0-dev.5.7 32688)
 * Using the new `completion` package.
 
