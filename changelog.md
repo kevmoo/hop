@@ -1,7 +1,6 @@
 # Changelog - Hop - Dart Task Management Framework
 
-## 0.30.0-dev pre-release
-
+## 0.30.0 2014-02-28 (SDK 1.3.0-dev.0.0 33060)
 * Updated minimum SDK version to 1.2.
 * **BREAKING** Removed `dartdoc` task.
     * Look at the new `hop_docgen` package for the same features.
