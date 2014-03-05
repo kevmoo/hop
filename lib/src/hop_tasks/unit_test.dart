@@ -13,7 +13,15 @@ const _SUMMARY_PASS = 'pass';
 const _SUMMARY_ERROR = 'error';
 const _FILTER_ARG = 'filter';
 
-Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
+typedef void _LegacyUnittestMethod(unittest.Configuration config);
+
+/// Creates a [Task] which runs the unit tests defined by [unitTestAction].
+///
+/// [unitTestAction] should be in the form `void function()`.
+///
+/// [unitTestAction] in the form `void function(Configuration config)` is
+/// deprecated.
+Task createUnitTestTask(Function unitTestAction,
                         {Duration timeout: const Duration(seconds: 20)}) {
   return new Task((TaskContext ctx) {
 
@@ -31,8 +39,15 @@ Task createUnitTestTask(void unitTestAction(unittest.Configuration config),
     final config = new _HopTestConfiguration(ctx, failSummary, passSummary,
         errorSummary, timeout);
 
-    // TODO: wrap this in a try/catch
-    unitTestAction(config);
+    if(unitTestAction is _LegacyUnittestMethod) {
+      ctx.warning('The "unitTestAction" argument to '
+          'createUnitTestTask has changed.');
+      ctx.warning('Change "unitTestAction" to be "void()".');
+      unitTestAction(config);
+    } else {
+      unittest.unittestConfiguration = config;
+      unitTestAction();
+    }
 
     if (ctx.extendedArgs[_FILTER_ARG].isNotEmpty) {
       ctx.info('Filtering tests by: ${ctx.arguments.rest}');

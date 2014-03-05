@@ -23,6 +23,29 @@ void main() {
 
       var out = stdout.toString();
 
+      expect(out, contains('The "unitTestAction" argument to createUnitTestTask'
+          ' has changed.'));
+      expect(out, contains('sample -- PASS'));
+      expect(out, contains('1 PASSED, 0 FAILED, 0 ERRORS'));
+    });
+  });
+
+  test('test method without config param', () {
+
+    var stdout = new StringBuffer();
+    var stderr = new StringBuffer();
+
+    return Process.start('dart', [_TEST_RUNNER_PATH, 'test_without_arg'])
+        .then((process) {
+      return pipeProcess(process,stdOutWriter: stdout.writeln,
+          stdErrWriter: stderr.writeln);
+    }).then((status) {
+
+      //expect(status, 0);
+      expect(stderr.isEmpty, isTrue);
+
+      var out = stdout.toString();
+
       expect(out, contains('sample -- PASS'));
       expect(out, contains('1 PASSED, 0 FAILED, 0 ERRORS'));
     });
