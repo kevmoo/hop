@@ -11,7 +11,7 @@ void main(List<String> args) {
   // Easy to enable hop-wide logging
   // enableScriptLogListener();
 
-  addTask('test', createUnitTestTask(test_console.testCore));
+  addTask('test', createUnitTestTask(test_console.main));
 
   addTask('docs', createDocGenTask('../kev_dartdoc_viewer'));
 
