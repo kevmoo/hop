@@ -9,10 +9,10 @@ documentation: http://dart-lang.github.io/hop/
 dependencies:
   args: '>=0.9.0 <0.11.0'
   bot: '>=0.26.0 <0.27.0'
-  bot_io: '>=0.25.2 <0.26.0'
+  bot_io: '>=0.25.2 <0.27.0'
   collection: '>=0.9.0 <0.10.0'
   completion: '>=0.1.0 <0.2.0'
-  git: '>=0.1.0 <0.2.0'
+  git: '>=0.1.0 <0.3.0'
   logging: '>=0.9.1 <0.10.0'
   path: '>=0.9.0 <2.0.0'
   unittest: '>=0.9.0 <0.11.0'
