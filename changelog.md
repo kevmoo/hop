@@ -1,5 +1,11 @@
 # Changelog - Hop - Dart Task Management Framework
 
+## 0.30.2-dev 
+* `createUnitTestTask` argument `unitTestAction` can now be a simple void function.
+
+## 0.30.1 2014-02-28
+* Fixed dependencies
+
 ## 0.30.0 2014-02-28 (SDK 1.3.0-dev.0.0 33060)
 * Updated minimum SDK version to 1.2.
 * **BREAKING** Removed `dartdoc` task.
