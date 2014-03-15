@@ -78,7 +78,9 @@
         <dartdoc-minimap-class item="{{viewer.currentPage}}">
         </dartdoc-minimap-class>
       </template>
-      <div>Dart Build {{buildIdentifier}}</div>
+      <template if="{{showVersion}}">
+        <div>Version {{version}}</div>
+      </template>
     </div>
   </template>
 </polymer-element>

@@ -1,21 +1,30 @@
-<!DOCTYPE html><html><head>
+<!DOCTYPE html><html><head><script src="packages/shadow_dom/shadow_dom.debug.js"></script>
+<script src="packages/custom_element/custom-elements.debug.js"></script>
 
   <meta charset="utf-8">
   <link rel="stylesheet" href="static/css/bootstrap.css">
   <link rel="stylesheet" href="static/css/dart-style.css">
   <link rel="stylesheet" href="static/css/pics.css">
   <link rel="stylesheet" href="static/css/prettify.css">
-  <script src="packages/shadow_dom/shadow_dom.debug.js"></script>
-  <script src="packages/custom_element/custom-elements.debug.js"></script>
+  <link rel="stylesheet" href="static/css/print.css">
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <script src="packages/browser/interop.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dart API Reference</title>
 </head>
 <body><polymer-element name="dartdoc-comment" extends="div">
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-parameter" attributes="parameters">
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-item">
   <template>
@@ -29,16 +38,16 @@
       </li>
     </ul>
   </template>
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-annotation">
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-link">
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-type">
-
+  
 </polymer-element>
 <polymer-element name="variable-heading" attributes="item">
   <template>
@@ -55,7 +64,7 @@
       <b><a id="{{idName}}" href="{{item.prefixedAnchorHref}}">{{name}}</a></b>
     </template>
   </template>
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-variable">
   <template>
@@ -86,7 +95,7 @@
     </dfn></p>
 
   </template>
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-method">
   <template>
@@ -190,7 +199,7 @@
     <div is="dartdoc-comment" item="{{item}}"></div>
   </template>
 
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-category" class="accordion-group">
 <template>
@@ -233,7 +242,7 @@
       </ul>
     </template>
   </template>
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-homepage">
   <template>
@@ -248,7 +257,7 @@
     </template>
   </template>
 
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-class" attributes="item">
   <template>
@@ -280,7 +289,7 @@
     </div>
   </template>
 
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-library" attributes="item">
   <template>
@@ -303,7 +312,7 @@
     </div>
   </template>
 
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-page">
   <template>
@@ -337,7 +346,7 @@
     </template>
   </template>
 
-
+  
 </polymer-element>
 <polymer-element name="search-result" extends="a" lightdom="">
   <template>
@@ -347,7 +356,7 @@
       <li class="text-right text-muted small">{{outerLibrary}}</li>
     </ul>
   </template>
-
+  
 </polymer-element>
 <polymer-element name="search-box">
   <template>
@@ -394,7 +403,7 @@
       </ul>
     </div>
   </template>
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-library-panel">
 <template>
@@ -427,7 +436,7 @@
       </ul>
     </div>
     </template>
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-breadcrumbs">
   <template>
@@ -443,7 +452,7 @@
       </template>
     </ul>
   </template>
-
+  
 </polymer-element>
 <polymer-element name="dartdoc-main">
   <template>
@@ -512,7 +521,9 @@
         <dartdoc-minimap-class item="{{viewer.currentPage}}">
         </dartdoc-minimap-class>
       </template>
-      <div>Dart Build {{buildIdentifier}}</div>
+      <template if="{{showVersion}}">
+        <div>Version {{version}}</div>
+      </template>
     </div>
   </template>
 </polymer-element>

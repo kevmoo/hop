@@ -44,7 +44,7 @@ h3 {
     font: 400 17px/24px 'Montserrat', sans-serif;
     text-transform: uppercase;
     margin-top: 10px;
-    color: #fff;
+    color: #484848;
 }
 
 h4 {
@@ -331,97 +331,6 @@ i.icon-close-x {
   height: 65px;
 }
 
-
-/* ***** Carousel ***** */
-.carousel {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.dart-carousel .carousel-indicators {
-    bottom: -80px;
-    width: 90%;
-    margin-left: -45%;
-}
-
-@media (max-width: 768px) {
-    .dart-carousel .carousel-indicators {
-        width: 100%;
-        margin-left: -50%;
-    }
-}
-
-.dart-carousel .carousel-indicators.icon-indicators {
-    bottom: -100px;
-}
-
-.dart-carousel .carousel-indicators li {
-    display: inline-block;
-    position: relative;
-    cursor: pointer;
-    width: auto;
-    height: auto;
-    text-indent: 0;
-    border: none;
-    border-radius: 0;
-    margin-right: 40px;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    font-size: 14px;
-}
-
-@media (max-width: 500px) {
-    .dart-carousel .carousel-indicators li {
-        width: 10px;
-        height: 10px;
-        text-indent: -999px;
-        cursor: pointer;
-        border: 1px solid #333;
-        border-radius: 10px;
-        margin: 1px;
-        padding: 0;
-    }
-}
-
-
-.dart-carousel .carousel-indicators.icon-indicators li {
-    padding-bottom: 20px;
-}
-
-.dart-carousel .carousel-indicators li.active {
-    background: transparent url('../img/carousel-indicator.png') no-repeat center bottom;
-}
-
-@media (max-width: 500px) {
-    .dart-carousel .carousel-indicators li.active {
-        background: #000;
-        background-image: none;
-    }
-}
-
-.dart-carousel .carousel-indicators li:last-child {
-    margin-right: 0;
-}
-
-.dart-carousel .carousel-indicators li:after {
-    content: url('../img/carousel-lnk-divider.png');
-    position: absolute;
-    top: -4px;
-    right: -35px;
-}
-
-.dart-carousel .carousel-indicators.icon-indicators li:after {
-    top: 5px;
-}
-
-.dart-carousel .carousel-indicators li:last-child:after {
-    content: none;
-}
-
-.dart-carousel .carousel-inner > .item > img {
-    margin: 0 auto;
-}
-
 /* ***** Code ***** */
 .code-hldr {
     text-align: center;
@@ -585,21 +494,6 @@ i.icon-close-x {
 
 .sub-hero a {
     color: #fff;
-}
-
-
-.dart-container > section {
-    margin-top: 65px;
-    margin-bottom: 50px;
-}
-
-.dart-container .sec-shadow {
-    padding-top: 40px;
-    padding-bottom: 100px;
-    background:
-       url(../img/section-shadow-top.png) center top no-repeat,
-       url(../img/section-shadow-bottom.png) center bottom no-repeat;
-    background-size: 90% auto;
 }
 
 /* ***** Dart CTAs ***** */
