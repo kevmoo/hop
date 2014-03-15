@@ -1,5 +1,5 @@
 name: hop
-version: 0.30.2
+version: 0.30.3-dev
 author: Kevin Moore <kevmoo@google.com>
 description: Dart Task Framework
 homepage: https://github.com/dart-lang/hop
