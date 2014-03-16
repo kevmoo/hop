@@ -21,41 +21,6 @@ The __The Hop task management system for Dart__ is hosted on [pub.dartlang.org](
 
 See the [changelog](https://github.com/dart-lang/hop/blob/master/changelog.md) to find the version that works best for you.
 
-If you'd like to track bleeding edge developments, you can reference the the [GitHub repository](https://github.com/dart-lang/hop) directly:
-```yaml
-dependencies:
-  hop:
-    git: https://github.com/dart-lang/hop.git
-```
-
-# Versioning
-
-* We follow [Semantic Versioning](http://semver.org/).
-* We are not planning a V1 for __Hop__ until Dart releases V1.
-	* In the mean time, the version will remain `0.Y.Z`.
-	* Changes to the _minor_ version - Y - will indicate breaking changes.
-	* Changes to the _patch_ version - Z - indicate non-breaking changes.
-
-# Dart SDK dependency
-
-* We're going to try to keep __Hop__ in line with the [latest integration build](https://gsdview.appspot.com/dart-editor-archive-integration/latest/) of the Dart SDK and Editor.
-* At this point, each SDK release tends to introduce breaking changes, which usually require breaking changes in __Hop__.
-* Keep an eye on the [changelog](https://github.com/dart-lang/hop/blob/master/changelog.md) to see how __Hop__ aligns with each SDK release.
-
-# The libraries
-
-## hop - core task runtime
-  * Easy to create command-line scripts.
-  * Define functionality in libraries. Add and update them with `pub`.
-  * Nice touches for free: bash command completion, help, helpful exit codes
-
-## hop_tasks
-  * A collection of tasks and task helpers.
-  * Unit tests
-  * dart2js
-  * dartdoc
-  * git
-
 # Authors
  * [Kevin Moore](https://github.com/kevmoo) ([+Kevin Moore](https://plus.google.com/110066012384188006594/), [@kevmoo](http://twitter.com/kevmoo))
  * [Adam Singer](https://github.com/financeCoding) ([+Adam Singer](https://plus.google.com/104569492481999771226))
