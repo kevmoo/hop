@@ -8,9 +8,6 @@ import 'package:hop_docgen/hop_docgen.dart';
 import '../test/harness_console.dart' as test_console;
 
 void main(List<String> args) {
-  // Easy to enable hop-wide logging
-  // enableScriptLogListener();
-
   addTask('test', createUnitTestTask(test_console.main));
 
   addTask('docs', createDocGenTask('../compiled_dartdoc_viewer'));

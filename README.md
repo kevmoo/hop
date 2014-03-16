@@ -3,6 +3,12 @@
 
 [![Build Status](https://drone.io/github.com/dart-lang/hop/status.png)](https://drone.io/github.com/dart-lang/hop/latest) [![Stories in Ready](https://badge.waffle.io/dart-lang/hop.png?label=ready)](http://waffle.io/dart-lang/hop)
 
+# Getting started
+
+* Read [the wiki](https://github.com/dart-lang/hop/wiki).
+* Read the [documented example](https://github.com/dart-lang/hop/blob/master/example/hop_runner.dart).
+* Check out Hop's [hop_runner](https://github.com/dart-lang/hop/blob/master/tool/hop_runner.dart).
+
 # Projects using Hop
 
 * [Pop, Pop, Win!](https://github.com/dart-lang/pop-pop-win) - Minesweeper with balloons
