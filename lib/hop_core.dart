@@ -1,3 +1,8 @@
+/**
+ * The core of hop.
+ *
+ * Import this when extending hop.
+ */
 library hop.core;
 
 import 'dart:async';

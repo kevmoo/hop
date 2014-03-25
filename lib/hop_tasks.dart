@@ -1,3 +1,4 @@
+/// A collection of useful tasks and task helpers.
 library hop_tasks;
 
 export 'src/hop_tasks/bench_task.dart';

@@ -6,6 +6,17 @@ import 'package:bot/bot.dart';
 import 'package:git/git.dart';
 import 'package:hop/hop_core.dart';
 
+
+/**
+ * Creates a task which creates and populates a branch with [sourceDir].
+ *
+ * Creates a task which: commits the files in [sourceDir] on the branch
+ * [sourceBranch], creates branch [targetBranch] if it does not exist and
+ * copies the files in [sourceDir] on the branch [sourceBranch] to the root of
+ * [targetBranch].
+ *
+ * This task wraps [branchForDir] and provides a description.
+ */
 Task getBranchForDirTask(String sourceBranch, String sourceDir,
                          String targetBranch, {String workingDir}) {
   requireArgumentNotNullOrEmpty(sourceBranch, 'sourceBranch');
@@ -20,6 +31,16 @@ Task getBranchForDirTask(String sourceBranch, String sourceDir,
       description: description);
 }
 
+
+/**
+ * Creates and populates a branch with [sourceDir].
+ *
+ * Commits the files in [sourceDir] on the branch [sourceBranch], creates branch
+ * [targetBranch] if it does not exist and copies the files in [sourceDir] on
+ * the branch [sourceBranch] to the root of [targetBranch].
+ *
+ * [getBranchForDirTask] wraps this into a [Task] and provides a description.
+ */
 Future branchForDir(TaskContext ctx, String sourceBranch, String sourceDir,
     String targetBranch, {String workingDir}) {
 

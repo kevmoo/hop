@@ -5,6 +5,17 @@ import 'dart:io';
 import 'package:bot/bot.dart';
 import 'package:hop/hop_core.dart';
 
+/**
+ * Creates a task which runs [command], a shell command.
+ *
+ * [command] is the shell command that this task runs. A command that works
+ * with one shell may not work with another shell.
+ *
+ * [args] is a list of arguments to pass to [command].
+ *
+ * [description] is the description of the task. This is displayed next to the
+ * task's name in the help.
+ */
 Task createProcessTask(String command, {List<String> args: null, String description}) {
   return new Task((ctx) => startProcess(ctx, command, args), description: description);
 }

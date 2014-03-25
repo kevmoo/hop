@@ -18,6 +18,26 @@ const _DEFAULT_RUN_COUNT = 20;
 const _COMMAND_ARG = 'command';
 const String _RUN_COUNT_ARE_NAME = 'run-count';
 
+/**
+ * Creates a benchmarking task.
+ *
+ * This task will run the command, passed to it through shell, twenty times and
+ * print some useful information about the amount of time the command took to
+ * complete and about the output.
+ *
+ * Assuming the hop task "bench" is this benchmark task, running:
+ *     dart tool/hop_runner.dart bench ls
+ *
+ * Will print something like:
+ *     bench: Min       0:00:00.002491
+ *            Max       0:00:00.010142
+ *            Media     0:00:00.002720
+ *            Mean      0:00:00.003241
+ *            StdDev    0:00:00.001687
+ *            StdDev%   52.05938%
+ *            StdErr    0:00:00.000377
+ *            StdDev%   11.64083%
+ */
 Task createBenchTask() => new Task((TaskContext ctx) {
   var parseResult = ctx.arguments;
 
