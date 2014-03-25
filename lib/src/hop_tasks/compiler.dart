@@ -23,8 +23,11 @@ class CompilerTargetType {
 }
 
 /**
- * [delayedRootList] a [List<String>] mapping to paths to libraries or some
- * combinations of [Future] or [Function] values that return a [List<String>].
+ * Runs dart2js on each of the files in [delayedRootList].
+ *
+ * [delayedFileList] is evaluated by [getDelayedResult]. It should be a
+ * [List<String>] of paths of files to compile. dart2js is recursive, it
+ * compiles imported files also.
  *
  * [outputType] must be one of type [CompilerTargetType].
  */

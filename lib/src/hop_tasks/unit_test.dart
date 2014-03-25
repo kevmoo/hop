@@ -15,12 +15,15 @@ const _FILTER_ARG = 'filter';
 
 typedef void _LegacyUnittestMethod(unittest.Configuration config);
 
-/// Creates a [Task] which runs the unit tests defined by [unitTestAction].
-///
-/// [unitTestAction] should be in the form `void function()`.
-///
-/// [unitTestAction] in the form `void function(Configuration config)` is
-/// deprecated.
+/**
+ * Creates a [Task] which runs the unit tests defined by [unitTestAction].
+ *
+ * [unitTestAction] is a function which takes no parameters and returns
+ * nothing.
+ *
+ * [unitTestAction] in the form `void function(Configuration config)` is
+ * deprecated.
+ */
 Task createUnitTestTask(Function unitTestAction,
                         {Duration timeout: const Duration(seconds: 20)}) {
   return new Task((TaskContext ctx) {

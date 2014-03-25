@@ -74,6 +74,13 @@ abstract class Task {
     });
   }
 
+  /**
+   * Returns a clone of this task.
+   *
+   * If [description] is specified the returned task's description is
+   * [description]. Otherwise the returned task's description is the
+   * description of this task.
+   */
   Task clone({String description});
 
   /**
