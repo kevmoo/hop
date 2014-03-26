@@ -1,12 +1,10 @@
 part of hop.runner;
 
 class Runner {
-  /**
-   * Runs a [Task] with the specificed [TaskRuntime].
-   *
-   * [runTask] handles a number of error cases, logs appropriate messages
-   * to [context] and returns a corresponding [RunResult] when completed.
-   */
+  /// Runs a [Task] with the specificed [TaskRuntime].
+  ///
+  /// [runTask] handles a number of error cases, logs appropriate messages
+  /// to [context] and returns a corresponding [RunResult] when completed.
   static Future<RunResult> runTask(TaskRuntime runtime, Task task,
       {bool throwExceptions: false}) {
 
@@ -68,13 +66,11 @@ class Runner {
         });
   }
 
-  /**
-   * [run] exists primarily for testing [Task] implementations.
-   *
-   * If you want to use Hop in an app, see [runHop].
-   *
-   * If you want to run a specific [Task] in isolation, see [runTask].
-   */
+  /// [run] exists primarily for testing [Task] implementations.
+  ///
+  /// If you want to use Hop in an app, see [runHop].
+  ///
+  /// If you want to run a specific [Task] in isolation, see [runTask].
   static Future<RunResult> run(HopConfig config, {Level printAtLogLevel,
     bool throwTaskExceptions: false}) {
     requireArgumentNotNull(config, 'config');
@@ -141,9 +137,7 @@ class Runner {
           });
   }
 
-  /**
-   * Designed to be run [runHop] command in the [hop] library.
-   */
+  /// Designed to be run [runHop] command in the [hop] library.
   static Future<RunResult> runShell(List<String> mainArgs,
       TaskRegistry registry, String helpTaskName, Level printAtLogLevel) {
 

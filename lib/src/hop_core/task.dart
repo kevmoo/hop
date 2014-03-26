@@ -74,18 +74,14 @@ abstract class Task {
     });
   }
 
-  /**
-   * Returns a clone of this [Task].
-   *
-   * Specify [description] to override the current description of the task.
-   */
+  /// Returns a clone of this [Task].
+  ///
+  /// Specify [description] to override the current description of the task.
   Task clone({String description});
 
-  /**
-   * Returned map is in argument order.
-   *
-   * Returned map is unmodifiable.
-   */
+  /// Returned map is in argument order.
+  ///
+  /// Returned map is unmodifiable.
   Map<String, dynamic> parseExtendedArgs(List<String> argResultsRest) {
     requireArgumentNotNull(argResultsRest, 'argResultRest');
     requireArgument(argResultsRest.every((e) => e != null), 'argResultRest',

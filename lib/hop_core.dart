@@ -1,8 +1,6 @@
-/**
- * The base Hop library.
- *
- * Includes the set of features required to create custom tasks.
- */
+/// The base Hop library.
+///
+/// Includes the set of features required to create custom tasks.
 library hop.core;
 
 import 'dart:async';

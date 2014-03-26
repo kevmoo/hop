@@ -23,17 +23,15 @@ class TaskRegistry {
 
   bool get isFrozen => _frozen;
 
-  /**
-   * [task] can be either an instance of [Task] or a [Function].
-   *
-   * If [task] is a [Function], it must take one argument: [TaskContext].
-   *
-   * If a [Future] is returned from the [task] [Function], the runner will wait
-   * for the [Future] to complete.
-   *
-   * If [description] is provided and [task] is an instance of [Task], then
-   * [task] will be cloned and given the provided [description].
-   */
+  /// [task] can be either an instance of [Task] or a [Function].
+  ///
+  /// If [task] is a [Function], it must take one argument: [TaskContext].
+  ///
+  /// If a [Future] is returned from the [task] [Function], the runner will wait
+  /// for the [Future] to complete.
+  ///
+  /// If [description] is provided and [task] is an instance of [Task], then
+  /// [task] will be cloned and given the provided [description].
   Task addTask(String name, dynamic task, {String description,
     List<String> dependencies} ) {
 
@@ -70,10 +68,8 @@ class TaskRegistry {
     return task;
   }
 
-  /**
-   * The keys in the returned [Map] are in dependency order, with the [Task] for
-   * the provided [taskName] occurring last.
-   */
+  /// The keys in the returned [Map] are in dependency order, with the [Task]
+  /// for the provided [taskName] occurring last.
   Map<String, Task> getTaskWithDependencies(String taskName) {
     requireArgument(tasks.containsKey(taskName), 'taskName',
         'No task with name: $taskName');

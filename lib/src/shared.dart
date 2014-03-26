@@ -34,9 +34,8 @@ abstract class TaskRuntime {
   bool get isDisposed;
   ArgResults get argResults;
 
-  /**
-   * If `null`, calls to [print] will not be logged and will be behave normally.
-   */
+  /// If `null`, calls to [print] will not be logged and will be behave
+  /// normally.
   Level get printAtLevel;
 }
 

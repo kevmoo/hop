@@ -13,15 +13,13 @@ import 'package:path/path.dart' as pathos;
 const _verboseArgName = 'verbose';
 const _formatMachineArgName = 'format-machine';
 
-/**
- * Creates a task which runs `dartanalyzer` on each file in
- * [delayedFileList].
- *
- * [delayedRootList] is [List<String>] mapping to Dart source files. It can also
- * be a [Future] or [Function] values which return [List<String>].
- *
- * `dartanalyzer` is recursive. It scans imported files also.
- */
+/// Creates a task which runs `dartanalyzer` on each file in
+/// [delayedFileList].
+///
+/// [delayedRootList] is [List<String>] mapping to Dart source files. It can
+/// also be a [Future] or [Function] values which return [List<String>].
+///
+/// `dartanalyzer` is recursive. It scans imported files also.
 Task createAnalyzerTask(dynamic delayedFileList) {
   return new Task((context) {
     final parseResult = context.arguments;

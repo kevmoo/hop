@@ -11,14 +11,12 @@ class TaskArgument {
     validateTaskName(name);
   }
 
-  /**
-   * Validates that the provided [argrs] are valid.
-   *
-   *
-   * If not, throws.
-   *
-   * If yes, returns an unmodifiable clone of [args].
-   */
+  /// Validates that the provided [argrs] are valid.
+  ///
+  ///
+  /// If not, throws.
+  ///
+  /// If yes, returns an unmodifiable clone of [args].
   static List<TaskArgument> validateArgs(Iterable<TaskArgument> args) {
     requireArgumentNotNull(args, 'args');
 

@@ -1,9 +1,7 @@
 part of hop.runner;
 
 abstract class _ContextLogger {
-  /**
-   * [value] must be either [String] or [ShellString].
-   */
+  /// [value] must be either [String] or [ShellString].
   void contextPrint(dynamic value);
 
   void hopEventListen(HopEvent event);
@@ -20,14 +18,12 @@ class HopConfig implements _ContextLogger {
   final StreamController<HopEvent> _eventController =
       new StreamController<HopEvent>.broadcast(sync: true);
 
-  /**
-   * This constructor exists for testing Hop.
-   *
-   * If you're using it in another context, you might be doing something wrong.
-   *
-   * [printer] needs to handle values of type [String] and [ShellString], other
-   * values should cause an [ArgumentError];
-   */
+  /// This constructor exists for testing Hop.
+  ///
+  /// If you're using it in another context, you might be doing something wrong.
+  ///
+  /// [printer] needs to handle values of type [String] and [ShellString], other
+  /// values should cause an [ArgumentError];
   factory HopConfig(TaskRegistry registry, List<String> args) {
 
     requireArgumentNotNull(registry, 'registry');

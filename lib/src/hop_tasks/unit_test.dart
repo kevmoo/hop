@@ -205,6 +205,6 @@ ${testCase.stackTrace}''');
   }
 }
 
-/** Indent each line in [str] by two spaces. */
+/// Indent each line in [str] by two spaces.
 String _indent(String str) =>
   str.replaceAll(new RegExp("^", multiLine: true), "  ");

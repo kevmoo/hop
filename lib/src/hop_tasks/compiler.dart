@@ -22,14 +22,12 @@ class CompilerTargetType {
   String toString() => 'CompilerTargetType.$fileExt';
 }
 
-/**
- * Runs `dart2js` on the specified files.
- *
- * [delayedRootList] is [List<String>] mapping to librarie paths. It can also be
- * a [Future] or [Function] values which return [List<String>].
- *
- * [outputType] must be one of type [CompilerTargetType].
- */
+/// Runs `dart2js` on the specified files.
+///
+/// [delayedRootList] is [List<String>] mapping to librarie paths. It can also
+/// be a [Future] or [Function] values which return [List<String>].
+///
+/// [outputType] must be one of type [CompilerTargetType].
 Task createDartCompilerTask(dynamic delayedRootList, {String singleOutput,
   String packageRoot, bool minify: false, bool liveTypeAnalysis: true,
   bool throwOnError: false, bool verbose: true, bool suppressWarnings: false,

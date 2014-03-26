@@ -11,9 +11,7 @@ class _TaskContext extends _LoggerChild with TaskLogger implements TaskContext {
     assert(extendedArgs != null);
   }
 
-  /**
-   * Terminates the current [Task] with a failure, explained by [message].
-   */
+  /// Terminates the current [Task] with a failure, explained by [message].
   void fail(String message) {
     throw new TaskFailError(message);
   }
@@ -49,9 +47,7 @@ class _LoggerChild extends TaskLogger {
     return new _LoggerChild(this._parent, _namePlusOne(_name, name));
   }
 
-  /**
-   * Throws [DisposedError] if the instance has already been disposed.
-   */
+  /// Throws [DisposedError] if the instance has already been disposed.
   void _requireNotDisposed() {
     if (isDisposed) {
       throw new DisposedError();

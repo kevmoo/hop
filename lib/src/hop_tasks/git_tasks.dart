@@ -7,14 +7,12 @@ import 'package:git/git.dart';
 import 'package:hop/hop_core.dart';
 
 
-/**
- * Creates a [Task] which creates and populates a branch with [sourceDir].
- *
- * The contents of [sourceDir] on the [sourceBranch] are used to create or
- * update [targetBranch].
- *
- * This task wraps [branchForDir] and provides a description.
- */
+/// Creates a [Task] which creates and populates a branch with [sourceDir].
+///
+/// The contents of [sourceDir] on the [sourceBranch] are used to create or
+/// update [targetBranch].
+///
+/// This task wraps [branchForDir] and provides a description.
 Task getBranchForDirTask(String sourceBranch, String sourceDir,
                          String targetBranch, {String workingDir}) {
   requireArgumentNotNullOrEmpty(sourceBranch, 'sourceBranch');
@@ -30,14 +28,12 @@ Task getBranchForDirTask(String sourceBranch, String sourceDir,
 }
 
 
-/**
- * Creates and populates a branch with [sourceDir].
- *
- * The contents of [sourceDir] on the [sourceBranch] are used to create or
- * update [targetBranch].
- *
- * [getBranchForDirTask] wraps this into a [Task] and provides a description.
- */
+/// Creates and populates a branch with [sourceDir].
+///
+/// The contents of [sourceDir] on the [sourceBranch] are used to create or
+/// update [targetBranch].
+///
+/// [getBranchForDirTask] wraps this into a [Task] and provides a description.
 Future branchForDir(TaskContext ctx, String sourceBranch, String sourceDir,
     String targetBranch, {String workingDir}) {
 
