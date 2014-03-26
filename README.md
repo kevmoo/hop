@@ -32,4 +32,4 @@ See the [changelog](https://github.com/dart-lang/hop/blob/master/changelog.md) t
  * [Adam Singer](https://github.com/financeCoding) ([+Adam Singer](https://plus.google.com/104569492481999771226))
  * [Damon Douglas](https://github.com/damondouglas) ([+Damon Douglas](https://plus.google.com/u/0/108940381045821372455/))
  * [Devon Carew](https://github.com/devoncarew) ([+Devon Carew](https://plus.google.com/104561874283081442379/))
- * _You? File bugs. Fork and Fix bugs. Let's build this community._
+ * Martin Charles
