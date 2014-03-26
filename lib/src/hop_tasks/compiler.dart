@@ -23,8 +23,10 @@ class CompilerTargetType {
 }
 
 /**
- * [delayedRootList] a [List<String>] mapping to paths to libraries or some
- * combinations of [Future] or [Function] values that return a [List<String>].
+ * Runs `dart2js` on the specified files.
+ *
+ * [delayedRootList] is [List<String>] mapping to librarie paths. It can also be
+ * a [Future] or [Function] values which return [List<String>].
  *
  * [outputType] must be one of type [CompilerTargetType].
  */

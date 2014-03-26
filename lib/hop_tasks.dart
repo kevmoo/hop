@@ -1,3 +1,4 @@
+/// Useful [Task] implementations and helpers.
 library hop_tasks;
 
 export 'src/hop_tasks/bench_task.dart';

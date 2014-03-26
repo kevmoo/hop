@@ -74,6 +74,11 @@ abstract class Task {
     });
   }
 
+  /**
+   * Returns a clone of this [Task].
+   *
+   * Specify [description] to override the current description of the task.
+   */
   Task clone({String description});
 
   /**

@@ -1,3 +1,8 @@
+/**
+ * The main Hop library.
+ *
+ * Should be imported into a 'tool/hop_runner.dart' file.
+ */
 library hop;
 
 import 'dart:async';
@@ -15,8 +20,7 @@ import 'src/hop_runner.dart';
 final _sharedConfig = new TaskRegistry();
 
 /**
- * Designed to enable features in __Hop__. Should be the last method called in
- * `tool/hop_runner.dart`.
+ * Runs Hop infrastructure after all tasks have been registered.
  *
  * [runHop] calls [io.exit] which terminates the application.
  *
@@ -24,9 +28,9 @@ final _sharedConfig = new TaskRegistry();
  * `tool/hop_runner.dart` relative to the working directory. If the script does
  * not, match that requirement, an [Exception] is thrown.
  *
- * If [helpTaskName], defines (surprise!) the name of the help task. If `null`
- * no help task is added. If [helpTaskName] conflicts with an already defined
- * task, an exception is thrown.
+ * [helpTaskName] defines the name of the help task. If [helpTaskName]
+ * conflicts with an already defined task, an error is thrown. Setting this
+ * to `null` will disable help.
  */
 void runHop(List<String> args, {
     bool paranoid: true,
@@ -43,21 +47,34 @@ void runHop(List<String> args, {
 }
 
 /**
+ * Adds a [Task] to Hop.
+ *
+ * [name] specifies the [String] used to identify the task.
+ *
  * [task] can be either an instance of [Task] or a [Function].
  *
- * If [task] is a [Function], it must take one argument: [TaskContext].
+ * If [task] is a [Function], it must take one argument: [TaskContext]. If a
+ * [Future] is returned from the [task] function, the runner will wait for the
+ * [Future] to complete.
  *
- * If a [Future] is returned from the [task] [Function], the runner will wait
- * for the [Future] to complete.
- *
- * If [description] is provided and [task] is an instance of [Task], then [task]
- * will be cloned and given the provided [description].
+ * If [description] is provided and [task] is a [Task], then [task] will be
+ * cloned and [description] will override the default description.
  */
 Task addTask(String name, dynamic task, {String description,
   List<String> dependencies}) =>
       _sharedConfig.addTask(name, task, description: description,
           dependencies: dependencies);
 
+/**
+ * Creates a [Task] which runs multiple tasks.
+ *
+ * [name] specifies the [String] used to identify the task.
+ *
+ * [existingTaskNames] is an [Iterable] specifying the existing tasks to be run
+ * when this task is run.
+ *
+ * [description] provides information when help is displayed for the task.
+ */
 Task addChainedTask(String name, Iterable<String> existingTaskNames, {
   String description}) => _sharedConfig.addChainedTask(name, existingTaskNames,
       description: description);

@@ -14,8 +14,13 @@ const _verboseArgName = 'verbose';
 const _formatMachineArgName = 'format-machine';
 
 /**
- * [delayedFileList] a [List<String>] mapping to paths to dart files or some
- * combinations of [Future] or [Function] values that return a [List<String>].
+ * Creates a task which runs `dartanalyzer` on each file in
+ * [delayedFileList].
+ *
+ * [delayedRootList] is [List<String>] mapping to Dart source files. It can also
+ * be a [Future] or [Function] values which return [List<String>].
+ *
+ * `dartanalyzer` is recursive. It scans imported files also.
  */
 Task createAnalyzerTask(dynamic delayedFileList) {
   return new Task((context) {
