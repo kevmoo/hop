@@ -22,8 +22,8 @@ final _sharedConfig = new TaskRegistry();
 /// [runHop] calls [io.exit] which terminates the application.
 ///
 /// If [paranoid] is `true`, [runHop] will verify the running script is
-/// `tool/hop_runner.dart` relative to the working directory. If the script does
-/// not, match that requirement, an [Exception] is thrown.
+/// `tool/hop_runner.dart` relative to the working directory. If not, an
+/// error is thrown.
 ///
 /// [helpTaskName] defines the name of the help task. If [helpTaskName]
 /// conflicts with an already defined task, an error is thrown. Setting this
