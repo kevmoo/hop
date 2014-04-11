@@ -1,29 +1,18 @@
-/*
- * Copyright 2013 The Polymer Authors. All rights reserved.
- * Use of this source code is governed by a BSD-style
- * license that can be found in the LICENSE file.
- */
+// Copyright (c) 2014, the Dart project authors.  Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
 (function() {
   var ShadowDOMPolyfill = window.ShadowDOMPolyfill;
-  var wrap = ShadowDOMPolyfill.wrap;
+  if (!ShadowDOMPolyfill) return;
 
-  // patch in prefixed name
-  Object.defineProperties(HTMLElement.prototype, {
-    //TODO(sjmiles): review accessor alias with Arv
-    webkitShadowRoot: {
-      get: function() {
-        return this.shadowRoot;
-      }
-    }
-  });
+  if (navigator.userAgent.indexOf('(Dart)') !== -1) {
+    console.error("ShadowDOMPolyfill polyfill was loaded in Dartium. This " +
+        "will not work. This indicates that Dartium's Chrome version is " +
+        "not compatible with this version of web_components.");
+  }
 
-  // ShadowCSS needs this:
-  window.wrap = window.ShadowDOMPolyfill.wrap;
-  window.unwrap = window.ShadowDOMPolyfill.unwrap;
-
-  //TODO(sjmiles): review method alias with Arv
-  HTMLElement.prototype.webkitCreateShadowRoot =
-      HTMLElement.prototype.createShadowRoot;
+  var needsConstructorFix = window.constructor === window.Window;
 
   // TODO(jmesserly): we need to wrap document somehow (a dart:html hook?)
   window.dartExperimentalFixupGetTag = function(originalGetTag) {
@@ -34,9 +23,9 @@
       // TODO(jmesserly): do we still need these?
       if (obj instanceof NodeList) return 'NodeList';
       if (obj instanceof ShadowRoot) return 'ShadowRoot';
-      if (window.MutationRecord && (obj instanceof MutationRecord))
+      if (MutationRecord && (obj instanceof MutationRecord))
           return 'MutationRecord';
-      if (window.MutationObserver && (obj instanceof MutationObserver))
+      if (MutationObserver && (obj instanceof MutationObserver))
           return 'MutationObserver';
 
       // TODO(jmesserly): this prevents incorrect interaction between ShadowDOM
@@ -47,11 +36,10 @@
       if (obj instanceof HTMLTemplateElement) return 'HTMLTemplateElement';
 
       var unwrapped = unwrapIfNeeded(obj);
-      if (obj !== unwrapped) {
-        // Fix up class names for Firefox.
-        // For some of them (like HTMLFormElement and HTMLInputElement),
-        // the "constructor" property of the unwrapped nodes points at the
-        // same constructor as the wrapper.
+      if (unwrapped && (needsConstructorFix || obj !== unwrapped)) {
+        // Fix up class names for Firefox, or if using the minified polyfill.
+        // dart2js prefers .constructor.name, but there are all kinds of cases
+        // where this will give the wrong answer.
         var ctor = obj.constructor
         if (ctor === unwrapped.constructor) {
           var name = ctor._ShadowDOMPolyfill$cacheTag_;
