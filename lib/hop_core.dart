@@ -6,7 +6,7 @@ library hop.core;
 import 'dart:async';
 import 'dart:collection';
 import 'package:args/args.dart';
-import 'package:bot/bot.dart';
+import 'package:bot/bot.dart' hide DisposedError;
 import 'package:collection/wrappers.dart';
 import 'package:logging/logging.dart';
 

@@ -59,3 +59,7 @@ int lastIndexWhere(Iterable source, bool predicate(dynamic element)) {
   }
   return foundIndex;
 }
+
+class DisposedError extends StateError {
+  DisposedError(): super('Invalid operation on disposed object');
+}

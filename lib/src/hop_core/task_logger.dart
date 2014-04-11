@@ -2,7 +2,7 @@ part of hop.core;
 
 /// Allows logging of [Task] activities, spawning sub-loggers, and failing the
 /// current [Task];
-abstract class TaskLogger implements Disposable {
+abstract class TaskLogger {
 
   TaskLogger getSubLogger(String name);
 
@@ -42,4 +42,7 @@ abstract class TaskLogger implements Disposable {
   }
 
   void log(Level logLevel, String message);
+
+  void dispose();
+  bool get isDisposed;
 }
