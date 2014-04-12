@@ -1,5 +1,5 @@
 name: hop
-version: 0.30.4-dev
+version: 0.30.3+1
 author: Hop Project Authors
 description: Dart Task Framework
 homepage: https://github.com/dart-lang/hop
@@ -12,7 +12,7 @@ dependencies:
   bot_io: '>=0.25.2 <0.27.0'
   collection: '>=0.9.0 <0.10.0'
   completion: '>=0.1.0 <0.2.0'
-  git: '>=0.1.0 <0.4.0'
+  git: '>=0.1.0 <0.5.0'
   logging: '>=0.9.1 <0.10.0'
   path: '>=0.9.0 <2.0.0'
   unittest: '>=0.9.0 <0.11.0'
