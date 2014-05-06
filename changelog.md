@@ -1,4 +1,10 @@
-# Changelog - Hop - Dart Task Management Framework
+## 0.30.4
+
+Stopped using deprecated features in `bot_io`.
+
+## 0.30.3
+
+Minor tweaks and dependency version changes.
 
 ## 0.30.2
 * `createUnitTestTask` argument `unitTestAction` can now be a simple void function.

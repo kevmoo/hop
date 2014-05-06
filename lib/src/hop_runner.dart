@@ -29,7 +29,7 @@ ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
     _initParserForTask(parser, taskName, task);
   });
 
-  parser.addFlag(_COLOR_FLAG, defaultsTo: Console.supportsColor,
+  parser.addFlag(_COLOR_FLAG, defaultsTo: AnsiColor.isSupported,
       help: 'Specifies if shell output can have color.');
 
   parser.addFlag(_PREFIX_FLAG, defaultsTo: true,
