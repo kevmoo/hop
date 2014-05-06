@@ -427,6 +427,7 @@ bot_io/bot_io.AnsiColor.YELLOW property
 bot_io/bot_io.AnsiColor.asBold method
 bot_io/bot_io.AnsiColor.foregroundId property
 bot_io/bot_io.AnsiColor.isBold getter
+bot_io/bot_io.AnsiColor.isSupported property
 bot_io/bot_io.AnsiColor.name property
 bot_io/bot_io.AnsiColor.shellValue getter
 bot_io/bot_io.AnsiColor.toString method
@@ -597,6 +598,7 @@ collection/dart-pkg-collection-wrappers.DelegatingIterable.take method
 collection/dart-pkg-collection-wrappers.DelegatingIterable.takeWhile method
 collection/dart-pkg-collection-wrappers.DelegatingIterable.toList method
 collection/dart-pkg-collection-wrappers.DelegatingIterable.toSet method
+collection/dart-pkg-collection-wrappers.DelegatingIterable.toString method
 collection/dart-pkg-collection-wrappers.DelegatingIterable.where method
 collection/dart-pkg-collection-wrappers.DelegatingList class
 collection/dart-pkg-collection-wrappers.DelegatingList.DelegatingList- constructor
@@ -641,6 +643,7 @@ collection/dart-pkg-collection-wrappers.DelegatingMap.keys getter
 collection/dart-pkg-collection-wrappers.DelegatingMap.length getter
 collection/dart-pkg-collection-wrappers.DelegatingMap.putIfAbsent method
 collection/dart-pkg-collection-wrappers.DelegatingMap.remove method
+collection/dart-pkg-collection-wrappers.DelegatingMap.toString method
 collection/dart-pkg-collection-wrappers.DelegatingMap.values getter
 collection/dart-pkg-collection-wrappers.DelegatingQueue class
 collection/dart-pkg-collection-wrappers.DelegatingQueue.DelegatingQueue- constructor
@@ -862,6 +865,7 @@ collection/dart-pkg-collection.DelegatingIterable.take method
 collection/dart-pkg-collection.DelegatingIterable.takeWhile method
 collection/dart-pkg-collection.DelegatingIterable.toList method
 collection/dart-pkg-collection.DelegatingIterable.toSet method
+collection/dart-pkg-collection.DelegatingIterable.toString method
 collection/dart-pkg-collection.DelegatingIterable.where method
 collection/dart-pkg-collection.DelegatingList class
 collection/dart-pkg-collection.DelegatingList.DelegatingList- constructor
@@ -906,6 +910,7 @@ collection/dart-pkg-collection.DelegatingMap.keys getter
 collection/dart-pkg-collection.DelegatingMap.length getter
 collection/dart-pkg-collection.DelegatingMap.putIfAbsent method
 collection/dart-pkg-collection.DelegatingMap.remove method
+collection/dart-pkg-collection.DelegatingMap.toString method
 collection/dart-pkg-collection.DelegatingMap.values getter
 collection/dart-pkg-collection.DelegatingQueue class
 collection/dart-pkg-collection.DelegatingQueue.DelegatingQueue- constructor
