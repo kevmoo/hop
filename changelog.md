@@ -1,3 +1,11 @@
+## 0.30.4+2
+
+* Support the latest release of `unittest`.
+
+## 0.30.4+1
+
+* Support the latest release of `git`.
+
 ## 0.30.4
 
 Stopped using deprecated features in `bot_io`.
