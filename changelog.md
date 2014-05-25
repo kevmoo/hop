@@ -1,3 +1,7 @@
+## 0.30.5
+
+* **DEPRECATED** `createUnitTestTask`. Use `hop_unittest` package instead.
+
 ## 0.30.4+2
 
 * Support the latest release of `unittest`.
