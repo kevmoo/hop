@@ -4,10 +4,9 @@
 library hop.core;
 
 import 'dart:async';
-import 'dart:collection' hide UnmodifiableMapView;
+import 'dart:collection';
 import 'package:args/args.dart';
 import 'package:bot/bot.dart' hide DisposedError;
-import 'package:collection/wrappers.dart';
 import 'package:logging/logging.dart';
 
 import 'package:hop/src/shared.dart';
