@@ -1,3 +1,9 @@
+## 0.31.0
+
+* `hop_tasks`
+    * **REMOVED** deprecated `createUnitTestTask`. Use `hop_unittest` package instead.
+    * **REMOVED** deprecated `getBranchForDirTask` and `branchForDir`. Use `hop_git` package instead.
+
 ## 0.30.5
 
 * `hop_tasks`
