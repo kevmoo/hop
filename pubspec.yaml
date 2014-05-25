@@ -12,10 +12,11 @@ dependencies:
   bot_io: '>=0.26.1 <0.27.0'
   collection: '>=0.9.0 <0.10.0'
   completion: '>=0.1.0 <0.2.0'
-  git: '>=0.1.0 <0.5.0'
+  hop_git: '>=0.1.0 <0.2.0'
   hop_unittest: '>=0.1.0 <0.2.0'
   logging: '>=0.9.1 <0.10.0'
   path: '>=0.9.0 <2.0.0'
 dev_dependencies:
+  git: '>=0.1.0 <0.5.0'
   hop_docgen: '>=0.1.0 <0.2.0'
   unittest: '>=0.9.0 <0.12.0'
