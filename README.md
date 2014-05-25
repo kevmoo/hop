@@ -11,12 +11,11 @@
 
 # Projects using Hop
 
-* [Pop, Pop, Win!](https://github.com/dart-lang/pop-pop-win) - Minesweeper with balloons
-* [Dart Widgets](https://github.com/dart-lang/widget.dart) - Reusable Web Components
+* [Box2d for Dart](https://github.com/dart-lang/dart-box2d)
 * [Lawndart](https://github.com/sethladd/lawndart) - Unified, asynchronous, easy-to-use library for browser-based storage.
 * [Spectre](https://github.com/johnmccutchan/spectre) - Spectre Graphics Engine for Dart
 * [vector_math](https://github.com/johnmccutchan/vector_math) - A Vector math library for 2D and 3D applications.
-* [Dart Client Generator for Discovery APIs](https://github.com/dart-gde/discovery_api_dart_client_generator)
+* [Dart Client Generator for Discovery APIs](https://github.com/dart-lang/discovery_api_dart_client_generator)
 * [chrome.dart](https://github.com/dart-gde/chrome.dart) - Dart interop with chrome.* APIs for Chrome Packaged Apps
 * [qr.dart](https://github.com/kevmoo/qr.dart) - Generate QR codes
 * [vote.dart](https://github.com/kevmoo/vote.dart) - Simulate, run, and calculate elections with different election methods

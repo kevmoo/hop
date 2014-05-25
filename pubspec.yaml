@@ -1,5 +1,5 @@
 name: hop
-version: 0.31.0
+version: 0.31.1-dev
 author: Hop Project Authors <hop_authors@j832.com>
 description: Dart Task Framework
 homepage: https://github.com/dart-lang/hop
