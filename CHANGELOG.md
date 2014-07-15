@@ -1,3 +1,7 @@
+## 0.31.0+1
+
+* Updated `homepage` and `documentation` links in `pubspec.yaml`.
+
 ## 0.31.0
 
 * `hop_tasks`
