@@ -24,7 +24,7 @@
 
 The __The Hop task management system for Dart__ is hosted on [pub.dartlang.org](http://pub.dartlang.org/packages/hop). Add the __Hop__ package to your `pubspec.yaml` file, selecting a version range that works with your version of the SDK. _Always check the [Hop page](http://pub.dartlang.org/packages/hop) on pub to find the latest release._
 
-See the [changelog](https://github.com/dart-lang/hop/blob/master/changelog.md) to find the version that works best for you.
+See the [changelog](https://github.com/kevmoo/hop/blob/master/CHANGELOG.md) to find the version that works best for you.
 
 # Authors
  * [Kevin Moore](https://github.com/kevmoo) ([+Kevin Moore](https://plus.google.com/110066012384188006594/), [@kevmoo](http://twitter.com/kevmoo))
