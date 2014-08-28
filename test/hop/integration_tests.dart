@@ -29,7 +29,7 @@ Future _testOutputSorted() {
         expect(pr.exitCode, equals(RunResult.SUCCESS.exitCode));
         final lines = Util.splitLines(pr.stdout.trim()).toList();
         expect(lines, orderedEquals(['analyze_all', 'analyze_libs',
-                                     'analyze_test_libs', 'bench', 'docs',
+                                     'analyze_test_libs', 'bench',
                                      'help', 'test']));
   });
 }
