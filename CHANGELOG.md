@@ -1,3 +1,7 @@
+## 0.31.0+3
+
+* Updated `README.md`.
+
 ## 0.31.0+2
 
 * Updated dependencies.
