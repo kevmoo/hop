@@ -1,3 +1,9 @@
+## 0.31.0+2
+
+* Updated dependencies.
+
+* Removed `hop_docgen`. 
+
 ## 0.31.0+1
 
 * Updated `homepage` and `documentation` links in `pubspec.yaml`.
