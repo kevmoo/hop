@@ -36,40 +36,35 @@ Future _testCompiler(String contents, CompilerTargetType target,
 
   List<String> sources;
 
-  return TempDir.create()
-      .then((TempDir value) {
-        tmpDir = value;
+  return TempDir.create().then((TempDir value) {
+    tmpDir = value;
 
-        return tmpDir.populate(sourceDirMap);
-      })
-      .then((TempDir value) {
-        assert(value == tmpDir);
+    return tmpDir.populate(sourceDirMap);
+  }).then((TempDir value) {
+    assert(value == tmpDir);
 
-        sources = [pathos.join(tmpDir.path, 'main.dart')];
+    sources = [pathos.join(tmpDir.path, 'main.dart')];
 
-        task = createDartCompilerTask(sources, outputType: target);
+    task = createDartCompilerTask(sources, outputType: target);
 
-        return runTaskInTestRunner(task);
+    return runTaskInTestRunner(task);
 
-      })
-      .then((RunResult result) {
-        expect(result, expectedResult);
+  }).then((RunResult result) {
+    expect(result, expectedResult);
 
-        return tmpDir.dir.list().toList();
-      })
-      .then((list) {
-        var entityNames = list.map((e) => e.path).toList();
+    return tmpDir.dir.list().toList();
+  }).then((list) {
+    var entityNames = list.map((e) => e.path).toList();
 
-        var outFiles = _getOutputFiles(sources, target,
-            expectedResult.success);
+    var outFiles = _getOutputFiles(sources, target,
+        expectedResult.success);
 
-        expect(entityNames, unorderedEquals(outFiles));
-      })
-      .whenComplete(() {
-        if(tmpDir != null) {
-          tmpDir.dispose();
-        }
-      });
+    expect(entityNames, unorderedEquals(outFiles));
+  }).whenComplete(() {
+    if(tmpDir != null) {
+      tmpDir.dispose();
+    }
+  });
 }
 
 
