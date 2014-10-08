@@ -98,4 +98,4 @@ Set<String> _getOutputFiles(List<String> inputFiles, CompilerTargetType type,
 }
 
 const _GOOD_TEST_CONTENT = 'main() { print("hello, world!"); }';
-const _BAD_TEST_CONTENT = 'ain() { print("hello, world!"); }';
+const _BAD_TEST_CONTENT = 'main() { print("hello, world!") }';
