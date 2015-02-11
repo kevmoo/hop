@@ -8,9 +8,8 @@ import 'package:hop/src/hop_runner.dart';
 const String TEST_TASK_NAME = 'test-task-name';
 
 Future<RunResult> runTaskInTestRunner(dynamic task, {List<String> extraArgs,
-  List<HopEvent> eventLog, Level printAtLogLevel: Level.INFO,
-  bool throwTaskExceptions: false}) {
-
+    List<HopEvent> eventLog, Level printAtLogLevel: Level.INFO,
+    bool throwTaskExceptions: false}) {
   final taskRegistry = new TaskRegistry();
   taskRegistry.addTask(TEST_TASK_NAME, task);
 
@@ -19,15 +18,15 @@ Future<RunResult> runTaskInTestRunner(dynamic task, {List<String> extraArgs,
     args.addAll(extraArgs);
   }
 
-  return runRegistry(taskRegistry, args, eventLog: eventLog,
+  return runRegistry(taskRegistry, args,
+      eventLog: eventLog,
       printAtLogLevel: printAtLogLevel,
       throwTaskExceptions: throwTaskExceptions);
 }
 
 Future<RunResult> runRegistry(TaskRegistry taskRegistry, List<String> args,
     {List<HopEvent> eventLog, Level printAtLogLevel: Level.INFO,
-     bool throwTaskExceptions: false}) {
-
+    bool throwTaskExceptions: false}) {
   var config = new HopConfig(taskRegistry, args);
 
   if (eventLog != null) {
@@ -36,21 +35,22 @@ Future<RunResult> runRegistry(TaskRegistry taskRegistry, List<String> args,
     config.onEvent.listen(eventLog.add);
   }
 
-  return Runner.run(config, printAtLogLevel: printAtLogLevel,
+  return Runner.run(config,
+      printAtLogLevel: printAtLogLevel,
       throwTaskExceptions: throwTaskExceptions);
 }
 
-Future<RunShellOutput> runRegistryShell(TaskRegistry registry, List<String> args) {
+Future<RunShellOutput> runRegistryShell(
+    TaskRegistry registry, List<String> args) {
   var buffer = new StringBuffer();
   var zoneSpec = new ZoneSpecification(print: (a, b, c, String line) {
     buffer.writeln(line);
   });
 
   return runZoned(() {
-    return Runner.runShell(args, registry, 'help', null)
-        .then((RunResult rr) {
-          return new RunShellOutput(rr, buffer.toString());
-        });
+    return Runner.runShell(args, registry, 'help', null).then((RunResult rr) {
+      return new RunShellOutput(rr, buffer.toString());
+    });
   }, zoneSpecification: zoneSpec);
 }
 

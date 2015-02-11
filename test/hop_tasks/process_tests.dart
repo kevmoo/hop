@@ -21,20 +21,18 @@ Future _testProcessSuccess() {
   final scriptPath = _getTestScriptPath('exit0');
   final task = createProcessTask('dart', args: [scriptPath]);
 
-  return runTaskInTestRunner(task)
-      .then((RunResult result) {
-        expect(result.success, isTrue);
-      });
+  return runTaskInTestRunner(task).then((RunResult result) {
+    expect(result.success, isTrue);
+  });
 }
 
 Future _testProcessFail() {
   final scriptPath = _getTestScriptPath('exit1');
   final task = createProcessTask('dart', args: [scriptPath]);
 
-  return runTaskInTestRunner(task)
-      .then((RunResult rr) {
-        expect(rr, RunResult.EXCEPTION);
-      });
+  return runTaskInTestRunner(task).then((RunResult rr) {
+    expect(rr, RunResult.EXCEPTION);
+  });
 }
 
 Future _testProcessMissing() {
@@ -43,10 +41,9 @@ Future _testProcessMissing() {
   final scriptPath = 'does_not_exist_right';
   final task = createProcessTask(scriptPath);
 
-  return runTaskInTestRunner(task)
-      .then((RunResult rr) {
-        expect(rr, RunResult.EXCEPTION);
-      });
+  return runTaskInTestRunner(task).then((RunResult rr) {
+    expect(rr, RunResult.EXCEPTION);
+  });
 }
 
 String _getTestScriptPath(String name) {
@@ -58,8 +55,7 @@ String _getTestScriptPath(String name) {
   final file = new File(filePath);
 
   if (!file.existsSync()) {
-    throw
-'''Could not find file "$filePath".
+    throw '''Could not find file "$filePath".
 Are you running this script from the root of the project?''';
   }
   return filePath;

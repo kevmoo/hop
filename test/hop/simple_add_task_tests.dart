@@ -7,7 +7,6 @@ import 'package:unittest/unittest.dart';
 import '../test_util.dart';
 
 void main() {
-
   test('addTask', () {
     var reg = new TaskRegistry();
 
@@ -17,11 +16,10 @@ void main() {
 
     expect(reg.tasks['foo'].description, 'task desc');
 
-    return runRegistry(reg, ['foo'])
-        .then((RunResult rr) {
-          expect(rr, RunResult.SUCCESS);
-          expect(ran, isTrue);
-        });
+    return runRegistry(reg, ['foo']).then((RunResult rr) {
+      expect(rr, RunResult.SUCCESS);
+      expect(ran, isTrue);
+    });
   });
 
   test('addTask, override description', () {
@@ -34,11 +32,10 @@ void main() {
 
     expect(reg.tasks['foo'].description, 'override desc');
 
-    return runRegistry(reg, ['foo'])
-        .then((RunResult rr) {
-          expect(rr, RunResult.SUCCESS);
-          expect(ran, isTrue);
-        });
+    return runRegistry(reg, ['foo']).then((RunResult rr) {
+      expect(rr, RunResult.SUCCESS);
+      expect(ran, isTrue);
+    });
   });
 
   test('addTask with sync closure', () {
@@ -51,11 +48,10 @@ void main() {
 
     expect(reg.tasks['foo'].description, 'test desc');
 
-    return runRegistry(reg, ['foo'])
-        .then((RunResult rr) {
-          expect(rr, RunResult.SUCCESS);
-          expect(ran, isTrue);
-        });
+    return runRegistry(reg, ['foo']).then((RunResult rr) {
+      expect(rr, RunResult.SUCCESS);
+      expect(ran, isTrue);
+    });
   });
 
   test('addTask with async closure', () {
@@ -63,16 +59,14 @@ void main() {
 
     bool ran = false;
 
-    reg.addTask('foo', (TaskContext ctx) =>
-        new Future(() => ran = true),
+    reg.addTask('foo', (TaskContext ctx) => new Future(() => ran = true),
         description: 'test desc');
 
     expect(reg.tasks['foo'].description, 'test desc');
 
-    return runRegistry(reg, ['foo'])
-        .then((RunResult rr) {
-          expect(rr, RunResult.SUCCESS);
-          expect(ran, isTrue);
-        });
+    return runRegistry(reg, ['foo']).then((RunResult rr) {
+      expect(rr, RunResult.SUCCESS);
+      expect(ran, isTrue);
+    });
   });
 }

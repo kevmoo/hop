@@ -7,29 +7,25 @@ import '../test_util.dart';
 
 void main() {
   test('simple args', () {
-
     final task = _makeSimpleTask();
-    return runTaskInTestRunner(task, extraArgs: ['hello', 'args'])
-        .then((RunResult result) {
-          expect(result, RunResult.SUCCESS);
-        });
+    return runTaskInTestRunner(task, extraArgs: ['hello', 'args']).then(
+        (RunResult result) {
+      expect(result, RunResult.SUCCESS);
+    });
   });
 
   test('provide a parser for ArgParser', () {
-    var parser = new ArgParser()
-      ..addFlag('foo', defaultsTo: false);
+    var parser = new ArgParser()..addFlag('foo', defaultsTo: false);
 
     var task = new Task((TaskContext ctx) {
       expect(ctx.arguments['foo'], true);
     }, argParser: parser);
 
-    return runTaskInTestRunner(task, extraArgs: ['--foo'])
-        .then((RunResult rr) {
-          expect(rr, RunResult.SUCCESS);
-        });
+    return runTaskInTestRunner(task, extraArgs: ['--foo']).then((RunResult rr) {
+      expect(rr, RunResult.SUCCESS);
+    });
   });
 }
-
 
 Task _makeSimpleTask() => new Task((ctx) {
   final args = ctx.arguments.rest;

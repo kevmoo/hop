@@ -42,9 +42,8 @@ class ConsoleContext extends TaskRuntime {
     }
     final ctx = new ConsoleContext._(args);
 
-    Runner.runTask(ctx, task)
-      .then((RunResult rr) {
-        io.exit(rr.exitCode);
-      });
+    Runner.runTask(ctx, task).then((RunResult rr) {
+      io.exit(rr.exitCode);
+    });
   }
 }

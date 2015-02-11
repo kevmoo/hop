@@ -28,19 +28,21 @@ ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
     _initParserForTask(parser, taskName, task);
   });
 
-  parser.addFlag(_COLOR_FLAG, defaultsTo: AnsiColor.isSupported,
+  parser.addFlag(_COLOR_FLAG,
+      defaultsTo: AnsiColor.isSupported,
       help: 'Specifies if shell output can have color.');
 
-  parser.addFlag(_PREFIX_FLAG, defaultsTo: true,
+  parser.addFlag(_PREFIX_FLAG,
+      defaultsTo: true,
       help: 'Specifies if shell output is prefixed by the task name.');
 
-  final logLevelAllowed = Level.LEVELS
-      .map((Level l) => l.name.toLowerCase())
-      .toList();
+  final logLevelAllowed =
+      Level.LEVELS.map((Level l) => l.name.toLowerCase()).toList();
 
   assert(logLevelAllowed.contains(defaultLogLevel.name.toLowerCase()));
 
-  parser.addOption(_LOG_LEVEL_OPTION, allowed: logLevelAllowed,
+  parser.addOption(_LOG_LEVEL_OPTION,
+      allowed: logLevelAllowed,
       defaultsTo: defaultLogLevel.name.toLowerCase(),
       help: 'The log level at which task output is printed to the shell');
 

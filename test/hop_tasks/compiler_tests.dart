@@ -10,29 +10,25 @@ import '../test_util.dart';
 
 void main() {
   [CompilerTargetType.DART, CompilerTargetType.JS].forEach((targetType) {
-
     group(targetType.toString(), () {
-
       test('good input', () {
         return _testCompiler(_GOOD_TEST_CONTENT, targetType, RunResult.SUCCESS);
       });
 
       test('bad input', () {
-        return _testCompiler(_BAD_TEST_CONTENT, targetType, RunResult.EXCEPTION);
+        return _testCompiler(
+            _BAD_TEST_CONTENT, targetType, RunResult.EXCEPTION);
       });
     });
-
   });
 }
 
-Future _testCompiler(String contents, CompilerTargetType target,
-                            RunResult expectedResult) {
+Future _testCompiler(
+    String contents, CompilerTargetType target, RunResult expectedResult) {
   TempDir tmpDir;
   Task task;
 
-  final sourceDirMap = {
-    'main.dart': contents
-  };
+  final sourceDirMap = {'main.dart': contents};
 
   List<String> sources;
 
@@ -48,7 +44,6 @@ Future _testCompiler(String contents, CompilerTargetType target,
     task = createDartCompilerTask(sources, outputType: target);
 
     return runTaskInTestRunner(task);
-
   }).then((RunResult result) {
     expect(result, expectedResult);
 
@@ -56,20 +51,18 @@ Future _testCompiler(String contents, CompilerTargetType target,
   }).then((list) {
     var entityNames = list.map((e) => e.path).toList();
 
-    var outFiles = _getOutputFiles(sources, target,
-        expectedResult.success);
+    var outFiles = _getOutputFiles(sources, target, expectedResult.success);
 
     expect(entityNames, unorderedEquals(outFiles));
   }).whenComplete(() {
-    if(tmpDir != null) {
+    if (tmpDir != null) {
       tmpDir.dispose();
     }
   });
 }
 
-
-Set<String> _getOutputFiles(List<String> inputFiles, CompilerTargetType type,
-    bool expectSuccess) {
+Set<String> _getOutputFiles(
+    List<String> inputFiles, CompilerTargetType type, bool expectSuccess) {
   var outputFiles = new Set<String>();
 
   inputFiles.forEach((inFile) {

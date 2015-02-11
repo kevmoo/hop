@@ -3,7 +3,6 @@
  */
 library example.hop_runner;
 
-
 /*
  * This is all you need to import when you create your `hop_runner.dart` file.
  */
@@ -40,12 +39,10 @@ void main(List<String> args) {
 
     var file = new File(scriptPath);
 
-    return file.stat()
-        .then((FileStat stat) {
-          ctx.info(stat.toString());
-        });
+    return file.stat().then((FileStat stat) {
+      ctx.info(stat.toString());
+    });
   }, description: 'Print the FileStat of the running script.');
-
 
   /*
    * By default, Hop checks to make sure that it's being run from the root of

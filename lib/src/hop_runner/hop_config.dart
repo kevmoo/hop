@@ -25,7 +25,6 @@ class HopConfig implements _ContextLogger {
   /// [printer] needs to handle values of type [String] and [ShellString], other
   /// values should cause an [ArgumentError];
   factory HopConfig(TaskRegistry registry, List<String> args) {
-
     requireArgumentNotNull(registry, 'registry');
     requireArgumentNotNull(args, 'args');
 
@@ -38,8 +37,8 @@ class HopConfig implements _ContextLogger {
   }
 
   HopConfig._internal(this.taskRegistry, this.parser, ArgResults args,
-      [this._printer]) :
-    this.argResults = args {
+      [this._printer])
+      : this.argResults = args {
     taskRegistry._freeze();
     assert(args != null);
     assert(parser != null);

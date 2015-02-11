@@ -23,11 +23,11 @@ void main() {
     var taskReg = new TaskRegistry();
     taskReg.addTask('good', task);
 
-    return runRegistryShell(taskReg, ['--no-color', 'help', 'good'])
-        .then((RunShellOutput value) {
-          expect(value.runResult, RunResult.SUCCESS);
-          expect(value.printOutput, startsWith(_GOOD_HELP_OUTPUT));
-        });
+    return runRegistryShell(taskReg, ['--no-color', 'help', 'good']).then(
+        (RunShellOutput value) {
+      expect(value.runResult, RunResult.SUCCESS);
+      expect(value.printOutput, startsWith(_GOOD_HELP_OUTPUT));
+    });
   });
 
   test('using context after task completes', () {
@@ -35,90 +35,83 @@ void main() {
 
     return runTaskInTestRunner((val) {
       ctx = val;
-    })
-    .then((RunResult rr) {
+    }).then((RunResult rr) {
       expect(rr, RunResult.SUCCESS);
       expect(() => ctx.config('this should not work'), throwsStateError);
     });
   });
 }
 
-Future _testCtxFail() =>
-    runTaskInTestRunner((ctx) => ctx.fail('fail!'))
-    .then((value) {
-      expect(value, RunResult.FAIL);
-    });
+Future _testCtxFail() => runTaskInTestRunner((ctx) => ctx.fail('fail!')).then(
+    (value) {
+  expect(value, RunResult.FAIL);
+});
 
-Future _testTrueIsCool() =>
-    runTaskInTestRunner((ctx) => true)
-    .then((value) {
-      expect(value, RunResult.SUCCESS);
-    });
+Future _testTrueIsCool() => runTaskInTestRunner((ctx) => true).then((value) {
+  expect(value, RunResult.SUCCESS);
+});
 
-Future _testFalseIsFail() =>
-    runTaskInTestRunner((ctx) => false)
-    .then((value) {
-      expect(value, RunResult.SUCCESS);
-    });
+Future _testFalseIsFail() => runTaskInTestRunner((ctx) => false).then((value) {
+  expect(value, RunResult.SUCCESS);
+});
 
-Future _testNullIsFine() =>
-    runTaskInTestRunner((ctx) => null)
-    .then((value) {
-      expect(value, RunResult.SUCCESS);
-    });
+Future _testNullIsFine() => runTaskInTestRunner((ctx) => null).then((value) {
+  expect(value, RunResult.SUCCESS);
+});
 
-Future _testExceptionIsSad() =>
-    runTaskInTestRunner((ctx) {
-      throw 'sorry';
-    })
-    .then((value) {
-      expect(value, RunResult.EXCEPTION);
-    });
+Future _testExceptionIsSad() => runTaskInTestRunner((ctx) {
+  throw 'sorry';
+}).then((value) {
+  expect(value, RunResult.EXCEPTION);
+});
 
 Future _testBadParam() {
   final taskReg = new TaskRegistry();
   taskReg.addTask('good', _getGoodTask());
 
-  return runRegistry(taskReg, ['bad'])
-      .then((value) {
-        expect(value, RunResult.BAD_USAGE);
-        // TODO: test that proper error message is printed
-      });
+  return runRegistry(taskReg, ['bad']).then((value) {
+    expect(value, RunResult.BAD_USAGE);
+    // TODO: test that proper error message is printed
+  });
 }
 
 Future _testNoParam() {
   final taskReg = new TaskRegistry();
   taskReg.addTask('good', _getGoodTask());
 
-  return runRegistryShell(taskReg, ['--no-color'])
-      .then((RunShellOutput value) {
-        expect(value.runResult, RunResult.SUCCESS);
-        expect(value.printOutput, startsWith(_GOOD_TASK_NO_PARAMS_OUTPUT));
-      });
+  return runRegistryShell(taskReg, ['--no-color']).then((RunShellOutput value) {
+    expect(value.runResult, RunResult.SUCCESS);
+    expect(value.printOutput, startsWith(_GOOD_TASK_NO_PARAMS_OUTPUT));
+  });
 }
 
 Future _testNoTasks() {
   final taskReg = new TaskRegistry();
 
-  return runRegistryShell(taskReg, ['--no-color'])
-      .then((RunShellOutput value) {
-        expect(value.runResult, RunResult.SUCCESS);
-        expect(value.printOutput, startsWith(_NO_TASK_NO_PARAMS_OUTPUT));
-      });
+  return runRegistryShell(taskReg, ['--no-color']).then((RunShellOutput value) {
+    expect(value.runResult, RunResult.SUCCESS);
+    expect(value.printOutput, startsWith(_NO_TASK_NO_PARAMS_OUTPUT));
+  });
 }
 
-Task _getGoodTask() => new Task(noopTaskRunner, description: 'Just a nice task',
-    argParser: new ArgParser()
-      ..addFlag('foo', abbr: 'f', help: 'The foo flag', defaultsTo: true,
-          negatable: true)
-      ..addOption('bar', abbr: 'b', help: 'the bar flag',
-          allowed: ['a', 'b', 'c'], defaultsTo: 'b', allowMultiple: true),
-    extendedArgs: [
-                   new TaskArgument('ta-first', required: true),
-                   new TaskArgument('ta-second'),
-                   new TaskArgument('ta-third', multiple: true)]);
+Task _getGoodTask() => new Task(noopTaskRunner,
+    description: 'Just a nice task', argParser: new ArgParser()
+  ..addFlag('foo',
+      abbr: 'f', help: 'The foo flag', defaultsTo: true, negatable: true)
+  ..addOption('bar',
+      abbr: 'b',
+      help: 'the bar flag',
+      allowed: ['a', 'b', 'c'],
+      defaultsTo: 'b',
+      allowMultiple: true),
+        extendedArgs: [
+  new TaskArgument('ta-first', required: true),
+  new TaskArgument('ta-second'),
+  new TaskArgument('ta-third', multiple: true)
+]);
 
-const _GOOD_HELP_OUTPUT = '''usage: hop [<hop-options>] good [<good-options>] <ta-first> [<ta-second>] [<ta-third>...]
+const _GOOD_HELP_OUTPUT =
+    '''usage: hop [<hop-options>] good [<good-options>] <ta-first> [<ta-second>] [<ta-third>...]
 
   Just a nice task
 

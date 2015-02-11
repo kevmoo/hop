@@ -7,7 +7,6 @@ import 'package:unittest/unittest.dart';
 import '../test_util.dart';
 
 void main() {
-
   test('hop event equality', () {
     var he1 = new HopEvent(Level.INFO, 'test', source: ['test', 'test']);
     var he1a = new HopEvent(Level.INFO, 'test', source: ['test', 'test']);
@@ -31,7 +30,6 @@ void main() {
   });
 
   test('basic logging test', () {
-
     var records = <HopEvent>[];
 
     var task = new Task((ctx) {
@@ -39,21 +37,21 @@ void main() {
       print('print');
     });
 
-    return runTaskInTestRunner(task, eventLog: records,
-        printAtLogLevel: Level.SEVERE)
-        .then((RunResult result) {
-          expect(result, same(RunResult.SUCCESS));
+    return runTaskInTestRunner(task,
+        eventLog: records, printAtLogLevel: Level.SEVERE).then(
+        (RunResult result) {
+      expect(result, same(RunResult.SUCCESS));
 
-          records.removeWhere((e) => e.level <= Level.FINE);
+      records.removeWhere((e) => e.level <= Level.FINE);
 
-          expect(records, orderedEquals(
-              [new HopEvent(Level.SEVERE, 'info', source: [TEST_TASK_NAME]),
-               new HopEvent(Level.SEVERE, 'print', source: [TEST_TASK_NAME])]));
-        });
+      expect(records, orderedEquals([
+        new HopEvent(Level.SEVERE, 'info', source: [TEST_TASK_NAME]),
+        new HopEvent(Level.SEVERE, 'print', source: [TEST_TASK_NAME])
+      ]));
+    });
   });
 
   test('sub-logger', () {
-
     var records = <HopEvent>[];
 
     var task = new Task((TaskContext ctx) {
@@ -68,22 +66,24 @@ void main() {
       ctx.severe('severe');
     });
 
-    return runTaskInTestRunner(task, eventLog: records, throwTaskExceptions: true)
-        .then((RunResult result) {
-          expect(result, same(RunResult.SUCCESS));
+    return runTaskInTestRunner(task,
+        eventLog: records, throwTaskExceptions: true).then((RunResult result) {
+      expect(result, same(RunResult.SUCCESS));
 
-          records.removeWhere((e) => e.level <= Level.FINE);
+      records.removeWhere((e) => e.level <= Level.FINE);
 
-          expect(records, orderedEquals(
-              [new HopEvent(Level.INFO, 'info', source: [TEST_TASK_NAME]),
-               new HopEvent(Level.WARNING, 'sub warn', source: [TEST_TASK_NAME, 'sub']),
-               new HopEvent(Level.SEVERE, 'subsub severe', source: [TEST_TASK_NAME, 'sub', 'subsub']),
-               new HopEvent(Level.SEVERE, 'severe', source: [TEST_TASK_NAME])]));
-        });
+      expect(records, orderedEquals([
+        new HopEvent(Level.INFO, 'info', source: [TEST_TASK_NAME]),
+        new HopEvent(Level.WARNING, 'sub warn',
+            source: [TEST_TASK_NAME, 'sub']),
+        new HopEvent(Level.SEVERE, 'subsub severe',
+            source: [TEST_TASK_NAME, 'sub', 'subsub']),
+        new HopEvent(Level.SEVERE, 'severe', source: [TEST_TASK_NAME])
+      ]));
+    });
   });
 
   test('sub-logger, parent disposes child', () {
-
     var records = <HopEvent>[];
 
     TaskContext ctx;
@@ -103,18 +103,18 @@ void main() {
       ctx.severe('severe');
     });
 
-    return runTaskInTestRunner(task, eventLog: records, throwTaskExceptions: true)
-        .then((RunResult result) {
-          expect(result, same(RunResult.SUCCESS));
+    return runTaskInTestRunner(task,
+        eventLog: records, throwTaskExceptions: true).then((RunResult result) {
+      expect(result, same(RunResult.SUCCESS));
 
-          expect(ctx.isDisposed, isTrue);
-          expect(() => ctx.info('test'), throwsStateError);
+      expect(ctx.isDisposed, isTrue);
+      expect(() => ctx.info('test'), throwsStateError);
 
-          expect(subLogger.isDisposed, isTrue);
-          expect(() => subLogger.info('test'), throwsStateError);
+      expect(subLogger.isDisposed, isTrue);
+      expect(() => subLogger.info('test'), throwsStateError);
 
-          expect(subsub.isDisposed, isTrue);
-          expect(() => subsub.info('test'), throwsStateError);
-        });
+      expect(subsub.isDisposed, isTrue);
+      expect(() => subsub.info('test'), throwsStateError);
     });
+  });
 }

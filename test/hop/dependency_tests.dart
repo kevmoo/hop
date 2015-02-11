@@ -7,9 +7,7 @@ import 'package:unittest/unittest.dart';
 import '../test_util.dart';
 
 void main() {
-
   test('simple dependency', () {
-
     var reg = new TaskRegistry();
 
     var counts = new Map<String, int>();
@@ -22,19 +20,17 @@ void main() {
     expect(reg.tasks, hasLength(1));
 
     reg.addTask('two', (ctx) {
-      expect(counts, { 'one' : 1 });
+      expect(counts, {'one': 1});
       _increment(counts, 'two');
     }, dependencies: ['one']);
 
-    return runRegistry(reg, ['two'])
-      .then((RunResult rr) {
-        expect(rr, RunResult.SUCCESS);
-        expect(counts, {'one' : 1, 'two': 1 });
-      });
+    return runRegistry(reg, ['two']).then((RunResult rr) {
+      expect(rr, RunResult.SUCCESS);
+      expect(counts, {'one': 1, 'two': 1});
+    });
   });
 
   test('dependencies with args', () {
-
     var reg = new TaskRegistry();
 
     var counts = new Map<String, int>();
@@ -51,16 +47,14 @@ void main() {
     reg.addTask('two', _createTaskWithArgs((ctx) {
       expect(ctx.arguments['trueFlag'], true);
       expect(ctx.arguments['option'], 'c');
-      expect(counts, { 'one' : 1 });
+      expect(counts, {'one': 1});
       _increment(counts, 'two');
     }), dependencies: ['one']);
 
-    return runRegistry(reg, ['two'])
-      .then((RunResult rr) {
-        expect(rr, RunResult.SUCCESS);
-        expect(counts, {'one' : 1, 'two': 1 });
-
-      });
+    return runRegistry(reg, ['two']).then((RunResult rr) {
+      expect(rr, RunResult.SUCCESS);
+      expect(counts, {'one': 1, 'two': 1});
+    });
   });
 
   // figure out dependency tree correctly
@@ -76,12 +70,11 @@ void main() {
 }
 
 Task _createTaskWithArgs(dynamic taskExec(TaskContext ctx)) =>
-  new Task(taskExec, argParser: _parserConfig());
+    new Task(taskExec, argParser: _parserConfig());
 
-ArgParser _parserConfig() =>
-    new ArgParser()
-      ..addFlag('trueFlag', defaultsTo: true)
-      ..addOption('option', allowed: ['a,b,c'], defaultsTo: 'c');
+ArgParser _parserConfig() => new ArgParser()
+  ..addFlag('trueFlag', defaultsTo: true)
+  ..addOption('option', allowed: ['a,b,c'], defaultsTo: 'c');
 
 void _increment(Map<String, int> counts, String value) {
   int current = counts.putIfAbsent(value, () => 0);

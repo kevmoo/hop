@@ -15,7 +15,7 @@
 
 * Updated dependencies.
 
-* Removed `hop_docgen`. 
+* Removed `hop_docgen`.
 
 ## 0.31.0+1
 
@@ -83,7 +83,7 @@ Minor tweaks and dependency version changes.
 * Removed deprecated items from `Task` class:
     * `factory Task.sync`
     * `factory Task.async`
-    * Optinal `config` argument in `factory Task` 
+    * Optinal `config` argument in `factory Task`
 
 ## 0.28.3+3 2014-01-25 (SDK 1.2.0-dev.1.0 r31918)
 
@@ -96,12 +96,12 @@ Minor tweaks and dependency version changes.
 * Doc tweaks.
 * Simplified `bin/hop` bash script.
 
-## 0.28.3 2013-12-23 
+## 0.28.3 2013-12-23
 
 * Using `collection` package directly
 * Using new arg parser model in shipping tasks
 
-## 0.28.2+1 2013-12-10 
+## 0.28.2+1 2013-12-10
 
 * Dependency oops
 

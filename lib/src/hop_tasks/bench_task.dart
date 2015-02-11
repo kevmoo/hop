@@ -51,20 +51,21 @@ Task createBenchTask() => new Task((TaskContext ctx) {
     var stats = new _Stats(values);
     print(stats.toString());
   });
-
 },
     argParser: _benchParserConfig(),
     description: 'Run a benchmark against the provided task',
-    extendedArgs:
-      [new TaskArgument('command', required: true, multiple: true)]);
+    extendedArgs: [
+  new TaskArgument('command', required: true, multiple: true)
+]);
 
-ArgParser _benchParserConfig() => new ArgParser()..addOption(
-    _RUN_COUNT_ARE_NAME, abbr: 'r', defaultsTo: _DEFAULT_RUN_COUNT.toString(),
-    help: 'Specify the number times the specified command should be run');
+ArgParser _benchParserConfig() => new ArgParser()
+  ..addOption(_RUN_COUNT_ARE_NAME,
+      abbr: 'r',
+      defaultsTo: _DEFAULT_RUN_COUNT.toString(),
+      help: 'Specify the number times the specified command should be run');
 
-Future<List<_BenchRunResult>> _runMany(TaskContext ctx, int count,
-    String processName, List<String> args) {
-
+Future<List<_BenchRunResult>> _runMany(
+    TaskContext ctx, int count, String processName, List<String> args) {
   assert(count > 1);
   var countStrLength = count.toString().length;
 
@@ -73,8 +74,8 @@ Future<List<_BenchRunResult>> _runMany(TaskContext ctx, int count,
 
   return Future.forEach(range, (i) {
     return _runOnce(i + 1, processName, args).then((result) {
-      var paddedNumber = Util.padLeft(result.runNumber.toString(),
-          countStrLength);
+      var paddedNumber =
+          Util.padLeft(result.runNumber.toString(), countStrLength);
       ctx.fine("Test $paddedNumber of $count - ${result.executionDuration}");
       results.add(result);
     });
@@ -83,8 +84,8 @@ Future<List<_BenchRunResult>> _runMany(TaskContext ctx, int count,
   });
 }
 
-Future<_BenchRunResult> _runOnce(int runNumber, String processName,
-    List<String> args) {
+Future<_BenchRunResult> _runOnce(
+    int runNumber, String processName, List<String> args) {
   var watch = new Stopwatch()..start();
 
   int postStartMicros;
@@ -93,8 +94,8 @@ Future<_BenchRunResult> _runOnce(int runNumber, String processName,
     postStartMicros = watch.elapsedMicroseconds;
     return pipeProcess(process);
   }).then((int exitCode) {
-    return new _BenchRunResult(runNumber, exitCode == 0, postStartMicros,
-        watch.elapsedMicroseconds);
+    return new _BenchRunResult(
+        runNumber, exitCode == 0, postStartMicros, watch.elapsedMicroseconds);
   });
 }
 
@@ -185,25 +186,27 @@ class _Stats {
 
   String toString() {
     var rows = [
-        ['Min', min],
-        ['Max', max],
-        ['Media', median],
-        ['Mean', mean],
-        ['StdDev', standardDeviation],
-        ['StdDev%', (standardDeviation / mean * 100).toStringAsFixed(5) + '%'],
-        ['StdErr', standardError],
-        ['StdDev%', (standardError / mean * 100).toStringAsFixed(5) + '%'],];
+      ['Min', min],
+      ['Max', max],
+      ['Media', median],
+      ['Mean', mean],
+      ['StdDev', standardDeviation],
+      ['StdDev%', (standardDeviation / mean * 100).toStringAsFixed(5) + '%'],
+      ['StdErr', standardError],
+      ['StdDev%', (standardError / mean * 100).toStringAsFixed(5) + '%'],
+    ];
 
     var cols = [
-        new ColumnDefinition('Name', (a) => a[0]),
-        new ColumnDefinition('Value', (a) {
-      var val = a[1];
-      if (val is num) {
-        return new Duration(microseconds: val.toInt()).toString();
-      } else {
-        return val.toString();
-      }
-    })];
+      new ColumnDefinition('Name', (a) => a[0]),
+      new ColumnDefinition('Value', (a) {
+        var val = a[1];
+        if (val is num) {
+          return new Duration(microseconds: val.toInt()).toString();
+        } else {
+          return val.toString();
+        }
+      })
+    ];
 
     return Console.getTable(rows, cols).join('\n');
   }

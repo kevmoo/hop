@@ -7,7 +7,6 @@ import '../test_util.dart';
 
 void main() {
   test('chain tasks - success', () {
-
     var log = [];
 
     var reg = new TaskRegistry();
@@ -26,15 +25,13 @@ void main() {
 
     expect(task is Task, isTrue);
 
-    return runRegistry(reg, ['chained'])
-        .then((RunResult result) {
-          expect(result.success, isTrue);
-          expect(log, runOrder);
-        });
+    return runRegistry(reg, ['chained']).then((RunResult result) {
+      expect(result.success, isTrue);
+      expect(log, runOrder);
+    });
   });
 
   test('chain tasks - fail', () {
-
     var log = [];
 
     var reg = new TaskRegistry();
@@ -49,15 +46,13 @@ void main() {
 
     expect(task is Task, isTrue);
 
-    return runRegistry(reg, ['chained'])
-        .then((RunResult result) {
-          expect(result.exitCode, RunResult.FAIL.exitCode);
-          expect(log, []);
-        });
+    return runRegistry(reg, ['chained']).then((RunResult result) {
+      expect(result.exitCode, RunResult.FAIL.exitCode);
+      expect(log, []);
+    });
   });
 
   test('chain tasks - error', () {
-
     var log = [];
 
     var reg = new TaskRegistry();
@@ -72,11 +67,10 @@ void main() {
 
     expect(task is Task, isTrue);
 
-    return runRegistry(reg, ['chained'])
-        .then((RunResult result) {
-          expect(result.exitCode, RunResult.EXCEPTION.exitCode);
-          expect(log, ['t1']);
-        });
+    return runRegistry(reg, ['chained']).then((RunResult result) {
+      expect(result.exitCode, RunResult.EXCEPTION.exitCode);
+      expect(log, ['t1']);
+    });
   });
 
   test('description', () {
@@ -100,7 +94,8 @@ void main() {
     expect(() {
       reg.addChainedTask('oops', ['nope']);
     }, throwsA((errorObj) {
-      return errorObj.toString()
+      return errorObj
+          .toString()
           .contains('The task "nope" has not be registered');
     }));
   });

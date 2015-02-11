@@ -22,9 +22,7 @@ void main() {
   });
 
   test('failed file', () {
-    final fileTexts = {
-      "main.dart": "void main() => asdf { XXXX i = 42; }"
-    };
+    final fileTexts = {"main.dart": "void main() => asdf { XXXX i = 42; }"};
 
     return _testAnalyzerTask(fileTexts, RunResult.FAIL);
   });
@@ -37,28 +35,26 @@ void main() {
     };
 
     return _testAnalyzerTask(fileTexts, RunResult.FAIL);
-
   });
 }
 
 Future _testAnalyzerTask(Map<String, String> inputs, RunResult expectedResult) {
   String path;
-  return TempDir
-      .then((Directory dir) {
-        path = dir.path;
-        return EntityPopulater.populate(path, inputs, leaveExistingDirs: true)
-          .then((Directory value) {
-            assert(value.path == path);
+  return TempDir.then((Directory dir) {
+    path = dir.path;
+    return EntityPopulater
+        .populate(path, inputs, leaveExistingDirs: true)
+        .then((Directory value) {
+      assert(value.path == path);
 
-            var fullPaths = inputs.keys
-                .map((e) => pathos.absolute(pathos.join(path, e)))
-                .toList();
+      var fullPaths = inputs.keys
+          .map((e) => pathos.absolute(pathos.join(path, e)))
+          .toList();
 
-            final task = createAnalyzerTask(fullPaths);
-            return runTaskInTestRunner(task);
-          })
-          .then((RunResult runResult) {
-            expect(runResult, expectedResult);
-          });
-      });
+      final task = createAnalyzerTask(fullPaths);
+      return runTaskInTestRunner(task);
+    }).then((RunResult runResult) {
+      expect(runResult, expectedResult);
+    });
+  });
 }

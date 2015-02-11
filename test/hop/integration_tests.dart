@@ -12,25 +12,25 @@ void main() {
 }
 
 Future _testBadHopCommand() {
-  return _runHop(['bad_command_name'], {})
-      .then((ProcessResult pr) {
-        expect(pr.exitCode, equals(RunResult.BAD_USAGE.exitCode));
-      });
+  return _runHop(['bad_command_name'], {}).then((ProcessResult pr) {
+    expect(pr.exitCode, equals(RunResult.BAD_USAGE.exitCode));
+  });
 }
 
 Future _testOutputSorted() {
-  final env = {
-    'COMP_LINE': 'hop',
-    'COMP_POINT': '4'
-  };
+  final env = {'COMP_LINE': 'hop', 'COMP_POINT': '4'};
 
-  return _runHop(['completion', '--', 'hop'], env)
-      .then((ProcessResult pr) {
-        expect(pr.exitCode, equals(RunResult.SUCCESS.exitCode));
-        final lines = Util.splitLines(pr.stdout.trim()).toList();
-        expect(lines, orderedEquals(['analyze_all', 'analyze_libs',
-                                     'analyze_test_libs', 'bench',
-                                     'help', 'test']));
+  return _runHop(['completion', '--', 'hop'], env).then((ProcessResult pr) {
+    expect(pr.exitCode, equals(RunResult.SUCCESS.exitCode));
+    final lines = Util.splitLines(pr.stdout.trim()).toList();
+    expect(lines, orderedEquals([
+      'analyze_all',
+      'analyze_libs',
+      'analyze_test_libs',
+      'bench',
+      'help',
+      'test'
+    ]));
   });
 }
 
@@ -52,4 +52,3 @@ Future<ProcessResult> _runHop(Iterable<String> args, Map<String, String> env) {
 
   return Process.run('dart', list, environment: env);
 }
-

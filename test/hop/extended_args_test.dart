@@ -7,7 +7,6 @@ import 'package:hop/src/hop_runner.dart';
 import '../test_util.dart';
 
 void main() {
-
   group('parseExtendedArgs', () {
     Task task;
 
@@ -40,11 +39,13 @@ void main() {
     });
 
     group('optional, with multiple', () {
-
       setUp(() {
-        task = new Task(noopTaskRunner, extendedArgs: [new TaskArgument('first'),
-                        new TaskArgument('second'),
-                        new TaskArgument('thirds', multiple: true)]);
+        task = new Task(noopTaskRunner,
+            extendedArgs: [
+          new TaskArgument('first'),
+          new TaskArgument('second'),
+          new TaskArgument('thirds', multiple: true)
+        ]);
       });
 
       test('success', () {
@@ -67,11 +68,13 @@ void main() {
     });
 
     group('optional, no multiple', () {
-
       setUp(() {
-        task = new Task(noopTaskRunner, extendedArgs: [new TaskArgument('first'),
-                        new TaskArgument('second'),
-                        new TaskArgument('thirds')]);
+        task = new Task(noopTaskRunner,
+            extendedArgs: [
+          new TaskArgument('first'),
+          new TaskArgument('second'),
+          new TaskArgument('thirds')
+        ]);
       });
 
       test('success', () {
@@ -104,12 +107,13 @@ void main() {
     });
 
     group('required, with multiple', () {
-
       setUp(() {
-        task = new Task(noopTaskRunner, extendedArgs:
-          [new TaskArgument('first', required: true),
-           new TaskArgument('second', required: true),
-           new TaskArgument('thirds', required: true, multiple: true)]);
+        task = new Task(noopTaskRunner,
+            extendedArgs: [
+          new TaskArgument('first', required: true),
+          new TaskArgument('second', required: true),
+          new TaskArgument('thirds', required: true, multiple: true)
+        ]);
       });
 
       test('success', () {
@@ -126,19 +130,20 @@ void main() {
           task.parseExtendedArgs(['1st', '2rd']);
           fail("should throw");
         } catch (ex) {
-          if(ex is! FormatException) rethrow;
+          if (ex is! FormatException) rethrow;
           expect(ex.message, 'Expected 3 argument(s); received 2');
         }
       });
     });
 
     group('required, without multiple', () {
-
       setUp(() {
-        task = new Task(noopTaskRunner, extendedArgs:
-          [new TaskArgument('first', required: true),
-           new TaskArgument('second', required: true),
-           new TaskArgument('thirds')]);
+        task = new Task(noopTaskRunner,
+            extendedArgs: [
+          new TaskArgument('first', required: true),
+          new TaskArgument('second', required: true),
+          new TaskArgument('thirds')
+        ]);
       });
 
       test('success', () {
@@ -155,64 +160,76 @@ void main() {
           task.parseExtendedArgs(['1st']);
           fail("should throw");
         } catch (ex) {
-          if(ex is! FormatException) rethrow;
+          if (ex is! FormatException) rethrow;
           expect(ex.message, 'Expected 2 argument(s); received 1');
         }
       });
 
       test('too many is bad', () {
-
         try {
           task.parseExtendedArgs(['1st', '2rd', '3rd', '4th']);
           fail("should throw");
         } catch (ex) {
-          if(ex is! FormatException) rethrow;
+          if (ex is! FormatException) rethrow;
           expect(ex.message, 'Expected 3 argument(s); received 4');
         }
       });
     });
-
   });
 
   test('extended arg values in TaskContext', () {
     var task = new Task((TaskContext ctx) {
-      expect(ctx.extendedArgs.keys, orderedEquals(['first', 'second', 'thirds']));
+      expect(
+          ctx.extendedArgs.keys, orderedEquals(['first', 'second', 'thirds']));
       expect(ctx.extendedArgs['first'], '1st');
       expect(ctx.extendedArgs['second'], '2nd');
       expect(ctx.extendedArgs['thirds'], ['3rd-a', '3rd-b']);
-    }, extendedArgs: [new TaskArgument('first'),
-                      new TaskArgument('second'),
-                      new TaskArgument('thirds', multiple: true)]);
+    },
+        extendedArgs: [
+      new TaskArgument('first'),
+      new TaskArgument('second'),
+      new TaskArgument('thirds', multiple: true)
+    ]);
 
     return runTaskInTestRunner(task,
-        extraArgs: ['1st', '2nd', '3rd-a', '3rd-b'], throwTaskExceptions: true)
-        .then((RunResult rr) {
-          expect(rr, RunResult.SUCCESS);
-        });
+        extraArgs: ['1st', '2nd', '3rd-a', '3rd-b'],
+        throwTaskExceptions: true).then((RunResult rr) {
+      expect(rr, RunResult.SUCCESS);
+    });
   });
 
   test("missing an extended arg", () {
-
     var log = <HopEvent>[];
 
     var task = new Task(noopTaskRunner,
         extendedArgs: [new TaskArgument('first', required: true)]);
 
-    return runTaskInTestRunner(task, eventLog: log)
-        .then((RunResult rr) {
-          // TODO: check for helpful error message, too
-          expect(rr, RunResult.BAD_USAGE);
-        });
+    return runTaskInTestRunner(task, eventLog: log).then((RunResult rr) {
+      // TODO: check for helpful error message, too
+      expect(rr, RunResult.BAD_USAGE);
+    });
   });
 
   test('valid ctor args', () {
     final valid = ['a', 'a-b', 'a-cool-name', 'a7', 'b2b', 'a_b'];
-    for(final v in valid) {
+    for (final v in valid) {
       expect(() => new TaskArgument(v), returnsNormally);
     }
 
-    final invalid = ['', null, ' ', '-', 'A', 'a-', 'a-B', 'a ', 'a b', '7', '7a'];
-    for(final v in invalid) {
+    final invalid = [
+      '',
+      null,
+      ' ',
+      '-',
+      'A',
+      'a-',
+      'a-B',
+      'a ',
+      'a b',
+      '7',
+      '7a'
+    ];
+    for (final v in invalid) {
       expect(() => new TaskArgument(v), throwsArgumentError);
     }
 
@@ -234,22 +251,36 @@ void main() {
     _validateExtendedArgs([new TaskArgument('a', required: true)], true);
 
     // first required and mult is fine
-    _validateExtendedArgs([new TaskArgument('a', required: true, multiple: true)], true);
+    _validateExtendedArgs(
+        [new TaskArgument('a', required: true, multiple: true)], true);
 
     // first required, second not required is fine
-    _validateExtendedArgs([new TaskArgument('a', required: true), new TaskArgument('b', required: false)], true);
+    _validateExtendedArgs([
+      new TaskArgument('a', required: true),
+      new TaskArgument('b', required: false)
+    ], true);
 
     // first not required, second required is bad
-    _validateExtendedArgs([new TaskArgument('a', required: false), new TaskArgument('b', required: true)], false);
+    _validateExtendedArgs([
+      new TaskArgument('a', required: false),
+      new TaskArgument('b', required: true)
+    ], false);
 
     // last multiple is fine
-    _validateExtendedArgs([new TaskArgument('a', multiple: false), new TaskArgument('b', multiple: true)], true);
+    _validateExtendedArgs([
+      new TaskArgument('a', multiple: false),
+      new TaskArgument('b', multiple: true)
+    ], true);
 
     // 'N' multiple, 'N+1' non-multiple is not fine
-    _validateExtendedArgs([new TaskArgument('a', multiple: true), new TaskArgument('b', multiple: false)], false);
+    _validateExtendedArgs([
+      new TaskArgument('a', multiple: true),
+      new TaskArgument('b', multiple: false)
+    ], false);
 
     // dupe names is not fine
-    _validateExtendedArgs([new TaskArgument('a'), new TaskArgument('a')], false);
+    _validateExtendedArgs(
+        [new TaskArgument('a'), new TaskArgument('a')], false);
   });
 }
 
@@ -257,4 +288,3 @@ void _validateExtendedArgs(List<TaskArgument> args, bool isGood) {
   var matcher = isGood ? returnsNormally : throwsArgumentError;
   expect(() => TaskArgument.validateArgs(args), matcher);
 }
-
