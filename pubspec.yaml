@@ -1,12 +1,12 @@
 name: hop
-version: 0.31.2-dev
+version: 0.31.1+1
 author: Hop Project Authors <hop_authors@j832.com>
 description: Dart Task Framework
 homepage: https://github.com/kevmoo/hop
 environment:
   sdk: '>=1.4.0 <2.0.0'
 dependencies:
-  args: '>=0.9.0 <0.13.0'
+  args: '>=0.9.0 <0.14.0'
   bot: '>=0.26.0 <0.29.0'
   bot_io: '>=0.26.1 <0.27.0'
   collection: '>=0.9.0 <2.0.0'
