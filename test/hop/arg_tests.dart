@@ -8,8 +8,8 @@ import '../test_util.dart';
 void main() {
   test('simple args', () {
     final task = _makeSimpleTask();
-    return runTaskInTestRunner(task, extraArgs: ['hello', 'args']).then(
-        (RunResult result) {
+    return runTaskInTestRunner(task, extraArgs: ['hello', 'args'])
+        .then((RunResult result) {
       expect(result, RunResult.SUCCESS);
     });
   });

@@ -61,8 +61,8 @@ Future _processDartAnalyzerFile(TaskContext context,
 
   return Future.forEach(analyzerFilePaths, (String path) {
     var logger = context.getSubLogger(path);
-    return _dartAnalyzer(logger, path, verbose, formatMachine).then(
-        (int exitCode) {
+    return _dartAnalyzer(logger, path, verbose, formatMachine)
+        .then((int exitCode) {
       logger.dispose();
 
       String prefix;
@@ -129,8 +129,9 @@ Future<String> _getPackagesDir(String filePath) {
   const packageDirName = 'packages';
 
   var packagesDirCandidatePath = pathos.join(dirName, packageDirName);
-  return FileSystemEntity.isDirectory(packagesDirCandidatePath).then(
-      (bool isDir) {
+  return FileSystemEntity
+      .isDirectory(packagesDirCandidatePath)
+      .then((bool isDir) {
     if (isDir) {
       return packagesDirCandidatePath;
     }
@@ -138,8 +139,9 @@ Future<String> _getPackagesDir(String filePath) {
     packagesDirCandidatePath =
         pathos.join(Directory.current.path, packageDirName);
 
-    return FileSystemEntity.isDirectory(packagesDirCandidatePath).then(
-        (bool isDir2) {
+    return FileSystemEntity
+        .isDirectory(packagesDirCandidatePath)
+        .then((bool isDir2) {
       if (isDir2) {
         return packagesDirCandidatePath;
       }

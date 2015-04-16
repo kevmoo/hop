@@ -33,8 +33,9 @@ void runHop(List<String> args, {bool paranoid: true,
   if (paranoid) {
     _paranoidHopCheck();
   }
-  Runner.runShell(args, _sharedConfig, helpTaskName, printAtLogLevel).then(
-      (RunResult rr) {
+  Runner
+      .runShell(args, _sharedConfig, helpTaskName, printAtLogLevel)
+      .then((RunResult rr) {
     io.exit(rr.exitCode);
   });
 }

@@ -38,8 +38,8 @@ void main() {
     });
 
     return runTaskInTestRunner(task,
-        eventLog: records, printAtLogLevel: Level.SEVERE).then(
-        (RunResult result) {
+            eventLog: records, printAtLogLevel: Level.SEVERE)
+        .then((RunResult result) {
       expect(result, same(RunResult.SUCCESS));
 
       records.removeWhere((e) => e.level <= Level.FINE);

@@ -23,8 +23,8 @@ void main() {
     var taskReg = new TaskRegistry();
     taskReg.addTask('good', task);
 
-    return runRegistryShell(taskReg, ['--no-color', 'help', 'good']).then(
-        (RunShellOutput value) {
+    return runRegistryShell(taskReg, ['--no-color', 'help', 'good'])
+        .then((RunShellOutput value) {
       expect(value.runResult, RunResult.SUCCESS);
       expect(value.printOutput, startsWith(_GOOD_HELP_OUTPUT));
     });
@@ -42,8 +42,8 @@ void main() {
   });
 }
 
-Future _testCtxFail() => runTaskInTestRunner((ctx) => ctx.fail('fail!')).then(
-    (value) {
+Future _testCtxFail() => runTaskInTestRunner((ctx) => ctx.fail('fail!'))
+    .then((value) {
   expect(value, RunResult.FAIL);
 });
 
