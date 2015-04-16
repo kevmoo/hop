@@ -16,3 +16,5 @@ dependencies:
 dev_dependencies:
   hop_unittest: ^0.1.0
   unittest: ^0.11.0
+executables:
+  bench:
