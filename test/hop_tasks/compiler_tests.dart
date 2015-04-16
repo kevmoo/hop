@@ -71,7 +71,6 @@ Set<String> _getOutputFiles(
     if (expectSuccess) {
       if (type == CompilerTargetType.JS) {
         var newName = inFile + '.js';
-        var inFileDir = pathos.dirname(inFile);
 
         outputFiles.add(newName);
         outputFiles.add(newName + '.deps');

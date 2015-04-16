@@ -54,7 +54,7 @@ void main() {
     final tasks = new TaskRegistry();
 
     expect(tasks.isFrozen, isFalse);
-    final hopConfig = new HopConfig(tasks, ['bad']);
+    new HopConfig(tasks, ['bad']);
     expect(tasks.isFrozen, isTrue);
 
     // cannot add task when frozen

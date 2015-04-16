@@ -156,7 +156,7 @@ class Runner {
     ArgResults args;
     try {
       args = tryArgsCompletion(mainArgs, parser);
-    } on FormatException catch (ex, stack) {
+    } on FormatException catch (ex) {
       // TODO: try to guess if --no-color was passed in here?
       print("There was an error parsing the provided arguments");
       print(ex.message);

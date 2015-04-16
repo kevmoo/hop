@@ -8,9 +8,6 @@ abstract class _ContextLogger {
 }
 
 class HopConfig implements _ContextLogger {
-  static final _childNameChainExpando =
-      new Expando<List<String>>('child names');
-
   final TaskRegistry taskRegistry;
   final ArgParser parser;
   final ArgResults argResults;

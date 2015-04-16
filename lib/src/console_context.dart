@@ -34,7 +34,7 @@ class ConsoleContext extends TaskRuntime {
     ArgResults args;
     try {
       args = tryArgsCompletion(mainArgs, parser);
-    } on FormatException catch (ex, stack) {
+    } on FormatException catch (ex) {
       print('There was a problem parsing the provided arguments.');
       print(ex.message);
       print(parser.usage);

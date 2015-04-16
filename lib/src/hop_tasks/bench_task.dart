@@ -34,7 +34,7 @@ const String _RUN_COUNT_ARE_NAME = 'run-count';
 ///            StdDev    0:00:00.001687
 ///            StdDev%   52.05938%
 ///            StdErr    0:00:00.000377
-///            StdDev%   11.64083%
+///            StdErr%   11.64083%
 Task createBenchTask() => new Task((TaskContext ctx) {
   var parseResult = ctx.arguments;
 
@@ -193,7 +193,7 @@ class _Stats {
       ['StdDev', standardDeviation],
       ['StdDev%', (standardDeviation / mean * 100).toStringAsFixed(5) + '%'],
       ['StdErr', standardError],
-      ['StdDev%', (standardError / mean * 100).toStringAsFixed(5) + '%'],
+      ['StdErr%', (standardError / mean * 100).toStringAsFixed(5) + '%'],
     ];
 
     var cols = [
