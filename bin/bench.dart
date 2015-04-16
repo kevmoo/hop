@@ -1,5 +1,4 @@
 #!/usr/bin/env dart
-
 import 'package:hop/src/console_context.dart';
 import 'package:hop/hop_tasks.dart';
 
