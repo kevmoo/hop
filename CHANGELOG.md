@@ -1,3 +1,9 @@
+## 0.32.0
+
+* Require at least Dart 1.9
+
+* Made `bench` a usable via `pub global activate hop`.
+
 ## 0.31.1
 
 * A bunch of cleanup.
