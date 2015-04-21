@@ -35,7 +35,7 @@ const String _RUN_COUNT_ARE_NAME = 'run-count';
 ///            StdDev%   52.05938%
 ///            StdErr    0:00:00.000377
 ///            StdErr%   11.64083%
-Task createBenchTask() => new Task((TaskContext ctx) {
+Task createBenchTask() => new Task((TaskContext ctx) async {
   var parseResult = ctx.arguments;
 
   var count = int.parse(parseResult[_RUN_COUNT_ARE_NAME],
@@ -46,11 +46,22 @@ Task createBenchTask() => new Task((TaskContext ctx) {
   String processName = commandParams.first;
   var args = commandParams.sublist(1);
 
-  return _runMany(ctx, count, processName, args).then((list) {
-    var values = list.map((brr) => brr.executionDurationMilliseconds);
-    var stats = new Stats(values);
-    print(stats.toString());
-  });
+  var countStrLength = count.toString().length;
+
+  var list = new List<_BenchRunResult>();
+
+  assert(count > 1);
+
+  for (var i = 0; i < count; i++) {
+    var result = await _runOnce(i + 1, processName, args);
+    var paddedNumber = result.runNumber.toString().padLeft(countStrLength);
+    ctx.fine("Test $paddedNumber of $count - ${result.executionDuration}");
+    list.add(result);
+  }
+
+  var values = list.map((brr) => brr.executionDurationMilliseconds);
+  var stats = new Stats(values);
+  print(stats.toString());
 },
     argParser: _benchParserConfig(),
     description: 'Run a benchmark against the provided task',
@@ -64,39 +75,14 @@ ArgParser _benchParserConfig() => new ArgParser()
       defaultsTo: _DEFAULT_RUN_COUNT.toString(),
       help: 'Specify the number times the specified command should be run');
 
-Future<List<_BenchRunResult>> _runMany(
-    TaskContext ctx, int count, String processName, List<String> args) {
-  assert(count > 1);
-  var countStrLength = count.toString().length;
-
-  var range = new Iterable.generate(count, (i) => i);
-  var results = new List<_BenchRunResult>();
-
-  return Future.forEach(range, (i) {
-    return _runOnce(i + 1, processName, args).then((result) {
-      var paddedNumber =
-          Util.padLeft(result.runNumber.toString(), countStrLength);
-      ctx.fine("Test $paddedNumber of $count - ${result.executionDuration}");
-      results.add(result);
-    });
-  }).then((_) {
-    return results;
-  });
-}
-
 Future<_BenchRunResult> _runOnce(
-    int runNumber, String processName, List<String> args) {
+    int runNumber, String processName, List<String> args) async {
   var watch = new Stopwatch()..start();
-
-  int postStartMicros;
-
-  return Process.start(processName, args).then((process) {
-    postStartMicros = watch.elapsedMicroseconds;
-    return pipeProcess(process);
-  }).then((int exitCode) {
-    return new _BenchRunResult(
-        runNumber, exitCode == 0, postStartMicros, watch.elapsedMicroseconds);
-  });
+  var postStartMicros = watch.elapsedMicroseconds;
+  var process = await Process.start(processName, args);
+  var exitCode = await pipeProcess(process);
+  return new _BenchRunResult(
+      runNumber, exitCode == 0, postStartMicros, watch.elapsedMicroseconds);
 }
 
 class _BenchRunResult {
