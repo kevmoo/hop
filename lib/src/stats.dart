@@ -62,7 +62,9 @@ class Stats {
     return new Stats.raw(count, mean, median, max, min, standardDeviation);
   }
 
-  String toString() {
+  String toString() => getResultString(asDurationFromMicroseconds: true);
+
+  String getResultString({bool asDurationFromMicroseconds: true}) {
     var rows = [
       ['Min', min],
       ['Max', max],
@@ -78,7 +80,7 @@ class Stats {
       new ColumnDefinition('Name', (a) => a[0]),
       new ColumnDefinition('Value', (a) {
         var val = a[1];
-        if (val is num) {
+        if (asDurationFromMicroseconds && val is num) {
           return new Duration(microseconds: val.toInt()).toString();
         } else {
           return val.toString();
