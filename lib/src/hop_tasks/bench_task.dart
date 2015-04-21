@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:io' hide Console;
 
 import 'package:args/args.dart';
-import 'package:bot/bot.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_tasks/process.dart';
 import 'package:hop/src/stats.dart';
@@ -14,7 +13,7 @@ import 'package:hop/src/stats.dart';
 // TODO: print out all of the summary values
 // TODO: tests?
 
-const _DEFAULT_RUN_COUNT = 20;
+const DEFAULT_BENCHMARK_COUNT = 20;
 const _COMMAND_ARG = 'command';
 const String _RUN_COUNT_ARE_NAME = 'run-count';
 
@@ -39,12 +38,33 @@ Task createBenchTask() => new Task((TaskContext ctx) async {
   var parseResult = ctx.arguments;
 
   var count = int.parse(parseResult[_RUN_COUNT_ARE_NAME],
-      onError: (s) => _DEFAULT_RUN_COUNT);
+      onError: (s) => DEFAULT_BENCHMARK_COUNT);
 
   List<String> commandParams = ctx.extendedArgs[_COMMAND_ARG];
 
   String processName = commandParams.first;
   var args = commandParams.sublist(1);
+
+  var stats = await benchmarkProcess(processName, args,
+      count: count, itemLog: ctx.fine);
+  print(stats.toString());
+},
+    argParser: _benchParserConfig(),
+    description: 'Run a benchmark against the provided task',
+    extendedArgs: [
+  new TaskArgument('command', required: true, multiple: true)
+]);
+
+/// If [count] is not provided, [DEFAULT_BENCHMARK_COUNT] is used.
+Future<Stats> benchmarkProcess(String processName, List<String> args,
+    {int count, void itemLog(String input)}) async {
+  if (count == null) {
+    count = DEFAULT_BENCHMARK_COUNT;
+  }
+
+  if (itemLog == null) {
+    itemLog = _emptyLogger;
+  }
 
   var countStrLength = count.toString().length;
 
@@ -55,24 +75,20 @@ Task createBenchTask() => new Task((TaskContext ctx) async {
   for (var i = 0; i < count; i++) {
     var result = await _runOnce(i + 1, processName, args);
     var paddedNumber = result.runNumber.toString().padLeft(countStrLength);
-    ctx.fine("Test $paddedNumber of $count - ${result.executionDuration}");
+    itemLog("Test $paddedNumber of $count - ${result.executionDuration}");
     list.add(result);
   }
 
   var values = list.map((brr) => brr.executionDurationMilliseconds);
-  var stats = new Stats(values);
-  print(stats.toString());
-},
-    argParser: _benchParserConfig(),
-    description: 'Run a benchmark against the provided task',
-    extendedArgs: [
-  new TaskArgument('command', required: true, multiple: true)
-]);
+  return new Stats(values);
+}
+
+void _emptyLogger(String input) {}
 
 ArgParser _benchParserConfig() => new ArgParser()
   ..addOption(_RUN_COUNT_ARE_NAME,
       abbr: 'r',
-      defaultsTo: _DEFAULT_RUN_COUNT.toString(),
+      defaultsTo: DEFAULT_BENCHMARK_COUNT.toString(),
       help: 'Specify the number times the specified command should be run');
 
 Future<_BenchRunResult> _runOnce(
