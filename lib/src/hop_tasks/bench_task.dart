@@ -5,7 +5,6 @@ import 'dart:io' hide Console;
 
 import 'package:args/args.dart';
 import 'package:hop/hop_core.dart';
-import 'package:hop/src/hop_tasks/process.dart';
 import 'package:hop/src/stats.dart';
 
 // TODO: options for handling failed processes?
@@ -79,7 +78,7 @@ Future<Stats> benchmarkProcess(String processName, List<String> args,
     list.add(result);
   }
 
-  var values = list.map((brr) => brr.executionDurationMilliseconds);
+  var values = list.map((brr) => brr.executionDuration.inMicroseconds);
   return new Stats(values);
 }
 
@@ -94,31 +93,25 @@ ArgParser _benchParserConfig() => new ArgParser()
 Future<_BenchRunResult> _runOnce(
     int runNumber, String processName, List<String> args) async {
   var watch = new Stopwatch()..start();
-  var postStartMicros = watch.elapsedMicroseconds;
-  var process = await Process.start(processName, args);
-  var exitCode = await pipeProcess(process);
-  return new _BenchRunResult(
-      runNumber, exitCode == 0, postStartMicros, watch.elapsedMicroseconds);
+  var process = await Process.run(processName, args);
+
+  return new _BenchRunResult(runNumber, process.exitCode == 0, watch.elapsed,
+      process.stdout, process.stderr);
 }
 
 class _BenchRunResult {
   final int runNumber;
-  final int postStartMicroseconds;
-  final int postEndMicroseconds;
+  final Duration executionDuration;
+  final String stdout;
+  final String stderr;
   final bool completed;
 
-  _BenchRunResult(this.runNumber, this.completed, this.postStartMicroseconds,
-      this.postEndMicroseconds);
-
-  int get executionDurationMilliseconds =>
-      postEndMicroseconds - postStartMicroseconds;
-
-  Duration get executionDuration =>
-      new Duration(microseconds: executionDurationMilliseconds);
+  _BenchRunResult(this.runNumber, this.completed, this.executionDuration,
+      this.stdout, this.stderr);
 
   @override
   String toString() => '''
 $runNumber
-$executionDurationMilliseconds
+$executionDuration
 $completed''';
 }
