@@ -23,13 +23,15 @@ Future _testOutputSorted() {
   return _runHop(['completion', '--', 'hop'], env).then((ProcessResult pr) {
     expect(pr.exitCode, equals(RunResult.SUCCESS.exitCode));
     final lines = Util.splitLines(pr.stdout.trim()).toList();
-    expect(lines, orderedEquals([
-      'analyze_all',
-      'analyze_libs',
-      'analyze_test_libs',
-      'bench',
-      'help'
-    ]));
+    expect(
+        lines,
+        orderedEquals([
+          'analyze_all',
+          'analyze_libs',
+          'analyze_test_libs',
+          'bench',
+          'help'
+        ]));
   });
 }
 

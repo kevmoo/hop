@@ -34,25 +34,25 @@ const String _RUN_COUNT_ARE_NAME = 'run-count';
 ///            StdErr    0:00:00.000377
 ///            StdErr%   11.64083%
 Task createBenchTask() => new Task((TaskContext ctx) async {
-  var parseResult = ctx.arguments;
+      var parseResult = ctx.arguments;
 
-  var count = int.parse(parseResult[_RUN_COUNT_ARE_NAME],
-      onError: (s) => DEFAULT_BENCHMARK_COUNT);
+      var count = int.parse(parseResult[_RUN_COUNT_ARE_NAME],
+          onError: (s) => DEFAULT_BENCHMARK_COUNT);
 
-  List<String> commandParams = ctx.extendedArgs[_COMMAND_ARG];
+      List<String> commandParams = ctx.extendedArgs[_COMMAND_ARG];
 
-  String processName = commandParams.first;
-  var args = commandParams.sublist(1);
+      String processName = commandParams.first;
+      var args = commandParams.sublist(1);
 
-  var stats = await benchmarkProcess(processName, args,
-      count: count, itemLog: ctx.fine);
-  print(stats.toString());
-},
-    argParser: _benchParserConfig(),
-    description: 'Run a benchmark against the provided task',
-    extendedArgs: [
-  new TaskArgument('command', required: true, multiple: true)
-]);
+      var stats = await benchmarkProcess(processName, args,
+          count: count, itemLog: ctx.fine);
+      print(stats.toString());
+    },
+        argParser: _benchParserConfig(),
+        description: 'Run a benchmark against the provided task',
+        extendedArgs: [
+          new TaskArgument('command', required: true, multiple: true)
+        ]);
 
 /// If [count] is not provided, [DEFAULT_BENCHMARK_COUNT] is used.
 Future<Stats> benchmarkProcess(String processName, List<String> args,

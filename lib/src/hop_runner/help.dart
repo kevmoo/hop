@@ -84,7 +84,9 @@ void _printHelp(_Printer printer, TaskRegistry registry, ArgParser parser) {
   }
 }
 
-String _getUsage({bool showOptions: true, String taskName: '<task>',
+String _getUsage(
+    {bool showOptions: true,
+    String taskName: '<task>',
     String extendedArgsUsage: '[--] [<task-args>]'}) {
   final optionsString = (taskName == '<task>') ? 'task' : taskName;
 

@@ -16,11 +16,15 @@ class Runner {
     return task.run(runtime).then((value) {
       // TODO: remove these checks at some future version
       if (value == true) {
-        runtime.addLog(Level.SEVERE, '`true` was returned from the task.\n'
+        runtime.addLog(
+            Level.SEVERE,
+            '`true` was returned from the task.\n'
             "It's possible that the task was trying to signal success using"
             "an old behavior.\nThis is no longer nessesary.");
       } else if (value == false) {
-        runtime.addLog(Level.SEVERE, "`false` was returned from the task.\n"
+        runtime.addLog(
+            Level.SEVERE,
+            "`false` was returned from the task.\n"
             "It's possible that the task was trying to signal failure using"
             "an old behavior.\nTasks should signal failure using "
             "`TaskContext.fail`.");
@@ -116,8 +120,12 @@ class Runner {
     }
   }
 
-  static Future<RunResult> _runNamedTask(String name, Task task,
-      ArgResults argResults, Level printAtLogLevel, HopConfig config,
+  static Future<RunResult> _runNamedTask(
+      String name,
+      Task task,
+      ArgResults argResults,
+      Level printAtLogLevel,
+      HopConfig config,
       bool throwExceptions) {
     var runtime = new _TaskRuntime(name, argResults, config,
         printAtLevel: printAtLogLevel);
@@ -132,7 +140,6 @@ class Runner {
   /// Designed to be run [runHop] command in the [hop] library.
   static Future<RunResult> runShell(List<String> mainArgs,
       TaskRegistry registry, String helpTaskName, Level printAtLogLevel) {
-
     // a bit ugly
     // the help task needs the parser and a print method
     // we can't get those until the help task is created

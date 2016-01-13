@@ -28,8 +28,10 @@ final _sharedConfig = new TaskRegistry();
 /// [helpTaskName] defines the name of the help task. If [helpTaskName]
 /// conflicts with an already defined task, an error is thrown. Setting this
 /// to `null` will disable help.
-void runHop(List<String> args, {bool paranoid: true,
-    String helpTaskName: 'help', Level printAtLogLevel: Level.INFO}) {
+void runHop(List<String> args,
+    {bool paranoid: true,
+    String helpTaskName: 'help',
+    Level printAtLogLevel: Level.INFO}) {
   if (paranoid) {
     _paranoidHopCheck();
   }
@@ -53,8 +55,9 @@ void runHop(List<String> args, {bool paranoid: true,
 /// If [description] is provided and [task] is a [Task], then [task] will be
 /// cloned and [description] will override the default description.
 Task addTask(String name, dynamic task,
-    {String description, List<String> dependencies}) => _sharedConfig.addTask(
-        name, task, description: description, dependencies: dependencies);
+        {String description, List<String> dependencies}) =>
+    _sharedConfig.addTask(name, task,
+        description: description, dependencies: dependencies);
 
 /// Creates a [Task] which runs multiple tasks.
 ///
@@ -65,15 +68,17 @@ Task addTask(String name, dynamic task,
 ///
 /// [description] provides information when help is displayed for the task.
 Task addChainedTask(String name, Iterable<String> existingTaskNames,
-    {String description}) => _sharedConfig.addChainedTask(
-        name, existingTaskNames, description: description);
+        {String description}) =>
+    _sharedConfig.addChainedTask(name, existingTaskNames,
+        description: description);
 
 void _paranoidHopCheck() {
   var currentDir = path.current;
 
   var expectedPubspecFile = path.join(currentDir, 'pubspec.yaml');
 
-  require(io.FileSystemEntity.isFileSync(expectedPubspecFile),
+  require(
+      io.FileSystemEntity.isFileSync(expectedPubspecFile),
       'pubspec.yaml is not in the working directory "$currentDir". '
       'Hop expects to run from a project root directory. '
       'When running from the Editor, change the working directory in '
@@ -83,6 +88,8 @@ void _paranoidHopCheck() {
 
   final expectedPath = path.join(currentDir, 'tool', 'hop_runner.dart');
 
-  require(runningScript == expectedPath, 'Running script should be at '
+  require(
+      runningScript == expectedPath,
+      'Running script should be at '
       '"$expectedPath", but it was at "$runningScript"');
 }

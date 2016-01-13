@@ -26,8 +26,10 @@ abstract class Task {
 
   ArgParser get argParser;
 
-  factory Task(dynamic taskDefinition(TaskContext ctx), {String description,
-      List<TaskArgument> extendedArgs, ArgParser argParser}) {
+  factory Task(dynamic taskDefinition(TaskContext ctx),
+      {String description,
+      List<TaskArgument> extendedArgs,
+      ArgParser argParser}) {
     return new _TaskWithParser(
         taskDefinition, description, extendedArgs, argParser);
   }
@@ -45,15 +47,15 @@ abstract class Task {
   String getUsage() => argParser.usage;
 
   String getExtendedArgsUsage() => _extendedArgs.map((TaskArgument arg) {
-    var value = '<${arg.name}>';
-    if (arg.multiple) {
-      value = value + '...';
-    }
-    if (!arg.required) {
-      value = '[$value]';
-    }
-    return value;
-  }).join(' ');
+        var value = '<${arg.name}>';
+        if (arg.multiple) {
+          value = value + '...';
+        }
+        if (!arg.required) {
+          value = '[$value]';
+        }
+        return value;
+      }).join(' ');
 
   Future run(TaskRuntime runtime) {
     requireArgumentNotNull(runtime, 'runtime');

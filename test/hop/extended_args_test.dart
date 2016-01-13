@@ -40,8 +40,7 @@ void main() {
 
     group('optional, with multiple', () {
       setUp(() {
-        task = new Task(noopTaskRunner,
-            extendedArgs: [
+        task = new Task(noopTaskRunner, extendedArgs: [
           new TaskArgument('first'),
           new TaskArgument('second'),
           new TaskArgument('thirds', multiple: true)
@@ -69,8 +68,7 @@ void main() {
 
     group('optional, no multiple', () {
       setUp(() {
-        task = new Task(noopTaskRunner,
-            extendedArgs: [
+        task = new Task(noopTaskRunner, extendedArgs: [
           new TaskArgument('first'),
           new TaskArgument('second'),
           new TaskArgument('thirds')
@@ -108,8 +106,7 @@ void main() {
 
     group('required, with multiple', () {
       setUp(() {
-        task = new Task(noopTaskRunner,
-            extendedArgs: [
+        task = new Task(noopTaskRunner, extendedArgs: [
           new TaskArgument('first', required: true),
           new TaskArgument('second', required: true),
           new TaskArgument('thirds', required: true, multiple: true)
@@ -138,8 +135,7 @@ void main() {
 
     group('required, without multiple', () {
       setUp(() {
-        task = new Task(noopTaskRunner,
-            extendedArgs: [
+        task = new Task(noopTaskRunner, extendedArgs: [
           new TaskArgument('first', required: true),
           new TaskArgument('second', required: true),
           new TaskArgument('thirds')
@@ -184,8 +180,7 @@ void main() {
       expect(ctx.extendedArgs['first'], '1st');
       expect(ctx.extendedArgs['second'], '2nd');
       expect(ctx.extendedArgs['thirds'], ['3rd-a', '3rd-b']);
-    },
-        extendedArgs: [
+    }, extendedArgs: [
       new TaskArgument('first'),
       new TaskArgument('second'),
       new TaskArgument('thirds', multiple: true)
@@ -238,7 +233,6 @@ void main() {
   });
 
   test('validate arg list', () {
-
     // empty is fine
     _validateExtendedArgs([], true);
 

@@ -12,7 +12,6 @@ import 'package:hop/hop.dart';
 import 'dart:io';
 
 void main(List<String> args) {
-
   /*
    * 1: Hello, World!
    *

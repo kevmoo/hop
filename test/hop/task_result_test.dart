@@ -42,28 +42,28 @@ void main() {
   });
 }
 
-Future _testCtxFail() => runTaskInTestRunner((ctx) => ctx.fail('fail!'))
-    .then((value) {
-  expect(value, RunResult.FAIL);
-});
+Future _testCtxFail() =>
+    runTaskInTestRunner((ctx) => ctx.fail('fail!')).then((value) {
+      expect(value, RunResult.FAIL);
+    });
 
 Future _testTrueIsCool() => runTaskInTestRunner((ctx) => true).then((value) {
-  expect(value, RunResult.SUCCESS);
-});
+      expect(value, RunResult.SUCCESS);
+    });
 
 Future _testFalseIsFail() => runTaskInTestRunner((ctx) => false).then((value) {
-  expect(value, RunResult.SUCCESS);
-});
+      expect(value, RunResult.SUCCESS);
+    });
 
 Future _testNullIsFine() => runTaskInTestRunner((ctx) => null).then((value) {
-  expect(value, RunResult.SUCCESS);
-});
+      expect(value, RunResult.SUCCESS);
+    });
 
 Future _testExceptionIsSad() => runTaskInTestRunner((ctx) {
-  throw 'sorry';
-}).then((value) {
-  expect(value, RunResult.EXCEPTION);
-});
+      throw 'sorry';
+    }).then((value) {
+      expect(value, RunResult.EXCEPTION);
+    });
 
 Future _testBadParam() {
   final taskReg = new TaskRegistry();
@@ -95,20 +95,21 @@ Future _testNoTasks() {
 }
 
 Task _getGoodTask() => new Task(noopTaskRunner,
-    description: 'Just a nice task', argParser: new ArgParser()
-  ..addFlag('foo',
-      abbr: 'f', help: 'The foo flag', defaultsTo: true, negatable: true)
-  ..addOption('bar',
-      abbr: 'b',
-      help: 'the bar flag',
-      allowed: ['a', 'b', 'c'],
-      defaultsTo: 'b',
-      allowMultiple: true),
-        extendedArgs: [
-  new TaskArgument('ta-first', required: true),
-  new TaskArgument('ta-second'),
-  new TaskArgument('ta-third', multiple: true)
-]);
+    description: 'Just a nice task',
+    argParser: new ArgParser()
+      ..addFlag('foo',
+          abbr: 'f', help: 'The foo flag', defaultsTo: true, negatable: true)
+      ..addOption('bar',
+          abbr: 'b',
+          help: 'the bar flag',
+          allowed: ['a', 'b', 'c'],
+          defaultsTo: 'b',
+          allowMultiple: true),
+    extendedArgs: [
+      new TaskArgument('ta-first', required: true),
+      new TaskArgument('ta-second'),
+      new TaskArgument('ta-third', multiple: true)
+    ]);
 
 const _GOOD_HELP_OUTPUT =
     '''usage: hop [<hop-options>] good [<good-options>] <ta-first> [<ta-second>] [<ta-third>...]

@@ -38,16 +38,18 @@ void main() {
     });
 
     return runTaskInTestRunner(task,
-            eventLog: records, printAtLogLevel: Level.SEVERE)
-        .then((RunResult result) {
+        eventLog: records,
+        printAtLogLevel: Level.SEVERE).then((RunResult result) {
       expect(result, same(RunResult.SUCCESS));
 
       records.removeWhere((e) => e.level <= Level.FINE);
 
-      expect(records, orderedEquals([
-        new HopEvent(Level.SEVERE, 'info', source: [TEST_TASK_NAME]),
-        new HopEvent(Level.SEVERE, 'print', source: [TEST_TASK_NAME])
-      ]));
+      expect(
+          records,
+          orderedEquals([
+            new HopEvent(Level.SEVERE, 'info', source: [TEST_TASK_NAME]),
+            new HopEvent(Level.SEVERE, 'print', source: [TEST_TASK_NAME])
+          ]));
     });
   });
 
@@ -72,14 +74,16 @@ void main() {
 
       records.removeWhere((e) => e.level <= Level.FINE);
 
-      expect(records, orderedEquals([
-        new HopEvent(Level.INFO, 'info', source: [TEST_TASK_NAME]),
-        new HopEvent(Level.WARNING, 'sub warn',
-            source: [TEST_TASK_NAME, 'sub']),
-        new HopEvent(Level.SEVERE, 'subsub severe',
-            source: [TEST_TASK_NAME, 'sub', 'subsub']),
-        new HopEvent(Level.SEVERE, 'severe', source: [TEST_TASK_NAME])
-      ]));
+      expect(
+          records,
+          orderedEquals([
+            new HopEvent(Level.INFO, 'info', source: [TEST_TASK_NAME]),
+            new HopEvent(Level.WARNING, 'sub warn',
+                source: [TEST_TASK_NAME, 'sub']),
+            new HopEvent(Level.SEVERE, 'subsub severe',
+                source: [TEST_TASK_NAME, 'sub', 'subsub']),
+            new HopEvent(Level.SEVERE, 'severe', source: [TEST_TASK_NAME])
+          ]));
     });
   });
 

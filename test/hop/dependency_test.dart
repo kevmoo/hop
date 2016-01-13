@@ -64,7 +64,6 @@ void main() {
   // simple dependency
 
   // no null dependencies
-
 }
 
 Task _createTaskWithArgs(dynamic taskExec(TaskContext ctx)) =>

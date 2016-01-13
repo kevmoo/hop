@@ -1,7 +1,6 @@
 part of hop.runner;
 
 class TaskRegistry {
-
   // There could be cases (testing, perhaps?) where a single task is added to
   // many registries. So we're keeping the expando per-instance, instead of
   // static

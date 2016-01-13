@@ -13,8 +13,8 @@ class HopEvent {
 
   HopEvent(this.level, this.message, {List<String> source})
       : this.logger = source == null
-          ? const []
-          : new UnmodifiableListView(source.toList(growable: false)) {
+            ? const []
+            : new UnmodifiableListView(source.toList(growable: false)) {
     requireArgumentNotNull(message, 'message');
     assert(!logger.isEmpty);
     assert(logger.every((s) => s != null && !s.isEmpty));
