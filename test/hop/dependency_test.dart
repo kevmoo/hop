@@ -1,9 +1,7 @@
-library test.hop.dependencies;
-
 import 'package:args/args.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_runner.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import '../test_util.dart';
 
 void main() {

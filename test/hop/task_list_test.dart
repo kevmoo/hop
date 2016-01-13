@@ -1,7 +1,7 @@
 library test.hop.task_list;
 
 import 'package:hop/src/hop_runner.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 void main() {
   test('dupe names are bad', () {

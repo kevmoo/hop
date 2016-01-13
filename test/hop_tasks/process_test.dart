@@ -2,7 +2,7 @@ library test.hop_tasks.process;
 
 import 'dart:async';
 import 'dart:io';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_tasks/process.dart';
 import '../test_util.dart';

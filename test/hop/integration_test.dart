@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:bot/bot.dart';
 import 'package:hop/hop_core.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 void main() {
   test('hop output is sorted', _testOutputSorted);
@@ -28,8 +28,7 @@ Future _testOutputSorted() {
       'analyze_libs',
       'analyze_test_libs',
       'bench',
-      'help',
-      'test'
+      'help'
     ]));
   });
 }

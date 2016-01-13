@@ -3,7 +3,7 @@ library test.hop_tasks.analyzer;
 import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart' as pathos;
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:bot_io/bot_io.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_tasks/dartanalyzer.dart';
