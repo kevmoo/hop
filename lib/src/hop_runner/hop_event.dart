@@ -23,7 +23,8 @@ class HopEvent {
   String toString() =>
       isPrint ? message : '$level\t${logger.join(':')}\t$message';
 
-  bool operator ==(Object other) => other is HopEvent &&
+  bool operator ==(Object other) =>
+      other is HopEvent &&
       level == other.level &&
       message == other.message &&
       const ListEquality<String>().equals(logger, other.logger);

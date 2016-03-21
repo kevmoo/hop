@@ -95,21 +95,24 @@ Future _testNoTasks() {
 }
 
 Task _getGoodTask() => new Task(noopTaskRunner,
-    description: 'Just a nice task',
-    argParser: new ArgParser()
-      ..addFlag('foo',
-          abbr: 'f', help: 'The foo flag', defaultsTo: true, negatable: true)
-      ..addOption('bar',
-          abbr: 'b',
-          help: 'the bar flag',
-          allowed: ['a', 'b', 'c'],
-          defaultsTo: 'b',
-          allowMultiple: true),
-    extendedArgs: [
-      new TaskArgument('ta-first', required: true),
-      new TaskArgument('ta-second'),
-      new TaskArgument('ta-third', multiple: true)
-    ]);
+        description: 'Just a nice task',
+        argParser: new ArgParser()
+          ..addFlag('foo',
+              abbr: 'f',
+              help: 'The foo flag',
+              defaultsTo: true,
+              negatable: true)
+          ..addOption('bar',
+              abbr: 'b',
+              help: 'the bar flag',
+              allowed: ['a', 'b', 'c'],
+              defaultsTo: 'b',
+              allowMultiple: true),
+        extendedArgs: [
+          new TaskArgument('ta-first', required: true),
+          new TaskArgument('ta-second'),
+          new TaskArgument('ta-third', multiple: true)
+        ]);
 
 const _GOOD_HELP_OUTPUT =
     '''usage: hop [<hop-options>] good [<good-options>] <ta-first> [<ta-second>] [<ta-third>...]
