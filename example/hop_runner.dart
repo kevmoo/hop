@@ -3,13 +3,12 @@
  */
 library example.hop_runner;
 
+import 'dart:io';
+
 /*
  * This is all you need to import when you create your `hop_runner.dart` file.
  */
 import 'package:hop/hop.dart';
-
-// Imports needed by the dasks below
-import 'dart:io';
 
 void main(List<String> args) {
   /*

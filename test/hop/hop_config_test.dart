@@ -1,5 +1,6 @@
-import 'package:test/test.dart';
 import 'package:hop/src/hop_runner.dart';
+import 'package:test/test.dart';
+
 import '../test_util.dart';
 
 void main() {

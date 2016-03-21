@@ -6,8 +6,8 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:bot/bot.dart';
 import 'package:hop/hop_core.dart';
-import 'package:hop/src/tasks_shared.dart';
 import 'package:hop/src/hop_tasks/process.dart';
+import 'package:hop/src/tasks_shared.dart';
 import 'package:path/path.dart' as pathos;
 
 const _verboseArgName = 'verbose';

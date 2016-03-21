@@ -1,8 +1,8 @@
 library test.hop.extended_args;
 
-import 'package:test/test.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_runner.dart';
+import 'package:test/test.dart';
 
 import '../test_util.dart';
 

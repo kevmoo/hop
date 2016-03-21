@@ -1,9 +1,10 @@
 library test.hop.shared;
 
 import 'dart:async';
-import 'package:logging/logging.dart';
+
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_runner.dart';
+import 'package:logging/logging.dart';
 
 const String TEST_TASK_NAME = 'test-task-name';
 

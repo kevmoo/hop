@@ -1,6 +1,7 @@
 library hop.src.stats;
 
 import 'dart:math' as math;
+
 import 'package:bot_io/bot_io.dart';
 
 class Stats {

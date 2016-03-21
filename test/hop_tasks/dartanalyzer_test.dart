@@ -2,11 +2,13 @@ library test.hop_tasks.analyzer;
 
 import 'dart:async';
 import 'dart:io';
-import 'package:path/path.dart' as pathos;
-import 'package:test/test.dart';
+
 import 'package:bot_io/bot_io.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_tasks/dartanalyzer.dart';
+import 'package:path/path.dart' as pathos;
+import 'package:test/test.dart';
+
 import '../test_util.dart';
 
 // TODO(kevmoo): figure out a way to validate output...

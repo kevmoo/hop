@@ -2,22 +2,23 @@ library hop.runner;
 
 import 'dart:async';
 import 'dart:collection';
+
 import 'package:args/args.dart';
 import 'package:bot/bot.dart' hide DisposedError;
 import 'package:bot_io/bot_io.dart';
-import 'package:collection/equality.dart';
+import 'package:collection/collection.dart';
 import 'package:completion/completion.dart';
+import 'package:hop/hop_core.dart';
 import 'package:logging/logging.dart';
 
-import 'package:hop/hop_core.dart';
 import 'shared.dart';
 
+part 'hop_runner/_task_runtime.dart';
 part 'hop_runner/help.dart';
 part 'hop_runner/hop_config.dart';
 part 'hop_runner/hop_event.dart';
 part 'hop_runner/runner.dart';
 part 'hop_runner/task_registry.dart';
-part 'hop_runner/_task_runtime.dart';
 
 ArgParser _getParser(TaskRegistry config, Level defaultLogLevel) {
   assert(config.isFrozen);

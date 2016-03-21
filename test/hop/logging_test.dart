@@ -4,6 +4,7 @@ import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_runner.dart';
 import 'package:logging/logging.dart';
 import 'package:test/test.dart';
+
 import '../test_util.dart';
 
 void main() {

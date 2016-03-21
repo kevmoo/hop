@@ -1,10 +1,12 @@
 library test.hop.sync;
 
 import 'dart:async';
+
 import 'package:args/args.dart';
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_runner.dart';
 import 'package:test/test.dart';
+
 import '../test_util.dart';
 
 void main() {

@@ -2,9 +2,11 @@ library test.hop_tasks.process;
 
 import 'dart:async';
 import 'dart:io';
-import 'package:test/test.dart';
+
 import 'package:hop/hop_core.dart';
 import 'package:hop/src/hop_tasks/process.dart';
+import 'package:test/test.dart';
+
 import '../test_util.dart';
 
 // TODO: support windows?
