@@ -11,7 +11,7 @@ dependencies:
   bot_io: ^0.26.1
   collection: ^1.0.0
   completion: ^0.1.4
-  logging: ^0.9.1
+  logging: '>=0.9.1 <0.13.0'
   path: ^1.0.0
 dev_dependencies:
   test: any
