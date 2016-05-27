@@ -9,6 +9,10 @@
 * Read the [documented example](https://github.com/dart-lang/hop/blob/master/example/hop_runner.dart).
 * Check out Hop's [hop_runner](https://github.com/dart-lang/hop/blob/master/tool/hop_runner.dart).
 
+# What is this thing?
+
+**hop** is [rake](http://rake.rubyforge.org/) for Dart.
+
 # Projects using Hop
 
 * [Box2d for Dart](https://github.com/dart-lang/dart-box2d)
